@@ -920,6 +920,139 @@ header h1 {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+/* Chord Module Styles */
+.chord-mode-btn {
+    padding: 12px;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.chord-mode-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.chord-mode-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.chord-selector {
+    margin-top: 30px;
+}
+
+.chord-selector p {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    color: #7f8c8d;
+}
+
+.chord-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.chord-group {
+    background: rgba(52, 152, 219, 0.05);
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(52, 152, 219, 0.2);
+}
+
+.chord-group h4 {
+    margin: 0 0 10px 0;
+    color: var(--primary-color);
+    font-size: 0.9em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+.chord-group .chord-btn {
+    margin: 5px;
+}
+
+.chord-btn {
+    padding: 10px 15px;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1em;
+    min-width: 60px;
+}
+
+.chord-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.chord-display {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.chord-name {
+    font-size: 3em;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.chord-type-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.chord-type-toggles label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.submit-btn-small {
+    margin-left: 10px;
+    padding: 8px 16px;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s;
+}
+
+.submit-btn-small:hover {
+    background: #229954;
+    transform: translateY(-2px);
+}
+
+.muted-string {
+    background: #e74c3c !important;
+    color: white !important;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.open-string-indicator {
+    background: #27ae60 !important;
+    color: white !important;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
 .interval-mode-btn.active {
     background: var(--primary-color);
     color: white;

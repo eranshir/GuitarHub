@@ -4,8 +4,10 @@ class App {
         this.audio = new AudioEngine();
         this.statistics = new Statistics();
         this.intervalTheory = new IntervalTheory();
+        this.chordTheory = new ChordTheory();
         this.game = null;
         this.intervalGame = null;
+        this.chordGame = null;
         this.charts = {};
         
         this.init();
@@ -14,6 +16,7 @@ class App {
     init() {
         this.game = new FretboardGame(this.guitar, this.statistics);
         this.intervalGame = new IntervalGame(this.guitar, this.statistics, this.intervalTheory);
+        this.chordGame = new ChordGame(this.guitar, this.statistics, this.chordTheory);
         this.setupModuleNavigation();
         this.setupAudioControls();
         this.setupStatisticsControls();
@@ -22,6 +25,7 @@ class App {
         window.addEventListener('beforeunload', () => {
             this.statistics.endSession();
             this.statistics.endIntervalSession();
+            this.statistics.endChordSession();
         });
     }
     
@@ -47,6 +51,8 @@ class App {
             document.getElementById('fretboard-module').classList.add('active');
         } else if (moduleId === 'intervals') {
             document.getElementById('intervals-module').classList.add('active');
+        } else if (moduleId === 'chords') {
+            document.getElementById('chords-module').classList.add('active');
         } else if (moduleId === 'stats') {
             document.getElementById('stats-module').classList.add('active');
             this.updateStatisticsDisplay();
@@ -101,6 +107,25 @@ class App {
                     this.intervalGame.currentQuestion.position2.fret
                 );
                 this.audio.playChord([freq1, freq2], 1500);
+            }
+        });
+        
+        // Chord audio controls
+        document.getElementById('play-chord-fret').addEventListener('click', () => {
+            if (this.chordGame.currentQuestion && this.chordGame.currentQuestion.type === 'chord-fret-to-name') {
+                const chord = this.chordTheory.chords[this.chordGame.currentQuestion.chordKey];
+                if (chord) {
+                    this.chordTheory.playChord(chord, this.guitar, this.audio);
+                }
+            }
+        });
+        
+        document.getElementById('play-chord-name').addEventListener('click', () => {
+            if (this.chordGame.currentQuestion && this.chordGame.currentQuestion.type === 'chord-name-to-fret') {
+                const chord = this.chordTheory.chords[this.chordGame.currentQuestion.chordKey];
+                if (chord) {
+                    this.chordTheory.playChord(chord, this.guitar, this.audio);
+                }
             }
         });
     }

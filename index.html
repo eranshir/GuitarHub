@@ -16,6 +16,7 @@
         <nav class="module-nav">
             <button class="module-btn active" data-module="fretboard">Fretboard Memory</button>
             <button class="module-btn" data-module="intervals">Intervals Memory</button>
+            <button class="module-btn" data-module="chords">Chords Memory</button>
             <button class="module-btn" data-module="stats">Statistics</button>
         </nav>
 
@@ -259,6 +260,148 @@
                 </div>
             </section>
 
+            <!-- Chords Memory Module -->
+            <section id="chords-module" class="module">
+                <div class="game-mode-selector">
+                    <button class="chord-mode-btn active" data-mode="chord-fret-to-name">Fret → Chord</button>
+                    <button class="chord-mode-btn" data-mode="chord-name-to-fret">Chord → Fret</button>
+                </div>
+
+                <div class="game-container">
+                    <div class="question-card">
+                        <div class="timer-display" id="chord-timer">00:00</div>
+                        <div class="score-display">
+                            <span class="correct">✓ <span id="chord-correct-count">0</span></span>
+                            <span class="incorrect">✗ <span id="chord-incorrect-count">0</span></span>
+                            <span class="streak">🔥 <span id="chord-streak-count">0</span></span>
+                        </div>
+                        
+                        <div class="session-controls" id="chord-session-controls" style="display: none;">
+                            <button id="chord-pause-btn" class="pause-btn">⏸ Pause</button>
+                            <button id="chord-resume-btn" class="resume-btn" style="display: none;">▶ Resume</button>
+                            <button id="chord-stop-btn" class="stop-btn">End Session</button>
+                        </div>
+                        
+                        <div class="feedback" id="chord-feedback"></div>
+                        
+                        <div id="chord-start-screen" class="game-content active">
+                            <h2 class="welcome-title">Chord Recognition</h2>
+                            <p class="welcome-text">Practice identifying and playing common guitar chords.</p>
+                            <button id="chord-start-btn" class="start-btn">Start Chord Session</button>
+                        </div>
+                        
+                        <div id="chord-pause-overlay" class="pause-overlay" style="display: none;">
+                            <div class="pause-content">
+                                <h2>Session Paused</h2>
+                                <p>Take your time. Click Resume when you're ready to continue.</p>
+                                <button id="chord-resume-overlay-btn" class="resume-btn">▶ Resume</button>
+                            </div>
+                        </div>
+                        
+                        <div id="chord-fret-to-name-game" class="game-content">
+                            <h2 class="question">What chord is this?</h2>
+                            <div class="fretboard-container">
+                                <div class="fretboard" id="fretboard-chord-fret-to-name">
+                                    <!-- Fretboard will be generated dynamically -->
+                                </div>
+                            </div>
+                            <button class="play-sound-btn" id="play-chord-fret">🔊 Play Chord</button>
+                            <div class="chord-selector">
+                                <p>Select the chord:</p>
+                                <div class="chord-buttons">
+                                    <!-- Major chords -->
+                                    <div class="chord-group">
+                                        <h4>Major</h4>
+                                        <button class="chord-btn" data-chord="C">C</button>
+                                        <button class="chord-btn" data-chord="G">G</button>
+                                        <button class="chord-btn" data-chord="D">D</button>
+                                        <button class="chord-btn" data-chord="A">A</button>
+                                        <button class="chord-btn" data-chord="E">E</button>
+                                        <button class="chord-btn" data-chord="F">F</button>
+                                    </div>
+                                    <!-- Minor chords -->
+                                    <div class="chord-group">
+                                        <h4>Minor</h4>
+                                        <button class="chord-btn" data-chord="Am">Am</button>
+                                        <button class="chord-btn" data-chord="Em">Em</button>
+                                        <button class="chord-btn" data-chord="Dm">Dm</button>
+                                        <button class="chord-btn" data-chord="Bm">Bm</button>
+                                    </div>
+                                    <!-- 7th chords -->
+                                    <div class="chord-group">
+                                        <h4>7th</h4>
+                                        <button class="chord-btn" data-chord="G7">G7</button>
+                                        <button class="chord-btn" data-chord="C7">C7</button>
+                                        <button class="chord-btn" data-chord="D7">D7</button>
+                                        <button class="chord-btn" data-chord="A7">A7</button>
+                                        <button class="chord-btn" data-chord="E7">E7</button>
+                                    </div>
+                                    <!-- Major 7th chords -->
+                                    <div class="chord-group">
+                                        <h4>Major 7th</h4>
+                                        <button class="chord-btn" data-chord="Cmaj7">Cmaj7</button>
+                                        <button class="chord-btn" data-chord="Gmaj7">Gmaj7</button>
+                                        <button class="chord-btn" data-chord="Dmaj7">Dmaj7</button>
+                                        <button class="chord-btn" data-chord="Amaj7">Amaj7</button>
+                                        <button class="chord-btn" data-chord="Emaj7">Emaj7</button>
+                                    </div>
+                                    <!-- Minor 7th chords -->
+                                    <div class="chord-group">
+                                        <h4>Minor 7th</h4>
+                                        <button class="chord-btn" data-chord="Am7">Am7</button>
+                                        <button class="chord-btn" data-chord="Em7">Em7</button>
+                                        <button class="chord-btn" data-chord="Dm7">Dm7</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="chord-name-to-fret-game" class="game-content">
+                            <h2 class="question">Play this chord:</h2>
+                            <div class="chord-display">
+                                <span class="chord-name" id="target-chord">-</span>
+                            </div>
+                            <button class="play-sound-btn" id="play-chord-name">🔊 Play Chord</button>
+                            <p class="instruction-text">Click on the fretboard to form the chord:</p>
+                            <div class="fretboard-container">
+                                <div class="fretboard" id="fretboard-chord-name-to-fret">
+                                    <!-- Fretboard will be generated dynamically -->
+                                </div>
+                            </div>
+                            <div class="selected-notes">
+                                <span>Selected: <span id="selected-chord-notes">None</span></span>
+                                <button id="clear-chord-selection" class="clear-btn-small">Clear</button>
+                                <button id="submit-chord-selection" class="submit-btn-small">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-panel">
+                        <h3>Chord Settings</h3>
+                        <div class="setting-group">
+                            <label>Practice Chord Types:</label>
+                            <div class="chord-type-toggles">
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="major" checked> Major</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="minor" checked> Minor</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="dominant7"> 7th</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="major7"> Major 7th</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="minor7"> Minor 7th</label>
+                            </div>
+                        </div>
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="include-barre">
+                                Include barre chords
+                            </label>
+                        </div>
+                        <div class="setting-group">
+                            <label>Max fret:</label>
+                            <input type="number" id="chord-max-fret" min="3" max="12" value="5">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Statistics Module -->
             <section id="stats-module" class="module">
                 <div class="stats-container">
@@ -303,9 +446,11 @@
     <script src="js/audio.js"></script>
     <script src="js/guitar.js"></script>
     <script src="js/intervals.js"></script>
+    <script src="js/chords.js"></script>
     <script src="js/fretboard.js"></script>
     <script src="js/game.js"></script>
     <script src="js/intervalGame.js"></script>
+    <script src="js/chordGame.js"></script>
     <script src="js/statistics.js"></script>
     <script src="js/app.js"></script>
 </body>

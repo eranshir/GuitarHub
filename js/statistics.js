@@ -26,12 +26,29 @@ class Statistics {
                 data.intervalSessions = [];
             }
             
+            // Ensure chordStats exists (for backward compatibility)
+            if (!data.chordStats) {
+                data.chordStats = {
+                    totalQuestions: 0,
+                    correctAnswers: 0,
+                    totalResponseTime: 0,
+                    chordTypeStats: {},
+                    modeStats: { 'chord-fret-to-name': 0, 'chord-name-to-fret': 0 }
+                };
+            }
+            
+            // Ensure chordSessions exists
+            if (!data.chordSessions) {
+                data.chordSessions = [];
+            }
+            
             return data;
         }
         
         return {
             sessions: [],
             intervalSessions: [],
+            chordSessions: [],
             allTimeStats: {
                 totalQuestions: 0,
                 correctAnswers: 0,
@@ -46,6 +63,13 @@ class Statistics {
                 totalResponseTime: 0,
                 intervalTypeStats: {},
                 directionStats: { ascending: 0, descending: 0 }
+            },
+            chordStats: {
+                totalQuestions: 0,
+                correctAnswers: 0,
+                totalResponseTime: 0,
+                chordTypeStats: {},
+                modeStats: { 'chord-fret-to-name': 0, 'chord-name-to-fret': 0 }
             }
         };
     }
@@ -314,10 +338,103 @@ class Statistics {
         return this.data.intervalStats;
     }
     
+    startNewChordSession() {
+        this.currentChordSession = {
+            id: Date.now(),
+            startTime: Date.now(),
+            endTime: null,
+            questions: [],
+            mode: null,
+            stats: {
+                total: 0,
+                correct: 0,
+                avgResponseTime: 0,
+                bestStreak: 0,
+                currentStreak: 0
+            }
+        };
+    }
+    
+    endChordSession() {
+        if (this.currentChordSession && this.currentChordSession.questions.length > 0) {
+            this.currentChordSession.endTime = Date.now();
+            this.data.chordSessions.push(this.currentChordSession);
+            
+            if (this.data.chordSessions.length > 100) {
+                this.data.chordSessions = this.data.chordSessions.slice(-100);
+            }
+            
+            this.saveData();
+            this.currentChordSession = null;
+        }
+    }
+    
+    recordChordAnswer(answerData) {
+        if (!this.currentChordSession) {
+            this.startNewChordSession();
+        }
+        
+        this.currentChordSession.mode = answerData.mode;
+        this.currentChordSession.questions.push(answerData);
+        this.currentChordSession.stats.total++;
+        
+        if (answerData.isCorrect) {
+            this.currentChordSession.stats.correct++;
+            this.currentChordSession.stats.currentStreak++;
+            if (this.currentChordSession.stats.currentStreak > this.currentChordSession.stats.bestStreak) {
+                this.currentChordSession.stats.bestStreak = this.currentChordSession.stats.currentStreak;
+            }
+        } else {
+            this.currentChordSession.stats.currentStreak = 0;
+        }
+        
+        const totalTime = this.currentChordSession.questions.reduce((sum, q) => sum + q.responseTime, 0);
+        this.currentChordSession.stats.avgResponseTime = totalTime / this.currentChordSession.questions.length;
+        
+        this.updateChordStats(answerData);
+        this.saveData();
+    }
+    
+    updateChordStats(answerData) {
+        this.data.chordStats.totalQuestions++;
+        
+        if (answerData.isCorrect) {
+            this.data.chordStats.correctAnswers++;
+            this.data.chordStats.totalResponseTime += answerData.responseTime;
+        }
+        
+        // Track chord type statistics
+        const chordKey = answerData.question.chordKey;
+        if (!this.data.chordStats.chordTypeStats[chordKey]) {
+            this.data.chordStats.chordTypeStats[chordKey] = {
+                total: 0,
+                correct: 0,
+                avgResponseTime: 0,
+                responseTimes: []
+            };
+        }
+        
+        const chordStat = this.data.chordStats.chordTypeStats[chordKey];
+        chordStat.total++;
+        if (answerData.isCorrect) {
+            chordStat.correct++;
+            chordStat.responseTimes.push(answerData.responseTime);
+            chordStat.avgResponseTime = chordStat.responseTimes.reduce((a, b) => a + b, 0) / chordStat.responseTimes.length;
+        }
+        
+        // Track mode statistics
+        this.data.chordStats.modeStats[answerData.mode]++;
+    }
+    
+    getChordStats() {
+        return this.data.chordStats;
+    }
+    
     clearAllData() {
         this.data = {
             sessions: [],
             intervalSessions: [],
+            chordSessions: [],
             allTimeStats: {
                 totalQuestions: 0,
                 correctAnswers: 0,
@@ -332,10 +449,18 @@ class Statistics {
                 totalResponseTime: 0,
                 intervalTypeStats: {},
                 directionStats: { ascending: 0, descending: 0 }
+            },
+            chordStats: {
+                totalQuestions: 0,
+                correctAnswers: 0,
+                totalResponseTime: 0,
+                chordTypeStats: {},
+                modeStats: { 'chord-fret-to-name': 0, 'chord-name-to-fret': 0 }
             }
         };
         this.currentSession = null;
         this.currentIntervalSession = null;
+        this.currentChordSession = null;
         this.saveData();
     }
     
