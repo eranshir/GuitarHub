@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuitarHub - Master Your Fretboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GuitarHub</h1>
+            <p class="tagline">Master Your Fretboard</p>
+        </header>
+
+        <nav class="module-nav">
+            <button class="module-btn active" data-module="fretboard">Fretboard Memory</button>
+            <button class="module-btn" data-module="intervals">Intervals Memory</button>
+            <button class="module-btn" data-module="stats">Statistics</button>
+        </nav>
+
+        <main>
+            <!-- Fretboard Memory Module -->
+            <section id="fretboard-module" class="module active">
+                <div class="game-mode-selector">
+                    <button class="mode-btn active" data-mode="note-to-fret">Note → Fret</button>
+                    <button class="mode-btn" data-mode="fret-to-note">Fret → Note</button>
+                </div>
+
+                <div class="game-container">
+                    <div class="question-card">
+                        <div class="timer-display">00:00</div>
+                        <div class="score-display">
+                            <span class="correct">✓ <span id="correct-count">0</span></span>
+                            <span class="incorrect">✗ <span id="incorrect-count">0</span></span>
+                            <span class="streak">🔥 <span id="streak-count">0</span></span>
+                        </div>
+                        
+                        <div class="session-controls" style="display: none;">
+                            <button id="pause-btn" class="pause-btn">⏸ Pause</button>
+                            <button id="resume-btn" class="resume-btn" style="display: none;">▶ Resume</button>
+                            <button id="stop-btn" class="stop-btn">End Session</button>
+                        </div>
+                        
+                        <div class="feedback" id="feedback"></div>
+                        
+                        <div id="start-screen" class="game-content active">
+                            <h2 class="welcome-title">Ready to Practice?</h2>
+                            <p class="welcome-text">Test your knowledge of the fretboard and improve your note recognition skills.</p>
+                            <button id="start-btn" class="start-btn">Start Practice Session</button>
+                        </div>
+                        
+                        <div id="pause-overlay" class="pause-overlay" style="display: none;">
+                            <div class="pause-content">
+                                <h2>Session Paused</h2>
+                                <p>Take your time. Click Resume when you're ready to continue.</p>
+                                <button id="resume-overlay-btn" class="resume-btn">▶ Resume</button>
+                            </div>
+                        </div>
+                        
+                        <div id="note-to-fret-game" class="game-content">
+                            <h2 class="question">Find this note:</h2>
+                            <div class="note-display">
+                                <span class="note-name" id="target-note">-</span>
+                                <span class="string-info">on string <span id="target-string">-</span></span>
+                            </div>
+                            <button class="play-sound-btn" id="play-note">🔊 Play Note</button>
+                            <p class="instruction-text">Click on the correct fret position below:</p>
+                            <div class="fretboard-container">
+                                <div class="fretboard" id="fretboard-note-to-fret">
+                                    <!-- Fretboard will be generated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="fret-to-note-game" class="game-content">
+                            <h2 class="question">What note is this?</h2>
+                            <div class="fretboard-container">
+                                <div class="fretboard" id="fretboard">
+                                    <!-- Fretboard will be generated dynamically -->
+                                </div>
+                            </div>
+                            <button class="play-sound-btn" id="play-fret-note">🔊 Play Note</button>
+                            <div class="note-selector">
+                                <div class="note-buttons">
+                                    <button class="note-btn" data-note="C">C</button>
+                                    <button class="note-btn" data-note="C#">C#/Db</button>
+                                    <button class="note-btn" data-note="D">D</button>
+                                    <button class="note-btn" data-note="D#">D#/Eb</button>
+                                    <button class="note-btn" data-note="E">E</button>
+                                    <button class="note-btn" data-note="F">F</button>
+                                    <button class="note-btn" data-note="F#">F#/Gb</button>
+                                    <button class="note-btn" data-note="G">G</button>
+                                    <button class="note-btn" data-note="G#">G#/Ab</button>
+                                    <button class="note-btn" data-note="A">A</button>
+                                    <button class="note-btn" data-note="A#">A#/Bb</button>
+                                    <button class="note-btn" data-note="B">B</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-panel">
+                        <h3>Settings</h3>
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="include-sharps" checked>
+                                Include sharps/flats
+                            </label>
+                        </div>
+                        <div class="setting-group">
+                            <label>Fret range:</label>
+                            <input type="number" id="min-fret" min="0" max="24" value="0"> -
+                            <input type="number" id="max-fret" min="0" max="24" value="12">
+                        </div>
+                        <div class="setting-group">
+                            <label>Strings:</label>
+                            <div class="string-toggles">
+                                <label><input type="checkbox" class="string-toggle" data-string="1" checked> 1st (E)</label>
+                                <label><input type="checkbox" class="string-toggle" data-string="2" checked> 2nd (B)</label>
+                                <label><input type="checkbox" class="string-toggle" data-string="3" checked> 3rd (G)</label>
+                                <label><input type="checkbox" class="string-toggle" data-string="4" checked> 4th (D)</label>
+                                <label><input type="checkbox" class="string-toggle" data-string="5" checked> 5th (A)</label>
+                                <label><input type="checkbox" class="string-toggle" data-string="6" checked> 6th (E)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Intervals Memory Module -->
+            <section id="intervals-module" class="module">
+                <div class="game-mode-selector">
+                    <button class="interval-mode-btn active" data-mode="interval-note-to-fret">Notes → Fret</button>
+                    <button class="interval-mode-btn" data-mode="interval-fret-to-note">Fret → Notes</button>
+                </div>
+
+                <div class="game-container">
+                    <div class="question-card">
+                        <div class="timer-display" id="interval-timer">00:00</div>
+                        <div class="score-display">
+                            <span class="correct">✓ <span id="interval-correct-count">0</span></span>
+                            <span class="incorrect">✗ <span id="interval-incorrect-count">0</span></span>
+                            <span class="streak">🔥 <span id="interval-streak-count">0</span></span>
+                        </div>
+                        
+                        <div class="session-controls" id="interval-session-controls" style="display: none;">
+                            <button id="interval-pause-btn" class="pause-btn">⏸ Pause</button>
+                            <button id="interval-resume-btn" class="resume-btn" style="display: none;">▶ Resume</button>
+                            <button id="interval-stop-btn" class="stop-btn">End Session</button>
+                        </div>
+                        
+                        <div class="feedback" id="interval-feedback"></div>
+                        
+                        <div id="interval-start-screen" class="game-content active">
+                            <h2 class="welcome-title">Interval Training</h2>
+                            <p class="welcome-text">Master intervals on the fretboard and develop your harmonic understanding.</p>
+                            <button id="interval-start-btn" class="start-btn">Start Interval Session</button>
+                        </div>
+                        
+                        <div id="interval-pause-overlay" class="pause-overlay" style="display: none;">
+                            <div class="pause-content">
+                                <h2>Session Paused</h2>
+                                <p>Take your time. Click Resume when you're ready to continue.</p>
+                                <button id="interval-resume-overlay-btn" class="resume-btn">▶ Resume</button>
+                            </div>
+                        </div>
+                        
+                        <div id="interval-note-to-fret-game" class="game-content">
+                            <h2 class="question">Find these notes:</h2>
+                            <div class="interval-display">
+                                <div class="interval-info">
+                                    <span class="interval-type" id="target-interval">Major 3rd</span>
+                                    <span class="interval-notes">from <span id="root-note">C</span></span>
+                                </div>
+                            </div>
+                            <button class="play-sound-btn" id="play-interval">🔊 Play Interval</button>
+                            <p class="instruction-text">Click two positions on the fretboard:</p>
+                            <div class="fretboard-container">
+                                <div class="fretboard" id="fretboard-interval-note-to-fret">
+                                    <!-- Fretboard will be generated dynamically -->
+                                </div>
+                            </div>
+                            <div class="selected-notes">
+                                <span>Selected: <span id="selected-interval-notes">None</span></span>
+                                <button id="clear-interval-selection" class="clear-btn-small">Clear</button>
+                            </div>
+                        </div>
+
+                        <div id="interval-fret-to-note-game" class="game-content">
+                            <h2 class="question">What interval is this?</h2>
+                            <div class="fretboard-container">
+                                <div class="fretboard" id="fretboard-interval-fret-to-note">
+                                    <!-- Fretboard will be generated dynamically -->
+                                </div>
+                            </div>
+                            <button class="play-sound-btn" id="play-interval-fret">🔊 Play Interval</button>
+                            <div class="interval-selector">
+                                <p>Select the interval:</p>
+                                <div class="interval-buttons">
+                                    <button class="interval-btn" data-interval="m2">Minor 2nd</button>
+                                    <button class="interval-btn" data-interval="M2">Major 2nd</button>
+                                    <button class="interval-btn" data-interval="m3">Minor 3rd</button>
+                                    <button class="interval-btn" data-interval="M3">Major 3rd</button>
+                                    <button class="interval-btn" data-interval="P4">Perfect 4th</button>
+                                    <button class="interval-btn" data-interval="TT">Tritone</button>
+                                    <button class="interval-btn" data-interval="P5">Perfect 5th</button>
+                                    <button class="interval-btn" data-interval="m6">Minor 6th</button>
+                                    <button class="interval-btn" data-interval="M6">Major 6th</button>
+                                    <button class="interval-btn" data-interval="m7">Minor 7th</button>
+                                    <button class="interval-btn" data-interval="M7">Major 7th</button>
+                                    <button class="interval-btn" data-interval="P8">Octave</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-panel">
+                        <h3>Interval Settings</h3>
+                        <div class="setting-group">
+                            <label>Practice Intervals:</label>
+                            <div class="interval-toggles">
+                                <label><input type="checkbox" class="interval-toggle" data-interval="m2" checked> Minor 2nd</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="M2" checked> Major 2nd</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="m3" checked> Minor 3rd</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="M3" checked> Major 3rd</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="P4" checked> Perfect 4th</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="TT"> Tritone</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="P5" checked> Perfect 5th</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="m6"> Minor 6th</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="M6" checked> Major 6th</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="m7"> Minor 7th</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="M7"> Major 7th</label>
+                                <label><input type="checkbox" class="interval-toggle" data-interval="P8" checked> Octave</label>
+                            </div>
+                        </div>
+                        <div class="setting-group">
+                            <label>Interval Direction:</label>
+                            <select id="interval-direction">
+                                <option value="ascending">Ascending Only</option>
+                                <option value="descending">Descending Only</option>
+                                <option value="both" selected>Both</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label>String Pairs:</label>
+                            <select id="string-pairs">
+                                <option value="adjacent">Adjacent Strings Only</option>
+                                <option value="skip">Skip One String</option>
+                                <option value="all" selected>All Combinations</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label>Fret range:</label>
+                            <input type="number" id="interval-min-fret" min="0" max="24" value="0"> -
+                            <input type="number" id="interval-max-fret" min="0" max="24" value="12">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Statistics Module -->
+            <section id="stats-module" class="module">
+                <div class="stats-container">
+                    <h2>Your Progress</h2>
+                    
+                    <div class="stats-overview">
+                        <div class="stat-card">
+                            <h3>Total Sessions</h3>
+                            <p class="stat-value" id="total-sessions">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Questions</h3>
+                            <p class="stat-value" id="total-questions">0</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Accuracy</h3>
+                            <p class="stat-value" id="accuracy">0%</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Avg Response Time</h3>
+                            <p class="stat-value" id="avg-time">0s</p>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Progress Over Time</h3>
+                        <canvas id="progress-chart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Response Time by Note</h3>
+                        <canvas id="note-chart"></canvas>
+                    </div>
+
+                    <button id="clear-stats" class="clear-btn">Clear All Statistics</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/guitar.js"></script>
+    <script src="js/intervals.js"></script>
+    <script src="js/fretboard.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/intervalGame.js"></script>
+    <script src="js/statistics.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
