@@ -467,7 +467,36 @@ class ChordGame {
         if (this.currentQuestion.type !== 'chord-fret-to-name') return;
         
         const responseTime = Date.now() - this.currentQuestion.startTime - this.pausedTime;
-        const isCorrect = selectedChord === this.currentQuestion.chordKey;
+        
+        // Get the chord object to determine the base chord
+        const chordObj = this.chordTheory.chords[this.currentQuestion.chordKey];
+        let correctAnswer = this.currentQuestion.chordKey;
+        
+        // Determine the base chord name from the chord type
+        if (chordObj) {
+            const root = chordObj.root || this.currentQuestion.chordKey.split('_')[0];
+            
+            if (chordObj.type === 'major' || chordObj.type === 'triad_major' || 
+                chordObj.type === 'caged_major' || chordObj.type === 'major_high') {
+                correctAnswer = root;  // e.g., "C"
+            } else if (chordObj.type === 'minor' || chordObj.type === 'triad_minor' || 
+                       chordObj.type === 'minor_high') {
+                correctAnswer = root + 'm';  // e.g., "Am"
+            } else if (chordObj.type === 'dominant7') {
+                correctAnswer = root + '7';  // e.g., "G7"
+            } else if (chordObj.type === 'major7') {
+                correctAnswer = root + 'maj7';  // e.g., "Cmaj7"
+            } else if (chordObj.type === 'minor7') {
+                correctAnswer = root + 'm7';  // e.g., "Am7"
+            } else if (chordObj.type === 'inversion_major') {
+                // For inversions, we could accept just the root chord
+                // but these are specifically different (bass note changes)
+                // so keep them as separate for now
+                correctAnswer = this.currentQuestion.chordKey;
+            }
+        }
+        
+        const isCorrect = selectedChord === correctAnswer;
         
         this.processAnswer(isCorrect, responseTime);
         
