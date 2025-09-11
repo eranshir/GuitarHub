@@ -26,6 +26,7 @@ class ChordGame {
             maxFret: 12,
             includeBarre: true  // Changed to true by default since many advanced chords use barre
         };
+        this.showMeUsed = false;
         
         this.fretboardDisplayFretToName = null;
         this.fretboardDisplayNameToFret = null;
@@ -178,6 +179,21 @@ class ChordGame {
             document.getElementById('chord-fret-to-name-game').classList.add('active');
         } else {
             document.getElementById('chord-name-to-fret-game').classList.add('active');
+            
+            // Setup Show me button event listeners
+            const showMeBtn = document.getElementById('show-me-chord');
+            const nextBtn = document.getElementById('next-chord');
+            if (showMeBtn && !showMeBtn.hasAttribute('data-listener-attached')) {
+                showMeBtn.setAttribute('data-listener-attached', 'true');
+                showMeBtn.addEventListener('click', () => {
+                    console.log('Show me chord clicked!');
+                    this.showAnswer();
+                });
+            }
+            if (nextBtn && !nextBtn.hasAttribute('data-listener-attached')) {
+                nextBtn.setAttribute('data-listener-attached', 'true');
+                nextBtn.addEventListener('click', () => this.generateQuestion());
+            }
         }
         
         this.statistics.startNewChordSession();
@@ -244,6 +260,15 @@ class ChordGame {
         if (!this.isSessionActive) return;
         
         this.clearSelection();
+        this.showMeUsed = false;
+        
+        // Reset show me/next buttons
+        const showMeBtn = document.getElementById('show-me-chord');
+        const nextBtn = document.getElementById('next-chord');
+        if (showMeBtn && this.currentMode === 'chord-name-to-fret') {
+            showMeBtn.style.display = 'inline-block';
+            nextBtn.style.display = 'none';
+        }
         
         if (this.currentMode === 'chord-fret-to-name') {
             this.generateFretToNameQuestion();
@@ -495,8 +520,8 @@ class ChordGame {
         }, 3000);
     }
     
-    processAnswer(isCorrect, responseTime) {
-        if (isCorrect) {
+    processAnswer(isCorrect, responseTime, gaveUp = false) {
+        if (isCorrect && !gaveUp) {
             this.score.correct++;
             this.score.streak++;
             document.getElementById('chord-correct-count').textContent = this.score.correct;
@@ -511,8 +536,9 @@ class ChordGame {
         this.statistics.recordChordAnswer({
             mode: this.currentMode,
             question: this.currentQuestion,
-            isCorrect: isCorrect,
+            isCorrect: isCorrect && !gaveUp,
             responseTime: responseTime,
+            gaveUp: gaveUp,
             timestamp: Date.now()
         });
         
@@ -660,6 +686,65 @@ class ChordGame {
             if (maxFretInput) {
                 maxFretInput.value = this.settings.maxFret;
             }
+        }
+    }
+    
+    showAnswer() {
+        if (!this.currentQuestion || this.showMeUsed || this.currentMode !== 'chord-name-to-fret') {
+            return;
+        }
+        
+        this.showMeUsed = true;
+        const responseTime = Date.now() - this.currentQuestion.startTime - this.pausedTime;
+        
+        // Record as incorrect with gave up flag
+        this.processAnswer(false, responseTime, true);
+        
+        // Show the correct answer on the fretboard
+        if (this.fretboardDisplayNameToFret && this.currentQuestion) {
+            const positions = [];
+            
+            // Add fretted positions (from the currentQuestion directly)
+            if (this.currentQuestion.frettedPositions) {
+                this.currentQuestion.frettedPositions.forEach(pos => {
+                    positions.push({ string: pos.string, fret: pos.fret });
+                });
+            }
+            
+            // Add open strings
+            if (this.currentQuestion.openStrings) {
+                this.currentQuestion.openStrings.forEach(string => {
+                    positions.push({ string: string, fret: 0 });
+                });
+            }
+            
+            this.fretboardDisplayNameToFret.highlightMultiplePositions(positions);
+        }
+        
+        // Show feedback
+        this.showFeedback(`The answer is: ${this.currentQuestion.chordName}`, false);
+        
+        // Display chord diagram details
+        const positionsStr = this.currentQuestion.frettedPositions
+            .map(p => `String ${p.string} Fret ${p.fret}`)
+            .join(', ');
+        const openStr = this.currentQuestion.openStrings && this.currentQuestion.openStrings.length > 0
+            ? ` | Open strings: ${this.currentQuestion.openStrings.join(', ')}`
+            : '';
+        const mutedStr = this.currentQuestion.muted && this.currentQuestion.muted.length > 0
+            ? ` | Muted strings: ${this.currentQuestion.muted.join(', ')}`
+            : '';
+            
+        setTimeout(() => {
+            this.showFeedback(`${this.currentQuestion.chordName}: ${positionsStr}${openStr}${mutedStr}`, false);
+        }, 100);
+        
+        // Switch buttons
+        const showMeBtn = document.getElementById('show-me-chord');
+        const nextBtn = document.getElementById('next-chord');
+        if (showMeBtn && nextBtn) {
+            showMeBtn.style.display = 'none';
+            nextBtn.style.display = 'inline-block';
         }
     }
 }

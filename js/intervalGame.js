@@ -22,6 +22,7 @@ class IntervalGame {
             minFret: 0,
             maxFret: 12
         };
+        this.showMeUsed = false;
         
         this.init();
     }
@@ -159,6 +160,21 @@ class IntervalGame {
         
         if (this.currentMode === 'interval-note-to-fret') {
             document.getElementById('interval-note-to-fret-game').classList.add('active');
+            
+            // Setup Show me button event listeners
+            const showMeBtn = document.getElementById('show-me-interval');
+            const nextBtn = document.getElementById('next-interval');
+            if (showMeBtn && !showMeBtn.hasAttribute('data-listener-attached')) {
+                showMeBtn.setAttribute('data-listener-attached', 'true');
+                showMeBtn.addEventListener('click', () => {
+                    console.log('Show me interval clicked!');
+                    this.showAnswer();
+                });
+            }
+            if (nextBtn && !nextBtn.hasAttribute('data-listener-attached')) {
+                nextBtn.setAttribute('data-listener-attached', 'true');
+                nextBtn.addEventListener('click', () => this.generateQuestion());
+            }
         } else {
             document.getElementById('interval-fret-to-note-game').classList.add('active');
         }
@@ -244,6 +260,15 @@ class IntervalGame {
         
         this.startTimer();
         this.clearSelection();
+        this.showMeUsed = false;
+        
+        // Reset show me/next buttons
+        const showMeBtn = document.getElementById('show-me-interval');
+        const nextBtn = document.getElementById('next-interval');
+        if (showMeBtn && this.currentMode === 'interval-note-to-fret') {
+            showMeBtn.style.display = 'inline-block';
+            nextBtn.style.display = 'none';
+        }
         
         if (this.currentMode === 'interval-note-to-fret') {
             this.generateNoteToFretQuestion();
@@ -442,8 +467,8 @@ class IntervalGame {
         }, 2000);
     }
     
-    processAnswer(isCorrect, responseTime) {
-        if (isCorrect) {
+    processAnswer(isCorrect, responseTime, gaveUp = false) {
+        if (isCorrect && !gaveUp) {
             this.score.correct++;
             this.score.streak++;
             document.getElementById('interval-correct-count').textContent = this.score.correct;
@@ -458,8 +483,9 @@ class IntervalGame {
         this.statistics.recordIntervalAnswer({
             mode: this.currentMode,
             question: this.currentQuestion,
-            isCorrect: isCorrect,
+            isCorrect: isCorrect && !gaveUp,
             responseTime: responseTime,
+            gaveUp: gaveUp,
             timestamp: Date.now()
         });
         
@@ -535,6 +561,36 @@ class IntervalGame {
             document.getElementById('string-pairs').value = this.settings.stringPairs;
             document.getElementById('interval-min-fret').value = this.settings.minFret;
             document.getElementById('interval-max-fret').value = this.settings.maxFret;
+        }
+    }
+    
+    showAnswer() {
+        if (!this.currentQuestion || this.showMeUsed || this.currentMode !== 'interval-note-to-fret') return;
+        
+        this.showMeUsed = true;
+        const responseTime = Date.now() - this.currentQuestion.startTime - this.pausedTime;
+        
+        // Record as incorrect with gave up flag
+        this.processAnswer(false, responseTime, true);
+        
+        // Show the correct answer on the fretboard
+        if (this.fretboardDisplayNoteToFret) {
+            this.fretboardDisplayNoteToFret.highlightMultiplePositions([
+                { string: this.currentQuestion.rootString, fret: this.currentQuestion.rootFret },
+                { string: this.currentQuestion.intervalString, fret: this.currentQuestion.intervalFret }
+            ]);
+        }
+        
+        // Show feedback
+        const intervalName = this.intervalTheory.intervals[this.currentQuestion.interval].name;
+        this.showFeedback(`The answer is: ${intervalName} from ${this.currentQuestion.rootNote} (String ${this.currentQuestion.rootString}, Fret ${this.currentQuestion.rootFret}) to ${this.currentQuestion.intervalNote} (String ${this.currentQuestion.intervalString}, Fret ${this.currentQuestion.intervalFret})`, false);
+        
+        // Switch buttons
+        const showMeBtn = document.getElementById('show-me-interval');
+        const nextBtn = document.getElementById('next-interval');
+        if (showMeBtn && nextBtn) {
+            showMeBtn.style.display = 'none';
+            nextBtn.style.display = 'inline-block';
         }
     }
 }

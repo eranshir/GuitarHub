@@ -18,6 +18,7 @@ class FretboardGame {
             maxFret: 12,
             enabledStrings: [1, 2, 3, 4, 5, 6]
         };
+        this.showMeUsed = false;
         
         this.init();
     }
@@ -124,6 +125,15 @@ class FretboardGame {
         
         this.startTimer();
         this.clearFeedback();
+        this.showMeUsed = false;
+        
+        // Reset show me/next buttons
+        const showMeBtn = document.getElementById('show-me-note');
+        const nextBtn = document.getElementById('next-note');
+        if (showMeBtn && this.currentMode === 'note-to-fret') {
+            showMeBtn.style.display = 'inline-block';
+            nextBtn.style.display = 'none';
+        }
         
         if (this.currentMode === 'note-to-fret') {
             this.generateNoteToFretQuestion();
@@ -189,7 +199,7 @@ class FretboardGame {
     }
     
     checkNoteToFretClick(clickedString, clickedFret) {
-        if (!this.isSessionActive || this.isPaused) return;
+        if (!this.isSessionActive || this.isPaused || this.showMeUsed) return;
         if (this.currentQuestion.type !== 'note-to-fret') return;
         
         const responseTime = Date.now() - this.currentQuestion.startTime - this.pausedTime;
@@ -227,8 +237,8 @@ class FretboardGame {
         setTimeout(() => this.generateQuestion(), 2000);
     }
     
-    processAnswer(isCorrect, responseTime) {
-        if (isCorrect) {
+    processAnswer(isCorrect, responseTime, gaveUp = false) {
+        if (isCorrect && !gaveUp) {
             this.score.correct++;
             this.score.streak++;
             document.getElementById('correct-count').textContent = this.score.correct;
@@ -243,8 +253,9 @@ class FretboardGame {
         this.statistics.recordAnswer({
             mode: this.currentMode,
             question: this.currentQuestion,
-            isCorrect: isCorrect,
+            isCorrect: isCorrect && !gaveUp,
             responseTime: responseTime,
+            gaveUp: gaveUp,
             timestamp: Date.now()
         });
         
@@ -336,6 +347,21 @@ class FretboardGame {
         
         if (this.currentMode === 'note-to-fret') {
             document.getElementById('note-to-fret-game').classList.add('active');
+            
+            // Setup Show me button event listeners for note-to-fret mode
+            const showMeBtn = document.getElementById('show-me-note');
+            const nextBtn = document.getElementById('next-note');
+            if (showMeBtn && !showMeBtn.hasAttribute('data-listener-attached')) {
+                showMeBtn.setAttribute('data-listener-attached', 'true');
+                showMeBtn.addEventListener('click', () => {
+                    console.log('Show me clicked!');
+                    this.showAnswer();
+                });
+            }
+            if (nextBtn && !nextBtn.hasAttribute('data-listener-attached')) {
+                nextBtn.setAttribute('data-listener-attached', 'true');
+                nextBtn.addEventListener('click', () => this.generateQuestion());
+            }
         } else {
             document.getElementById('fret-to-note-game').classList.add('active');
         }
@@ -404,6 +430,46 @@ class FretboardGame {
         
         if (this.startTime) {
             this.startTimer();
+        }
+    }
+    
+    showAnswer() {
+        // Check if we can show answer
+        if (!this.isSessionActive) {
+            console.log('Session not active');
+            return;
+        }
+        if (!this.currentQuestion) {
+            console.log('No current question');
+            return;
+        }
+        if (this.showMeUsed) {
+            console.log('Show me already used');
+            return;
+        }
+        if (this.currentMode !== 'note-to-fret') {
+            console.log('Wrong mode:', this.currentMode);
+            return;
+        }
+        
+        this.showMeUsed = true;
+        const responseTime = Date.now() - this.currentQuestion.startTime - this.pausedTime;
+        
+        // Record as incorrect with gave up flag
+        this.processAnswer(false, responseTime, true);
+        
+        // Show the correct answer on the fretboard
+        this.fretboardDisplayNoteToFret.highlightPosition(this.currentQuestion.string, this.currentQuestion.correctAnswer);
+        
+        // Show feedback
+        this.showFeedback(`The answer is: ${this.currentQuestion.note} on string ${this.currentQuestion.string} is at fret ${this.currentQuestion.correctAnswer}`, false);
+        
+        // Switch buttons
+        const showMeBtn = document.getElementById('show-me-note');
+        const nextBtn = document.getElementById('next-note');
+        if (showMeBtn && nextBtn) {
+            showMeBtn.style.display = 'none';
+            nextBtn.style.display = 'inline-block';
         }
     }
 }
