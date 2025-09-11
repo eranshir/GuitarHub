@@ -511,10 +511,24 @@ class ChordGame {
                 correctAnswer = root + 'maj7';  // e.g., "Cmaj7"
             } else if (chordObj.type === 'minor7') {
                 correctAnswer = root + 'm7';  // e.g., "Am7"
+            } else if (chordObj.type === 'sus2') {
+                correctAnswer = root + 'sus2';  // e.g., "Csus2"
+            } else if (chordObj.type === 'sus4') {
+                correctAnswer = root + 'sus4';  // e.g., "Csus4"
+            } else if (chordObj.type === '6th') {
+                correctAnswer = root + '6';  // e.g., "C6"
+            } else if (chordObj.type === 'm6') {
+                correctAnswer = root + 'm6';  // e.g., "Am6"
+            } else if (chordObj.type === 'add9') {
+                correctAnswer = root + 'add9';  // e.g., "Cadd9"
+            } else if (chordObj.type === 'power') {
+                correctAnswer = root + '5';  // e.g., "C5"
+            } else if (chordObj.type === 'dim') {
+                correctAnswer = root + 'dim';  // e.g., "Cdim"
+            } else if (chordObj.type === 'aug') {
+                correctAnswer = root + 'aug';  // e.g., "Caug"
             } else if (chordObj.type === 'inversion_major') {
-                // For inversions, we could accept just the root chord
-                // but these are specifically different (bass note changes)
-                // so keep them as separate for now
+                // For inversions, we keep them separate as they have different bass notes
                 correctAnswer = this.currentQuestion.chordKey;
             }
         }
