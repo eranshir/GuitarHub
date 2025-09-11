@@ -199,8 +199,8 @@ class ChordTheory {
             
             // Four-string moveable shapes (triads) - strings 4-3-2-1
             // Major shapes
-            'C_triad_5': {
-                name: 'C Major (triad, 5th pos)',
+            'C_triad_3': {
+                name: 'C Major (triad, 3rd pos)',
                 type: 'triad_major',
                 root: 'C',
                 positions: [{string: 4, fret: 5}, {string: 3, fret: 5}, {string: 2, fret: 5}, {string: 1, fret: 3}],
@@ -219,8 +219,8 @@ class ChordTheory {
                 shape: 'E-shape',
                 rootString: 1
             },
-            'D_triad_7': {
-                name: 'D Major (triad, 7th pos)',
+            'D_triad_5': {
+                name: 'D Major (triad, 5th pos)',
                 type: 'triad_major',
                 root: 'D',
                 positions: [{string: 4, fret: 7}, {string: 3, fret: 7}, {string: 2, fret: 7}, {string: 1, fret: 5}],
@@ -229,8 +229,8 @@ class ChordTheory {
                 shape: 'D-shape',
                 rootString: 4
             },
-            'F_triad_5': {
-                name: 'F Major (triad, 5th pos)',
+            'F_triad_8': {
+                name: 'F Major (triad, 8th pos)',
                 type: 'triad_major',
                 root: 'F',
                 positions: [{string: 4, fret: 10}, {string: 3, fret: 10}, {string: 2, fret: 10}, {string: 1, fret: 8}],
@@ -251,8 +251,8 @@ class ChordTheory {
                 shape: 'Dm-shape',
                 rootString: 4
             },
-            'Em_triad_8': {
-                name: 'E Minor (triad, 8th pos)',
+            'Em_triad_7': {
+                name: 'E Minor (triad, 7th pos)',
                 type: 'triad_minor',
                 root: 'E',
                 positions: [{string: 4, fret: 9}, {string: 3, fret: 9}, {string: 2, fret: 8}, {string: 1, fret: 7}],
@@ -362,8 +362,8 @@ class ChordTheory {
             'dominant7': ['G7', 'C7', 'D7', 'A7', 'E7'],
             'major7': ['Cmaj7', 'Gmaj7', 'Dmaj7', 'Amaj7', 'Emaj7'],
             'minor7': ['Am7', 'Em7', 'Dm7'],
-            'triad_major': ['C_triad_5', 'G_triad_3', 'D_triad_7', 'F_triad_5'],
-            'triad_minor': ['Am_triad_5', 'Em_triad_8'],
+            'triad_major': ['C_triad_3', 'G_triad_3', 'D_triad_5', 'F_triad_8'],
+            'triad_minor': ['Am_triad_5', 'Em_triad_7'],
             'inversion_major': ['C_1st_inv', 'G_1st_inv', 'C_2nd_inv'],
             'caged_major': ['C_CAGED_C', 'D_CAGED_C', 'G_CAGED_E', 'A_CAGED_G'],
             'major_high': ['C_8th_pos'],
