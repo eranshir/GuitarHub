@@ -58,6 +58,29 @@ class ChordGame {
     }
     
     setupEventListeners() {
+        // Accordion toggles
+        document.querySelectorAll('.accordion-toggle').forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                const target = toggle.dataset.target;
+                const content = document.getElementById(target);
+                const icon = toggle.querySelector('.accordion-icon');
+                
+                if (content) {
+                    const isOpen = content.classList.contains('show');
+                    
+                    if (isOpen) {
+                        content.classList.remove('show');
+                        toggle.classList.remove('active');
+                        icon.textContent = '▶';
+                    } else {
+                        content.classList.add('show');
+                        toggle.classList.add('active');
+                        icon.textContent = '▼';
+                    }
+                }
+            });
+        });
+        
         // Mode selection
         document.querySelectorAll('.chord-mode-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {

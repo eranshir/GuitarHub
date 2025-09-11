@@ -308,64 +308,108 @@
                         
                         <div id="chord-fret-to-name-game" class="game-content">
                             <h2 class="question">What chord is this?</h2>
-                            <div class="fretboard-container">
-                                <div class="fretboard" id="fretboard-chord-fret-to-name">
-                                    <!-- Fretboard will be generated dynamically -->
+                            <div class="chord-game-layout">
+                                <div class="chord-game-left">
+                                    <div class="fretboard-container">
+                                        <div class="fretboard" id="fretboard-chord-fret-to-name">
+                                            <!-- Fretboard will be generated dynamically -->
+                                        </div>
+                                    </div>
+                                    <button class="play-sound-btn" id="play-chord-fret">🔊 Play Chord</button>
                                 </div>
-                            </div>
-                            <button class="play-sound-btn" id="play-chord-fret">🔊 Play Chord</button>
-                            <div class="chord-selector">
-                                <p>Select the chord:</p>
-                                <div class="chord-buttons">
-                                    <!-- Major chords -->
-                                    <div class="chord-group">
-                                        <h4>Major</h4>
-                                        <button class="chord-btn" data-chord="C">C</button>
-                                        <button class="chord-btn" data-chord="G">G</button>
-                                        <button class="chord-btn" data-chord="D">D</button>
-                                        <button class="chord-btn" data-chord="A">A</button>
-                                        <button class="chord-btn" data-chord="E">E</button>
-                                        <button class="chord-btn" data-chord="F">F</button>
+                                <div class="chord-game-right">
+                                    <!-- Chord Selection Accordion -->
+                                    <div class="accordion-section">
+                                        <button class="accordion-toggle active" data-target="chord-selector-content">
+                                            <span>Chord Selection</span>
+                                            <span class="accordion-icon">▼</span>
+                                        </button>
+                                        <div id="chord-selector-content" class="accordion-content show">
+                                            <div class="chord-buttons">
+                                                <h4>Major</h4>
+                                                <button class="chord-btn" data-chord="C">C</button>
+                                                <button class="chord-btn" data-chord="D">D</button>
+                                                <button class="chord-btn" data-chord="E">E</button>
+                                                <button class="chord-btn" data-chord="F">F</button>
+                                                <button class="chord-btn" data-chord="G">G</button>
+                                                <button class="chord-btn" data-chord="A">A</button>
+                                                
+                                                <h4>Minor</h4>
+                                                <button class="chord-btn" data-chord="Am">Am</button>
+                                                <button class="chord-btn" data-chord="Bm">Bm</button>
+                                                <button class="chord-btn" data-chord="Dm">Dm</button>
+                                                <button class="chord-btn" data-chord="Em">Em</button>
+                                                
+                                                <h4>7th</h4>
+                                                <button class="chord-btn" data-chord="C7">C7</button>
+                                                <button class="chord-btn" data-chord="D7">D7</button>
+                                                <button class="chord-btn" data-chord="E7">E7</button>
+                                                <button class="chord-btn" data-chord="G7">G7</button>
+                                                <button class="chord-btn" data-chord="A7">A7</button>
+                                                <div></div>
+                                                
+                                                <h4>Major 7th</h4>
+                                                <button class="chord-btn" data-chord="Cmaj7">Cmaj7</button>
+                                                <button class="chord-btn" data-chord="Dmaj7">Dmaj7</button>
+                                                <button class="chord-btn" data-chord="Emaj7">Emaj7</button>
+                                                <button class="chord-btn" data-chord="Gmaj7">Gmaj7</button>
+                                                <button class="chord-btn" data-chord="Amaj7">Amaj7</button>
+                                                <div></div>
+                                                
+                                                <h4>Minor 7th</h4>
+                                                <button class="chord-btn" data-chord="Am7">Am7</button>
+                                                <button class="chord-btn" data-chord="Dm7">Dm7</button>
+                                                <button class="chord-btn" data-chord="Em7">Em7</button>
+                                                <div></div>
+                                                
+                                                <h4>Inversions</h4>
+                                                <button class="chord-btn" data-chord="C_1st_inv">C/E</button>
+                                                <button class="chord-btn" data-chord="G_1st_inv">G/B</button>
+                                                <button class="chord-btn" data-chord="C_2nd_inv">C/G</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- Minor chords -->
-                                    <div class="chord-group">
-                                        <h4>Minor</h4>
-                                        <button class="chord-btn" data-chord="Am">Am</button>
-                                        <button class="chord-btn" data-chord="Em">Em</button>
-                                        <button class="chord-btn" data-chord="Dm">Dm</button>
-                                        <button class="chord-btn" data-chord="Bm">Bm</button>
-                                    </div>
-                                    <!-- 7th chords -->
-                                    <div class="chord-group">
-                                        <h4>7th</h4>
-                                        <button class="chord-btn" data-chord="G7">G7</button>
-                                        <button class="chord-btn" data-chord="C7">C7</button>
-                                        <button class="chord-btn" data-chord="D7">D7</button>
-                                        <button class="chord-btn" data-chord="A7">A7</button>
-                                        <button class="chord-btn" data-chord="E7">E7</button>
-                                    </div>
-                                    <!-- Major 7th chords -->
-                                    <div class="chord-group">
-                                        <h4>Major 7th</h4>
-                                        <button class="chord-btn" data-chord="Cmaj7">Cmaj7</button>
-                                        <button class="chord-btn" data-chord="Gmaj7">Gmaj7</button>
-                                        <button class="chord-btn" data-chord="Dmaj7">Dmaj7</button>
-                                        <button class="chord-btn" data-chord="Amaj7">Amaj7</button>
-                                        <button class="chord-btn" data-chord="Emaj7">Emaj7</button>
-                                    </div>
-                                    <!-- Minor 7th chords -->
-                                    <div class="chord-group">
-                                        <h4>Minor 7th</h4>
-                                        <button class="chord-btn" data-chord="Am7">Am7</button>
-                                        <button class="chord-btn" data-chord="Em7">Em7</button>
-                                        <button class="chord-btn" data-chord="Dm7">Dm7</button>
-                                    </div>
-                                    <!-- Inversions (keep these as they're genuinely different chords) -->
-                                    <div class="chord-group">
-                                        <h4>Inversions</h4>
-                                        <button class="chord-btn" data-chord="C_1st_inv">C/E</button>
-                                        <button class="chord-btn" data-chord="G_1st_inv">G/B</button>
-                                        <button class="chord-btn" data-chord="C_2nd_inv">C/G</button>
+                                    
+                                    <!-- Settings Accordion -->
+                                    <div class="accordion-section">
+                                        <button class="accordion-toggle" data-target="chord-settings-content">
+                                            <span>Settings</span>
+                                            <span class="accordion-icon">▶</span>
+                                        </button>
+                                        <div id="chord-settings-content" class="accordion-content">
+                                            <div class="setting-group">
+                                                <label>Basic Chord Types:</label>
+                                                <div class="chord-type-toggles">
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="major" checked> Major</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="minor" checked> Minor</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="dominant7"> 7th</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="major7"> Major 7th</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="minor7"> Minor 7th</label>
+                                                </div>
+                                            </div>
+                                            <div class="setting-group">
+                                                <label>Advanced Types:</label>
+                                                <div class="chord-type-toggles">
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="triad_major"> Triads (Maj)</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="triad_minor"> Triads (Min)</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="inversion_major"> Inversions</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="caged_major"> CAGED</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="major_high"> High Maj</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="minor_high"> High Min</label>
+                                                </div>
+                                            </div>
+                                            <div class="setting-group">
+                                                <label>
+                                                    <input type="checkbox" id="include-barre" checked>
+                                                    Include barre chords
+                                                </label>
+                                            </div>
+                                            <div class="setting-group">
+                                                <label>Fret range:</label>
+                                                <input type="number" id="chord-min-fret" min="0" max="15" value="0"> -
+                                                <input type="number" id="chord-max-fret" min="3" max="15" value="12">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -392,42 +436,6 @@
                                 <button id="clear-chord-selection" class="clear-btn-small">Clear</button>
                                 <button id="submit-chord-selection" class="submit-btn-small">Submit</button>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="settings-panel">
-                        <h3>Chord Settings</h3>
-                        <div class="setting-group">
-                            <label>Basic Chord Types:</label>
-                            <div class="chord-type-toggles">
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="major" checked> Major (open)</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="minor" checked> Minor (open)</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="dominant7"> 7th</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="major7"> Major 7th</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="minor7"> Minor 7th</label>
-                            </div>
-                        </div>
-                        <div class="setting-group">
-                            <label>Advanced Chord Types:</label>
-                            <div class="chord-type-toggles">
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="triad_major"> Major Triads</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="triad_minor"> Minor Triads</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="inversion_major"> Inversions</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="caged_major"> CAGED Shapes</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="major_high"> Higher Position Major</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="minor_high"> Higher Position Minor</label>
-                            </div>
-                        </div>
-                        <div class="setting-group">
-                            <label>
-                                <input type="checkbox" id="include-barre" checked>
-                                Include barre chords
-                            </label>
-                        </div>
-                        <div class="setting-group">
-                            <label>Fret range:</label>
-                            <input type="number" id="chord-min-fret" min="0" max="15" value="0"> -
-                            <input type="number" id="chord-max-fret" min="3" max="15" value="12">
                         </div>
                     </div>
                 </div>
