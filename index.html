@@ -352,6 +352,40 @@
                                         <button class="chord-btn" data-chord="Em7">Em7</button>
                                         <button class="chord-btn" data-chord="Dm7">Dm7</button>
                                     </div>
+                                    <!-- Triads -->
+                                    <div class="chord-group">
+                                        <h4>Major Triads</h4>
+                                        <button class="chord-btn" data-chord="C_triad_5">C (5th)</button>
+                                        <button class="chord-btn" data-chord="G_triad_3">G (3rd)</button>
+                                        <button class="chord-btn" data-chord="D_triad_7">D (7th)</button>
+                                        <button class="chord-btn" data-chord="F_triad_5">F (5th)</button>
+                                    </div>
+                                    <div class="chord-group">
+                                        <h4>Minor Triads</h4>
+                                        <button class="chord-btn" data-chord="Am_triad_5">Am (5th)</button>
+                                        <button class="chord-btn" data-chord="Em_triad_8">Em (8th)</button>
+                                    </div>
+                                    <!-- Inversions -->
+                                    <div class="chord-group">
+                                        <h4>Inversions</h4>
+                                        <button class="chord-btn" data-chord="C_1st_inv">C/E</button>
+                                        <button class="chord-btn" data-chord="G_1st_inv">G/B</button>
+                                        <button class="chord-btn" data-chord="C_2nd_inv">C/G</button>
+                                    </div>
+                                    <!-- CAGED -->
+                                    <div class="chord-group">
+                                        <h4>CAGED Shapes</h4>
+                                        <button class="chord-btn" data-chord="C_CAGED_C">C (C-shape)</button>
+                                        <button class="chord-btn" data-chord="D_CAGED_C">D (C-shape)</button>
+                                        <button class="chord-btn" data-chord="G_CAGED_E">G (E-shape)</button>
+                                        <button class="chord-btn" data-chord="A_CAGED_G">A (G-shape)</button>
+                                    </div>
+                                    <!-- Higher positions -->
+                                    <div class="chord-group">
+                                        <h4>Higher Positions</h4>
+                                        <button class="chord-btn" data-chord="C_8th_pos">C (8th)</button>
+                                        <button class="chord-btn" data-chord="Am_5th_pos">Am (5th)</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -379,24 +413,36 @@
                     <div class="settings-panel">
                         <h3>Chord Settings</h3>
                         <div class="setting-group">
-                            <label>Practice Chord Types:</label>
+                            <label>Basic Chord Types:</label>
                             <div class="chord-type-toggles">
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="major" checked> Major</label>
-                                <label><input type="checkbox" class="chord-type-toggle" data-type="minor" checked> Minor</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="major" checked> Major (open)</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="minor" checked> Minor (open)</label>
                                 <label><input type="checkbox" class="chord-type-toggle" data-type="dominant7"> 7th</label>
                                 <label><input type="checkbox" class="chord-type-toggle" data-type="major7"> Major 7th</label>
                                 <label><input type="checkbox" class="chord-type-toggle" data-type="minor7"> Minor 7th</label>
                             </div>
                         </div>
                         <div class="setting-group">
+                            <label>Advanced Chord Types:</label>
+                            <div class="chord-type-toggles">
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="triad_major"> Major Triads</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="triad_minor"> Minor Triads</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="inversion_major"> Inversions</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="caged_major"> CAGED Shapes</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="major_high"> Higher Position Major</label>
+                                <label><input type="checkbox" class="chord-type-toggle" data-type="minor_high"> Higher Position Minor</label>
+                            </div>
+                        </div>
+                        <div class="setting-group">
                             <label>
-                                <input type="checkbox" id="include-barre">
+                                <input type="checkbox" id="include-barre" checked>
                                 Include barre chords
                             </label>
                         </div>
                         <div class="setting-group">
-                            <label>Max fret:</label>
-                            <input type="number" id="chord-max-fret" min="3" max="12" value="5">
+                            <label>Fret range:</label>
+                            <input type="number" id="chord-min-fret" min="0" max="15" value="0"> -
+                            <input type="number" id="chord-max-fret" min="3" max="15" value="12">
                         </div>
                     </div>
                 </div>

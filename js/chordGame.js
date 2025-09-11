@@ -22,8 +22,9 @@ class ChordGame {
         
         this.settings = {
             enabledTypes: ['major', 'minor'],
-            maxFret: 5,
-            includeBarre: false
+            minFret: 0,
+            maxFret: 12,
+            includeBarre: true  // Changed to true by default since many advanced chords use barre
         };
         
         this.fretboardDisplayFretToName = null;
@@ -41,12 +42,12 @@ class ChordGame {
     initializeFretboards() {
         // Initialize fretboard for fret-to-name mode (showing chord shape)
         if (!this.fretboardDisplayFretToName) {
-            this.fretboardDisplayFretToName = new FretboardDisplay('fretboard-chord-fret-to-name', false);
+            this.fretboardDisplayFretToName = new FretboardDisplay('fretboard-chord-fret-to-name', false, 15);
         }
         
         // Initialize fretboard for name-to-fret mode (interactive)
         if (!this.fretboardDisplayNameToFret) {
-            this.fretboardDisplayNameToFret = new FretboardDisplay('fretboard-chord-name-to-fret', true);
+            this.fretboardDisplayNameToFret = new FretboardDisplay('fretboard-chord-name-to-fret', true, 15);
             if (this.fretboardDisplayNameToFret) {
                 this.fretboardDisplayNameToFret.setClickHandler((string, fret) => {
                     this.handleFretboardClick(string, fret);
@@ -136,6 +137,24 @@ class ChordGame {
         if (includeBarreToggle) {
             includeBarreToggle.addEventListener('change', (e) => {
                 this.settings.includeBarre = e.target.checked;
+                this.saveSettings();
+            });
+        }
+        
+        // Fret range settings
+        const minFretInput = document.getElementById('chord-min-fret');
+        const maxFretInput = document.getElementById('chord-max-fret');
+        
+        if (minFretInput) {
+            minFretInput.addEventListener('change', (e) => {
+                this.settings.minFret = parseInt(e.target.value);
+                this.saveSettings();
+            });
+        }
+        
+        if (maxFretInput) {
+            maxFretInput.addEventListener('change', (e) => {
+                this.settings.maxFret = parseInt(e.target.value);
                 this.saveSettings();
             });
         }
@@ -234,20 +253,56 @@ class ChordGame {
     }
     
     generateFretToNameQuestion() {
-        // Filter out barre chords if not enabled
         let enabledTypes = [...this.settings.enabledTypes];
-        if (!this.settings.includeBarre) {
-            // We'll filter the actual chords, not the types
-        }
         
         let chord;
+        let attempts = 0;
+        const maxAttempts = 50;
+        
         do {
             chord = this.chordTheory.getRandomChord(enabledTypes);
-            // Skip barre chords if not enabled
-        } while (chord && !this.settings.includeBarre && chord.barrePosition);
+            attempts++;
+            
+            if (!chord) {
+                console.log('No chord returned from getRandomChord');
+                break;
+            }
+            
+            // Check if chord has barre and it's not enabled
+            if (!this.settings.includeBarre && chord.barrePosition) {
+                console.log('Skipping barre chord:', chord.name);
+                continue;
+            }
+            
+            // Check if chord is within fret range
+            const frettedPositions = chord.positions.filter(p => p.fret > 0);
+            if (frettedPositions.length === 0) {
+                console.log('Skipping chord with no fretted positions:', chord.name);
+                continue; // Skip if no fretted positions
+            }
+            
+            const maxFret = Math.max(...frettedPositions.map(p => p.fret));
+            const minFret = Math.min(...frettedPositions.map(p => p.fret));
+            
+            console.log(`Chord ${chord.name}: frets ${minFret}-${maxFret}, settings: ${this.settings.minFret}-${this.settings.maxFret}`);
+            
+            if (minFret >= this.settings.minFret && maxFret <= this.settings.maxFret) {
+                console.log('Found valid chord:', chord.name);
+                break; // Found a valid chord
+            } else {
+                console.log('Chord out of range:', chord.name);
+            }
+        } while (attempts < maxAttempts);
         
-        if (!chord) {
-            this.showFeedback('No chords available with current settings', false);
+        if (!chord || attempts >= maxAttempts) {
+            console.log('Failed to find chord:', {
+                enabledTypes,
+                minFret: this.settings.minFret,
+                maxFret: this.settings.maxFret,
+                includeBarre: this.settings.includeBarre,
+                attempts
+            });
+            this.showFeedback('No chords available with current settings. Try adjusting fret range or enabling more chord types.', false);
             return;
         }
         
@@ -272,12 +327,39 @@ class ChordGame {
         let enabledTypes = [...this.settings.enabledTypes];
         
         let chord;
+        let attempts = 0;
+        const maxAttempts = 50;
+        
         do {
             chord = this.chordTheory.getRandomChord(enabledTypes);
-        } while (chord && !this.settings.includeBarre && chord.barrePosition);
+            attempts++;
+            
+            if (!chord) break;
+            
+            // Check if chord has barre and it's not enabled
+            if (!this.settings.includeBarre && chord.barrePosition) continue;
+            
+            // Check if chord is within fret range
+            const frettedPositions = chord.positions.filter(p => p.fret > 0);
+            if (frettedPositions.length === 0) continue; // Skip if no fretted positions
+            
+            const maxFret = Math.max(...frettedPositions.map(p => p.fret));
+            const minFret = Math.min(...frettedPositions.map(p => p.fret));
+            
+            if (minFret >= this.settings.minFret && maxFret <= this.settings.maxFret) {
+                break; // Found a valid chord
+            }
+        } while (attempts < maxAttempts);
         
-        if (!chord) {
-            this.showFeedback('No chords available with current settings', false);
+        if (!chord || attempts >= maxAttempts) {
+            console.log('Failed to find chord:', {
+                enabledTypes,
+                minFret: this.settings.minFret,
+                maxFret: this.settings.maxFret,
+                includeBarre: this.settings.includeBarre,
+                attempts
+            });
+            this.showFeedback('No chords available with current settings. Try adjusting fret range or enabling more chord types.', false);
             return;
         }
         
@@ -548,7 +630,16 @@ class ChordGame {
     loadSettings() {
         const saved = localStorage.getItem('chordGameSettings');
         if (saved) {
-            this.settings = JSON.parse(saved);
+            const loadedSettings = JSON.parse(saved);
+            // Merge with defaults to ensure all properties exist
+            this.settings = {
+                ...this.settings,  // Start with defaults
+                ...loadedSettings  // Override with saved values
+            };
+            
+            // Ensure minFret and maxFret are defined
+            if (this.settings.minFret === undefined) this.settings.minFret = 0;
+            if (this.settings.maxFret === undefined) this.settings.maxFret = 12;
             
             // Update UI
             document.querySelectorAll('.chord-type-toggle').forEach(toggle => {
@@ -558,6 +649,16 @@ class ChordGame {
             const includeBarreToggle = document.getElementById('include-barre');
             if (includeBarreToggle) {
                 includeBarreToggle.checked = this.settings.includeBarre;
+            }
+            
+            const minFretInput = document.getElementById('chord-min-fret');
+            if (minFretInput) {
+                minFretInput.value = this.settings.minFret;
+            }
+            
+            const maxFretInput = document.getElementById('chord-max-fret');
+            if (maxFretInput) {
+                maxFretInput.value = this.settings.maxFret;
             }
         }
     }

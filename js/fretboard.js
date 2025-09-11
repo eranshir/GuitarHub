@@ -1,7 +1,7 @@
 class FretboardDisplay {
-    constructor(containerId = 'fretboard', isInteractive = false) {
+    constructor(containerId = 'fretboard', isInteractive = false, maxFrets = 12) {
         this.container = document.getElementById(containerId);
-        this.fretCount = 12;
+        this.fretCount = maxFrets;
         this.stringCount = 6;
         this.stringNames = ['E', 'B', 'G', 'D', 'A', 'E'];
         this.isInteractive = isInteractive;
