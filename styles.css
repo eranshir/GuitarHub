@@ -638,9 +638,29 @@ header h1 {
 }
 
 .accordion-content.show {
-    max-height: 600px;
+    max-height: 400px;
     padding: 20px;
     overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+/* Custom scrollbar for accordion */
+.accordion-content.show::-webkit-scrollbar {
+    width: 8px;
+}
+
+.accordion-content.show::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.accordion-content.show::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.accordion-content.show::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 /* Chord Buttons in Accordion */
