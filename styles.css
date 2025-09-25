@@ -638,8 +638,9 @@ header h1 {
 }
 
 .accordion-content.show {
-    max-height: 800px;
+    max-height: 600px;
     padding: 20px;
+    overflow-y: auto;
 }
 
 /* Chord Buttons in Accordion */
@@ -658,12 +659,16 @@ header h1 {
 .chord-game-right .chord-buttons h4 {
     font-size: 0.85em;
     color: #666;
-    margin: 10px 0 5px 0;
+    margin: 15px 0 8px 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     grid-column: 1 / -1;
     border-bottom: 1px solid #e0e0e0;
     padding-bottom: 5px;
+}
+
+.chord-game-right .chord-buttons h4:first-child {
+    margin-top: 0;
 }
 
 .chord-game-right .chord-btn {
