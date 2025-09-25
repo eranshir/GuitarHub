@@ -1274,3 +1274,27 @@ header h1 {
     gap: 5px;
     font-size: 0.95em;
 }
+
+.settings-note {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 15px;
+    text-align: center;
+    padding: 10px;
+}
+
+.settings-link-btn {
+    width: 100%;
+    padding: 10px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.settings-link-btn:hover {
+    background: var(--primary-dark);
+}

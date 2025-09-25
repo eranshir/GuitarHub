@@ -20,8 +20,9 @@ class ChordGame {
         this.pausedTime = 0;
         this.pauseStartTime = null;
         
+        // Default settings - will be updated based on HTML checkboxes
         this.settings = {
-            enabledTypes: ['major', 'minor'],
+            enabledTypes: [],  // Will be populated from HTML
             minFret: 0,
             maxFret: 12,
             includeBarre: true  // Changed to true by default since many advanced chords use barre
@@ -781,25 +782,49 @@ class ChordGame {
             if (this.settings.minFret === undefined) this.settings.minFret = 0;
             if (this.settings.maxFret === undefined) this.settings.maxFret = 12;
             
-            // Update UI
+            // Ensure enabledTypes includes all available chord types if not specified
+            // This handles the case where new chord types are added after settings were saved
+            if (!this.settings.enabledTypes || this.settings.enabledTypes.length === 0) {
+                // Default to major and minor if no types are enabled
+                this.settings.enabledTypes = ['major', 'minor'];
+            }
+            
+            // Update UI to match loaded settings
             document.querySelectorAll('.chord-type-toggle').forEach(toggle => {
                 toggle.checked = this.settings.enabledTypes.includes(toggle.dataset.type);
             });
+        } else {
+            // No saved settings - read initial state from HTML checkboxes
+            this.settings.enabledTypes = [];
+            document.querySelectorAll('.chord-type-toggle:checked').forEach(toggle => {
+                this.settings.enabledTypes.push(toggle.dataset.type);
+            });
             
-            const includeBarreToggle = document.getElementById('include-barre');
-            if (includeBarreToggle) {
-                includeBarreToggle.checked = this.settings.includeBarre;
+            // If no checkboxes are checked, default to major and minor
+            if (this.settings.enabledTypes.length === 0) {
+                this.settings.enabledTypes = ['major', 'minor'];
+                // Check the major and minor checkboxes
+                const majorToggle = document.querySelector('.chord-type-toggle[data-type="major"]');
+                const minorToggle = document.querySelector('.chord-type-toggle[data-type="minor"]');
+                if (majorToggle) majorToggle.checked = true;
+                if (minorToggle) minorToggle.checked = true;
             }
-            
-            const minFretInput = document.getElementById('chord-min-fret');
-            if (minFretInput) {
-                minFretInput.value = this.settings.minFret;
-            }
-            
-            const maxFretInput = document.getElementById('chord-max-fret');
-            if (maxFretInput) {
-                maxFretInput.value = this.settings.maxFret;
-            }
+        }
+        
+        // Always sync UI elements with current settings
+        const includeBarreToggle = document.getElementById('include-barre');
+        if (includeBarreToggle) {
+            includeBarreToggle.checked = this.settings.includeBarre;
+        }
+        
+        const minFretInput = document.getElementById('chord-min-fret');
+        if (minFretInput) {
+            minFretInput.value = this.settings.minFret;
+        }
+        
+        const maxFretInput = document.getElementById('chord-max-fret');
+        if (maxFretInput) {
+            maxFretInput.value = this.settings.maxFret;
         }
     }
     

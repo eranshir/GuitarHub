@@ -475,24 +475,89 @@
 
                         <div id="chord-name-to-fret-game" class="game-content">
                             <h2 class="question">Play this chord:</h2>
-                            <div class="chord-display">
-                                <span class="chord-name" id="target-chord">-</span>
-                            </div>
-                            <button class="play-sound-btn" id="play-chord-name">🔊 Play Chord</button>
-                            <div class="help-controls">
-                                <button class="show-me-btn" id="show-me-chord">Show me</button>
-                                <button class="next-btn" id="next-chord" style="display: none;">Next</button>
-                            </div>
-                            <p class="instruction-text">Click on the fretboard to form the chord:</p>
-                            <div class="fretboard-container">
-                                <div class="fretboard" id="fretboard-chord-name-to-fret">
-                                    <!-- Fretboard will be generated dynamically -->
+                            <div class="chord-game-layout">
+                                <div class="chord-game-left">
+                                    <div class="chord-display">
+                                        <span class="chord-name" id="target-chord">-</span>
+                                    </div>
+                                    <button class="play-sound-btn" id="play-chord-name">🔊 Play Chord</button>
+                                    <div class="help-controls">
+                                        <button class="show-me-btn" id="show-me-chord">Show me</button>
+                                        <button class="next-btn" id="next-chord" style="display: none;">Next</button>
+                                    </div>
+                                    <p class="instruction-text">Click on the fretboard to form the chord:</p>
+                                    <div class="fretboard-container">
+                                        <div class="fretboard" id="fretboard-chord-name-to-fret">
+                                            <!-- Fretboard will be generated dynamically -->
+                                        </div>
+                                    </div>
+                                    <div class="selected-notes">
+                                        <span>Selected: <span id="selected-chord-notes">None</span></span>
+                                        <button id="clear-chord-selection" class="clear-btn-small">Clear</button>
+                                        <button id="submit-chord-selection" class="submit-btn-small">Submit</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="selected-notes">
-                                <span>Selected: <span id="selected-chord-notes">None</span></span>
-                                <button id="clear-chord-selection" class="clear-btn-small">Clear</button>
-                                <button id="submit-chord-selection" class="submit-btn-small">Submit</button>
+                                <div class="chord-game-right">
+                                    <!-- Settings Accordion -->
+                                    <div class="accordion-section">
+                                        <button class="accordion-toggle" data-target="chord-settings-name-to-fret">
+                                            <span>Settings</span>
+                                            <span class="accordion-icon">▶</span>
+                                        </button>
+                                        <div id="chord-settings-name-to-fret" class="accordion-content">
+                                            <div class="setting-group">
+                                                <label>Basic Chord Types:</label>
+                                                <div class="chord-type-toggles">
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="major" checked> Major</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="minor" checked> Minor</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="dominant7"> 7th</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="major7"> Major 7th</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="minor7"> Minor 7th</label>
+                                                </div>
+                                            </div>
+                                            <div class="setting-group">
+                                                <label>Extended:</label>
+                                                <div class="chord-type-toggles">
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="sus2"> Sus2</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="sus4"> Sus4</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="6th"> 6th</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="m6"> Minor 6th</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="add9"> Add9</label>
+                                                </div>
+                                            </div>
+                                            <div class="setting-group">
+                                                <label>Special:</label>
+                                                <div class="chord-type-toggles">
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="power"> Power</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="dim"> Diminished</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="aug"> Augmented</label>
+                                                </div>
+                                            </div>
+                                            <div class="setting-group">
+                                                <label>Advanced:</label>
+                                                <div class="chord-type-toggles">
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="triad_major"> Triads (Maj)</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="triad_minor"> Triads (Min)</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="inversion_major"> Inversions</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="caged_major"> CAGED</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="major_high"> High Maj</label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="minor_high"> High Min</label>
+                                                </div>
+                                            </div>
+                                            <div class="setting-group">
+                                                <label><input type="checkbox" id="include-barre" checked> Include Barre Chords</label>
+                                            </div>
+                                            <div class="setting-group">
+                                                <label>Fret Range:</label>
+                                                <div class="fret-range-inputs">
+                                                    <input type="number" id="chord-min-fret" min="0" max="24" value="0">
+                                                    <span>to</span>
+                                                    <input type="number" id="chord-max-fret" min="0" max="24" value="12">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
