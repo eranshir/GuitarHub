@@ -568,8 +568,34 @@ class ChordGame {
         
         if (isCorrect) {
             this.showFeedback(`Correct! That's ${this.currentQuestion.chordName}`, true);
+            // Auto-progress after correct answer
+            setTimeout(() => {
+                this.clearFeedback();
+                this.generateQuestion();
+            }, 2000);
         } else {
-            // Combine selected positions with open strings to identify the full chord
+            // Show the correct answer on the fretboard
+            this.clearSelection();
+            
+            // Highlight all positions of the correct chord
+            const correctPositions = [];
+            
+            // Add fretted positions
+            this.currentQuestion.frettedPositions.forEach(pos => {
+                correctPositions.push({ string: pos.string, fret: pos.fret });
+            });
+            
+            // Add open strings
+            this.currentQuestion.openStrings.forEach(string => {
+                correctPositions.push({ string: string, fret: 0 });
+            });
+            
+            // Highlight the correct chord on the fretboard
+            if (this.fretboardDisplayNameToFret) {
+                this.fretboardDisplayNameToFret.highlightMultiplePositions(correctPositions);
+            }
+            
+            // Combine selected positions with open strings to identify what was played
             const fullPositions = [...this.selectedPositions];
             this.currentQuestion.openStrings.forEach(string => {
                 fullPositions.push({ string, fret: 0 });
@@ -577,13 +603,23 @@ class ChordGame {
             
             const playedChord = this.chordTheory.getChordByPositions(fullPositions);
             const playedName = playedChord ? playedChord.name : 'not a recognized chord';
-            this.showFeedback(`Incorrect. You played ${playedName}. Looking for ${this.currentQuestion.chordName}`, false);
+            this.showFeedback(`Incorrect. You played ${playedName}. The correct answer is shown on the fretboard.`, false);
+            
+            // Show the "Next" button instead of auto-progressing
+            const submitBtn = document.getElementById('submit-chord-selection');
+            const clearBtn = document.getElementById('clear-chord-selection');
+            if (submitBtn && clearBtn) {
+                submitBtn.style.display = 'none';
+                clearBtn.textContent = 'Next';
+                clearBtn.onclick = () => {
+                    this.clearFeedback();
+                    this.generateQuestion();
+                    clearBtn.textContent = 'Clear';
+                    clearBtn.onclick = () => this.clearSelection();
+                    submitBtn.style.display = 'inline-block';
+                };
+            }
         }
-        
-        setTimeout(() => {
-            this.clearFeedback();
-            this.generateQuestion();
-        }, 3000);
     }
     
     processAnswer(isCorrect, responseTime, gaveUp = false) {
