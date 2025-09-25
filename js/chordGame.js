@@ -574,8 +574,21 @@ class ChordGame {
                 this.generateQuestion();
             }, 2000);
         } else {
-            // Show the correct answer on the fretboard
-            this.clearSelection();
+            // First identify what was played before clearing
+            const fullPositions = [...this.selectedPositions];
+            this.currentQuestion.openStrings.forEach(string => {
+                fullPositions.push({ string, fret: 0 });
+            });
+            
+            const playedChord = this.chordTheory.getChordByPositions(fullPositions);
+            const playedName = playedChord ? playedChord.name : 'not a recognized chord';
+            
+            // Now clear the selection
+            this.selectedPositions = [];
+            const selectedNotesElement = document.getElementById('selected-chord-notes');
+            if (selectedNotesElement) {
+                selectedNotesElement.textContent = 'Correct answer shown';
+            }
             
             // Highlight all positions of the correct chord
             const correctPositions = [];
@@ -592,18 +605,16 @@ class ChordGame {
             
             // Highlight the correct chord on the fretboard
             if (this.fretboardDisplayNameToFret) {
+                this.fretboardDisplayNameToFret.clearHighlights();
                 this.fretboardDisplayNameToFret.highlightMultiplePositions(correctPositions);
+                
+                // Also show muted strings
+                if (this.currentQuestion.muted && this.currentQuestion.muted.length > 0) {
+                    this.showMutedStrings(this.currentQuestion.muted, 'fretboard-chord-name-to-fret');
+                }
             }
             
-            // Combine selected positions with open strings to identify what was played
-            const fullPositions = [...this.selectedPositions];
-            this.currentQuestion.openStrings.forEach(string => {
-                fullPositions.push({ string, fret: 0 });
-            });
-            
-            const playedChord = this.chordTheory.getChordByPositions(fullPositions);
-            const playedName = playedChord ? playedChord.name : 'not a recognized chord';
-            this.showFeedback(`Incorrect. You played ${playedName}. The correct answer is shown on the fretboard.`, false);
+            this.showFeedback(`Incorrect. You played ${playedName}. The correct answer (${this.currentQuestion.chordName}) is shown on the fretboard.`, false);
             
             // Show the "Next" button instead of auto-progressing
             const submitBtn = document.getElementById('submit-chord-selection');
@@ -613,6 +624,7 @@ class ChordGame {
                 clearBtn.textContent = 'Next';
                 clearBtn.onclick = () => {
                     this.clearFeedback();
+                    this.clearSelection();  // This will clear highlights and muted strings
                     this.generateQuestion();
                     clearBtn.textContent = 'Clear';
                     clearBtn.onclick = () => this.clearSelection();
