@@ -183,6 +183,46 @@ class ChordGame {
                 this.saveSettings();
             });
         }
+
+        // Apply settings buttons (one for each mode)
+        const applyBtnFretToName = document.getElementById('apply-chord-settings-fret-to-name');
+        if (applyBtnFretToName) {
+            applyBtnFretToName.addEventListener('click', () => {
+                this.applySettings();
+            });
+        }
+
+        const applyBtnNameToFret = document.getElementById('apply-chord-settings-name-to-fret');
+        if (applyBtnNameToFret) {
+            applyBtnNameToFret.addEventListener('click', () => {
+                this.applySettings();
+            });
+        }
+    }
+
+    applySettings() {
+        // Update settings from UI
+        this.updateEnabledTypes();
+        const includeBarreToggle = document.getElementById('include-barre');
+        if (includeBarreToggle) {
+            this.settings.includeBarre = includeBarreToggle.checked;
+        }
+        const minFretInput = document.getElementById('chord-min-fret');
+        const maxFretInput = document.getElementById('chord-max-fret');
+        if (minFretInput) {
+            this.settings.minFret = parseInt(minFretInput.value);
+        }
+        if (maxFretInput) {
+            this.settings.maxFret = parseInt(maxFretInput.value);
+        }
+        this.saveSettings();
+
+        // If session is active, regenerate the current question
+        if (this.isSessionActive && !this.isPaused) {
+            this.clearFeedback();
+            this.clearSelection();
+            this.generateQuestion();
+        }
     }
     
     startSession() {
@@ -351,7 +391,7 @@ class ChordGame {
                 includeBarre: this.settings.includeBarre,
                 attempts
             });
-            this.showFeedback('No chords available with current settings. Try adjusting fret range or enabling more chord types.', false);
+            this.showFeedback(window.i18n.t('chords.feedback.noChordsSelected'), false);
             return;
         }
         
@@ -408,10 +448,10 @@ class ChordGame {
                 includeBarre: this.settings.includeBarre,
                 attempts
             });
-            this.showFeedback('No chords available with current settings. Try adjusting fret range or enabling more chord types.', false);
+            this.showFeedback(window.i18n.t('chords.feedback.noChordsSelected'), false);
             return;
         }
-        
+
         // Separate fretted positions from open strings
         const frettedPositions = chord.positions.filter(pos => pos.fret > 0);
         const openStrings = chord.positions.filter(pos => pos.fret === 0).map(pos => pos.string);
@@ -511,7 +551,7 @@ class ChordGame {
             } else if (chordObj.type === 'major7') {
                 correctAnswer = root + 'maj7';  // e.g., "Cmaj7"
             } else if (chordObj.type === 'minor7') {
-                correctAnswer = root + 'm7';  // e.g., "Am7"
+                correctAnswer = root + 'm7';  // e.g., "Am7", "Bm7", "Cm7"
             } else if (chordObj.type === 'sus2') {
                 correctAnswer = root + 'sus2';  // e.g., "Csus2"
             } else if (chordObj.type === 'sus4') {
@@ -531,6 +571,25 @@ class ChordGame {
             } else if (chordObj.type === 'inversion_major') {
                 // For inversions, we keep them separate as they have different bass notes
                 correctAnswer = this.currentQuestion.chordKey;
+            } else if (chordObj.type === 'shell_dom7') {
+                correctAnswer = root + '7';  // e.g., "C7"
+            } else if (chordObj.type === 'shell_maj7') {
+                correctAnswer = root + 'maj7';  // e.g., "Cmaj7"
+            } else if (chordObj.type === 'shell_min7') {
+                correctAnswer = root + 'm7';  // e.g., "Am7"
+            } else if (chordObj.type === 'shell_min7b5') {
+                // Shell chords should be recognized as their full chord equivalent
+                correctAnswer = root + 'm7';  // Shell m7b5 can be answered as m7 since it's simplified
+            } else if (chordObj.type.startsWith('shell_')) {
+                // For any other shell chords, extract the base type
+                const baseType = chordObj.type.replace('shell_', '');
+                if (baseType === 'dom7') {
+                    correctAnswer = root + '7';
+                } else if (baseType === 'maj7') {
+                    correctAnswer = root + 'maj7';
+                } else if (baseType === 'min7') {
+                    correctAnswer = root + 'm7';
+                }
             }
         }
         
@@ -539,11 +598,15 @@ class ChordGame {
         this.processAnswer(isCorrect, responseTime);
         
         if (isCorrect) {
-            this.showFeedback(`Correct! That's ${this.currentQuestion.chordName}`, true);
+            this.showFeedback(window.i18n.t('chords.feedback.correct', {
+                chordName: this.currentQuestion.chordName
+            }), true);
         } else {
             const selectedChordData = this.chordTheory.chords[selectedChord];
             const selectedName = selectedChordData ? selectedChordData.name : selectedChord;
-            this.showFeedback(`Incorrect. That's ${this.currentQuestion.chordName}, not ${selectedName}`, false);
+            this.showFeedback(window.i18n.t('chords.feedback.incorrect', {
+                correctChord: this.currentQuestion.chordName
+            }), false);
         }
         
         setTimeout(() => {
@@ -568,7 +631,9 @@ class ChordGame {
         this.processAnswer(isCorrect, responseTime);
         
         if (isCorrect) {
-            this.showFeedback(`Correct! That's ${this.currentQuestion.chordName}`, true);
+            this.showFeedback(window.i18n.t('chords.feedback.correct', {
+                chordName: this.currentQuestion.chordName
+            }), true);
             // Auto-progress after correct answer
             setTimeout(() => {
                 this.clearFeedback();
@@ -615,7 +680,9 @@ class ChordGame {
                 }
             }
             
-            this.showFeedback(`Incorrect. You played ${playedName}. The correct answer (${this.currentQuestion.chordName}) is shown on the fretboard.`, false);
+            this.showFeedback(window.i18n.t('chords.feedback.incorrect', {
+                correctChord: this.currentQuestion.chordName
+            }), false);
             
             // Show the "Next" button instead of auto-progressing
             const submitBtn = document.getElementById('submit-chord-selection');

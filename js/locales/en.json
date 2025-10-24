@@ -1,0 +1,206 @@
+{
+  "app": {
+    "title": "GuitarHub",
+    "tagline": "Master Your Fretboard"
+  },
+  "nav": {
+    "fretboard": "Fretboard Memory",
+    "intervals": "Intervals Memory",
+    "chords": "Chords Memory",
+    "stats": "Statistics"
+  },
+  "common": {
+    "start": "Start Practice Session",
+    "pause": "⏸ Pause",
+    "resume": "▶ Resume",
+    "endSession": "End Session",
+    "next": "Next",
+    "showMe": "Show me",
+    "playSound": "🔊 Play Note",
+    "playChord": "🔊 Play Chord",
+    "playInterval": "🔊 Play Interval",
+    "clear": "Clear",
+    "submit": "Submit",
+    "settings": "Settings",
+    "applySettings": "Apply Settings",
+    "correct": "✓",
+    "incorrect": "✗",
+    "streak": "🔥"
+  },
+  "fretboard": {
+    "modes": {
+      "noteToFret": "Note → Fret",
+      "fretToNote": "Fret → Note"
+    },
+    "welcome": {
+      "title": "Ready to Practice?",
+      "text": "Test your knowledge of the fretboard and improve your note recognition skills."
+    },
+    "pause": {
+      "title": "Session Paused",
+      "text": "Take your time. Click Resume when you're ready to continue."
+    },
+    "questions": {
+      "noteToFret": "Find this note:",
+      "fretToNote": "What note is this?",
+      "onString": "on string"
+    },
+    "instruction": "Click on the correct fret position below:",
+    "settings": {
+      "includeSharps": "Include sharps/flats",
+      "fretRange": "Fret range:",
+      "strings": "Strings:",
+      "string1": "1st (E)",
+      "string2": "2nd (B)",
+      "string3": "3rd (G)",
+      "string4": "4th (D)",
+      "string5": "5th (A)",
+      "string6": "6th (E)"
+    },
+    "feedback": {
+      "correct": "Correct! {note} on string {string} is at fret {fret}",
+      "incorrect": "Incorrect. {note} on string {string} is at fret {fret}",
+      "correctFretToNote": "Correct! String {string}, Fret {fret} is {note}",
+      "incorrectFretToNote": "Incorrect. String {string}, Fret {fret} is {note}",
+      "showAnswer": "The answer is: {note} on string {string} is at fret {fret}",
+      "sessionComplete": "Session Complete! You got {correct} out of {total} correct ({accuracy}% accuracy)"
+    }
+  },
+  "intervals": {
+    "title": "Interval Training",
+    "welcome": "Master intervals on the fretboard and develop your harmonic understanding.",
+    "startButton": "Start Interval Session",
+    "modes": {
+      "noteToFret": "Notes → Fret",
+      "fretToNote": "Fret → Notes"
+    },
+    "questions": {
+      "noteToFret": "Find these notes:",
+      "fretToNote": "What interval is this?",
+      "from": "from"
+    },
+    "instruction": "Click two positions on the fretboard:",
+    "selected": "Selected:",
+    "none": "None",
+    "feedback": {
+      "noIntervalsSelected": "No intervals selected. Please select at least one interval.",
+      "correct": "Correct! That's a {intervalName}",
+      "incorrect": "Incorrect. You played a {actualInterval}. Looking for {expectedInterval}",
+      "incorrectFretToNote": "Incorrect. That's a {correctInterval}, not a {selectedInterval}",
+      "sessionComplete": "Session Complete! You got {correct} out of {total} correct ({accuracy}% accuracy)"
+    },
+    "settings": {
+      "title": "Interval Settings",
+      "practiceIntervals": "Practice Intervals:",
+      "minor2": "Minor 2nd",
+      "major2": "Major 2nd",
+      "minor3": "Minor 3rd",
+      "major3": "Major 3rd",
+      "perfect4": "Perfect 4th",
+      "tritone": "Tritone",
+      "perfect5": "Perfect 5th",
+      "minor6": "Minor 6th",
+      "major6": "Major 6th",
+      "minor7": "Minor 7th",
+      "major7": "Major 7th",
+      "octave": "Octave",
+      "direction": "Interval Direction:",
+      "ascending": "Ascending Only",
+      "descending": "Descending Only",
+      "both": "Both",
+      "stringPairs": "String Pairs:",
+      "adjacent": "Adjacent Strings Only",
+      "skipOne": "Skip One String",
+      "allCombinations": "All Combinations",
+      "fretRange": "Fret range:"
+    }
+  },
+  "chords": {
+    "title": "Chord Recognition",
+    "welcome": "Practice identifying and playing common guitar chords.",
+    "startButton": "Start Chord Session",
+    "modes": {
+      "fretToName": "Fret → Chord",
+      "nameToFret": "Chord → Fret"
+    },
+    "questions": {
+      "fretToName": "What chord is this?",
+      "nameToFret": "Play this chord:"
+    },
+    "instruction": "Click on the fretboard to form the chord:",
+    "selected": "Selected:",
+    "none": "None",
+    "chordSelection": "Chord Selection",
+    "feedback": {
+      "noChordsSelected": "No chord types selected. Please select at least one chord type.",
+      "correct": "Correct! That's a {chordName}",
+      "incorrect": "Incorrect. The correct answer is {correctChord}",
+      "sessionComplete": "Session Complete! You got {correct} out of {total} correct ({accuracy}% accuracy)"
+    },
+    "types": {
+      "major": "Major",
+      "minor": "Minor",
+      "seventh": "7th",
+      "major7": "Major 7th",
+      "minor7": "Minor 7th",
+      "sus2": "Sus2",
+      "sus4": "Sus4",
+      "sixth": "6th",
+      "add9": "Add9",
+      "power": "Power",
+      "dimAug": "Dim/Aug"
+    },
+    "inversions": "Inversions",
+    "settings": {
+      "title": "Settings",
+      "basicTypes": "Basic Chord Types:",
+      "major": "Major",
+      "minor": "Minor",
+      "dominant7": "7th",
+      "major7": "Major 7th",
+      "minor7": "Minor 7th",
+      "extended": "Extended:",
+      "sus2": "Sus2",
+      "sus4": "Sus4",
+      "6th": "6th",
+      "m6": "Minor 6th",
+      "add9": "Add9",
+      "special": "Special:",
+      "power": "Power",
+      "dim": "Diminished",
+      "aug": "Augmented",
+      "advanced": "Advanced:",
+      "triadMajor": "Triads (Maj)",
+      "triadMinor": "Triads (Min)",
+      "inversion": "Inversions",
+      "caged": "CAGED",
+      "highMajor": "High Maj",
+      "highMinor": "High Min",
+      "includeBarre": "Include barre chords",
+      "fretRange": "Fret range:",
+      "shellChords": "Shell Chords:",
+      "shellDom7": "Dom7",
+      "shellMaj7": "Maj7",
+      "shellMin7": "Min7",
+      "shellMin7b5": "Min7♭5"
+    }
+  },
+  "statistics": {
+    "title": "Your Progress",
+    "totalSessions": "Total Sessions",
+    "totalQuestions": "Total Questions",
+    "accuracy": "Accuracy",
+    "avgTime": "Avg Response Time",
+    "progressOverTime": "Progress Over Time",
+    "responseTimeByNote": "Response Time by Note",
+    "clearStats": "Clear All Statistics",
+    "confirmClear": "Are you sure you want to clear all statistics? This cannot be undone.",
+    "chart": {
+      "accuracy": "Accuracy (%)",
+      "avgResponseTime": "Avg Response Time (s)",
+      "date": "Date",
+      "responseTime": "Response Time (s)",
+      "note": "Note"
+    }
+  }
+}

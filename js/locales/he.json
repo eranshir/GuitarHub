@@ -1,0 +1,206 @@
+{
+  "app": {
+    "title": "GuitarHub",
+    "tagline": "שלוט בלוח הסריגים שלך"
+  },
+  "nav": {
+    "fretboard": "זיכרון לוח הסריגים",
+    "intervals": "זיכרון אינטרוולים",
+    "chords": "זיכרון אקורדים",
+    "stats": "סטטיסטיקה"
+  },
+  "common": {
+    "start": "התחל אימון",
+    "pause": "⏸ השהה",
+    "resume": "▶ המשך",
+    "endSession": "סיים אימון",
+    "next": "הבא",
+    "showMe": "הראה לי",
+    "playSound": "🔊 השמע צליל",
+    "playChord": "🔊 השמע אקורד",
+    "playInterval": "🔊 השמע אינטרוול",
+    "clear": "נקה",
+    "submit": "שלח",
+    "settings": "הגדרות",
+    "applySettings": "החל הגדרות",
+    "correct": "✓",
+    "incorrect": "✗",
+    "streak": "🔥"
+  },
+  "fretboard": {
+    "modes": {
+      "noteToFret": "תו → סריג",
+      "fretToNote": "סריג → תו"
+    },
+    "welcome": {
+      "title": "מוכנים להתאמן?",
+      "text": "בחן את הידע שלך בלוח הסריגים ושפר את יכולת זיהוי התווים שלך."
+    },
+    "pause": {
+      "title": "האימון מושהה",
+      "text": "קח את הזמן שלך. לחץ המשך כשאתה מוכן להמשיך."
+    },
+    "questions": {
+      "noteToFret": "מצא את התו הזה:",
+      "fretToNote": "איזה תו זה?",
+      "onString": "על מיתר"
+    },
+    "instruction": "לחץ על מיקום הסריג הנכון למטה:",
+    "settings": {
+      "includeSharps": "כלול דיאזים/במולים",
+      "fretRange": "טווח סריגים:",
+      "strings": "מיתרים:",
+      "string1": "1 (Mi)",
+      "string2": "2 (Si)",
+      "string3": "3 (Sol)",
+      "string4": "4 (Re)",
+      "string5": "5 (La)",
+      "string6": "6 (Mi)"
+    },
+    "feedback": {
+      "correct": "נכון! {note} על מיתר {string} נמצא בסריג {fret}",
+      "incorrect": "שגוי. {note} על מיתר {string} נמצא בסריג {fret}",
+      "correctFretToNote": "נכון! מיתר {string}, סריג {fret} הוא {note}",
+      "incorrectFretToNote": "שגוי. מיתר {string}, סריג {fret} הוא {note}",
+      "showAnswer": "התשובה היא: {note} על מיתר {string} נמצא בסריג {fret}",
+      "sessionComplete": "האימון הסתיים! עניתי נכון על {correct} מתוך {total} ({accuracy}% דיוק)"
+    }
+  },
+  "intervals": {
+    "title": "אימון אינטרוולים",
+    "welcome": "שלוט באינטרוולים על לוח הסריגים ופתח את ההבנה ההרמונית שלך.",
+    "startButton": "התחל אימון אינטרוולים",
+    "modes": {
+      "noteToFret": "תווים → סריג",
+      "fretToNote": "סריג → תווים"
+    },
+    "questions": {
+      "noteToFret": "מצא את התווים האלה:",
+      "fretToNote": "איזה אינטרוול זה?",
+      "from": "מ"
+    },
+    "instruction": "לחץ על שני מיקומים על לוח הסריגים:",
+    "selected": "נבחר:",
+    "none": "אין",
+    "feedback": {
+      "noIntervalsSelected": "לא נבחרו אינטרוולים. אנא בחר לפחות אינטרוול אחד.",
+      "correct": "נכון! זה {intervalName}",
+      "incorrect": "שגוי. ניגנת {actualInterval}. מחפש {expectedInterval}",
+      "incorrectFretToNote": "שגוי. זה {correctInterval}, לא {selectedInterval}",
+      "sessionComplete": "האימון הסתיים! עניתי נכון על {correct} מתוך {total} ({accuracy}% דיוק)"
+    },
+    "settings": {
+      "title": "הגדרות אינטרוולים",
+      "practiceIntervals": "אינטרוולים לתרגול:",
+      "minor2": "שנייה קטנה",
+      "major2": "שנייה גדולה",
+      "minor3": "שלישית קטנה",
+      "major3": "שלישית גדולה",
+      "perfect4": "רביעית נקייה",
+      "tritone": "טריטון",
+      "perfect5": "חמישית נקייה",
+      "minor6": "שישית קטנה",
+      "major6": "שישית גדולה",
+      "minor7": "שביעית קטנה",
+      "major7": "שביעית גדולה",
+      "octave": "אוקטבה",
+      "direction": "כיוון אינטרוול:",
+      "ascending": "עולה בלבד",
+      "descending": "יורד בלבד",
+      "both": "שניהם",
+      "stringPairs": "זוגות מיתרים:",
+      "adjacent": "מיתרים סמוכים בלבד",
+      "skipOne": "דלג על מיתר אחד",
+      "allCombinations": "כל הצירופים",
+      "fretRange": "טווח סריגים:"
+    }
+  },
+  "chords": {
+    "title": "זיהוי אקורדים",
+    "welcome": "תרגל זיהוי ונגינה של אקורדי גיטרה נפוצים.",
+    "startButton": "התחל אימון אקורדים",
+    "modes": {
+      "fretToName": "סריג → אקורד",
+      "nameToFret": "אקורד → סריג"
+    },
+    "questions": {
+      "fretToName": "איזה אקורד זה?",
+      "nameToFret": "נגן את האקורד הזה:"
+    },
+    "instruction": "לחץ על לוח הסריגים כדי ליצור את האקורד:",
+    "selected": "נבחר:",
+    "none": "אין",
+    "chordSelection": "בחירת אקורד",
+    "feedback": {
+      "noChordsSelected": "לא נבחרו סוגי אקורדים. אנא בחר לפחות סוג אקורד אחד.",
+      "correct": "נכון! זה {chordName}",
+      "incorrect": "שגוי. התשובה הנכונה היא {correctChord}",
+      "sessionComplete": "האימון הסתיים! עניתי נכון על {correct} מתוך {total} ({accuracy}% דיוק)"
+    },
+    "types": {
+      "major": "מז'ור",
+      "minor": "מינור",
+      "seventh": "7",
+      "major7": "מז'ור 7",
+      "minor7": "מינור 7",
+      "sus2": "Sus2",
+      "sus4": "Sus4",
+      "sixth": "6",
+      "add9": "Add9",
+      "power": "Power",
+      "dimAug": "מוקטן/מוגדל"
+    },
+    "inversions": "היפוכים",
+    "settings": {
+      "title": "הגדרות",
+      "basicTypes": "סוגי אקורדים בסיסיים:",
+      "major": "מז'ור",
+      "minor": "מינור",
+      "dominant7": "7",
+      "major7": "מז'ור 7",
+      "minor7": "מינור 7",
+      "extended": "מורחבים:",
+      "sus2": "Sus2",
+      "sus4": "Sus4",
+      "6th": "6",
+      "m6": "מינור 6",
+      "add9": "Add9",
+      "special": "מיוחדים:",
+      "power": "Power",
+      "dim": "מוקטן",
+      "aug": "מוגדל",
+      "advanced": "מתקדמים:",
+      "triadMajor": "טריאדות (מז'ור)",
+      "triadMinor": "טריאדות (מינור)",
+      "inversion": "היפוכים",
+      "caged": "CAGED",
+      "highMajor": "מז'ור גבוה",
+      "highMinor": "מינור גבוה",
+      "includeBarre": "כלול אקורדי בארה",
+      "fretRange": "טווח סריגים:",
+      "shellChords": "אקורדי Shell:",
+      "shellDom7": "Dom7",
+      "shellMaj7": "Maj7",
+      "shellMin7": "Min7",
+      "shellMin7b5": "Min7♭5"
+    }
+  },
+  "statistics": {
+    "title": "ההתקדמות שלך",
+    "totalSessions": "סך אימונים",
+    "totalQuestions": "סך שאלות",
+    "accuracy": "דיוק",
+    "avgTime": "זמן תגובה ממוצע",
+    "progressOverTime": "התקדמות לאורך זמן",
+    "responseTimeByNote": "זמן תגובה לפי תו",
+    "clearStats": "נקה את כל הסטטיסטיקה",
+    "confirmClear": "האם אתה בטוח שברצונך למחוק את כל הסטטיסטיקה? פעולה זו לא ניתנת לביטול.",
+    "chart": {
+      "accuracy": "דיוק (%)",
+      "avgResponseTime": "זמן תגובה ממוצע (שניות)",
+      "date": "תאריך",
+      "responseTime": "זמן תגובה (שניות)",
+      "note": "תו"
+    }
+  }
+}

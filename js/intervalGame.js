@@ -118,6 +118,28 @@ class IntervalGame {
             this.settings.maxFret = parseInt(e.target.value);
             this.saveSettings();
         });
+
+        // Apply settings button
+        document.getElementById('apply-interval-settings').addEventListener('click', () => {
+            this.applySettings();
+        });
+    }
+
+    applySettings() {
+        // Update settings from UI
+        this.updateEnabledIntervals();
+        this.settings.direction = document.getElementById('interval-direction').value;
+        this.settings.stringPairs = document.getElementById('string-pairs').value;
+        this.settings.minFret = parseInt(document.getElementById('interval-min-fret').value);
+        this.settings.maxFret = parseInt(document.getElementById('interval-max-fret').value);
+        this.saveSettings();
+
+        // If session is active, regenerate the current question
+        if (this.isSessionActive && !this.isPaused) {
+            this.clearFeedback();
+            this.clearSelection();
+            this.generateQuestion();
+        }
     }
     
     switchMode(mode) {
@@ -210,7 +232,11 @@ class IntervalGame {
         if (totalQuestions > 0) {
             const accuracy = ((this.score.correct / totalQuestions) * 100).toFixed(1);
             const feedback = document.getElementById('interval-feedback');
-            feedback.textContent = `Session Complete! You got ${this.score.correct} out of ${totalQuestions} correct (${accuracy}% accuracy)`;
+            feedback.textContent = window.i18n.t('intervals.feedback.sessionComplete', {
+                correct: this.score.correct,
+                total: totalQuestions,
+                accuracy: accuracy
+            });
             feedback.className = 'feedback show correct';
             setTimeout(() => {
                 this.clearFeedback();
@@ -280,7 +306,7 @@ class IntervalGame {
     generateNoteToFretQuestion() {
         const intervalKey = this.intervalTheory.getRandomInterval(this.settings.enabledIntervals);
         if (!intervalKey) {
-            this.showFeedback('No intervals selected. Please select at least one interval.', false);
+            this.showFeedback(window.i18n.t('intervals.feedback.noIntervalsSelected'), false);
             return;
         }
         
@@ -314,7 +340,7 @@ class IntervalGame {
     generateFretToNoteQuestion() {
         const intervalKey = this.intervalTheory.getRandomInterval(this.settings.enabledIntervals);
         if (!intervalKey) {
-            this.showFeedback('No intervals selected. Please select at least one interval.', false);
+            this.showFeedback(window.i18n.t('intervals.feedback.noIntervalsSelected'), false);
             return;
         }
         
@@ -426,14 +452,19 @@ class IntervalGame {
                              (foundIntervalReverse === this.currentQuestion.intervalKey);
             
             this.processAnswer(isCorrect, responseTime);
-            
+
             if (isCorrect) {
-                this.showFeedback(`Correct! That's a ${this.currentQuestion.intervalName}`, true);
+                this.showFeedback(window.i18n.t('intervals.feedback.correct', {
+                    intervalName: this.currentQuestion.intervalName
+                }), true);
             } else {
-                const actualInterval = this.intervalTheory.intervals[foundInterval] || 
+                const actualInterval = this.intervalTheory.intervals[foundInterval] ||
                                      this.intervalTheory.intervals[foundIntervalReverse];
                 const intervalName = actualInterval ? actualInterval.name : 'unknown interval';
-                this.showFeedback(`Incorrect. You played a ${intervalName}. Looking for ${this.currentQuestion.intervalName}`, false);
+                this.showFeedback(window.i18n.t('intervals.feedback.incorrect', {
+                    actualInterval: intervalName,
+                    expectedInterval: this.currentQuestion.intervalName
+                }), false);
             }
             
             setTimeout(() => {
@@ -453,12 +484,17 @@ class IntervalGame {
         const isCorrect = selectedInterval === this.currentQuestion.intervalKey;
         
         this.processAnswer(isCorrect, responseTime);
-        
+
         if (isCorrect) {
-            this.showFeedback(`Correct! That's a ${this.currentQuestion.intervalName}`, true);
+            this.showFeedback(window.i18n.t('intervals.feedback.correct', {
+                intervalName: this.currentQuestion.intervalName
+            }), true);
         } else {
             const selectedName = this.intervalTheory.intervals[selectedInterval].name;
-            this.showFeedback(`Incorrect. That's a ${this.currentQuestion.intervalName}, not a ${selectedName}`, false);
+            this.showFeedback(window.i18n.t('intervals.feedback.incorrectFretToNote', {
+                correctInterval: this.currentQuestion.intervalName,
+                selectedInterval: selectedName
+            }), false);
         }
         
         setTimeout(() => {

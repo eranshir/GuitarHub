@@ -98,8 +98,8 @@ header h1 {
 
 .mode-btn {
     padding: 10px 25px;
-    background: var(--card-bg);
-    color: var(--text-color);
+    background: var(--primary-color);
+    color: white;
     border: 2px solid var(--primary-color);
     border-radius: var(--border-radius);
     font-size: 1em;
@@ -113,8 +113,8 @@ header h1 {
 }
 
 .mode-btn.active {
-    background: var(--primary-color);
-    color: white;
+    background: var(--card-bg);
+    color: var(--text-color);
 }
 
 .game-container {
@@ -1109,8 +1109,9 @@ header h1 {
 
 .interval-btn, .interval-mode-btn {
     padding: 12px;
-    background: white;
-    border: 2px solid #ddd;
+    background: var(--primary-color);
+    color: white;
+    border: 2px solid var(--primary-color);
     border-radius: 8px;
     font-size: 1em;
     cursor: pointer;
@@ -1126,8 +1127,9 @@ header h1 {
 /* Chord Module Styles */
 .chord-mode-btn {
     padding: 12px;
-    background: white;
-    border: 2px solid #ddd;
+    background: var(--primary-color);
+    color: white;
+    border: 2px solid var(--primary-color);
     border-radius: 8px;
     font-size: 1em;
     cursor: pointer;
@@ -1141,8 +1143,8 @@ header h1 {
 }
 
 .chord-mode-btn.active {
-    background: var(--primary-color);
-    color: white;
+    background: var(--card-bg);
+    color: var(--text-color);
     border-color: var(--primary-color);
 }
 
@@ -1257,8 +1259,8 @@ header h1 {
 }
 
 .interval-mode-btn.active {
-    background: var(--primary-color);
-    color: white;
+    background: var(--card-bg);
+    color: var(--text-color);
     border-color: var(--primary-color);
 }
 
@@ -1297,4 +1299,144 @@ header h1 {
 
 .settings-link-btn:hover {
     background: var(--primary-dark);
+}
+
+/* Language Selector Styles */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header-title {
+    text-align: center;
+    flex: 1;
+}
+
+.language-selector {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.language-dropdown {
+    padding: 8px 15px;
+    font-size: 1em;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.language-dropdown:hover {
+    background: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.5);
+}
+
+.language-dropdown option {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* RTL Support for Hebrew */
+body.rtl {
+    direction: rtl;
+}
+
+body.rtl .header-content {
+    flex-direction: row-reverse;
+}
+
+body.rtl .language-selector {
+    right: auto;
+    left: 20px;
+}
+
+body.rtl .game-mode-selector,
+body.rtl .module-nav {
+    flex-direction: row-reverse;
+}
+
+body.rtl .score-display {
+    flex-direction: row-reverse;
+}
+
+body.rtl .session-controls {
+    flex-direction: row-reverse;
+}
+
+body.rtl .help-controls {
+    flex-direction: row-reverse;
+}
+
+body.rtl .answer-input {
+    flex-direction: row-reverse;
+}
+
+body.rtl .selected-notes {
+    flex-direction: row-reverse;
+}
+
+body.rtl .chord-game-layout {
+    flex-direction: row-reverse;
+}
+
+body.rtl .string-toggles label,
+body.rtl .chord-type-toggles label,
+body.rtl .interval-toggles label {
+    flex-direction: row-reverse;
+}
+
+body.rtl .accordion-toggle {
+    flex-direction: row-reverse;
+}
+
+body.rtl .setting-group label {
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .language-selector {
+        position: static;
+    }
+
+    body.rtl .language-selector {
+        position: static;
+    }
+}
+
+/* Apply Settings Button */
+.apply-settings-btn {
+    width: 100%;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 10px;
+}
+
+.apply-settings-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.apply-settings-btn:active {
+    transform: translateY(0);
 }

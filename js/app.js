@@ -21,7 +21,14 @@ class App {
         this.setupAudioControls();
         this.setupStatisticsControls();
         this.updateStatisticsDisplay();
-        
+
+        // Update charts when language changes
+        window.addEventListener('languageChanged', () => {
+            if (this.charts.progress || this.charts.notes) {
+                this.updateCharts();
+            }
+        });
+
         window.addEventListener('beforeunload', () => {
             this.statistics.endSession();
             this.statistics.endIntervalSession();
@@ -132,7 +139,7 @@ class App {
     
     setupStatisticsControls() {
         document.getElementById('clear-stats').addEventListener('click', () => {
-            if (confirm('Are you sure you want to clear all statistics? This cannot be undone.')) {
+            if (confirm(window.i18n.t('statistics.confirmClear'))) {
                 this.statistics.clearAllData();
                 this.updateStatisticsDisplay();
                 this.updateCharts();
@@ -181,7 +188,7 @@ class App {
                 labels: dates,
                 datasets: [
                     {
-                        label: 'Accuracy (%)',
+                        label: window.i18n.t('statistics.chart.accuracy'),
                         data: accuracyData,
                         borderColor: '#27ae60',
                         backgroundColor: 'rgba(39, 174, 96, 0.1)',
@@ -189,7 +196,7 @@ class App {
                         tension: 0.4
                     },
                     {
-                        label: 'Avg Response Time (s)',
+                        label: window.i18n.t('statistics.chart.avgResponseTime'),
                         data: responseTimeData,
                         borderColor: '#e74c3c',
                         backgroundColor: 'rgba(231, 76, 60, 0.1)',
@@ -233,7 +240,7 @@ class App {
                         display: true,
                         title: {
                             display: true,
-                            text: 'Date'
+                            text: window.i18n.t('statistics.chart.date')
                         }
                     },
                     'y-accuracy': {
@@ -242,7 +249,7 @@ class App {
                         position: 'left',
                         title: {
                             display: true,
-                            text: 'Accuracy (%)'
+                            text: window.i18n.t('statistics.chart.accuracy')
                         },
                         min: 0,
                         max: 100
@@ -253,7 +260,7 @@ class App {
                         position: 'right',
                         title: {
                             display: true,
-                            text: 'Response Time (s)'
+                            text: window.i18n.t('statistics.chart.responseTime')
                         },
                         min: 0,
                         grid: {
@@ -283,7 +290,7 @@ class App {
                 labels: notes,
                 datasets: [
                     {
-                        label: 'Avg Response Time (s)',
+                        label: window.i18n.t('statistics.chart.avgResponseTime'),
                         data: responseTimes,
                         backgroundColor: 'rgba(52, 152, 219, 0.6)',
                         borderColor: '#3498db',
@@ -302,7 +309,7 @@ class App {
                         callbacks: {
                             afterLabel: function(context) {
                                 const index = context.dataIndex;
-                                return `Accuracy: ${accuracies[index].toFixed(1)}%`;
+                                return `${window.i18n.t('statistics.accuracy')}: ${accuracies[index].toFixed(1)}%`;
                             }
                         }
                     }
@@ -312,14 +319,14 @@ class App {
                         display: true,
                         title: {
                             display: true,
-                            text: 'Note'
+                            text: window.i18n.t('statistics.chart.note')
                         }
                     },
                     y: {
                         display: true,
                         title: {
                             display: true,
-                            text: 'Response Time (s)'
+                            text: window.i18n.t('statistics.chart.responseTime')
                         },
                         min: 0
                     }

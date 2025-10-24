@@ -9,23 +9,33 @@
 <body>
     <div class="container">
         <header>
-            <h1>GuitarHub</h1>
-            <p class="tagline">Master Your Fretboard</p>
+            <div class="header-content">
+                <div class="header-title">
+                    <h1 data-i18n="app.title">GuitarHub</h1>
+                    <p class="tagline" data-i18n="app.tagline">Master Your Fretboard</p>
+                </div>
+                <div class="language-selector">
+                    <select id="language-select" class="language-dropdown">
+                        <option value="en">🇺🇸 English</option>
+                        <option value="he">🇮🇱 עברית</option>
+                    </select>
+                </div>
+            </div>
         </header>
 
         <nav class="module-nav">
-            <button class="module-btn active" data-module="fretboard">Fretboard Memory</button>
-            <button class="module-btn" data-module="intervals">Intervals Memory</button>
-            <button class="module-btn" data-module="chords">Chords Memory</button>
-            <button class="module-btn" data-module="stats">Statistics</button>
+            <button class="module-btn active" data-module="fretboard" data-i18n="nav.fretboard">Fretboard Memory</button>
+            <button class="module-btn" data-module="intervals" data-i18n="nav.intervals">Intervals Memory</button>
+            <button class="module-btn" data-module="chords" data-i18n="nav.chords">Chords Memory</button>
+            <button class="module-btn" data-module="stats" data-i18n="nav.stats">Statistics</button>
         </nav>
 
         <main>
             <!-- Fretboard Memory Module -->
             <section id="fretboard-module" class="module active">
                 <div class="game-mode-selector">
-                    <button class="mode-btn active" data-mode="note-to-fret">Note → Fret</button>
-                    <button class="mode-btn" data-mode="fret-to-note">Fret → Note</button>
+                    <button class="mode-btn active" data-mode="note-to-fret" data-i18n="fretboard.modes.noteToFret">Note → Fret</button>
+                    <button class="mode-btn" data-mode="fret-to-note" data-i18n="fretboard.modes.fretToNote">Fret → Note</button>
                 </div>
 
                 <div class="game-container">
@@ -38,39 +48,39 @@
                         </div>
                         
                         <div class="session-controls" style="display: none;">
-                            <button id="pause-btn" class="pause-btn">⏸ Pause</button>
-                            <button id="resume-btn" class="resume-btn" style="display: none;">▶ Resume</button>
-                            <button id="stop-btn" class="stop-btn">End Session</button>
+                            <button id="pause-btn" class="pause-btn" data-i18n="common.pause">⏸ Pause</button>
+                            <button id="resume-btn" class="resume-btn" style="display: none;" data-i18n="common.resume">▶ Resume</button>
+                            <button id="stop-btn" class="stop-btn" data-i18n="common.endSession">End Session</button>
                         </div>
                         
                         <div class="feedback" id="feedback"></div>
                         
                         <div id="start-screen" class="game-content active">
-                            <h2 class="welcome-title">Ready to Practice?</h2>
-                            <p class="welcome-text">Test your knowledge of the fretboard and improve your note recognition skills.</p>
-                            <button id="start-btn" class="start-btn">Start Practice Session</button>
+                            <h2 class="welcome-title" data-i18n="fretboard.welcome.title">Ready to Practice?</h2>
+                            <p class="welcome-text" data-i18n="fretboard.welcome.text">Test your knowledge of the fretboard and improve your note recognition skills.</p>
+                            <button id="start-btn" class="start-btn" data-i18n="common.start">Start Practice Session</button>
                         </div>
                         
                         <div id="pause-overlay" class="pause-overlay" style="display: none;">
                             <div class="pause-content">
-                                <h2>Session Paused</h2>
-                                <p>Take your time. Click Resume when you're ready to continue.</p>
-                                <button id="resume-overlay-btn" class="resume-btn">▶ Resume</button>
+                                <h2 data-i18n="fretboard.pause.title">Session Paused</h2>
+                                <p data-i18n="fretboard.pause.text">Take your time. Click Resume when you're ready to continue.</p>
+                                <button id="resume-overlay-btn" class="resume-btn" data-i18n="common.resume">▶ Resume</button>
                             </div>
                         </div>
                         
                         <div id="note-to-fret-game" class="game-content">
-                            <h2 class="question">Find this note:</h2>
+                            <h2 class="question" data-i18n="fretboard.questions.noteToFret">Find this note:</h2>
                             <div class="note-display">
                                 <span class="note-name" id="target-note">-</span>
-                                <span class="string-info">on string <span id="target-string">-</span></span>
+                                <span class="string-info"><span data-i18n="fretboard.questions.onString">on string</span> <span id="target-string">-</span></span>
                             </div>
-                            <button class="play-sound-btn" id="play-note">🔊 Play Note</button>
+                            <button class="play-sound-btn" id="play-note" data-i18n="common.playSound">🔊 Play Note</button>
                             <div class="help-controls">
-                                <button class="show-me-btn" id="show-me-note">Show me</button>
-                                <button class="next-btn" id="next-note" style="display: none;">Next</button>
+                                <button class="show-me-btn" id="show-me-note" data-i18n="common.showMe">Show me</button>
+                                <button class="next-btn" id="next-note" style="display: none;" data-i18n="common.next">Next</button>
                             </div>
-                            <p class="instruction-text">Click on the correct fret position below:</p>
+                            <p class="instruction-text" data-i18n="fretboard.instruction">Click on the correct fret position below:</p>
                             <div class="fretboard-container">
                                 <div class="fretboard" id="fretboard-note-to-fret">
                                     <!-- Fretboard will be generated dynamically -->
@@ -79,13 +89,13 @@
                         </div>
 
                         <div id="fret-to-note-game" class="game-content">
-                            <h2 class="question">What note is this?</h2>
+                            <h2 class="question" data-i18n="fretboard.questions.fretToNote">What note is this?</h2>
                             <div class="fretboard-container">
                                 <div class="fretboard" id="fretboard">
                                     <!-- Fretboard will be generated dynamically -->
                                 </div>
                             </div>
-                            <button class="play-sound-btn" id="play-fret-note">🔊 Play Note</button>
+                            <button class="play-sound-btn" id="play-fret-note" data-i18n="common.playSound">🔊 Play Note</button>
                             <div class="note-selector">
                                 <div class="note-buttons">
                                     <button class="note-btn" data-note="C">C</button>
@@ -106,28 +116,31 @@
                     </div>
 
                     <div class="settings-panel">
-                        <h3>Settings</h3>
+                        <h3 data-i18n="common.settings">Settings</h3>
                         <div class="setting-group">
                             <label>
                                 <input type="checkbox" id="include-sharps" checked>
-                                Include sharps/flats
+                                <span data-i18n="fretboard.settings.includeSharps">Include sharps/flats</span>
                             </label>
                         </div>
                         <div class="setting-group">
-                            <label>Fret range:</label>
+                            <label data-i18n="fretboard.settings.fretRange">Fret range:</label>
                             <input type="number" id="min-fret" min="0" max="24" value="0"> -
                             <input type="number" id="max-fret" min="0" max="24" value="12">
                         </div>
                         <div class="setting-group">
-                            <label>Strings:</label>
+                            <label data-i18n="fretboard.settings.strings">Strings:</label>
                             <div class="string-toggles">
-                                <label><input type="checkbox" class="string-toggle" data-string="1" checked> 1st (E)</label>
-                                <label><input type="checkbox" class="string-toggle" data-string="2" checked> 2nd (B)</label>
-                                <label><input type="checkbox" class="string-toggle" data-string="3" checked> 3rd (G)</label>
-                                <label><input type="checkbox" class="string-toggle" data-string="4" checked> 4th (D)</label>
-                                <label><input type="checkbox" class="string-toggle" data-string="5" checked> 5th (A)</label>
-                                <label><input type="checkbox" class="string-toggle" data-string="6" checked> 6th (E)</label>
+                                <label><input type="checkbox" class="string-toggle" data-string="1" checked> <span data-i18n="fretboard.settings.string1">1st (E)</span></label>
+                                <label><input type="checkbox" class="string-toggle" data-string="2" checked> <span data-i18n="fretboard.settings.string2">2nd (B)</span></label>
+                                <label><input type="checkbox" class="string-toggle" data-string="3" checked> <span data-i18n="fretboard.settings.string3">3rd (G)</span></label>
+                                <label><input type="checkbox" class="string-toggle" data-string="4" checked> <span data-i18n="fretboard.settings.string4">4th (D)</span></label>
+                                <label><input type="checkbox" class="string-toggle" data-string="5" checked> <span data-i18n="fretboard.settings.string5">5th (A)</span></label>
+                                <label><input type="checkbox" class="string-toggle" data-string="6" checked> <span data-i18n="fretboard.settings.string6">6th (E)</span></label>
                             </div>
+                        </div>
+                        <div class="setting-group">
+                            <button id="apply-fretboard-settings" class="apply-settings-btn" data-i18n="common.applySettings">Apply Settings</button>
                         </div>
                     </div>
                 </div>
@@ -136,8 +149,8 @@
             <!-- Intervals Memory Module -->
             <section id="intervals-module" class="module">
                 <div class="game-mode-selector">
-                    <button class="interval-mode-btn active" data-mode="interval-note-to-fret">Notes → Fret</button>
-                    <button class="interval-mode-btn" data-mode="interval-fret-to-note">Fret → Notes</button>
+                    <button class="interval-mode-btn active" data-mode="interval-note-to-fret" data-i18n="intervals.modes.noteToFret">Notes → Fret</button>
+                    <button class="interval-mode-btn" data-mode="interval-fret-to-note" data-i18n="intervals.modes.fretToNote">Fret → Notes</button>
                 </div>
 
                 <div class="game-container">
@@ -150,17 +163,17 @@
                         </div>
                         
                         <div class="session-controls" id="interval-session-controls" style="display: none;">
-                            <button id="interval-pause-btn" class="pause-btn">⏸ Pause</button>
-                            <button id="interval-resume-btn" class="resume-btn" style="display: none;">▶ Resume</button>
-                            <button id="interval-stop-btn" class="stop-btn">End Session</button>
+                            <button id="interval-pause-btn" class="pause-btn" data-i18n="common.pause">⏸ Pause</button>
+                            <button id="interval-resume-btn" class="resume-btn" style="display: none;" data-i18n="common.resume">▶ Resume</button>
+                            <button id="interval-stop-btn" class="stop-btn" data-i18n="common.endSession">End Session</button>
                         </div>
                         
                         <div class="feedback" id="interval-feedback"></div>
                         
                         <div id="interval-start-screen" class="game-content active">
-                            <h2 class="welcome-title">Interval Training</h2>
-                            <p class="welcome-text">Master intervals on the fretboard and develop your harmonic understanding.</p>
-                            <button id="interval-start-btn" class="start-btn">Start Interval Session</button>
+                            <h2 class="welcome-title" data-i18n="intervals.title">Interval Training</h2>
+                            <p class="welcome-text" data-i18n="intervals.welcome">Master intervals on the fretboard and develop your harmonic understanding.</p>
+                            <button id="interval-start-btn" class="start-btn" data-i18n="intervals.startButton">Start Interval Session</button>
                         </div>
                         
                         <div id="interval-pause-overlay" class="pause-overlay" style="display: none;">
@@ -264,6 +277,9 @@
                             <input type="number" id="interval-min-fret" min="0" max="24" value="0"> -
                             <input type="number" id="interval-max-fret" min="0" max="24" value="12">
                         </div>
+                        <div class="setting-group">
+                            <button id="apply-interval-settings" class="apply-settings-btn" data-i18n="common.applySettings">Apply Settings</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -271,8 +287,8 @@
             <!-- Chords Memory Module -->
             <section id="chords-module" class="module">
                 <div class="game-mode-selector">
-                    <button class="chord-mode-btn active" data-mode="chord-fret-to-name">Fret → Chord</button>
-                    <button class="chord-mode-btn" data-mode="chord-name-to-fret">Chord → Fret</button>
+                    <button class="chord-mode-btn active" data-mode="chord-fret-to-name" data-i18n="chords.modes.fretToName">Fret → Chord</button>
+                    <button class="chord-mode-btn" data-mode="chord-name-to-fret" data-i18n="chords.modes.nameToFret">Chord → Fret</button>
                 </div>
 
                 <div class="game-container">
@@ -285,17 +301,17 @@
                         </div>
                         
                         <div class="session-controls" id="chord-session-controls" style="display: none;">
-                            <button id="chord-pause-btn" class="pause-btn">⏸ Pause</button>
-                            <button id="chord-resume-btn" class="resume-btn" style="display: none;">▶ Resume</button>
-                            <button id="chord-stop-btn" class="stop-btn">End Session</button>
+                            <button id="chord-pause-btn" class="pause-btn" data-i18n="common.pause">⏸ Pause</button>
+                            <button id="chord-resume-btn" class="resume-btn" style="display: none;" data-i18n="common.resume">▶ Resume</button>
+                            <button id="chord-stop-btn" class="stop-btn" data-i18n="common.endSession">End Session</button>
                         </div>
                         
                         <div class="feedback" id="chord-feedback"></div>
                         
                         <div id="chord-start-screen" class="game-content active">
-                            <h2 class="welcome-title">Chord Recognition</h2>
-                            <p class="welcome-text">Practice identifying and playing common guitar chords.</p>
-                            <button id="chord-start-btn" class="start-btn">Start Chord Session</button>
+                            <h2 class="welcome-title" data-i18n="chords.title">Chord Recognition</h2>
+                            <p class="welcome-text" data-i18n="chords.welcome">Practice identifying and playing common guitar chords.</p>
+                            <button id="chord-start-btn" class="start-btn" data-i18n="chords.startButton">Start Chord Session</button>
                         </div>
                         
                         <div id="chord-pause-overlay" class="pause-overlay" style="display: none;">
@@ -307,7 +323,7 @@
                         </div>
                         
                         <div id="chord-fret-to-name-game" class="game-content">
-                            <h2 class="question">What chord is this?</h2>
+                            <h2 class="question" data-i18n="chords.questions.fretToName">What chord is this?</h2>
                             <div class="chord-game-layout">
                                 <div class="chord-game-left">
                                     <div class="fretboard-container">
@@ -358,6 +374,8 @@
                                                 
                                                 <h4>Minor 7th</h4>
                                                 <button class="chord-btn" data-chord="Am7">Am7</button>
+                                                <button class="chord-btn" data-chord="Bm7">Bm7</button>
+                                                <button class="chord-btn" data-chord="Cm7">Cm7</button>
                                                 <button class="chord-btn" data-chord="Dm7">Dm7</button>
                                                 <button class="chord-btn" data-chord="Em7">Em7</button>
                                                 <div></div>
@@ -457,6 +475,15 @@
                                                 </div>
                                             </div>
                                             <div class="setting-group">
+                                                <label data-i18n="chords.settings.shellChords">Shell Chords:</label>
+                                                <div class="chord-type-toggles">
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="shell_dom7"> <span data-i18n="chords.settings.shellDom7">Dom7</span></label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="shell_maj7"> <span data-i18n="chords.settings.shellMaj7">Maj7</span></label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="shell_min7"> <span data-i18n="chords.settings.shellMin7">Min7</span></label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="shell_min7b5"> <span data-i18n="chords.settings.shellMin7b5">Min7♭5</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="setting-group">
                                                 <label>
                                                     <input type="checkbox" id="include-barre" checked>
                                                     Include barre chords
@@ -466,6 +493,9 @@
                                                 <label>Fret range:</label>
                                                 <input type="number" id="chord-min-fret" min="0" max="15" value="0"> -
                                                 <input type="number" id="chord-max-fret" min="3" max="15" value="12">
+                                            </div>
+                                            <div class="setting-group">
+                                                <button id="apply-chord-settings-fret-to-name" class="apply-settings-btn" data-i18n="common.applySettings">Apply Settings</button>
                                             </div>
                                         </div>
                                     </div>
@@ -545,6 +575,15 @@
                                                 </div>
                                             </div>
                                             <div class="setting-group">
+                                                <label data-i18n="chords.settings.shellChords">Shell Chords:</label>
+                                                <div class="chord-type-toggles">
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="shell_dom7"> <span data-i18n="chords.settings.shellDom7">Dom7</span></label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="shell_maj7"> <span data-i18n="chords.settings.shellMaj7">Maj7</span></label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="shell_min7"> <span data-i18n="chords.settings.shellMin7">Min7</span></label>
+                                                    <label><input type="checkbox" class="chord-type-toggle" data-type="shell_min7b5"> <span data-i18n="chords.settings.shellMin7b5">Min7♭5</span></label>
+                                                </div>
+                                            </div>
+                                            <div class="setting-group">
                                                 <label><input type="checkbox" id="include-barre" checked> Include Barre Chords</label>
                                             </div>
                                             <div class="setting-group">
@@ -554,6 +593,9 @@
                                                     <span>to</span>
                                                     <input type="number" id="chord-max-fret" min="0" max="24" value="12">
                                                 </div>
+                                            </div>
+                                            <div class="setting-group">
+                                                <button id="apply-chord-settings-name-to-fret" class="apply-settings-btn" data-i18n="common.applySettings">Apply Settings</button>
                                             </div>
                                         </div>
                                     </div>
@@ -567,44 +609,45 @@
             <!-- Statistics Module -->
             <section id="stats-module" class="module">
                 <div class="stats-container">
-                    <h2>Your Progress</h2>
-                    
+                    <h2 data-i18n="statistics.title">Your Progress</h2>
+
                     <div class="stats-overview">
                         <div class="stat-card">
-                            <h3>Total Sessions</h3>
+                            <h3 data-i18n="statistics.totalSessions">Total Sessions</h3>
                             <p class="stat-value" id="total-sessions">0</p>
                         </div>
                         <div class="stat-card">
-                            <h3>Total Questions</h3>
+                            <h3 data-i18n="statistics.totalQuestions">Total Questions</h3>
                             <p class="stat-value" id="total-questions">0</p>
                         </div>
                         <div class="stat-card">
-                            <h3>Accuracy</h3>
+                            <h3 data-i18n="statistics.accuracy">Accuracy</h3>
                             <p class="stat-value" id="accuracy">0%</p>
                         </div>
                         <div class="stat-card">
-                            <h3>Avg Response Time</h3>
+                            <h3 data-i18n="statistics.avgTime">Avg Response Time</h3>
                             <p class="stat-value" id="avg-time">0s</p>
                         </div>
                     </div>
 
                     <div class="chart-container">
-                        <h3>Progress Over Time</h3>
+                        <h3 data-i18n="statistics.progressOverTime">Progress Over Time</h3>
                         <canvas id="progress-chart"></canvas>
                     </div>
 
                     <div class="chart-container">
-                        <h3>Response Time by Note</h3>
+                        <h3 data-i18n="statistics.responseTimeByNote">Response Time by Note</h3>
                         <canvas id="note-chart"></canvas>
                     </div>
 
-                    <button id="clear-stats" class="clear-btn">Clear All Statistics</button>
+                    <button id="clear-stats" class="clear-btn" data-i18n="statistics.clearStats">Clear All Statistics</button>
                 </div>
             </section>
         </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/i18n.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/guitar.js"></script>
     <script src="js/intervals.js"></script>
@@ -615,5 +658,19 @@
     <script src="js/chordGame.js"></script>
     <script src="js/statistics.js"></script>
     <script src="js/app.js"></script>
+    <script>
+        // Initialize language selector
+        document.addEventListener('DOMContentLoaded', () => {
+            const languageSelect = document.getElementById('language-select');
+
+            // Set the current language in the dropdown
+            languageSelect.value = window.i18n.getCurrentLanguage();
+
+            // Handle language change
+            languageSelect.addEventListener('change', (e) => {
+                window.i18n.switchLanguage(e.target.value);
+            });
+        });
+    </script>
 </body>
 </html>

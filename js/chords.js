@@ -196,6 +196,22 @@ class ChordTheory {
                 muted: [5, 6],
                 barrePosition: null
             },
+            'Bm7': {
+                name: 'B Minor 7',
+                type: 'minor7',
+                root: 'B',
+                positions: [{string: 5, fret: 2}, {string: 4, fret: 2}, {string: 3, fret: 2}, {string: 2, fret: 3}, {string: 1, fret: 2}],
+                muted: [6],
+                barrePosition: {fret: 2, strings: [1, 5]}
+            },
+            'Cm7': {
+                name: 'C Minor 7',
+                type: 'minor7',
+                root: 'C',
+                positions: [{string: 5, fret: 3}, {string: 4, fret: 3}, {string: 3, fret: 3}, {string: 2, fret: 4}, {string: 1, fret: 3}],
+                muted: [6],
+                barrePosition: {fret: 3, strings: [1, 5]}
+            },
             
             // Four-string moveable shapes (triads) - strings 4-3-2-1
             // Major shapes
@@ -564,6 +580,143 @@ class ChordTheory {
                 positions: [{string: 4, fret: 5}, {string: 3, fret: 4}, {string: 2, fret: 4}, {string: 1, fret: 3}],
                 muted: [6, 5],
                 open: []
+            },
+
+            // Shell chords (Root, 3rd, 7th - no 5th)
+            // Dominant 7 shells
+            'C7_shell': {
+                name: 'C7 (shell)',
+                type: 'shell_dom7',
+                root: 'C',
+                positions: [{string: 5, fret: 3}, {string: 4, fret: 2}, {string: 3, fret: 3}],
+                muted: [6, 2, 1],
+                open: []
+            },
+            'G7_shell': {
+                name: 'G7 (shell)',
+                type: 'shell_dom7',
+                root: 'G',
+                positions: [{string: 6, fret: 3}, {string: 5, fret: 2}, {string: 4, fret: 3}],
+                muted: [3, 2, 1],
+                open: []
+            },
+            'D7_shell': {
+                name: 'D7 (shell)',
+                type: 'shell_dom7',
+                root: 'D',
+                positions: [{string: 5, fret: 5}, {string: 4, fret: 4}, {string: 3, fret: 5}],
+                muted: [6, 2, 1],
+                open: []
+            },
+            'A7_shell': {
+                name: 'A7 (shell)',
+                type: 'shell_dom7',
+                root: 'A',
+                positions: [{string: 5, fret: 0}, {string: 4, fret: 2}, {string: 3, fret: 0}],
+                muted: [6, 2, 1],
+                open: [5, 3]
+            },
+            'E7_shell': {
+                name: 'E7 (shell)',
+                type: 'shell_dom7',
+                root: 'E',
+                positions: [{string: 6, fret: 0}, {string: 5, fret: 2}, {string: 4, fret: 0}],
+                muted: [3, 2, 1],
+                open: [6, 4]
+            },
+
+            // Major 7 shells
+            'Cmaj7_shell': {
+                name: 'Cmaj7 (shell)',
+                type: 'shell_maj7',
+                root: 'C',
+                positions: [{string: 5, fret: 3}, {string: 4, fret: 2}, {string: 3, fret: 4}],
+                muted: [6, 2, 1],
+                open: []
+            },
+            'Gmaj7_shell': {
+                name: 'Gmaj7 (shell)',
+                type: 'shell_maj7',
+                root: 'G',
+                positions: [{string: 6, fret: 3}, {string: 5, fret: 2}, {string: 4, fret: 4}],
+                muted: [3, 2, 1],
+                open: []
+            },
+            'Dmaj7_shell': {
+                name: 'Dmaj7 (shell)',
+                type: 'shell_maj7',
+                root: 'D',
+                positions: [{string: 5, fret: 5}, {string: 4, fret: 4}, {string: 3, fret: 6}],
+                muted: [6, 2, 1],
+                open: []
+            },
+            'Amaj7_shell': {
+                name: 'Amaj7 (shell)',
+                type: 'shell_maj7',
+                root: 'A',
+                positions: [{string: 5, fret: 0}, {string: 4, fret: 2}, {string: 3, fret: 1}],
+                muted: [6, 2, 1],
+                open: [5]
+            },
+            'Emaj7_shell': {
+                name: 'Emaj7 (shell)',
+                type: 'shell_maj7',
+                root: 'E',
+                positions: [{string: 6, fret: 0}, {string: 5, fret: 2}, {string: 4, fret: 1}],
+                muted: [3, 2, 1],
+                open: [6]
+            },
+
+            // Minor 7 shells
+            'Am7_shell': {
+                name: 'Am7 (shell)',
+                type: 'shell_min7',
+                root: 'A',
+                positions: [{string: 5, fret: 0}, {string: 4, fret: 2}, {string: 3, fret: 0}],
+                muted: [6, 2, 1],
+                open: [5, 3]
+            },
+            'Em7_shell': {
+                name: 'Em7 (shell)',
+                type: 'shell_min7',
+                root: 'E',
+                positions: [{string: 6, fret: 0}, {string: 5, fret: 2}, {string: 4, fret: 0}],
+                muted: [3, 2, 1],
+                open: [6, 4]
+            },
+            'Dm7_shell': {
+                name: 'Dm7 (shell)',
+                type: 'shell_min7',
+                root: 'D',
+                positions: [{string: 5, fret: 5}, {string: 4, fret: 5}, {string: 3, fret: 5}],
+                muted: [6, 2, 1],
+                open: []
+            },
+            'Cm7_shell': {
+                name: 'Cm7 (shell)',
+                type: 'shell_min7',
+                root: 'C',
+                positions: [{string: 5, fret: 3}, {string: 4, fret: 3}, {string: 3, fret: 3}],
+                muted: [6, 2, 1],
+                open: []
+            },
+
+            // Minor 7b5 shells (half-diminished)
+            'Bm7b5_shell': {
+                name: 'Bm7♭5 (shell)',
+                type: 'shell_min7b5',
+                root: 'B',
+                positions: [{string: 5, fret: 2}, {string: 4, fret: 2}, {string: 3, fret: 2}],
+                muted: [6, 2, 1],
+                open: []
+            },
+            'Dm7b5_shell': {
+                name: 'Dm7♭5 (shell)',
+                type: 'shell_min7b5',
+                root: 'D',
+                positions: [{string: 5, fret: 5}, {string: 4, fret: 5}, {string: 3, fret: 4}],
+                muted: [6, 2, 1],
+                open: []
             }
         };
         
@@ -573,7 +726,7 @@ class ChordTheory {
             'minor': ['Am', 'Em', 'Dm', 'Bm'],
             'dominant7': ['G7', 'C7', 'D7', 'A7', 'E7'],
             'major7': ['Cmaj7', 'Gmaj7', 'Dmaj7', 'Amaj7', 'Emaj7'],
-            'minor7': ['Am7', 'Em7', 'Dm7'],
+            'minor7': ['Am7', 'Em7', 'Dm7', 'Bm7', 'Cm7'],
             'sus2': ['Csus2', 'Dsus2', 'Asus2'],
             'sus4': ['Csus4', 'Dsus4', 'Asus4', 'Esus4'],
             '6th': ['C6', 'G6', 'D6'],
@@ -587,7 +740,11 @@ class ChordTheory {
             'inversion_major': ['C_1st_inv', 'G_1st_inv', 'C_2nd_inv'],
             'caged_major': ['C_CAGED_C', 'D_CAGED_C', 'G_CAGED_E', 'A_CAGED_G'],
             'major_high': ['C_8th_pos'],
-            'minor_high': ['Am_5th_pos']
+            'minor_high': ['Am_5th_pos'],
+            'shell_dom7': ['C7_shell', 'G7_shell', 'D7_shell', 'A7_shell', 'E7_shell'],
+            'shell_maj7': ['Cmaj7_shell', 'Gmaj7_shell', 'Dmaj7_shell', 'Amaj7_shell', 'Emaj7_shell'],
+            'shell_min7': ['Am7_shell', 'Em7_shell', 'Dm7_shell', 'Cm7_shell'],
+            'shell_min7b5': ['Bm7b5_shell', 'Dm7b5_shell']
         };
     }
     

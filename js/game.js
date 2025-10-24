@@ -95,6 +95,26 @@ class FretboardGame {
                 this.updateEnabledStrings();
             });
         });
+
+        // Apply settings button
+        document.getElementById('apply-fretboard-settings').addEventListener('click', () => {
+            this.applySettings();
+        });
+    }
+
+    applySettings() {
+        // Update settings from UI
+        this.settings.includeSharps = document.getElementById('include-sharps').checked;
+        this.settings.minFret = parseInt(document.getElementById('min-fret').value);
+        this.settings.maxFret = parseInt(document.getElementById('max-fret').value);
+        this.updateEnabledStrings();
+        this.saveSettings();
+
+        // If session is active, regenerate the current question
+        if (this.isSessionActive && !this.isPaused) {
+            this.clearFeedback();
+            this.generateQuestion();
+        }
     }
     
     switchMode(mode) {
@@ -212,9 +232,17 @@ class FretboardGame {
         this.processAnswer(isCorrect, responseTime);
         
         if (isCorrect) {
-            this.showFeedback(`Correct! ${this.currentQuestion.note} on string ${this.currentQuestion.string} is at fret ${clickedFret}`, true);
+            this.showFeedback(window.i18n.t('fretboard.feedback.correct', {
+                note: this.currentQuestion.note,
+                string: this.currentQuestion.string,
+                fret: clickedFret
+            }), true);
         } else {
-            this.showFeedback(`Incorrect. ${this.currentQuestion.note} on string ${this.currentQuestion.string} is at fret ${this.currentQuestion.correctAnswer}`, false);
+            this.showFeedback(window.i18n.t('fretboard.feedback.incorrect', {
+                note: this.currentQuestion.note,
+                string: this.currentQuestion.string,
+                fret: this.currentQuestion.correctAnswer
+            }), false);
             // Highlight the correct answer
             this.fretboardDisplayNoteToFret.highlightPosition(this.currentQuestion.string, this.currentQuestion.correctAnswer);
         }
@@ -229,9 +257,17 @@ class FretboardGame {
         this.processAnswer(isCorrect, responseTime);
         
         if (isCorrect) {
-            this.showFeedback(`Correct! String ${this.currentQuestion.string}, Fret ${this.currentQuestion.fret} is ${this.guitar.getNoteDisplayName(answer)}`, true);
+            this.showFeedback(window.i18n.t('fretboard.feedback.correctFretToNote', {
+                string: this.currentQuestion.string,
+                fret: this.currentQuestion.fret,
+                note: this.guitar.getNoteDisplayName(answer)
+            }), true);
         } else {
-            this.showFeedback(`Incorrect. String ${this.currentQuestion.string}, Fret ${this.currentQuestion.fret} is ${this.guitar.getNoteDisplayName(this.currentQuestion.correctAnswer)}`, false);
+            this.showFeedback(window.i18n.t('fretboard.feedback.incorrectFretToNote', {
+                string: this.currentQuestion.string,
+                fret: this.currentQuestion.fret,
+                note: this.guitar.getNoteDisplayName(this.currentQuestion.correctAnswer)
+            }), false);
         }
         
         setTimeout(() => this.generateQuestion(), 2000);
@@ -390,7 +426,11 @@ class FretboardGame {
         if (totalQuestions > 0) {
             const accuracy = ((this.score.correct / totalQuestions) * 100).toFixed(1);
             const feedback = document.getElementById('feedback');
-            feedback.textContent = `Session Complete! You got ${this.score.correct} out of ${totalQuestions} correct (${accuracy}% accuracy)`;
+            feedback.textContent = window.i18n.t('fretboard.feedback.sessionComplete', {
+                correct: this.score.correct,
+                total: totalQuestions,
+                accuracy: accuracy
+            });
             feedback.className = 'feedback show correct';
             setTimeout(() => {
                 this.clearFeedback();
@@ -462,7 +502,11 @@ class FretboardGame {
         this.fretboardDisplayNoteToFret.highlightPosition(this.currentQuestion.string, this.currentQuestion.correctAnswer);
         
         // Show feedback
-        this.showFeedback(`The answer is: ${this.currentQuestion.note} on string ${this.currentQuestion.string} is at fret ${this.currentQuestion.correctAnswer}`, false);
+        this.showFeedback(window.i18n.t('fretboard.feedback.showAnswer', {
+            note: this.currentQuestion.note,
+            string: this.currentQuestion.string,
+            fret: this.currentQuestion.correctAnswer
+        }), false);
         
         // Switch buttons
         const showMeBtn = document.getElementById('show-me-note');
