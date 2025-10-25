@@ -1,0 +1,366 @@
+{
+  "filename": "Disney_songs.pdf",
+  "total_pages": 54,
+  "total_songs": 20,
+  "generated_at": "2025-10-26T00:01:30.492047",
+  "processing_time": "0:00:43",
+  "songs": [
+    {
+      "title": "Baby Mine",
+      "start_page": 4,
+      "end_page": 5
+    },
+    {
+      "title": "Beauty and the Beast",
+      "start_page": 6,
+      "end_page": 9
+    },
+    {
+      "title": "Can You Feel the Love Tonight",
+      "start_page": 10,
+      "end_page": 11
+    },
+    {
+      "title": "Chim Chim Cher-ee",
+      "start_page": 12,
+      "end_page": 13
+    },
+    {
+      "title": "Colors of the Wind",
+      "start_page": 14,
+      "end_page": 16
+    },
+    {
+      "title": "A Dream Is a Wish Your Heart Makes",
+      "start_page": 17,
+      "end_page": 19
+    },
+    {
+      "title": "God Help the Outcasts",
+      "start_page": 20,
+      "end_page": 22
+    },
+    {
+      "title": "I'm Wishing",
+      "start_page": 23,
+      "end_page": 25
+    },
+    {
+      "title": "It's a Small World",
+      "start_page": 26,
+      "end_page": 27
+    },
+    {
+      "title": "Little April Shower",
+      "start_page": 28,
+      "end_page": 29
+    },
+    {
+      "title": "Mickey Mouse March",
+      "start_page": 30,
+      "end_page": 31
+    },
+    {
+      "title": "Once Upon a Dream",
+      "start_page": 32,
+      "end_page": 35
+    },
+    {
+      "title": "So This Is Love",
+      "start_page": 36,
+      "end_page": 37
+    },
+    {
+      "title": "Some Day My Prince Will Come",
+      "start_page": 38,
+      "end_page": 39
+    },
+    {
+      "title": "When You Wish Upon a Star",
+      "start_page": 40,
+      "end_page": 42
+    },
+    {
+      "title": "Whistle While You Work",
+      "start_page": 43,
+      "end_page": 43
+    },
+    {
+      "title": "Who's Afraid of the Big Bad Wolf?",
+      "start_page": 44,
+      "end_page": 45
+    },
+    {
+      "title": "A Whole New World",
+      "start_page": 46,
+      "end_page": 47
+    },
+    {
+      "title": "You'll Be in My Heart",
+      "start_page": 48,
+      "end_page": 53
+    },
+    {
+      "title": "BABY MINE",
+      "start_page": 54,
+      "end_page": 54
+    }
+  ],
+  "raw_page_data": [
+    {
+      "page_number": 4,
+      "top_text": "Baby Mine",
+      "timestamp": "2025-10-26T00:00:49.685897"
+    },
+    {
+      "page_number": 5,
+      "top_text": "Coda",
+      "timestamp": "2025-10-26T00:00:50.497663"
+    },
+    {
+      "page_number": 6,
+      "top_text": "Beauty and the Beast",
+      "timestamp": "2025-10-26T00:00:51.145673"
+    },
+    {
+      "page_number": 7,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T00:00:51.733872"
+    },
+    {
+      "page_number": 8,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T00:00:52.329862"
+    },
+    {
+      "page_number": 9,
+      "top_text": "I cannot provide the largest, most prominent text as there is no visible song title or large text in the top portion of this music sheet page. Only musical notation and chord names are present.",
+      "timestamp": "2025-10-26T00:00:53.107860"
+    },
+    {
+      "page_number": 10,
+      "top_text": "Can You Feel the Love Tonight",
+      "timestamp": "2025-10-26T00:00:53.694614"
+    },
+    {
+      "page_number": 11,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T00:00:54.296677"
+    },
+    {
+      "page_number": 12,
+      "top_text": "Chim Chim Cher-ee",
+      "timestamp": "2025-10-26T00:00:55.058144"
+    },
+    {
+      "page_number": 13,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T00:00:55.615967"
+    },
+    {
+      "page_number": 14,
+      "top_text": "Colors of the Wind",
+      "timestamp": "2025-10-26T00:00:56.193602"
+    },
+    {
+      "page_number": 15,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T00:00:56.789900"
+    },
+    {
+      "page_number": 16,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T00:00:57.725342"
+    },
+    {
+      "page_number": 17,
+      "top_text": "A Dream Is a Wish Your Heart Makes",
+      "timestamp": "2025-10-26T00:00:58.301367"
+    },
+    {
+      "page_number": 18,
+      "top_text": "1/2CV",
+      "timestamp": "2025-10-26T00:00:58.871119"
+    },
+    {
+      "page_number": 19,
+      "top_text": "A.H.",
+      "timestamp": "2025-10-26T00:00:59.451216"
+    },
+    {
+      "page_number": 20,
+      "top_text": "God Help the Outcasts",
+      "timestamp": "2025-10-26T00:01:00.019958"
+    },
+    {
+      "page_number": 21,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T00:01:00.630971"
+    },
+    {
+      "page_number": 22,
+      "top_text": "D.S. al Coda",
+      "timestamp": "2025-10-26T00:01:01.267714"
+    },
+    {
+      "page_number": 23,
+      "top_text": "I'm Wishing",
+      "timestamp": "2025-10-26T00:01:01.848526"
+    },
+    {
+      "page_number": 24,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T00:01:02.492371"
+    },
+    {
+      "page_number": 25,
+      "top_text": "CVII",
+      "timestamp": "2025-10-26T00:01:03.060399"
+    },
+    {
+      "page_number": 26,
+      "top_text": "It's a Small World",
+      "timestamp": "2025-10-26T00:01:03.669048"
+    },
+    {
+      "page_number": 27,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T00:01:04.228958"
+    },
+    {
+      "page_number": 28,
+      "top_text": "Little April Shower",
+      "timestamp": "2025-10-26T00:01:04.792634"
+    },
+    {
+      "page_number": 29,
+      "top_text": "D.C. al Coda",
+      "timestamp": "2025-10-26T00:01:05.415418"
+    },
+    {
+      "page_number": 30,
+      "top_text": "Mickey Mouse March",
+      "timestamp": "2025-10-26T00:01:06.007221"
+    },
+    {
+      "page_number": 31,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T00:01:06.565786"
+    },
+    {
+      "page_number": 32,
+      "top_text": "Once Upon a Dream",
+      "timestamp": "2025-10-26T00:01:07.131975"
+    },
+    {
+      "page_number": 33,
+      "top_text": "Harm.",
+      "timestamp": "2025-10-26T00:01:07.700983"
+    },
+    {
+      "page_number": 34,
+      "top_text": "Scales and Arpeggios",
+      "timestamp": "2025-10-26T00:01:08.502245"
+    },
+    {
+      "page_number": 35,
+      "top_text": "D.S. al Coda",
+      "timestamp": "2025-10-26T00:01:09.156568"
+    },
+    {
+      "page_number": 36,
+      "top_text": "So This Is Love",
+      "timestamp": "2025-10-26T00:01:09.736316"
+    },
+    {
+      "page_number": 37,
+      "top_text": "Harm.",
+      "timestamp": "2025-10-26T00:01:10.358862"
+    },
+    {
+      "page_number": 38,
+      "top_text": "Some Day My Prince Will Come",
+      "timestamp": "2025-10-26T00:01:11.040112"
+    },
+    {
+      "page_number": 39,
+      "top_text": "Horn",
+      "timestamp": "2025-10-26T00:01:11.608904"
+    },
+    {
+      "page_number": 40,
+      "top_text": "When You Wish Upon a Star",
+      "timestamp": "2025-10-26T00:01:12.206364"
+    },
+    {
+      "page_number": 41,
+      "top_text": "Bridges",
+      "timestamp": "2025-10-26T00:01:12.791713"
+    },
+    {
+      "page_number": 42,
+      "top_text": "CVII",
+      "timestamp": "2025-10-26T00:01:13.361603"
+    },
+    {
+      "page_number": 43,
+      "top_text": "Whistle While You Work",
+      "timestamp": "2025-10-26T00:01:13.989376"
+    },
+    {
+      "page_number": 44,
+      "top_text": "Who's Afraid of the Big Bad Wolf?",
+      "timestamp": "2025-10-26T00:01:14.587212"
+    },
+    {
+      "page_number": 45,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T00:01:15.136150"
+    },
+    {
+      "page_number": 46,
+      "top_text": "A Whole New World",
+      "timestamp": "2025-10-26T00:01:15.713195"
+    },
+    {
+      "page_number": 47,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T00:01:16.489096"
+    },
+    {
+      "page_number": 48,
+      "top_text": "You'll Be in My Heart",
+      "timestamp": "2025-10-26T00:01:17.070898"
+    },
+    {
+      "page_number": 49,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T00:01:17.676849"
+    },
+    {
+      "page_number": 50,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T00:01:18.267370"
+    },
+    {
+      "page_number": 51,
+      "top_text": "Outro-Chorus",
+      "timestamp": "2025-10-26T00:01:18.910301"
+    },
+    {
+      "page_number": 52,
+      "top_text": "CIV",
+      "timestamp": "2025-10-26T00:01:19.477293"
+    },
+    {
+      "page_number": 53,
+      "top_text": "2/4CH",
+      "timestamp": "2025-10-26T00:01:20.124191"
+    },
+    {
+      "page_number": 54,
+      "top_text": "BABY MINE",
+      "timestamp": "2025-10-26T00:01:23.610830"
+    }
+  ]
+}

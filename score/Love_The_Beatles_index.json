@@ -1,0 +1,711 @@
+{
+  "filename": "Love_The_Beatles.pdf",
+  "total_pages": 116,
+  "total_songs": 27,
+  "generated_at": "2025-10-25T23:57:08.431833",
+  "processing_time": "0:05:11",
+  "songs": [
+    {
+      "title": "BECAUSE",
+      "start_page": 4,
+      "end_page": 4
+    },
+    {
+      "title": "GET BACK",
+      "start_page": 5,
+      "end_page": 9
+    },
+    {
+      "title": "GLASS ONION",
+      "start_page": 10,
+      "end_page": 11
+    },
+    {
+      "title": "ELEANOR RIGBY",
+      "start_page": 12,
+      "end_page": 15
+    },
+    {
+      "title": "I AM THE WALRUS",
+      "start_page": 16,
+      "end_page": 21
+    },
+    {
+      "title": "I WANT TO HOLD YOUR HAND",
+      "start_page": 22,
+      "end_page": 24
+    },
+    {
+      "title": "DRIVE MY CAR/THE WORD/ WHAT YOU'RE DOING",
+      "start_page": 25,
+      "end_page": 28
+    },
+    {
+      "title": "GNIK NUS",
+      "start_page": 29,
+      "end_page": 29
+    },
+    {
+      "title": "SOMETHING",
+      "start_page": 30,
+      "end_page": 32
+    },
+    {
+      "title": "BEING FOR THE BENEFIT OF MR. KITE!/I WANT YOU (SHE'S SO HEAVY)/HELTER SKELTER",
+      "start_page": 33,
+      "end_page": 36
+    },
+    {
+      "title": "HELP!",
+      "start_page": 37,
+      "end_page": 39
+    },
+    {
+      "title": "BLACKBIRD/YESTERDAY",
+      "start_page": 40,
+      "end_page": 43
+    },
+    {
+      "title": "STRAWBERRY FIELDS FOREVER",
+      "start_page": 44,
+      "end_page": 50
+    },
+    {
+      "title": "WITHIN YOU WITHOUT YOU/TOMORROW NEVER KNOWS",
+      "start_page": 51,
+      "end_page": 54
+    },
+    {
+      "title": "LUCY IN THE SKY WITH DIAMONDS",
+      "start_page": 55,
+      "end_page": 60
+    },
+    {
+      "title": "OCTOPUS'S GARDEN",
+      "start_page": 61,
+      "end_page": 68
+    },
+    {
+      "title": "LADY MADONNA",
+      "start_page": 69,
+      "end_page": 73
+    },
+    {
+      "title": "HERE COMES THE SUN",
+      "start_page": 74,
+      "end_page": 79
+    },
+    {
+      "title": "COME TOGETHER/DEAR PRUDENCE",
+      "start_page": 80,
+      "end_page": 84
+    },
+    {
+      "title": "REVOLUTION",
+      "start_page": 85,
+      "end_page": 88
+    },
+    {
+      "title": "BACK IN THE U.S.S.R.",
+      "start_page": 89,
+      "end_page": 92
+    },
+    {
+      "title": "WHILE MY GUITAR GENTLY WEEPS",
+      "start_page": 93,
+      "end_page": 96
+    },
+    {
+      "title": "A DAY IN THE LIFE",
+      "start_page": 97,
+      "end_page": 102
+    },
+    {
+      "title": "HEY JUDE",
+      "start_page": 103,
+      "end_page": 106
+    },
+    {
+      "title": "SGT. PEPPER'S LONELY HEARTS CLUB BAND",
+      "start_page": 107,
+      "end_page": 109
+    },
+    {
+      "title": "ALL YOU NEED IS LOVE",
+      "start_page": 110,
+      "end_page": 115
+    },
+    {
+      "title": "BECAUSE",
+      "start_page": 116,
+      "end_page": 116
+    }
+  ],
+  "raw_page_data": [
+    {
+      "page_number": 4,
+      "top_text": "BECAUSE",
+      "timestamp": "2025-10-25T23:53:30.877985"
+    },
+    {
+      "page_number": 5,
+      "top_text": "GET BACK",
+      "timestamp": "2025-10-25T23:53:33.522492"
+    },
+    {
+      "page_number": 6,
+      "top_text": "Jo Jo left his home in Tucson Arizona for some California grass. Get back, get back, get back to where you once belonged. Get back, get back, get back.",
+      "timestamp": "2025-10-25T23:53:37.483931"
+    },
+    {
+      "page_number": 7,
+      "top_text": "Spoken: Get back Jo Jo.",
+      "timestamp": "2025-10-25T23:53:40.846003"
+    },
+    {
+      "page_number": 8,
+      "top_text": "Get back Joe.",
+      "timestamp": "2025-10-25T23:53:43.529754"
+    },
+    {
+      "page_number": 9,
+      "top_text": "Go home. Oh get back,",
+      "timestamp": "2025-10-25T23:53:46.342445"
+    },
+    {
+      "page_number": 10,
+      "top_text": "GLASS ONION",
+      "timestamp": "2025-10-25T23:53:48.800631"
+    },
+    {
+      "page_number": 11,
+      "top_text": "Oh, yeah.",
+      "timestamp": "2025-10-25T23:53:50.534082"
+    },
+    {
+      "page_number": 12,
+      "top_text": "ELEANOR RIGBY",
+      "timestamp": "2025-10-25T23:53:52.162231"
+    },
+    {
+      "page_number": 13,
+      "top_text": "Ah, look at all the lonely people.",
+      "timestamp": "2025-10-25T23:53:53.833575"
+    },
+    {
+      "page_number": 14,
+      "top_text": "Waits at the window,",
+      "timestamp": "2025-10-25T23:53:55.532553"
+    },
+    {
+      "page_number": 15,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-25T23:53:57.204157"
+    },
+    {
+      "page_number": 16,
+      "top_text": "I AM THE WALRUS",
+      "timestamp": "2025-10-25T23:53:58.877764"
+    },
+    {
+      "page_number": 17,
+      "top_text": "1. Sitting on a corn-flake",
+      "timestamp": "2025-10-25T23:54:00.515566"
+    },
+    {
+      "page_number": 18,
+      "top_text": "I am the egg-man. (Oh.) They are the egg-men. (Oh.) I am the wal-rus. Goo goo g'joob. Mis-ter cit-y p'lice-man sitting pret-ty, lit-tle p'lice-men in a row.",
+      "timestamp": "2025-10-25T23:54:02.484459"
+    },
+    {
+      "page_number": 19,
+      "top_text": "See how they fly like Lucy in the sky see how they run. I'm crying. I'm crying. I'm crying.",
+      "timestamp": "2025-10-25T23:54:04.305257"
+    },
+    {
+      "page_number": 20,
+      "top_text": "Sitting in an English garden waiting for the sun.\n\nIf the sun don't come—you get a tan from standing in the English rain.\n\nI am the egg-man. They are the egg-men. I am the",
+      "timestamp": "2025-10-25T23:54:06.153394"
+    },
+    {
+      "page_number": 21,
+      "top_text": "wal-rus. Goo goo g'joobg'goo— goo g' joob.",
+      "timestamp": "2025-10-25T23:54:07.931142"
+    },
+    {
+      "page_number": 22,
+      "top_text": "I WANT TO HOLD YOUR HAND",
+      "timestamp": "2025-10-25T23:54:09.598547"
+    },
+    {
+      "page_number": 23,
+      "top_text": "I want to hold your hand.",
+      "timestamp": "2025-10-25T23:54:11.322026"
+    },
+    {
+      "page_number": 24,
+      "top_text": "It's such a feeling that my love I can't hide,",
+      "timestamp": "2025-10-25T23:54:13.063978"
+    },
+    {
+      "page_number": 25,
+      "top_text": "DRIVE MY CAR/THE WORD/ WHAT YOU'RE DOING",
+      "timestamp": "2025-10-25T23:54:14.839934"
+    },
+    {
+      "page_number": 26,
+      "top_text": "Baby, You Can Drive My Car",
+      "timestamp": "2025-10-25T23:54:16.475175"
+    },
+    {
+      "page_number": 27,
+      "top_text": "Look what you're doing,\nYou got me running\nI'm feeling there's no fun in it.\nWhy should it be so much\nto ask of you what you're",
+      "timestamp": "2025-10-25T23:54:18.303495"
+    },
+    {
+      "page_number": 28,
+      "top_text": "Beep, beep, mm beep, beep. Yeah.",
+      "timestamp": "2025-10-25T23:54:20.026316"
+    },
+    {
+      "page_number": 29,
+      "top_text": "GNIK NUS",
+      "timestamp": "2025-10-25T23:54:21.653855"
+    },
+    {
+      "page_number": 30,
+      "top_text": "SOMETHING",
+      "timestamp": "2025-10-25T23:54:23.299715"
+    },
+    {
+      "page_number": 31,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-25T23:54:24.979169"
+    },
+    {
+      "page_number": 32,
+      "top_text": "know.",
+      "timestamp": "2025-10-25T23:54:26.591255"
+    },
+    {
+      "page_number": 33,
+      "top_text": "BEING FOR THE BENEFIT OF MR. KITE!/\nI WANT YOU (SHE'S SO HEAVY)/HELTER SKELTER",
+      "timestamp": "2025-10-25T23:54:28.468026"
+    },
+    {
+      "page_number": 34,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-25T23:54:30.031337"
+    },
+    {
+      "page_number": 35,
+      "top_text": "waltz.",
+      "timestamp": "2025-10-25T23:54:31.578500"
+    },
+    {
+      "page_number": 36,
+      "top_text": "The night mis-ter Kite is topping the bill.",
+      "timestamp": "2025-10-25T23:54:33.136160"
+    },
+    {
+      "page_number": 37,
+      "top_text": "HELP!",
+      "timestamp": "2025-10-25T23:54:34.743327"
+    },
+    {
+      "page_number": 38,
+      "top_text": "I never needed anybody's help in any way.\nmy independence seems to vanish in the haze.\n\nBut now these days are gone, I'm not so self-assured.\nBut every now and then I feel so insecure.\n\nNow I find I've changed my mind,\nI know that I just need you like I've opened up the doors.\nHelp me if you can, I'm feeling never done before.",
+      "timestamp": "2025-10-25T23:54:37.199275"
+    },
+    {
+      "page_number": 39,
+      "top_text": "And I do appreciate you being round.\nHelp me get my feet back on the ground.\nWon't you please, please help me?\nHelp me, help me! Oo.",
+      "timestamp": "2025-10-25T23:54:39.060364"
+    },
+    {
+      "page_number": 40,
+      "top_text": "BLACKBIRD/YESTERDAY",
+      "timestamp": "2025-10-25T23:54:40.723625"
+    },
+    {
+      "page_number": 41,
+      "top_text": "Yesterday",
+      "timestamp": "2025-10-25T23:54:42.336268"
+    },
+    {
+      "page_number": 42,
+      "top_text": "Yesterday",
+      "timestamp": "2025-10-25T23:54:43.892330"
+    },
+    {
+      "page_number": 43,
+      "top_text": "Yesterday",
+      "timestamp": "2025-10-25T23:54:45.474541"
+    },
+    {
+      "page_number": 44,
+      "top_text": "STRAWBERRY FIELDS FOREVER",
+      "timestamp": "2025-10-25T23:54:47.142433"
+    },
+    {
+      "page_number": 45,
+      "top_text": "Straw-ber-ry Field.",
+      "timestamp": "2025-10-25T23:54:48.847943"
+    },
+    {
+      "page_number": 46,
+      "top_text": "Straw-ber-ry Field.",
+      "timestamp": "2025-10-25T23:54:50.584024"
+    },
+    {
+      "page_number": 47,
+      "top_text": "Straw-ber-ry Fields for ev-er.",
+      "timestamp": "2025-10-25T23:54:52.737139"
+    },
+    {
+      "page_number": 48,
+      "top_text": "Piccolo trumpet",
+      "timestamp": "2025-10-25T23:54:54.375657"
+    },
+    {
+      "page_number": 49,
+      "top_text": "Hella heba helloa.",
+      "timestamp": "2025-10-25T23:54:56.036015"
+    },
+    {
+      "page_number": 50,
+      "top_text": "Hella heba helloa.",
+      "timestamp": "2025-10-25T23:54:57.751606"
+    },
+    {
+      "page_number": 51,
+      "top_text": "WITHIN YOU WITHOUT YOU/TOMORROW NEVER KNOWS",
+      "timestamp": "2025-10-25T23:54:59.426623"
+    },
+    {
+      "page_number": 52,
+      "top_text": "We were talking about the space between us all, and the people who hide themselves behind a wall of illusion;",
+      "timestamp": "2025-10-25T23:55:01.134651"
+    },
+    {
+      "page_number": 53,
+      "top_text": "glimpse the truth, then it's far too late, when they pass away.",
+      "timestamp": "2025-10-25T23:55:02.870389"
+    },
+    {
+      "page_number": 54,
+      "top_text": "Slightly faster",
+      "timestamp": "2025-10-25T23:55:04.437010"
+    },
+    {
+      "page_number": 55,
+      "top_text": "LUCY IN THE SKY WITH DIAMONDS",
+      "timestamp": "2025-10-25T23:55:06.119689"
+    },
+    {
+      "page_number": 56,
+      "top_text": "Somebody calls you, you answer quite slowly, a girl with kaleidoscope eyes.",
+      "timestamp": "2025-10-25T23:55:07.719109"
+    },
+    {
+      "page_number": 57,
+      "top_text": "flowers of yellow and green,",
+      "timestamp": "2025-10-25T23:55:09.257342"
+    },
+    {
+      "page_number": 58,
+      "top_text": "Lucy in the sky with diamonds",
+      "timestamp": "2025-10-25T23:55:11.045021"
+    },
+    {
+      "page_number": 59,
+      "top_text": "Lucy in the sky with diamonds",
+      "timestamp": "2025-10-25T23:55:12.732497"
+    },
+    {
+      "page_number": 60,
+      "top_text": "Attacca",
+      "timestamp": "2025-10-25T23:55:14.227321"
+    },
+    {
+      "page_number": 61,
+      "top_text": "OCTOPUS'S GARDEN",
+      "timestamp": "2025-10-25T23:55:15.858011"
+    },
+    {
+      "page_number": 62,
+      "top_text": "I'd like to be under the sea in an octopus's garden in the shade.",
+      "timestamp": "2025-10-25T23:55:17.509563"
+    },
+    {
+      "page_number": 63,
+      "top_text": "I'd ask my friends to come and see an octopus's garden with me.",
+      "timestamp": "2025-10-25T23:55:19.253570"
+    },
+    {
+      "page_number": 64,
+      "top_text": "We would be warm below the storm in our little hide away beneath the waves.",
+      "timestamp": "2025-10-25T23:55:20.986651"
+    },
+    {
+      "page_number": 65,
+      "top_text": "We would sing and dance around\nWe would be so happy, you and me;",
+      "timestamp": "2025-10-25T23:55:22.759546"
+    },
+    {
+      "page_number": 66,
+      "top_text": "Guitar solo",
+      "timestamp": "2025-10-25T23:55:24.580262"
+    },
+    {
+      "page_number": 67,
+      "top_text": "In an octopus's garden with you.",
+      "timestamp": "2025-10-25T23:55:26.358661"
+    },
+    {
+      "page_number": 68,
+      "top_text": "Ah.",
+      "timestamp": "2025-10-25T23:55:27.822861"
+    },
+    {
+      "page_number": 69,
+      "top_text": "LADY MADONNA",
+      "timestamp": "2025-10-25T23:55:29.469676"
+    },
+    {
+      "page_number": 70,
+      "top_text": "See how they run.",
+      "timestamp": "2025-10-25T23:55:31.118388"
+    },
+    {
+      "page_number": 71,
+      "top_text": "To Coda φ",
+      "timestamp": "2025-10-25T23:55:32.746277"
+    },
+    {
+      "page_number": 72,
+      "top_text": "Friday night arrives without a suitcase.\nTuesday afternoon is never ending.\nSunday morning creeping like a nun.\nWednesday morning papers didn't come.\nMonday's child has learnt to tie his bootlace.\nThursday night your stockings needed mending.\nSee how they run.",
+      "timestamp": "2025-10-25T23:55:34.752572"
+    },
+    {
+      "page_number": 73,
+      "top_text": "D.S. al Coda\nPlay four times",
+      "timestamp": "2025-10-25T23:55:36.336841"
+    },
+    {
+      "page_number": 74,
+      "top_text": "HERE COMES THE SUN",
+      "timestamp": "2025-10-25T23:55:37.992203"
+    },
+    {
+      "page_number": 75,
+      "top_text": "Here comes the sun, doo da doo doo. Here comes the sun and I say, \"It's all right.\"",
+      "timestamp": "2025-10-25T23:55:39.950272"
+    },
+    {
+      "page_number": 76,
+      "top_text": "Little darling",
+      "timestamp": "2025-10-25T23:55:41.754241"
+    },
+    {
+      "page_number": 77,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-25T23:55:43.394506"
+    },
+    {
+      "page_number": 78,
+      "top_text": "Here comes the sun.",
+      "timestamp": "2025-10-25T23:55:45.055509"
+    },
+    {
+      "page_number": 79,
+      "top_text": "Sarangi",
+      "timestamp": "2025-10-25T23:55:46.556424"
+    },
+    {
+      "page_number": 80,
+      "top_text": "COME TOGETHER/DEAR PRUDENCE",
+      "timestamp": "2025-10-25T23:55:48.203910"
+    },
+    {
+      "page_number": 81,
+      "top_text": "Got to be a joker; he just do what he please...",
+      "timestamp": "2025-10-25T23:55:50.054023"
+    },
+    {
+      "page_number": 82,
+      "top_text": "One thing I can tell you is you got to be free.",
+      "timestamp": "2025-10-25T23:55:51.722259"
+    },
+    {
+      "page_number": 83,
+      "top_text": "Come together, yeah!",
+      "timestamp": "2025-10-25T23:55:53.399279"
+    },
+    {
+      "page_number": 84,
+      "top_text": "Can you take me back where I've been from, brother can you take me back?",
+      "timestamp": "2025-10-25T23:55:55.141499"
+    },
+    {
+      "page_number": 85,
+      "top_text": "REVOLUTION",
+      "timestamp": "2025-10-25T23:55:56.793733"
+    },
+    {
+      "page_number": 86,
+      "top_text": "world.\nplan.\nhead.\n\nYou tell me that it's evolution.\nYou ask me for a contribution.\nYou tell me it's the institution.\n\nWell, you know,\nWell, you know,\nWell, you know,\n\nwe all want to change the world.\nwe're all doing what we can.\nyou better free your mind instead.",
+      "timestamp": "2025-10-25T23:55:58.746431"
+    },
+    {
+      "page_number": 87,
+      "top_text": "But when you talk about destruction,\nBut if you want money for people with minds that hate,\nBut if you go carrying pictures of Chairman Mao,\n\nDon't you know that you can count me out.\nAll I can tell you is \"Brother you have to wait.\"\nYou ain't going to make it with anybody anyhow.\n\nDon't you know it's gonna be alright,\nalright, alright, alright.",
+      "timestamp": "2025-10-25T23:56:00.877971"
+    },
+    {
+      "page_number": 88,
+      "top_text": "Alright, alright, alright, alright, alright.",
+      "timestamp": "2025-10-25T23:56:02.598500"
+    },
+    {
+      "page_number": 89,
+      "top_text": "BACK IN THE U.S.S.R.",
+      "timestamp": "2025-10-25T23:56:04.479955"
+    },
+    {
+      "page_number": 90,
+      "top_text": "You don't know how lucky you are, boy, back in the U.S.S.R.",
+      "timestamp": "2025-10-25T23:56:06.224905"
+    },
+    {
+      "page_number": 91,
+      "top_text": "Back in the U.S., back in the U.S.,",
+      "timestamp": "2025-10-25T23:56:07.946682"
+    },
+    {
+      "page_number": 92,
+      "top_text": "Back in the U.S.S.R.",
+      "timestamp": "2025-10-25T23:56:09.641778"
+    },
+    {
+      "page_number": 93,
+      "top_text": "WHILE MY GUITAR GENTLY WEEPS",
+      "timestamp": "2025-10-25T23:56:11.325181"
+    },
+    {
+      "page_number": 94,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-25T23:56:12.858960"
+    },
+    {
+      "page_number": 95,
+      "top_text": "I don't know why no body told you,\nI don't know how you were diverted,\nhow to unfold your love.\nyou were perverted too.\n\nI don't know how someone controlled you,\nI don't know how you were inverted,\nthey bought and sold you.\nno one altered you.\n\nD.S. al Coda",
+      "timestamp": "2025-10-25T23:56:14.924920"
+    },
+    {
+      "page_number": 96,
+      "top_text": "Coda",
+      "timestamp": "2025-10-25T23:56:16.639790"
+    },
+    {
+      "page_number": 97,
+      "top_text": "A DAY IN THE LIFE",
+      "timestamp": "2025-10-25T23:56:18.301323"
+    },
+    {
+      "page_number": 98,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-25T23:56:20.088788"
+    },
+    {
+      "page_number": 99,
+      "top_text": "A crowd of people stood and stared,\nA crowd of people turned away,\nthey'd seen his face before,\nbut I just had to look;\nno-bod-y was real-ly sure if he was from the House of Lords.\nhaving read the book.\nI'd love to turn",
+      "timestamp": "2025-10-25T23:56:22.112845"
+    },
+    {
+      "page_number": 100,
+      "top_text": "Instrumental break ad lib",
+      "timestamp": "2025-10-25T23:56:23.906846"
+    },
+    {
+      "page_number": 101,
+      "top_text": "way up-stairs and had a smoke, and some-bod-y spoke and I went in-to a dream.",
+      "timestamp": "2025-10-25T23:56:25.715467"
+    },
+    {
+      "page_number": 102,
+      "top_text": "they had to count them all.___ Now they know how man - y holes it takes to fill the Al - bert Hall. I'd love to turn you on.",
+      "timestamp": "2025-10-25T23:56:27.733957"
+    },
+    {
+      "page_number": 103,
+      "top_text": "HEY JUDE",
+      "timestamp": "2025-10-25T23:56:29.342532"
+    },
+    {
+      "page_number": 104,
+      "top_text": "Jude, don't be afraid,\nyou were made to go out and\nJude, don't let me down,\nyou have found her now go and\nget her.\nThe minute you let her under your skin,\nRemember to let her into your heart,\nthen you begin to make it better.",
+      "timestamp": "2025-10-25T23:56:32.746095"
+    },
+    {
+      "page_number": 105,
+      "top_text": "Hey Jude",
+      "timestamp": "2025-10-25T23:56:34.644408"
+    },
+    {
+      "page_number": 106,
+      "top_text": "Hey Jude",
+      "timestamp": "2025-10-25T23:56:36.268341"
+    },
+    {
+      "page_number": 107,
+      "top_text": "SGT. PEPPER'S LONELY HEARTS CLUB BAND",
+      "timestamp": "2025-10-25T23:56:38.007363"
+    },
+    {
+      "page_number": 108,
+      "top_text": "Sergeant Pepper's Lonely Hearts Club Band",
+      "timestamp": "2025-10-25T23:56:39.893233"
+    },
+    {
+      "page_number": 109,
+      "top_text": "Sergeant Pepper's Lonely Hearts Club Band",
+      "timestamp": "2025-10-25T23:56:41.641529"
+    },
+    {
+      "page_number": 110,
+      "top_text": "ALL YOU NEED IS LOVE",
+      "timestamp": "2025-10-25T23:56:43.290151"
+    },
+    {
+      "page_number": 111,
+      "top_text": "There's no-thing you can do that can't be done.",
+      "timestamp": "2025-10-25T23:56:45.246166"
+    },
+    {
+      "page_number": 112,
+      "top_text": "All you need is love.",
+      "timestamp": "2025-10-25T23:56:46.964298"
+    },
+    {
+      "page_number": 113,
+      "top_text": "All you need is love.",
+      "timestamp": "2025-10-25T23:56:49.736310"
+    },
+    {
+      "page_number": 114,
+      "top_text": "Love is all you need.",
+      "timestamp": "2025-10-25T23:56:54.356086"
+    },
+    {
+      "page_number": 115,
+      "top_text": "There is no visible text on the top portion of this music sheet page.",
+      "timestamp": "2025-10-25T23:56:56.368299"
+    },
+    {
+      "page_number": 116,
+      "top_text": "BECAUSE",
+      "timestamp": "2025-10-25T23:56:59.927801"
+    }
+  ]
+}

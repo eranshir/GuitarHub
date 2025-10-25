@@ -644,9 +644,80 @@
                 </div>
             </section>
         </main>
+
+        <!-- Songs Browser Overlay (Hidden by default, activated with Shift+S) -->
+        <div id="songs-browser-overlay" class="songs-browser-overlay" style="display: none;">
+            <div class="songs-browser-container">
+                <div class="songs-browser-header">
+                    <h2>Songs Browser</h2>
+                    <button id="close-songs-browser" class="close-browser-btn">✕</button>
+                </div>
+
+                <div class="songs-browser-tabs">
+                    <button class="browser-tab active" data-tab="browse">Browse by Book</button>
+                    <button class="browser-tab" data-tab="search">Search Songs</button>
+                </div>
+
+                <div class="songs-browser-content">
+                    <!-- Browse Tab -->
+                    <div id="browse-tab" class="browser-tab-content active">
+                        <div class="browse-controls">
+                            <select id="book-selector" class="book-selector">
+                                <option value="">Select a book...</option>
+                            </select>
+                            <select id="sort-selector" class="sort-selector">
+                                <option value="original">Original Order</option>
+                                <option value="alphabetical">Alphabetical</option>
+                            </select>
+                        </div>
+                        <div id="songs-list" class="songs-list">
+                            <!-- Songs will be populated here -->
+                        </div>
+                    </div>
+
+                    <!-- Search Tab -->
+                    <div id="search-tab" class="browser-tab-content">
+                        <div class="search-controls">
+                            <input type="text" id="song-search-input" class="song-search-input" placeholder="Search for a song...">
+                            <div id="search-autocomplete" class="search-autocomplete" style="display: none;">
+                                <!-- Autocomplete suggestions will appear here -->
+                            </div>
+                        </div>
+                        <div id="search-results" class="search-results">
+                            <!-- Search results will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PDF Viewer (appears when song is selected) -->
+            <div id="pdf-viewer" class="pdf-viewer" style="display: none;">
+                <div class="pdf-viewer-header">
+                    <div class="pdf-info">
+                        <button id="back-to-list" class="back-btn">← Back to List</button>
+                        <h3 id="current-song-title">Song Title</h3>
+                        <span id="current-page-info">Page 1 of 3</span>
+                    </div>
+                </div>
+                <div class="pdf-viewer-content">
+                    <button id="prev-page" class="nav-btn nav-btn-left">‹</button>
+                    <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
+                    <button id="next-page" class="nav-btn nav-btn-right">›</button>
+                </div>
+                <div class="pdf-viewer-footer">
+                    <input type="range" id="page-slider" class="page-slider" min="1" max="1" value="1">
+                    <div class="zoom-controls">
+                        <button id="zoom-out" class="zoom-btn">−</button>
+                        <span id="zoom-level">100%</span>
+                        <button id="zoom-in" class="zoom-btn">+</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <script src="js/i18n.js"></script>
     <script src="js/audio.js"></script>
     <script src="js/guitar.js"></script>
@@ -657,6 +728,7 @@
     <script src="js/intervalGame.js"></script>
     <script src="js/chordGame.js"></script>
     <script src="js/statistics.js"></script>
+    <script src="js/songsBrowser.js"></script>
     <script src="js/app.js"></script>
     <script>
         // Initialize language selector

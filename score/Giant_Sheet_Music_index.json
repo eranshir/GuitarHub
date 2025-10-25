@@ -1,0 +1,1761 @@
+{
+  "filename": "Giant_Sheet_Music.pdf",
+  "total_pages": 308,
+  "total_songs": 47,
+  "generated_at": "2025-10-26T00:26:51.097811",
+  "processing_time": "0:11:48",
+  "songs": [
+    {
+      "title": "50 WAYS TO LEAVE YOUR LOVER",
+      "start_page": 6,
+      "end_page": 9
+    },
+    {
+      "title": "AFRICA",
+      "start_page": 10,
+      "end_page": 17
+    },
+    {
+      "title": "ALL ALONG THE WATCHTOWER",
+      "start_page": 18,
+      "end_page": 23
+    },
+    {
+      "title": "ALL MY LOVE",
+      "start_page": 24,
+      "end_page": 31
+    },
+    {
+      "title": "BEHIND BLUE EYES",
+      "start_page": 32,
+      "end_page": 37
+    },
+    {
+      "title": "BIG YELLOW TAXI",
+      "start_page": 38,
+      "end_page": 40
+    },
+    {
+      "title": "BLINDED BY THE LIGHT",
+      "start_page": 41,
+      "end_page": 51
+    },
+    {
+      "title": "BORN TO RUN",
+      "start_page": 52,
+      "end_page": 61
+    },
+    {
+      "title": "BRIDGE OVER TROUBLED WATER",
+      "start_page": 62,
+      "end_page": 69
+    },
+    {
+      "title": "BLOWIN' IN THE WIND",
+      "start_page": 70,
+      "end_page": 72
+    },
+    {
+      "title": "CLOSER TO THE HEART",
+      "start_page": 73,
+      "end_page": 75
+    },
+    {
+      "title": "DANCING IN THE MOONLIGHT",
+      "start_page": 76,
+      "end_page": 81
+    },
+    {
+      "title": "DO YOU FEEL LIKE WE DO",
+      "start_page": 82,
+      "end_page": 89
+    },
+    {
+      "title": "DON'T STOP BELIEVIN'",
+      "start_page": 90,
+      "end_page": 93
+    },
+    {
+      "title": "FAITHFULLY",
+      "start_page": 94,
+      "end_page": 97
+    },
+    {
+      "title": "FOOL IN THE RAIN",
+      "start_page": 98,
+      "end_page": 109
+    },
+    {
+      "title": "FROM ME TO YOU",
+      "start_page": 110,
+      "end_page": 113
+    },
+    {
+      "title": "GIVE UP THE FUNK TEAR THE ROOF OFF THE SUCKER",
+      "start_page": 114,
+      "end_page": 120
+    },
+    {
+      "title": "THE GREAT GIG IN THE SKY",
+      "start_page": 121,
+      "end_page": 125
+    },
+    {
+      "title": "GOING UP THE COUNTRY",
+      "start_page": 126,
+      "end_page": 131
+    },
+    {
+      "title": "I LOVE L.A.",
+      "start_page": 132,
+      "end_page": 139
+    },
+    {
+      "title": "I SAW HER STANDING THERE",
+      "start_page": 140,
+      "end_page": 145
+    },
+    {
+      "title": "LIKE A ROLLING STONE",
+      "start_page": 146,
+      "end_page": 150
+    },
+    {
+      "title": "THE LOAD OUT",
+      "start_page": 151,
+      "end_page": 161
+    },
+    {
+      "title": "LIVE AND LET DIE",
+      "start_page": 162,
+      "end_page": 165
+    },
+    {
+      "title": "LOVE REIGN O'ER ME",
+      "start_page": 166,
+      "end_page": 173
+    },
+    {
+      "title": "MONEY",
+      "start_page": 174,
+      "end_page": 178
+    },
+    {
+      "title": "NIGHTS IN WHITE SATIN",
+      "start_page": 179,
+      "end_page": 181
+    },
+    {
+      "title": "PARANOID",
+      "start_page": 182,
+      "end_page": 186
+    },
+    {
+      "title": "PINBALL WIZARD",
+      "start_page": 187,
+      "end_page": 193
+    },
+    {
+      "title": "P-FUNK WANTS TO GET FUNKED UP",
+      "start_page": 194,
+      "end_page": 203
+    },
+    {
+      "title": "RIVER",
+      "start_page": 204,
+      "end_page": 208
+    },
+    {
+      "title": "SATURDAY IN THE PARK",
+      "start_page": 209,
+      "end_page": 215
+    },
+    {
+      "title": "SHE LOVES YOU",
+      "start_page": 216,
+      "end_page": 219
+    },
+    {
+      "title": "SHE'S A RAINBOW",
+      "start_page": 220,
+      "end_page": 225
+    },
+    {
+      "title": "THE SOUND OF SILENCE",
+      "start_page": 226,
+      "end_page": 231
+    },
+    {
+      "title": "ST. STEPHEN",
+      "start_page": 232,
+      "end_page": 237
+    },
+    {
+      "title": "STAIRWAY TO HEAVEN",
+      "start_page": 238,
+      "end_page": 249
+    },
+    {
+      "title": "SPACE ODDITY",
+      "start_page": 250,
+      "end_page": 256
+    },
+    {
+      "title": "TOM SAWYER",
+      "start_page": 257,
+      "end_page": 263
+    },
+    {
+      "title": "THUNDER ROAD",
+      "start_page": 264,
+      "end_page": 273
+    },
+    {
+      "title": "UNCLE JOHN'S BAND",
+      "start_page": 274,
+      "end_page": 280
+    },
+    {
+      "title": "A WHITER SHADE OF PALE",
+      "start_page": 281,
+      "end_page": 283
+    },
+    {
+      "title": "WOODSTOCK",
+      "start_page": 284,
+      "end_page": 291
+    },
+    {
+      "title": "YOU CAN'T ALWAYS GET WHAT YOU WANT",
+      "start_page": 292,
+      "end_page": 301
+    },
+    {
+      "title": "WILD HORSES",
+      "start_page": 302,
+      "end_page": 307
+    },
+    {
+      "title": "THE GIANT BOOK OF CLASSIC ROCK",
+      "start_page": 308,
+      "end_page": 308
+    }
+  ],
+  "raw_page_data": [
+    {
+      "page_number": 6,
+      "top_text": "50 WAYS TO LEAVE YOUR LOVER",
+      "timestamp": "2025-10-26T00:18:26.243502"
+    },
+    {
+      "page_number": 7,
+      "top_text": "Fifty Ways to Leave Your Lover",
+      "timestamp": "2025-10-26T00:18:28.508187"
+    },
+    {
+      "page_number": 8,
+      "top_text": "Fifty Ways to Leave Your Lover",
+      "timestamp": "2025-10-26T00:18:30.722868"
+    },
+    {
+      "page_number": 9,
+      "top_text": "key, Lee, and get your-self free.",
+      "timestamp": "2025-10-26T00:18:33.366248"
+    },
+    {
+      "page_number": 10,
+      "top_text": "AFRICA",
+      "timestamp": "2025-10-26T00:18:35.645456"
+    },
+    {
+      "page_number": 11,
+      "top_text": "Verse 2:",
+      "timestamp": "2025-10-26T00:18:38.752389"
+    },
+    {
+      "page_number": 12,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:18:40.294080"
+    },
+    {
+      "page_number": 13,
+      "top_text": "There's nothing that a hundred men or more could ever do.",
+      "timestamp": "2025-10-26T00:18:41.840639"
+    },
+    {
+      "page_number": 14,
+      "top_text": "Keyboard solo:",
+      "timestamp": "2025-10-26T00:18:43.335225"
+    },
+    {
+      "page_number": 15,
+      "top_text": "Hurry, boy, she's waiting there for you.",
+      "timestamp": "2025-10-26T00:18:44.804213"
+    },
+    {
+      "page_number": 16,
+      "top_text": "I bless the rains down in Africa.",
+      "timestamp": "2025-10-26T00:18:46.309802"
+    },
+    {
+      "page_number": 17,
+      "top_text": "Repeat and fade",
+      "timestamp": "2025-10-26T00:18:47.700563"
+    },
+    {
+      "page_number": 18,
+      "top_text": "ALL ALONG THE WATCHTOWER",
+      "timestamp": "2025-10-26T00:18:49.113888"
+    },
+    {
+      "page_number": 19,
+      "top_text": "\"There's too much confusion,\"",
+      "timestamp": "2025-10-26T00:18:50.582217"
+    },
+    {
+      "page_number": 20,
+      "top_text": "Verse 2:",
+      "timestamp": "2025-10-26T00:18:52.337330"
+    },
+    {
+      "page_number": 21,
+      "top_text": "Verse 3:",
+      "timestamp": "2025-10-26T00:18:53.715326"
+    },
+    {
+      "page_number": 22,
+      "top_text": "Well, ah oh, outside in the cold distance, uh, a wild-cat did growl.",
+      "timestamp": "2025-10-26T00:18:55.402252"
+    },
+    {
+      "page_number": 23,
+      "top_text": "All Along the Watchtower",
+      "timestamp": "2025-10-26T00:18:57.029137"
+    },
+    {
+      "page_number": 24,
+      "top_text": "ALL MY LOVE",
+      "timestamp": "2025-10-26T00:18:58.491007"
+    },
+    {
+      "page_number": 25,
+      "top_text": "to chase a feather in the wind?",
+      "timestamp": "2025-10-26T00:19:00.073652"
+    },
+    {
+      "page_number": 26,
+      "top_text": "All My Love",
+      "timestamp": "2025-10-26T00:19:01.823962"
+    },
+    {
+      "page_number": 27,
+      "top_text": "All My Love",
+      "timestamp": "2025-10-26T00:19:03.381125"
+    },
+    {
+      "page_number": 28,
+      "top_text": "Slower",
+      "timestamp": "2025-10-26T00:19:04.848699"
+    },
+    {
+      "page_number": 29,
+      "top_text": "(Synth. strings)",
+      "timestamp": "2025-10-26T00:19:06.556064"
+    },
+    {
+      "page_number": 30,
+      "top_text": "All My Love",
+      "timestamp": "2025-10-26T00:19:08.090994"
+    },
+    {
+      "page_number": 31,
+      "top_text": "All My Love",
+      "timestamp": "2025-10-26T00:19:09.539574"
+    },
+    {
+      "page_number": 32,
+      "top_text": "BEHIND BLUE EYES",
+      "timestamp": "2025-10-26T00:19:11.028921"
+    },
+    {
+      "page_number": 33,
+      "top_text": "No one knows what it's like to be hated, to be fatigued, to telling only lies.",
+      "timestamp": "2025-10-26T00:19:12.713294"
+    },
+    {
+      "page_number": 34,
+      "top_text": "Behind Blue Eyes",
+      "timestamp": "2025-10-26T00:19:14.138806"
+    },
+    {
+      "page_number": 35,
+      "top_text": "Bridge:",
+      "timestamp": "2025-10-26T00:19:15.899207"
+    },
+    {
+      "page_number": 36,
+      "top_text": "And if I swallow anything evil, put your finger down my throat. And if I shiver, please give me a blanket. Keep me warm, let me wear your coat.",
+      "timestamp": "2025-10-26T00:19:17.580535"
+    },
+    {
+      "page_number": 37,
+      "top_text": "Behind Blue Eyes",
+      "timestamp": "2025-10-26T00:19:19.087581"
+    },
+    {
+      "page_number": 38,
+      "top_text": "BIG YELLOW TAXI",
+      "timestamp": "2025-10-26T00:19:20.491345"
+    },
+    {
+      "page_number": 39,
+      "top_text": "Big Yellow Taxi",
+      "timestamp": "2025-10-26T00:19:21.927690"
+    },
+    {
+      "page_number": 40,
+      "top_text": "Don't it always seem to go that you don't know what you've got till it's gone?",
+      "timestamp": "2025-10-26T00:19:23.670362"
+    },
+    {
+      "page_number": 41,
+      "top_text": "BLINDED BY THE LIGHT",
+      "timestamp": "2025-10-26T00:19:25.130870"
+    },
+    {
+      "page_number": 42,
+      "top_text": "Blinded by the Light",
+      "timestamp": "2025-10-26T00:19:26.585243"
+    },
+    {
+      "page_number": 43,
+      "top_text": "In the dumps with the mumps as the adolescent pumps his way...",
+      "timestamp": "2025-10-26T00:19:28.159473"
+    },
+    {
+      "page_number": 44,
+      "top_text": "The calliope crashed to the ground.\nAsked me if I needed a ride.\nThe calliope crashed to the ground.\nOh, she was blinded by the light,\nrevved up like a deuce, another",
+      "timestamp": "2025-10-26T00:19:29.898413"
+    },
+    {
+      "page_number": 45,
+      "top_text": "Blinded by the Light",
+      "timestamp": "2025-10-26T00:19:31.445972"
+    },
+    {
+      "page_number": 46,
+      "top_text": "With a half-time feel",
+      "timestamp": "2025-10-26T00:19:33.059537"
+    },
+    {
+      "page_number": 47,
+      "top_text": "Solo:",
+      "timestamp": "2025-10-26T00:19:34.592627"
+    },
+    {
+      "page_number": 48,
+      "top_text": "eyes of the sun.",
+      "timestamp": "2025-10-26T00:19:36.044445"
+    },
+    {
+      "page_number": 49,
+      "top_text": "Blinded by the Light",
+      "timestamp": "2025-10-26T00:19:37.686996"
+    },
+    {
+      "page_number": 50,
+      "top_text": "Blinded by the Light",
+      "timestamp": "2025-10-26T00:19:39.295933"
+    },
+    {
+      "page_number": 51,
+      "top_text": "Blinded by the Light",
+      "timestamp": "2025-10-26T00:19:40.742965"
+    },
+    {
+      "page_number": 52,
+      "top_text": "BORN TO RUN",
+      "timestamp": "2025-10-26T00:19:42.326182"
+    },
+    {
+      "page_number": 53,
+      "top_text": "Born to Run",
+      "timestamp": "2025-10-26T00:19:43.802891"
+    },
+    {
+      "page_number": 54,
+      "top_text": "baby, this town rips the bones from your back. It's a death trap, it's a suicide rap. We got to get out while we're young. 'Cause tramps like us, baby, we were born to run.",
+      "timestamp": "2025-10-26T00:19:45.520403"
+    },
+    {
+      "page_number": 55,
+      "top_text": "Wendy",
+      "timestamp": "2025-10-26T00:19:47.056054"
+    },
+    {
+      "page_number": 56,
+      "top_text": "Bridge:",
+      "timestamp": "2025-10-26T00:19:48.617682"
+    },
+    {
+      "page_number": 57,
+      "top_text": "bold and stark as kids are huddled on the beach in the mist. I wanna die with you, Wendy, on the streets tonight in an ever-lasting kiss. Huh!",
+      "timestamp": "2025-10-26T00:19:50.351420"
+    },
+    {
+      "page_number": 58,
+      "top_text": "Verse 3:",
+      "timestamp": "2025-10-26T00:19:51.893603"
+    },
+    {
+      "page_number": 59,
+      "top_text": "live with the sadness, I'll love you with all the madness in my soul. Oh, some-day, girl, I don't know when, we're gonna get to that place where we really want to go, and we'll walk in the sun. But 'til then, tramps like us,",
+      "timestamp": "2025-10-26T00:19:53.802347"
+    },
+    {
+      "page_number": 60,
+      "top_text": "baby, we were born to run.",
+      "timestamp": "2025-10-26T00:19:55.372660"
+    },
+    {
+      "page_number": 61,
+      "top_text": "Hmm, oh, oh, oh, oh.",
+      "timestamp": "2025-10-26T00:19:57.011486"
+    },
+    {
+      "page_number": 62,
+      "top_text": "BRIDGE OVER TROUBLED WATER",
+      "timestamp": "2025-10-26T00:19:58.537288"
+    },
+    {
+      "page_number": 63,
+      "top_text": "Bridge Over Troubled Water",
+      "timestamp": "2025-10-26T00:20:00.198466"
+    },
+    {
+      "page_number": 64,
+      "top_text": "troubled water, I will lay me down.",
+      "timestamp": "2025-10-26T00:20:01.742734"
+    },
+    {
+      "page_number": 65,
+      "top_text": "Verse 2:",
+      "timestamp": "2025-10-26T00:20:03.205510"
+    },
+    {
+      "page_number": 66,
+      "top_text": "Bridge Over Troubled Water",
+      "timestamp": "2025-10-26T00:20:04.853078"
+    },
+    {
+      "page_number": 67,
+      "top_text": "Verse 3:",
+      "timestamp": "2025-10-26T00:20:06.245861"
+    },
+    {
+      "page_number": 68,
+      "top_text": "Your time has come to shine. All your dreams are on their way. See how they shine. Oh, if you need a friend, I'm sailing right behind, like a",
+      "timestamp": "2025-10-26T00:20:07.974256"
+    },
+    {
+      "page_number": 69,
+      "top_text": "Bridge Over Troubled Water",
+      "timestamp": "2025-10-26T00:20:09.401421"
+    },
+    {
+      "page_number": 70,
+      "top_text": "BLOWIN' IN THE WIND",
+      "timestamp": "2025-10-26T00:20:10.787925"
+    },
+    {
+      "page_number": 71,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:20:12.273039"
+    },
+    {
+      "page_number": 72,
+      "top_text": "blow-in' in the wind. The answer is blow-in' in the wind.",
+      "timestamp": "2025-10-26T00:20:13.868784"
+    },
+    {
+      "page_number": 73,
+      "top_text": "CLOSER TO THE HEART",
+      "timestamp": "2025-10-26T00:20:15.313717"
+    },
+    {
+      "page_number": 74,
+      "top_text": "Verse:",
+      "timestamp": "2025-10-26T00:20:16.940533"
+    },
+    {
+      "page_number": 75,
+      "top_text": "Closer to the heart.",
+      "timestamp": "2025-10-26T00:20:18.425256"
+    },
+    {
+      "page_number": 76,
+      "top_text": "DANCING IN THE MOONLIGHT",
+      "timestamp": "2025-10-26T00:20:19.948321"
+    },
+    {
+      "page_number": 77,
+      "top_text": "ev'rybody was dancin' in the moonlight.",
+      "timestamp": "2025-10-26T00:20:21.456942"
+    },
+    {
+      "page_number": 78,
+      "top_text": "Dancing in the Moonlight",
+      "timestamp": "2025-10-26T00:20:23.021625"
+    },
+    {
+      "page_number": 79,
+      "top_text": "Dancing in the Moonlight",
+      "timestamp": "2025-10-26T00:20:24.444496"
+    },
+    {
+      "page_number": 80,
+      "top_text": "ev'rybody's dance in' in the moonlight.",
+      "timestamp": "2025-10-26T00:20:25.949626"
+    },
+    {
+      "page_number": 81,
+      "top_text": "Dancing in the Moonlight",
+      "timestamp": "2025-10-26T00:20:27.475437"
+    },
+    {
+      "page_number": 82,
+      "top_text": "DO YOU FEEL LIKE WE DO",
+      "timestamp": "2025-10-26T00:20:28.957430"
+    },
+    {
+      "page_number": 83,
+      "top_text": "Verse 1: (Sing first time only)",
+      "timestamp": "2025-10-26T00:20:30.618514"
+    },
+    {
+      "page_number": 84,
+      "top_text": "Whose wine? What wine? Where the hell did I dine?\n\"Don't walk, don't walk, don't walk away.\"\nMust have been a dream,\nI don't believe where I've been.\nDrove into a taxi, bent the boot, hit the back.\nCome on, let's do it again.\nHad to play some music, otherwise, he'd crack.",
+      "timestamp": "2025-10-26T00:20:32.584300"
+    },
+    {
+      "page_number": 85,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:20:34.004635"
+    },
+    {
+      "page_number": 86,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:20:35.429137"
+    },
+    {
+      "page_number": 87,
+      "top_text": "How d'you feel?",
+      "timestamp": "2025-10-26T00:20:36.951916"
+    },
+    {
+      "page_number": 88,
+      "top_text": "Do You Feel Like We Do?",
+      "timestamp": "2025-10-26T00:20:38.496018"
+    },
+    {
+      "page_number": 89,
+      "top_text": "On cue:",
+      "timestamp": "2025-10-26T00:20:39.893044"
+    },
+    {
+      "page_number": 90,
+      "top_text": "DON'T STOP BELIEVIN'",
+      "timestamp": "2025-10-26T00:20:41.326860"
+    },
+    {
+      "page_number": 91,
+      "top_text": "Don't Stop Believin'",
+      "timestamp": "2025-10-26T00:20:42.880501"
+    },
+    {
+      "page_number": 92,
+      "top_text": "Don't Stop Believin'",
+      "timestamp": "2025-10-26T00:20:44.536977"
+    },
+    {
+      "page_number": 93,
+      "top_text": "Don't Stop Believin'",
+      "timestamp": "2025-10-26T00:20:46.048957"
+    },
+    {
+      "page_number": 94,
+      "top_text": "FAITHFULLY",
+      "timestamp": "2025-10-26T00:20:47.438971"
+    },
+    {
+      "page_number": 95,
+      "top_text": "Wheels go 'round and 'round, you're on my mind.\nWe all need the clowns to make us smile.",
+      "timestamp": "2025-10-26T00:20:49.127128"
+    },
+    {
+      "page_number": 96,
+      "top_text": "Right down the line it's been you and me.\nTwo strangers learn to fall in love again.\nAnd loving a musician ain't always what it's supposed to be.\nI get the joy of rediscovering you.\nOh, girl, you stand by me.\nI'm forever yours.",
+      "timestamp": "2025-10-26T00:20:51.022669"
+    },
+    {
+      "page_number": 97,
+      "top_text": "faithfully",
+      "timestamp": "2025-10-26T00:20:52.413744"
+    },
+    {
+      "page_number": 98,
+      "top_text": "FOOL IN THE RAIN",
+      "timestamp": "2025-10-26T00:20:53.829036"
+    },
+    {
+      "page_number": 99,
+      "top_text": "Verses 1 & 4:",
+      "timestamp": "2025-10-26T00:20:55.395600"
+    },
+    {
+      "page_number": 100,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T00:20:56.790860"
+    },
+    {
+      "page_number": 101,
+      "top_text": "Verses 2 & 3:",
+      "timestamp": "2025-10-26T00:20:58.531032"
+    },
+    {
+      "page_number": 102,
+      "top_text": "It ain't the first time, believe me baby, storm that I thought would blow over clouds the light of the love that I found,",
+      "timestamp": "2025-10-26T00:21:00.217561"
+    },
+    {
+      "page_number": 103,
+      "top_text": "Bright latin",
+      "timestamp": "2025-10-26T00:21:01.639836"
+    },
+    {
+      "page_number": 104,
+      "top_text": "hand of the clock, well, it don't seem to stop, when I'm thinking it over.",
+      "timestamp": "2025-10-26T00:21:03.571620"
+    },
+    {
+      "page_number": 105,
+      "top_text": "time is a - live. and I",
+      "timestamp": "2025-10-26T00:21:05.098419"
+    },
+    {
+      "page_number": 106,
+      "top_text": "I see you in my dream, but I just don't see you with me. I've got to get home. I've got to get home. I've got to get",
+      "timestamp": "2025-10-26T00:21:08.313519"
+    },
+    {
+      "page_number": 107,
+      "top_text": "home.\nI've got to get home.",
+      "timestamp": "2025-10-26T00:21:09.953839"
+    },
+    {
+      "page_number": 108,
+      "top_text": "Repeat as desired for solo",
+      "timestamp": "2025-10-26T00:21:11.382916"
+    },
+    {
+      "page_number": 109,
+      "top_text": "Light of the love that I found.",
+      "timestamp": "2025-10-26T00:21:12.877989"
+    },
+    {
+      "page_number": 110,
+      "top_text": "FROM ME TO YOU",
+      "timestamp": "2025-10-26T00:21:14.355164"
+    },
+    {
+      "page_number": 111,
+      "top_text": "Verse 2:",
+      "timestamp": "2025-10-26T00:21:15.780618"
+    },
+    {
+      "page_number": 112,
+      "top_text": "Verse 3 & 5:",
+      "timestamp": "2025-10-26T00:21:17.204572"
+    },
+    {
+      "page_number": 113,
+      "top_text": "Verse 4:",
+      "timestamp": "2025-10-26T00:21:18.588229"
+    },
+    {
+      "page_number": 114,
+      "top_text": "GIVE UP THE FUNK (TEAR THE ROOF OFF THE SUCKER)",
+      "timestamp": "2025-10-26T00:21:20.194820"
+    },
+    {
+      "page_number": 115,
+      "top_text": "tear the roof off the suck-er. You've got a real type of thing go-ing down, get-tin' down, there's a whole lot of rhythm go-ing 'round.",
+      "timestamp": "2025-10-26T00:21:21.957805"
+    },
+    {
+      "page_number": 116,
+      "top_text": "Ow, we want the funk,\ngive up the funk.\nOw, we need the funk,\nwe got-ta have that funk.\nOw, we want the funk,\ngive up the funk.\nOw, we need the funk,",
+      "timestamp": "2025-10-26T00:21:23.661038"
+    },
+    {
+      "page_number": 117,
+      "top_text": "we got-ta have that funk.",
+      "timestamp": "2025-10-26T00:21:25.113527"
+    },
+    {
+      "page_number": 118,
+      "top_text": "You got a",
+      "timestamp": "2025-10-26T00:21:26.646019"
+    },
+    {
+      "page_number": 119,
+      "top_text": "whole lot of rhythm going 'round.",
+      "timestamp": "2025-10-26T00:21:28.130475"
+    },
+    {
+      "page_number": 120,
+      "top_text": "Give Up the Funk (Tear the Roof Off the Sucker)",
+      "timestamp": "2025-10-26T00:21:29.718489"
+    },
+    {
+      "page_number": 121,
+      "top_text": "THE GREAT GIG IN THE SKY",
+      "timestamp": "2025-10-26T00:21:31.232409"
+    },
+    {
+      "page_number": 122,
+      "top_text": "Whoa.",
+      "timestamp": "2025-10-26T00:21:32.796690"
+    },
+    {
+      "page_number": 123,
+      "top_text": "The Great Gig in the Sky",
+      "timestamp": "2025-10-26T00:21:34.382868"
+    },
+    {
+      "page_number": 124,
+      "top_text": "The Great Gig in the Sky",
+      "timestamp": "2025-10-26T00:21:35.949556"
+    },
+    {
+      "page_number": 125,
+      "top_text": "Whoa, oh, oh, ah, oh, ooh, hah, dim. poco a poco, rit.",
+      "timestamp": "2025-10-26T00:21:37.637783"
+    },
+    {
+      "page_number": 126,
+      "top_text": "GOING UP THE COUNTRY",
+      "timestamp": "2025-10-26T00:21:39.165737"
+    },
+    {
+      "page_number": 127,
+      "top_text": "I'm go'n' up the country.",
+      "timestamp": "2025-10-26T00:21:40.689218"
+    },
+    {
+      "page_number": 128,
+      "top_text": "I'm going where the water tastes like wine. We can jump in the water; stay drunk all the time.",
+      "timestamp": "2025-10-26T00:21:42.374759"
+    },
+    {
+      "page_number": 129,
+      "top_text": "Going Up the Country",
+      "timestamp": "2025-10-26T00:21:43.828468"
+    },
+    {
+      "page_number": 130,
+      "top_text": "long as I got mine.",
+      "timestamp": "2025-10-26T00:21:45.337477"
+    },
+    {
+      "page_number": 131,
+      "top_text": "Verse 3:\nI'm gonna leave the city,\nGot to get away.\nI'm gonna leave the city,\nGot to get away.\nAll this fussin' and fightin';\nMan, you know I sure can't stay.\n\nVerse 4:\nNow, baby, pack your leavin' trunk,\nYou know we've got to leave today.\nJust exactly where we're goin' I cannot say,\nBut we might even leave the U.S.A.,\n'Cause it's a brand-new game\nAnd I want to play.\n(To Tag:)",
+      "timestamp": "2025-10-26T00:21:47.396724"
+    },
+    {
+      "page_number": 132,
+      "top_text": "I LOVE L.A.",
+      "timestamp": "2025-10-26T00:21:48.936123"
+    },
+    {
+      "page_number": 133,
+      "top_text": "Medium rock J = 120",
+      "timestamp": "2025-10-26T00:21:50.613327"
+    },
+    {
+      "page_number": 134,
+      "top_text": "Born to Ride",
+      "timestamp": "2025-10-26T00:21:52.320645"
+    },
+    {
+      "page_number": 135,
+      "top_text": "I Love L.A.",
+      "timestamp": "2025-10-26T00:21:53.932286"
+    },
+    {
+      "page_number": 136,
+      "top_text": "Rag-like in \"2\"",
+      "timestamp": "2025-10-26T00:21:55.653997"
+    },
+    {
+      "page_number": 137,
+      "top_text": "Look at that mountain.",
+      "timestamp": "2025-10-26T00:21:57.296987"
+    },
+    {
+      "page_number": 138,
+      "top_text": "Santa Monica Boulevard",
+      "timestamp": "2025-10-26T00:21:58.930594"
+    },
+    {
+      "page_number": 139,
+      "top_text": "I Love L.A.",
+      "timestamp": "2025-10-26T00:22:00.404609"
+    },
+    {
+      "page_number": 140,
+      "top_text": "I SAW HER STANDING THERE",
+      "timestamp": "2025-10-26T00:22:01.903641"
+    },
+    {
+      "page_number": 141,
+      "top_text": "I Saw Her Standing There",
+      "timestamp": "2025-10-26T00:22:03.416095"
+    },
+    {
+      "page_number": 142,
+      "top_text": "when I crossed that room, and I held her hand in mine.",
+      "timestamp": "2025-10-26T00:22:05.272050"
+    },
+    {
+      "page_number": 143,
+      "top_text": "And before too long, I fell in love with her.",
+      "timestamp": "2025-10-26T00:22:06.849118"
+    },
+    {
+      "page_number": 144,
+      "top_text": "Guitar solo:",
+      "timestamp": "2025-10-26T00:22:08.500499"
+    },
+    {
+      "page_number": 145,
+      "top_text": "Well, my",
+      "timestamp": "2025-10-26T00:22:09.984339"
+    },
+    {
+      "page_number": 146,
+      "top_text": "LIKE A ROLLING STONE",
+      "timestamp": "2025-10-26T00:22:11.715503"
+    },
+    {
+      "page_number": 147,
+      "top_text": "People call, say, \"Be ware, doll, you're bound to fall.\" You thought they were all bod-y's ev-er taught you how to live out on the street and now you're gon-na have to get Nev-er un-der-stood that it ain't no good, you shouldn't let oth-er peo-ple get your",
+      "timestamp": "2025-10-26T00:22:13.585973"
+    },
+    {
+      "page_number": 148,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:22:15.128594"
+    },
+    {
+      "page_number": 149,
+      "top_text": "Like a Rolling Stone",
+      "timestamp": "2025-10-26T00:22:16.632080"
+    },
+    {
+      "page_number": 150,
+      "top_text": "Like a Rolling Stone",
+      "timestamp": "2025-10-26T00:22:18.034585"
+    },
+    {
+      "page_number": 151,
+      "top_text": "THE LOAD OUT",
+      "timestamp": "2025-10-26T00:22:19.553288"
+    },
+    {
+      "page_number": 152,
+      "top_text": "Let the road-ies take the stage.",
+      "timestamp": "2025-10-26T00:22:21.135167"
+    },
+    {
+      "page_number": 153,
+      "top_text": "Tonight the people were so fine.",
+      "timestamp": "2025-10-26T00:22:22.716581"
+    },
+    {
+      "page_number": 154,
+      "top_text": "and that's a sound they'll never know...",
+      "timestamp": "2025-10-26T00:22:24.395515"
+    },
+    {
+      "page_number": 155,
+      "top_text": "Guitar solo:",
+      "timestamp": "2025-10-26T00:22:25.934811"
+    },
+    {
+      "page_number": 156,
+      "top_text": "But the band's on the bus and they're waiting to go. We got to drive all night and do the show in Chicago or Detroit. I don't know. We do so",
+      "timestamp": "2025-10-26T00:22:27.719658"
+    },
+    {
+      "page_number": 157,
+      "top_text": "many shows in a row.\nAnd these towns all look the same.\nWe just pass the time in the hotel rooms and wander 'round backstage 'til those lights come up and we hear that crowd and we remember why we came.",
+      "timestamp": "2025-10-26T00:22:29.494127"
+    },
+    {
+      "page_number": 158,
+      "top_text": "Synth. solo:",
+      "timestamp": "2025-10-26T00:22:31.025598"
+    },
+    {
+      "page_number": 159,
+      "top_text": "country and western on the bus;",
+      "timestamp": "2025-10-26T00:22:32.774462"
+    },
+    {
+      "page_number": 160,
+      "top_text": "Pry-or on the video.",
+      "timestamp": "2025-10-26T00:22:34.342064"
+    },
+    {
+      "page_number": 161,
+      "top_text": "sit there and wait or you can pull us through. Come along. Sing the song. You know that you can't go wrong. 'Cause when that morning sun comes dim. beating down, you're gonna wake up in your town. But we'll be scheduled to appear a thousand miles away from here.",
+      "timestamp": "2025-10-26T00:22:36.210195"
+    },
+    {
+      "page_number": 162,
+      "top_text": "LIVE AND LET DIE",
+      "timestamp": "2025-10-26T00:22:37.735868"
+    },
+    {
+      "page_number": 163,
+      "top_text": "Live and let die,",
+      "timestamp": "2025-10-26T00:22:39.219961"
+    },
+    {
+      "page_number": 164,
+      "top_text": "What does it matter to ya,\nwhen you got a job to do you got-ta do it well.\nYou got-ta",
+      "timestamp": "2025-10-26T00:22:40.844829"
+    },
+    {
+      "page_number": 165,
+      "top_text": "give the other fellow hell!",
+      "timestamp": "2025-10-26T00:22:42.265944"
+    },
+    {
+      "page_number": 166,
+      "top_text": "LOVE REIGN O'ER ME",
+      "timestamp": "2025-10-26T00:22:43.653394"
+    },
+    {
+      "page_number": 167,
+      "top_text": "beach",
+      "timestamp": "2025-10-26T00:22:45.109960"
+    },
+    {
+      "page_number": 168,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:22:46.649557"
+    },
+    {
+      "page_number": 169,
+      "top_text": "Rain on me. Reign o'er me.",
+      "timestamp": "2025-10-26T00:22:48.040561"
+    },
+    {
+      "page_number": 170,
+      "top_text": "the nights we spent a-part, a-lone, I need to get back home to cool, cool rain.",
+      "timestamp": "2025-10-26T00:22:49.636894"
+    },
+    {
+      "page_number": 171,
+      "top_text": "Oh God, I need a drink of cool, cool rain.",
+      "timestamp": "2025-10-26T00:22:51.141338"
+    },
+    {
+      "page_number": 172,
+      "top_text": "Love Reign o'er Me",
+      "timestamp": "2025-10-26T00:22:52.542179"
+    },
+    {
+      "page_number": 173,
+      "top_text": "Love Reign o'er Me",
+      "timestamp": "2025-10-26T00:22:54.043340"
+    },
+    {
+      "page_number": 174,
+      "top_text": "MONEY",
+      "timestamp": "2025-10-26T00:22:55.516651"
+    },
+    {
+      "page_number": 175,
+      "top_text": "Money",
+      "timestamp": "2025-10-26T00:22:56.986157"
+    },
+    {
+      "page_number": 176,
+      "top_text": "sax. solo ad lib.",
+      "timestamp": "2025-10-26T00:22:58.609402"
+    },
+    {
+      "page_number": 177,
+      "top_text": "Solos ad lib.",
+      "timestamp": "2025-10-26T00:23:00.042783"
+    },
+    {
+      "page_number": 178,
+      "top_text": "prise that they're giving none away, away, away, away, away, away, away, away.",
+      "timestamp": "2025-10-26T00:23:01.691629"
+    },
+    {
+      "page_number": 179,
+      "top_text": "NIGHTS IN WHITE SATIN",
+      "timestamp": "2025-10-26T00:23:03.452775"
+    },
+    {
+      "page_number": 180,
+      "top_text": "Just what the truth is\nJust what you want to be,\nI can't say any more, 'cause I\nyou'll be in the end, and I\nlove you,\nlove you,\nYes, I love you,\nYes, I love you,\nOh, how I\nlove you.\nlove you.\nHow I love you.",
+      "timestamp": "2025-10-26T00:23:05.259106"
+    },
+    {
+      "page_number": 181,
+      "top_text": "Nights in White Satin",
+      "timestamp": "2025-10-26T00:23:06.774120"
+    },
+    {
+      "page_number": 182,
+      "top_text": "PARANOID",
+      "timestamp": "2025-10-26T00:23:08.248583"
+    },
+    {
+      "page_number": 183,
+      "top_text": "I am frowning all the time.\nI must be blind.",
+      "timestamp": "2025-10-26T00:23:09.720674"
+    },
+    {
+      "page_number": 184,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T00:23:11.270863"
+    },
+    {
+      "page_number": 185,
+      "top_text": "And so as you hear these words telling you now of",
+      "timestamp": "2025-10-26T00:23:12.720905"
+    },
+    {
+      "page_number": 186,
+      "top_text": "my state. I tell you to enjoy life. I wish I could, but it's too late.",
+      "timestamp": "2025-10-26T00:23:14.360311"
+    },
+    {
+      "page_number": 187,
+      "top_text": "PINBALL WIZARD",
+      "timestamp": "2025-10-26T00:23:15.757958"
+    },
+    {
+      "page_number": 188,
+      "top_text": "Verse 1:",
+      "timestamp": "2025-10-26T00:23:17.332826"
+    },
+    {
+      "page_number": 189,
+      "top_text": "Pinball Wizard",
+      "timestamp": "2025-10-26T00:23:18.986522"
+    },
+    {
+      "page_number": 190,
+      "top_text": "Feel - in' all the bump - ers,\nsee no lights a flash - in',\nalways play - in' clean.\nplays by sense of smell.\n\nPlays by in - tu - i - tion,\nAl - ways gets the re - play,\nthe dig - it count - ers fall.\nnever seen him fall.\n\ndeaf, dumb, and blind kid sure plays a mean pin - ball.\ndeaf, dumb, and blind kid sure plays a mean pin - ball.\n\nHe's a",
+      "timestamp": "2025-10-26T00:23:21.147573"
+    },
+    {
+      "page_number": 191,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:23:22.713139"
+    },
+    {
+      "page_number": 192,
+      "top_text": "Verse 4:",
+      "timestamp": "2025-10-26T00:23:24.304114"
+    },
+    {
+      "page_number": 193,
+      "top_text": "Pinball Wizard",
+      "timestamp": "2025-10-26T00:23:25.701403"
+    },
+    {
+      "page_number": 194,
+      "top_text": "P-FUNK (WANTS TO GET FUNKED UP)",
+      "timestamp": "2025-10-26T00:23:27.222323"
+    },
+    {
+      "page_number": 195,
+      "top_text": "or deeper still, the Mothership Connection. Home of the extraterrestrial brothers, dealers of funky music. P-Funk, uncut funk, The Bomb. Coming to you directly from the Mothership, top of the Chocolate Milky Way, 500,000 kilowatts of P-Funk power. So kick back, dig, while we do it to you in your eardrums.",
+      "timestamp": "2025-10-26T00:23:29.137213"
+    },
+    {
+      "page_number": 196,
+      "top_text": "And me? I'm known as Lollipop Man, alias the Long-Haired Sucker. My motto is:",
+      "timestamp": "2025-10-26T00:23:30.886813"
+    },
+    {
+      "page_number": 197,
+      "top_text": "Make my funk the P-funk, I wants to get funked up.",
+      "timestamp": "2025-10-26T00:23:32.518942"
+    },
+    {
+      "page_number": 198,
+      "top_text": "Verse 3:",
+      "timestamp": "2025-10-26T00:23:34.024506"
+    },
+    {
+      "page_number": 199,
+      "top_text": "Y'all should dig my sun-rooftop.",
+      "timestamp": "2025-10-26T00:23:35.505648"
+    },
+    {
+      "page_number": 200,
+      "top_text": "but can you imagine Doobiein' your funk? Ho! W-E-F-U-N-K, We-funk.",
+      "timestamp": "2025-10-26T00:23:37.188183"
+    },
+    {
+      "page_number": 201,
+      "top_text": "Make my funk the P-funk before I take it home.",
+      "timestamp": "2025-10-26T00:23:38.909849"
+    },
+    {
+      "page_number": 202,
+      "top_text": "Make my funk the P-funk, I wants to get funked up. I want the bomb, I want the P-funk, I want my funk uncut. Make my funk the P-funk, I wants to get funked up. Make my funk the P-funk, I want my funk uncut.",
+      "timestamp": "2025-10-26T00:23:40.830806"
+    },
+    {
+      "page_number": 203,
+      "top_text": "Make my funk the P-funk, I wants to get funked up. I want the bomb, I want the P-funk, don't want my funk stepped on.\n\nRepeat ad lib. and fade\n\nMake my funk the P-funk before I take it home.\n\nVerse 2:\nW-E-F-U-N-K, y'all.\nNow this is what I want you all to do:\nIf you got faults, defects, or shortcomings,\nYou know, like arthritis, rheumatism, or migraines,\nWhatever part of your body it is,\nI want you to lay it on your radio, let the vibes flow through.\nFunk not only moves, it can re-move, dig?\nThe desired effect is what you get\nWhen you improve your Interplanetary Funksmanship.\nSir Lollipop Man! Chocolate-coated, freaky, and habit forming.\nDoin' it to you in 3-D,\nSo groovy that I dig me.\nOnce upon a time called Now!\nSomebody say, \"Is there funk after death?\"\nI say, \"Is Seven Up?\"\nYeah, P-Funk!",
+      "timestamp": "2025-10-26T00:23:43.721941"
+    },
+    {
+      "page_number": 204,
+      "top_text": "RIVER",
+      "timestamp": "2025-10-26T00:23:45.285090"
+    },
+    {
+      "page_number": 205,
+      "top_text": "I wish I had a river so long",
+      "timestamp": "2025-10-26T00:23:46.842940"
+    },
+    {
+      "page_number": 206,
+      "top_text": "teach my feet to fly.",
+      "timestamp": "2025-10-26T00:23:50.747574"
+    },
+    {
+      "page_number": 207,
+      "top_text": "Oh, I wish I had a river I could skate away on.\nI made my baby cry.",
+      "timestamp": "2025-10-26T00:23:52.412805"
+    },
+    {
+      "page_number": 208,
+      "top_text": "Verse 2:",
+      "timestamp": "2025-10-26T00:23:54.008618"
+    },
+    {
+      "page_number": 209,
+      "top_text": "SATURDAY IN THE PARK",
+      "timestamp": "2025-10-26T00:23:55.526475"
+    },
+    {
+      "page_number": 210,
+      "top_text": "Saturday in the Park",
+      "timestamp": "2025-10-26T00:23:57.078849"
+    },
+    {
+      "page_number": 211,
+      "top_text": "Saturday in the Park",
+      "timestamp": "2025-10-26T00:23:58.706796"
+    },
+    {
+      "page_number": 212,
+      "top_text": "think it was the Fourth of July.",
+      "timestamp": "2025-10-26T00:24:00.297165"
+    },
+    {
+      "page_number": 213,
+      "top_text": "Swing",
+      "timestamp": "2025-10-26T00:24:01.814105"
+    },
+    {
+      "page_number": 214,
+      "top_text": "Verse 3:",
+      "timestamp": "2025-10-26T00:24:03.513774"
+    },
+    {
+      "page_number": 215,
+      "top_text": "Waiting for us all.",
+      "timestamp": "2025-10-26T00:24:05.256912"
+    },
+    {
+      "page_number": 216,
+      "top_text": "SHE LOVES YOU",
+      "timestamp": "2025-10-26T00:24:07.122051"
+    },
+    {
+      "page_number": 217,
+      "top_text": "It's you she's thinking of,\nBut now, she says she knows\nPride can hurt you, too.\nShe said she loves you, and you know that can't be bad.\nYes, she loves you, and you know you should be glad.",
+      "timestamp": "2025-10-26T00:24:08.880490"
+    },
+    {
+      "page_number": 218,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:24:10.372197"
+    },
+    {
+      "page_number": 219,
+      "top_text": "With a love like that, you know you should be glad.",
+      "timestamp": "2025-10-26T00:24:11.893869"
+    },
+    {
+      "page_number": 220,
+      "top_text": "SHE'S A RAINBOW",
+      "timestamp": "2025-10-26T00:24:13.464324"
+    },
+    {
+      "page_number": 221,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:24:14.964947"
+    },
+    {
+      "page_number": 222,
+      "top_text": "Bassoon",
+      "timestamp": "2025-10-26T00:24:16.575188"
+    },
+    {
+      "page_number": 223,
+      "top_text": "Freely Verse",
+      "timestamp": "2025-10-26T00:24:18.042065"
+    },
+    {
+      "page_number": 224,
+      "top_text": "Have you seen a lady fairer?",
+      "timestamp": "2025-10-26T00:24:19.558274"
+    },
+    {
+      "page_number": 225,
+      "top_text": "Oh, ev'-rywhere, she comes in colors",
+      "timestamp": "2025-10-26T00:24:21.460635"
+    },
+    {
+      "page_number": 226,
+      "top_text": "THE SOUND OF SILENCE",
+      "timestamp": "2025-10-26T00:24:22.947293"
+    },
+    {
+      "page_number": 227,
+      "top_text": "The Sound of Silence",
+      "timestamp": "2025-10-26T00:24:24.585861"
+    },
+    {
+      "page_number": 228,
+      "top_text": "The Sound of Silence",
+      "timestamp": "2025-10-26T00:24:26.161349"
+    },
+    {
+      "page_number": 229,
+      "top_text": "People writing songs that voices never share and no one dared disturb the sound of silence.",
+      "timestamp": "2025-10-26T00:24:27.859379"
+    },
+    {
+      "page_number": 230,
+      "top_text": "But my words like silent raindrops fell and echoed in the wells of silence.\n\nVerse 5:\nAnd the people bowed and prayed to the neon god they made.\nAnd the sign flashed out its",
+      "timestamp": "2025-10-26T00:24:29.608614"
+    },
+    {
+      "page_number": 231,
+      "top_text": "And the sign said, \"The words of the prophets are written on the subway walls...\"",
+      "timestamp": "2025-10-26T00:24:31.221380"
+    },
+    {
+      "page_number": 232,
+      "top_text": "ST. STEPHEN",
+      "timestamp": "2025-10-26T00:24:32.789248"
+    },
+    {
+      "page_number": 233,
+      "top_text": "Stephen would answer if he only knew how.",
+      "timestamp": "2025-10-26T00:24:34.436413"
+    },
+    {
+      "page_number": 234,
+      "top_text": "Hell half-way twixt now and then.",
+      "timestamp": "2025-10-26T00:24:36.006349"
+    },
+    {
+      "page_number": 235,
+      "top_text": "Dark-ness shrugs and bids the day good-bye.",
+      "timestamp": "2025-10-26T00:24:37.608968"
+    },
+    {
+      "page_number": 236,
+      "top_text": "Verses 3 & 4:",
+      "timestamp": "2025-10-26T00:24:39.173423"
+    },
+    {
+      "page_number": 237,
+      "top_text": "Repeat ad lib. and fade",
+      "timestamp": "2025-10-26T00:24:40.721637"
+    },
+    {
+      "page_number": 238,
+      "top_text": "STAIRWAY TO HEAVEN",
+      "timestamp": "2025-10-26T00:24:42.345519"
+    },
+    {
+      "page_number": 239,
+      "top_text": "Stairway to Heaven",
+      "timestamp": "2025-10-26T00:24:43.822827"
+    },
+    {
+      "page_number": 240,
+      "top_text": "Stairway to Heaven",
+      "timestamp": "2025-10-26T00:24:45.354364"
+    },
+    {
+      "page_number": 241,
+      "top_text": "Slightly faster",
+      "timestamp": "2025-10-26T00:24:46.762163"
+    },
+    {
+      "page_number": 242,
+      "top_text": "Verses 2 & 3:",
+      "timestamp": "2025-10-26T00:24:48.242352"
+    },
+    {
+      "page_number": 243,
+      "top_text": "Ooo, it really makes me wonder.",
+      "timestamp": "2025-10-26T00:24:49.795292"
+    },
+    {
+      "page_number": 244,
+      "top_text": "there's still time to change the road you're on.\nyour stair-way lies on the whis-p'rin' wind.\n\nAnd it makes me wonder,\nahh.",
+      "timestamp": "2025-10-26T00:24:51.554182"
+    },
+    {
+      "page_number": 245,
+      "top_text": "Guitar Solo:",
+      "timestamp": "2025-10-26T00:24:53.201469"
+    },
+    {
+      "page_number": 246,
+      "top_text": "Stairway to Heaven",
+      "timestamp": "2025-10-26T00:24:54.839298"
+    },
+    {
+      "page_number": 247,
+      "top_text": "Stairway to Heaven",
+      "timestamp": "2025-10-26T00:24:56.485473"
+    },
+    {
+      "page_number": 248,
+      "top_text": "who shines white light and wants to show_ how ev'-ry-thing still turns to gold.______ And if you lis-ten ver-y hard, ______ the tune will come to you_ at last.______ When all are one_ and one is all,-",
+      "timestamp": "2025-10-26T00:24:58.255536"
+    },
+    {
+      "page_number": 249,
+      "top_text": "Stairway to Heaven",
+      "timestamp": "2025-10-26T00:24:59.868569"
+    },
+    {
+      "page_number": 250,
+      "top_text": "SPACE ODDITY",
+      "timestamp": "2025-10-26T00:25:01.384627"
+    },
+    {
+      "page_number": 251,
+      "top_text": "Ground control to Major Tom.",
+      "timestamp": "2025-10-26T00:25:03.278370"
+    },
+    {
+      "page_number": 252,
+      "top_text": "God's love be with you.\n\nChorus:\nThis is ground control to Major Tom.\nYou've really made the grade.\nAnd the papers want to know whose shirts you wear.\nNow it's time to leave the capsule if you dare.",
+      "timestamp": "2025-10-26T00:25:05.126707"
+    },
+    {
+      "page_number": 253,
+      "top_text": "This is Major Tom to ground control.",
+      "timestamp": "2025-10-26T00:25:06.590569"
+    },
+    {
+      "page_number": 254,
+      "top_text": "Space Oddity",
+      "timestamp": "2025-10-26T00:25:08.156679"
+    },
+    {
+      "page_number": 255,
+      "top_text": "Space Oddity",
+      "timestamp": "2025-10-26T00:25:09.752414"
+    },
+    {
+      "page_number": 256,
+      "top_text": "Tell my wife I love her very much. She knows.",
+      "timestamp": "2025-10-26T00:25:11.336511"
+    },
+    {
+      "page_number": 257,
+      "top_text": "TOM SAWYER",
+      "timestamp": "2025-10-26T00:25:12.706846"
+    },
+    {
+      "page_number": 258,
+      "top_text": "Though his mind is not for rent,\nNo, his mind is not for rent\ndon't put him to any",
+      "timestamp": "2025-10-26T00:25:14.507716"
+    },
+    {
+      "page_number": 259,
+      "top_text": "What you say about his company is what you say about society.",
+      "timestamp": "2025-10-26T00:25:16.020141"
+    },
+    {
+      "page_number": 260,
+      "top_text": "The world is, the world is. Love and life are deep, may-be as his skies are wide.",
+      "timestamp": "2025-10-26T00:25:17.647300"
+    },
+    {
+      "page_number": 261,
+      "top_text": "day's Tom Saw-yer, he gets high on you,— and the space he in - vades,— he gets by_____ on you.",
+      "timestamp": "2025-10-26T00:25:19.187188"
+    },
+    {
+      "page_number": 262,
+      "top_text": "D.S. $S al Coda",
+      "timestamp": "2025-10-26T00:25:20.738297"
+    },
+    {
+      "page_number": 263,
+      "top_text": "Exit the warrior. Today's Tom Sawyer, he gets high on you and the energy you trade, he gets right on to the friction of the day.",
+      "timestamp": "2025-10-26T00:25:22.395888"
+    },
+    {
+      "page_number": 264,
+      "top_text": "THUNDER ROAD",
+      "timestamp": "2025-10-26T00:25:23.962837"
+    },
+    {
+      "page_number": 265,
+      "top_text": "Or-bi-son's sing-in' for the lonely.",
+      "timestamp": "2025-10-26T00:25:25.907533"
+    },
+    {
+      "page_number": 266,
+      "top_text": "faith, there's magic in the night. You ain't a beauty, but hey, you're alright. Oh, and that's alright with me.\n\nVerse 2:\nneath your covers and study your pain, make crosses from your lovers, throw roses in the rain, waste your summer praying in vain for a savior to rise from these streets. Well now, I'm",
+      "timestamp": "2025-10-26T00:25:27.954683"
+    },
+    {
+      "page_number": 267,
+      "top_text": "Thunder Road",
+      "timestamp": "2025-10-26T00:25:29.435025"
+    },
+    {
+      "page_number": 268,
+      "top_text": "Thunder Road",
+      "timestamp": "2025-10-26T00:25:31.074320"
+    },
+    {
+      "page_number": 269,
+      "top_text": "Thunder Road",
+      "timestamp": "2025-10-26T00:25:32.614959"
+    },
+    {
+      "page_number": 270,
+      "top_text": "long walk from your front-porch to my front seat. The door's open, but the ride ain't free, and I know you're lonely for words that I ain't spoken, but tonight we'll be free. All the promises'll be broken. There were ghosts in the eyes of all the boys you sent away. They haunt this dusty beach road in the skeleton frames of burned...",
+      "timestamp": "2025-10-26T00:25:34.793653"
+    },
+    {
+      "page_number": 271,
+      "top_text": "Thunder Road",
+      "timestamp": "2025-10-26T00:25:36.367339"
+    },
+    {
+      "page_number": 272,
+      "top_text": "Instrumental:",
+      "timestamp": "2025-10-26T00:25:37.945238"
+    },
+    {
+      "page_number": 273,
+      "top_text": "Thunder Road",
+      "timestamp": "2025-10-26T00:25:39.362562"
+    },
+    {
+      "page_number": 274,
+      "top_text": "UNCLE JOHN'S BAND",
+      "timestamp": "2025-10-26T00:25:40.882778"
+    },
+    {
+      "page_number": 275,
+      "top_text": "Think this through with me; Will you come with me?",
+      "timestamp": "2025-10-26T00:25:42.588003"
+    },
+    {
+      "page_number": 276,
+      "top_text": "Their walls are built of cannon balls; their motto is: \"Don't tread on me.\" Come hear Uncle John's Band playing to the tide. Come with me or go alone, he's come to take his children home. It's",
+      "timestamp": "2025-10-26T00:25:44.472112"
+    },
+    {
+      "page_number": 277,
+      "top_text": "the same story the crow told me, it's the only one he knows.\nI live in a silver mine and I call it Beggar's Tomb.\n\nLike the morning sun you come and I got me a violin and I beg you call the tune.\n\nAin't no time to hate, anybody's choice.\n\nbarely time to wait.\nI can hear your voice.",
+      "timestamp": "2025-10-26T00:25:46.662451"
+    },
+    {
+      "page_number": 278,
+      "top_text": "Uncle John's Band",
+      "timestamp": "2025-10-26T00:25:48.444054"
+    },
+    {
+      "page_number": 279,
+      "top_text": "Uncle John's Band",
+      "timestamp": "2025-10-26T00:25:49.958918"
+    },
+    {
+      "page_number": 280,
+      "top_text": "Uncle John's Band",
+      "timestamp": "2025-10-26T00:25:51.510912"
+    },
+    {
+      "page_number": 281,
+      "top_text": "A WHITER SHADE OF PALE",
+      "timestamp": "2025-10-26T00:25:52.988659"
+    },
+    {
+      "page_number": 282,
+      "top_text": "A Whiter Shade of Pale",
+      "timestamp": "2025-10-26T00:25:54.548343"
+    },
+    {
+      "page_number": 283,
+      "top_text": "A Whiter Shade of Pale",
+      "timestamp": "2025-10-26T00:25:56.019942"
+    },
+    {
+      "page_number": 284,
+      "top_text": "WOODSTOCK",
+      "timestamp": "2025-10-26T00:25:57.461851"
+    },
+    {
+      "page_number": 285,
+      "top_text": "Verse 1 (sing 1st time only):",
+      "timestamp": "2025-10-26T00:25:59.001797"
+    },
+    {
+      "page_number": 286,
+      "top_text": "Chorus 1 & 2:",
+      "timestamp": "2025-10-26T00:26:00.642049"
+    },
+    {
+      "page_number": 287,
+      "top_text": "Guitar solo ad lib.",
+      "timestamp": "2025-10-26T00:26:02.132647"
+    },
+    {
+      "page_number": 288,
+      "top_text": "Chorus 3:",
+      "timestamp": "2025-10-26T00:26:03.692071"
+    },
+    {
+      "page_number": 289,
+      "top_text": "Verse 3:",
+      "timestamp": "2025-10-26T00:26:05.192580"
+    },
+    {
+      "page_number": 290,
+      "top_text": "Chorus 4:",
+      "timestamp": "2025-10-26T00:26:06.681731"
+    },
+    {
+      "page_number": 291,
+      "top_text": "Repeat ad lib. and fade",
+      "timestamp": "2025-10-26T00:26:08.227430"
+    },
+    {
+      "page_number": 292,
+      "top_text": "YOU CAN'T ALWAYS GET WHAT YOU WANT",
+      "timestamp": "2025-10-26T00:26:09.682456"
+    },
+    {
+      "page_number": 293,
+      "top_text": "You Can't Always Get What You Want",
+      "timestamp": "2025-10-26T00:26:11.134997"
+    },
+    {
+      "page_number": 294,
+      "top_text": "(Lead Vocal)",
+      "timestamp": "2025-10-26T00:26:12.856632"
+    },
+    {
+      "page_number": 295,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:26:14.329040"
+    },
+    {
+      "page_number": 296,
+      "top_text": "try some-times, well, you might find you get what you need. Oh, yeah.",
+      "timestamp": "2025-10-26T00:26:15.963813"
+    },
+    {
+      "page_number": 297,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:26:17.445156"
+    },
+    {
+      "page_number": 298,
+      "top_text": "You Can't Always Get What You Want",
+      "timestamp": "2025-10-26T00:26:19.054135"
+    },
+    {
+      "page_number": 299,
+      "top_text": "Chorus:",
+      "timestamp": "2025-10-26T00:26:20.665467"
+    },
+    {
+      "page_number": 300,
+      "top_text": "You get what you need.",
+      "timestamp": "2025-10-26T00:26:22.308011"
+    },
+    {
+      "page_number": 301,
+      "top_text": "Repeat ad lib. and fade",
+      "timestamp": "2025-10-26T00:26:23.718656"
+    },
+    {
+      "page_number": 302,
+      "top_text": "WILD HORSES",
+      "timestamp": "2025-10-26T00:26:25.216490"
+    },
+    {
+      "page_number": 303,
+      "top_text": "Wild Horses",
+      "timestamp": "2025-10-26T00:26:26.756145"
+    },
+    {
+      "page_number": 304,
+      "top_text": "Wild Horses",
+      "timestamp": "2025-10-26T00:26:28.296581"
+    },
+    {
+      "page_number": 305,
+      "top_text": "Wild Horses",
+      "timestamp": "2025-10-26T00:26:30.413778"
+    },
+    {
+      "page_number": 306,
+      "top_text": "we'll ride them some-day.",
+      "timestamp": "2025-10-26T00:26:32.620365"
+    },
+    {
+      "page_number": 307,
+      "top_text": "There is no visible text on the top portion of this music sheet page.",
+      "timestamp": "2025-10-26T00:26:33.925783"
+    },
+    {
+      "page_number": 308,
+      "top_text": "THE GIANT BOOK OF CLASSIC ROCK",
+      "timestamp": "2025-10-26T00:26:38.890573"
+    }
+  ]
+}
