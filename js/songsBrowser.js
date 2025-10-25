@@ -338,17 +338,17 @@ class SongsBrowser {
 
     async loadPDF(pdfPath, startPage, endPage) {
         try {
-            console.log(`Loading PDF: ${pdfPath}, pages ${startPage}-${endPage}`);
+            console.log(`Loading PDF: ${pdfPath}, starting at page ${startPage}`);
 
             const loadingTask = pdfjsLib.getDocument(pdfPath);
             this.pdfDoc = await loadingTask.promise;
 
             this.currentPage = startPage;
 
-            // Set up slider
+            // Set up slider for entire PDF (not just song pages)
             const slider = document.getElementById('page-slider');
-            slider.min = startPage;
-            slider.max = endPage;
+            slider.min = 1;
+            slider.max = this.pdfDoc.numPages;
             slider.value = startPage;
 
             // Render first page
@@ -381,9 +381,9 @@ class SongsBrowser {
             await page.render(renderContext).promise;
 
             // Update page info
-            const endPage = parseInt(document.getElementById('page-slider').max);
+            const totalPages = this.pdfDoc.numPages;
             document.getElementById('current-page-info').textContent =
-                `Page ${pageNum} of ${endPage}`;
+                `Page ${pageNum} of ${totalPages}`;
 
             // Update slider
             document.getElementById('page-slider').value = pageNum;
