@@ -68,23 +68,41 @@ def cleanup_with_openai(page_data_list, client):
             "text": stripped_text
         })
 
-    # Calculate optimal batch size
-    base_prompt_tokens = 500  # Approximate overhead for instructions
+    # Calculate optimal batch size by testing
     max_tokens_per_batch = 115000  # Leave some headroom
 
-    # Estimate tokens per page
-    sample_page_json = json.dumps(pages_summary[:1], indent=2)
-    tokens_per_page = count_tokens(sample_page_json)
+    print(f"📊 Total pages to process: {len(pages_summary)}")
+    print(f"🧪 Testing batch sizes...\n")
 
-    pages_per_batch = max((max_tokens_per_batch - base_prompt_tokens) // tokens_per_page, 1)
+    # Start with a conservative estimate and test
+    test_sizes = [1000, 500, 250, 100, 50]
+    pages_per_batch = 50  # Default fallback
+
+    for test_size in test_sizes:
+        if len(pages_summary) < test_size:
+            continue
+
+        test_batch = pages_summary[:test_size]
+        test_prompt = create_batch_prompt(test_batch)
+        test_tokens = count_tokens(test_prompt)
+
+        print(f"   {test_size} pages = {test_tokens:,} tokens", end="")
+
+        if test_tokens < max_tokens_per_batch:
+            pages_per_batch = test_size
+            print(f" ✓ (will use this)")
+            break
+        else:
+            print(f" ✗ (too large)")
+
+    print(f"\n📦 Using batch size: {pages_per_batch} pages")
 
     # Split into batches
     batches = []
     for i in range(0, len(pages_summary), pages_per_batch):
         batches.append(pages_summary[i:i + pages_per_batch])
 
-    print(f"📊 Total pages: {len(pages_summary)}")
-    print(f"📦 Batches needed: {len(batches)} (approx {pages_per_batch} pages per batch)")
+    print(f"📦 Total batches: {len(batches)}")
 
     # Process each batch
     all_song_starts = []

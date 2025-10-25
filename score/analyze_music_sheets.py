@@ -146,22 +146,31 @@ Respond with ONLY the JSON array, no other text."""
             })
 
         # Calculate optimal batch size
-        base_prompt_tokens = 500  # Approximate overhead for instructions
         max_tokens_per_batch = 115000  # Leave some headroom
 
-        # Estimate tokens per page
-        sample_page_json = json.dumps(pages_summary[:1], indent=2)
-        tokens_per_page = self.count_tokens(sample_page_json)
+        # Create a sample prompt to accurately measure overhead
+        sample_batch = pages_summary[:10] if len(pages_summary) >= 10 else pages_summary
+        sample_prompt = self.create_batch_prompt(sample_batch)
+        sample_tokens = self.count_tokens(sample_prompt)
 
-        pages_per_batch = max((max_tokens_per_batch - base_prompt_tokens) // tokens_per_page, 1)
+        # Calculate actual tokens per page (including JSON formatting)
+        data_only_tokens = self.count_tokens(json.dumps(sample_batch, indent=2))
+        overhead_tokens = sample_tokens - data_only_tokens
+        tokens_per_page = data_only_tokens / len(sample_batch)
+
+        print(f"📏 Token estimates:")
+        print(f"   • Overhead: {overhead_tokens:,} tokens")
+        print(f"   • Per page: {tokens_per_page:.1f} tokens")
+
+        pages_per_batch = max(int((max_tokens_per_batch - overhead_tokens) / tokens_per_page), 1)
+        print(f"   • Calculated batch size: {pages_per_batch} pages\n")
 
         # Split into batches
         batches = []
         for i in range(0, len(pages_summary), pages_per_batch):
             batches.append(pages_summary[i:i + pages_per_batch])
 
-        print(f"📊 Total pages: {len(pages_summary)}")
-        print(f"📦 Batches needed: {len(batches)} (approx {pages_per_batch} pages per batch)")
+        print(f"📦 Total batches: {len(batches)}")
 
         # Process each batch
         all_song_starts = []
