@@ -164,7 +164,7 @@ Respond with ONLY the JSON array, no other text."""
 
         return songs
 
-    def analyze(self):
+    def analyze(self, start_page_override=1):
         """Main analysis function with progress tracking and recovery."""
 
         self.start_time = time.time()
@@ -178,8 +178,10 @@ Respond with ONLY the JSON array, no other text."""
             print(f"🔄 Resuming analysis...")
         else:
             page_data_list = []
-            start_page = 1
+            start_page = start_page_override
             print(f"🆕 Starting new analysis...")
+            if start_page_override > 1:
+                print(f"⏩ Skipping pages 1-{start_page_override - 1}")
 
         # Convert PDF to images
         print("\n📄 Converting PDF to images...")
@@ -266,12 +268,27 @@ Respond with ONLY the JSON array, no other text."""
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python analyze_music_sheets.py <pdf_file>")
+        print("Usage: python analyze_music_sheets.py <pdf_file> [--start-page N]")
         print("\nThis script analyzes music sheet PDFs and creates an index of songs.")
         print("It tracks progress and can resume if interrupted.")
+        print("\nOptions:")
+        print("  --start-page N    Start analysis from page N (default: 1)")
+        print("                    Use this to skip intro/description pages")
         sys.exit(1)
 
     pdf_path = sys.argv[1]
+    start_page_override = 1
+
+    # Parse optional --start-page argument
+    if len(sys.argv) >= 4 and sys.argv[2] == '--start-page':
+        try:
+            start_page_override = int(sys.argv[3])
+            if start_page_override < 1:
+                print("❌ Error: Start page must be >= 1")
+                sys.exit(1)
+        except ValueError:
+            print("❌ Error: Start page must be a number")
+            sys.exit(1)
 
     if not os.path.exists(pdf_path):
         print(f"❌ Error: File '{pdf_path}' not found")
@@ -285,6 +302,8 @@ def main():
     print("🎼 MUSIC SHEET PDF ANALYZER")
     print("="*50)
     print(f"📁 File: {pdf_path}")
+    if start_page_override > 1:
+        print(f"🔢 Starting from page: {start_page_override}")
     print(f"⏰ Started: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
 
     # Load the Moondream model
@@ -299,7 +318,7 @@ def main():
 
     # Create analyzer and run
     analyzer = MusicSheetAnalyzer(pdf_path, model)
-    analyzer.analyze()
+    analyzer.analyze(start_page_override=start_page_override)
 
 if __name__ == "__main__":
     main()
