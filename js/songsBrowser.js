@@ -33,11 +33,15 @@ class SongsBrowser {
          *   59_hits.pdf
          */
 
-        // List of books to load (you'll need to update this with your actual books)
+        // List of books to load
         const bookFiles = [
-            'don_mclean_index.json',
+            '59_hits_index.json',
             'DIRE_STRAITS_index.json',
-            // Add more index files as needed
+            'Disney_songs_index.json',
+            'don_mclean_index.json',
+            'Giant_Sheet_Music_index.json',
+            'hebrew_songs_index.json',
+            'Love_The_Beatles_index.json'
         ];
 
         console.log('Loading book indices...');
