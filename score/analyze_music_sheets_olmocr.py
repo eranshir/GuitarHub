@@ -137,6 +137,31 @@ Write only the largest text you see:"""
             # Fallback: rough estimate (1 token ≈ 4 chars)
             return len(text) // 4
 
+    def create_batch_prompt(self, pages_batch):
+        """Create prompt for a batch of pages."""
+        return f"""You are analyzing a music sheet PDF. For each page, I've extracted the text from the top of the page using OCR.
+
+Your task: Identify which pages START a new song (have a song title at the top) vs which pages are CONTINUATIONS (song continues from previous page).
+
+Song titles are typically:
+- Large, bold text at the top
+- Recognizable song names
+- NOT lyrics, NOT chord symbols (like Am, G7, Dm7), NOT musical directions (To Coda, D.S.)
+- NOT book metadata (table of contents, artist bio, etc.)
+
+Here's the data from pages {pages_batch[0]['page']} to {pages_batch[-1]['page']}:
+{json.dumps(pages_batch, indent=2)}
+
+Respond with a JSON array of objects for ONLY the pages that start new songs:
+[
+  {{"page": 11, "title": "AND I LOVE YOU SO"}},
+  {{"page": 14, "title": "AMERICAN PIE"}},
+  ...
+]
+
+Only include pages that clearly start a NEW song. Skip continuation pages, index pages, artist bio pages, etc.
+Respond with ONLY the JSON array, no other text."""
+
     def cleanup_with_openai(self, page_data_list, api_key):
         """Use OpenAI to intelligently identify song titles vs continuations."""
 
@@ -155,85 +180,68 @@ Write only the largest text you see:"""
                 "text": stripped_text
             })
 
-        # Build the prompt
-        prompt = f"""You are analyzing a music sheet PDF. For each page, I've extracted the text from the top of the page using OCR.
+        # Calculate optimal batch size
+        base_prompt_tokens = 500  # Approximate overhead for instructions
+        max_tokens_per_batch = 115000  # Leave some headroom
 
-Your task: Identify which pages START a new song (have a song title at the top) vs which pages are CONTINUATIONS (song continues from previous page).
+        # Estimate tokens per page
+        sample_page_json = json.dumps(pages_summary[:1], indent=2)
+        tokens_per_page = self.count_tokens(sample_page_json)
 
-Song titles are typically:
-- Large, bold text at the top
-- Recognizable song names
-- NOT lyrics, NOT chord symbols (like Am, G7, Dm7), NOT musical directions (To Coda, D.S.)
-- NOT book metadata (table of contents, artist bio, etc.)
+        pages_per_batch = max((max_tokens_per_batch - base_prompt_tokens) // tokens_per_page, 1)
 
-Here's the data from all pages:
-{json.dumps(pages_summary, indent=2)}
+        # Split into batches
+        batches = []
+        for i in range(0, len(pages_summary), pages_per_batch):
+            batches.append(pages_summary[i:i + pages_per_batch])
 
-Respond with a JSON array of objects for ONLY the pages that start new songs:
-[
-  {{"page": 11, "title": "AND I LOVE YOU SO"}},
-  {{"page": 14, "title": "AMERICAN PIE"}},
-  ...
-]
+        print(f"📊 Total pages: {len(pages_summary)}")
+        print(f"📦 Batches needed: {len(batches)} (approx {pages_per_batch} pages per batch)")
 
-Only include pages that clearly start a NEW song. Skip continuation pages, index pages, artist bio pages, etc.
-Respond with ONLY the JSON array, no other text."""
+        # Process each batch
+        all_song_starts = []
 
-        # Check token count
-        token_count = self.count_tokens(prompt)
-        print(f"📊 Prompt tokens: {token_count:,}")
+        for batch_num, batch in enumerate(batches, 1):
+            print(f"\n   Processing batch {batch_num}/{len(batches)} (pages {batch[0]['page']}-{batch[-1]['page']})...")
 
-        if token_count > 120000:
-            print(f"⚠️  Warning: Prompt exceeds 120k tokens!")
-            print(f"   Truncating to fit within limit...")
+            prompt = self.create_batch_prompt(batch)
 
-            # Calculate how many pages we can fit
-            overhead_tokens = 500  # For system prompt and instructions
-            tokens_per_page = token_count // len(pages_summary)
-            max_pages = (120000 - overhead_tokens) // tokens_per_page
+            # Verify token count
+            token_count = self.count_tokens(prompt)
+            print(f"   Tokens: {token_count:,}")
 
-            print(f"   Analyzing in batches of {max_pages} pages...")
-            # For now, just use the first batch
-            # TODO: Implement full batching if needed
-            pages_summary = pages_summary[:max_pages]
+            if token_count > 120000:
+                print(f"   ⚠️  Batch still too large! Skipping...")
+                continue
 
-            # Rebuild prompt with truncated data
-            prompt = f"""You are analyzing a music sheet PDF. For each page, I've extracted the text from the top of the page using OCR.
+            try:
+                response = self.openai_client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0
+                )
 
-Your task: Identify which pages START a new song (have a song title at the top) vs which pages are CONTINUATIONS (song continues from previous page).
+                # Parse response
+                content = response.choices[0].message.content.strip()
 
-Song titles are typically:
-- Large, bold text at the top
-- Recognizable song names
-- NOT lyrics, NOT chord symbols (like Am, G7, Dm7), NOT musical directions (To Coda, D.S.)
-- NOT book metadata (table of contents, artist bio, etc.)
+                # Remove markdown code blocks if present
+                if content.startswith("```"):
+                    content = content.split("```")[1]
+                    if content.startswith("json"):
+                        content = content[4:]
+                    content = content.strip()
 
-Here's the data from all pages:
-{json.dumps(pages_summary, indent=2)}
+                batch_results = json.loads(content)
+                all_song_starts.extend(batch_results)
+                print(f"   ✓ Found {len(batch_results)} songs in this batch")
 
-Respond with a JSON array of objects for ONLY the pages that start new songs.
-Respond with ONLY the JSON array, no other text."""
+            except Exception as e:
+                print(f"   ❌ Error processing batch: {e}")
+                continue
 
-        response = self.openai_client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0
-        )
+        print(f"\n✓ Total songs identified: {len(all_song_starts)}\n")
 
-        # Parse OpenAI response
-        content = response.choices[0].message.content.strip()
-
-        # Remove markdown code blocks if present
-        if content.startswith("```"):
-            content = content.split("```")[1]
-            if content.startswith("json"):
-                content = content[4:]
-            content = content.strip()
-
-        song_starts = json.loads(content)
-        print(f"✓ OpenAI identified {len(song_starts)} songs\n")
-
-        return song_starts
+        return all_song_starts
 
     def build_song_index(self, song_starts, total_pages):
         """Build final song index from OpenAI-identified song starts."""
