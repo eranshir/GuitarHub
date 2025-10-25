@@ -4,12 +4,14 @@ os.environ['DYLD_LIBRARY_PATH'] = '/opt/homebrew/lib:' + os.environ.get('DYLD_LI
 import sys
 import json
 import time
+import re
 from pathlib import Path
 from datetime import datetime, timedelta
 from transformers import AutoModelForCausalLM
 from PIL import Image
 import pdf2image
 from openai import OpenAI
+import tiktoken
 
 class MusicSheetAnalyzer:
     def __init__(self, pdf_path, model):
@@ -81,6 +83,24 @@ Write the largest text you see:"""
 
         return page_data
 
+    def strip_text(self, text):
+        """Strip unnecessary characters to reduce token count."""
+        # Remove multiple spaces
+        text = re.sub(r'\s+', ' ', text)
+        # Remove special characters but keep letters, numbers, basic punctuation
+        text = re.sub(r'[^\w\s\-\'\"\.,!?]', '', text)
+        # Trim
+        return text.strip()
+
+    def count_tokens(self, text):
+        """Count tokens in text using OpenAI's tokenizer."""
+        try:
+            encoding = tiktoken.encoding_for_model("gpt-4o-mini")
+            return len(encoding.encode(text))
+        except Exception:
+            # Fallback: rough estimate (1 token ≈ 4 chars)
+            return len(text) // 4
+
     def cleanup_with_openai(self, page_data_list, api_key):
         """Use OpenAI to intelligently identify song titles vs continuations."""
 
@@ -88,15 +108,20 @@ Write the largest text you see:"""
 
         client = OpenAI(api_key=api_key)
 
-        # Prepare data for OpenAI
+        # Prepare stripped data for OpenAI
         pages_summary = []
         for page in page_data_list:
+            stripped_text = self.strip_text(page["top_text"])
+            # Limit each page's text to 100 chars max
+            if len(stripped_text) > 100:
+                stripped_text = stripped_text[:100]
+
             pages_summary.append({
                 "page": page["page_number"],
-                "text": page["top_text"]
+                "text": stripped_text
             })
 
-        # Ask OpenAI to analyze
+        # Build the prompt
         prompt = f"""You are analyzing a music sheet PDF. For each page, I've extracted the text from the top of the page.
 
 Your task: Identify which pages START a new song (have a song title at the top) vs which pages are CONTINUATIONS (song continues from previous page).
@@ -117,6 +142,33 @@ Respond with a JSON array of objects for ONLY the pages that start new songs:
 ]
 
 Only include pages that clearly start a NEW song. Skip continuation pages, index pages, artist bio pages, etc.
+Respond with ONLY the JSON array, no other text."""
+
+        # Check token count
+        token_count = self.count_tokens(prompt)
+        print(f"📊 Prompt tokens: {token_count:,}")
+
+        if token_count > 120000:
+            print(f"⚠️  Warning: Prompt exceeds 120k tokens!")
+            print(f"   Truncating to fit within limit...")
+
+            # Calculate how many pages we can fit
+            overhead_tokens = 500  # For system prompt and instructions
+            tokens_per_page = token_count // len(pages_summary)
+            max_pages = (120000 - overhead_tokens) // tokens_per_page
+
+            print(f"   Analyzing in batches of {max_pages} pages...")
+            pages_summary = pages_summary[:max_pages]
+
+            # Rebuild prompt with truncated data
+            prompt = f"""You are analyzing a music sheet PDF. For each page, I've extracted the text from the top of the page.
+
+Your task: Identify which pages START a new song vs CONTINUATIONS.
+
+Here's the data:
+{json.dumps(pages_summary, indent=2)}
+
+Respond with a JSON array for pages that start new songs.
 Respond with ONLY the JSON array, no other text."""
 
         response = client.chat.completions.create(

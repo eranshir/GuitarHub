@@ -1,0 +1,736 @@
+{
+  "filename": "DIRE_STRAITS.pdf",
+  "total_pages": 146,
+  "total_songs": 9,
+  "generated_at": "2025-10-25T18:58:37.708873",
+  "processing_time": "0:03:59",
+  "songs": [
+    {
+      "title": "SULTANS OF SWING",
+      "start_page": 11,
+      "end_page": 26
+    },
+    {
+      "title": "BROTHERS IN ARMS",
+      "start_page": 27,
+      "end_page": 35
+    },
+    {
+      "title": "ROMEO AND JULIET",
+      "start_page": 36,
+      "end_page": 53
+    },
+    {
+      "title": "PRIVATE INVESTIGATIONS",
+      "start_page": 54,
+      "end_page": 64
+    },
+    {
+      "title": "TELEGRAPH ROAD",
+      "start_page": 65,
+      "end_page": 89
+    },
+    {
+      "title": "MONEY FOR NOTHING",
+      "start_page": 90,
+      "end_page": 113
+    },
+    {
+      "title": "WALK OF LIFE",
+      "start_page": 114,
+      "end_page": 122
+    },
+    {
+      "title": "TUNNEL OF LOVE",
+      "start_page": 123,
+      "end_page": 145
+    },
+    {
+      "title": "JAM",
+      "start_page": 146,
+      "end_page": 146
+    }
+  ],
+  "raw_page_data": [
+    {
+      "page_number": 11,
+      "top_text": "Sultans Of Swing",
+      "timestamp": "2025-10-25T18:55:05.040103"
+    },
+    {
+      "page_number": 12,
+      "top_text": "You got a shi-ver in the dark. It's raining in the park, but mean",
+      "timestamp": "2025-10-25T18:55:07.272080"
+    },
+    {
+      "page_number": 13,
+      "top_text": "A band is blowing Dixie -",
+      "timestamp": "2025-10-25T18:55:08.786501"
+    },
+    {
+      "page_number": 14,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:55:10.027701"
+    },
+    {
+      "page_number": 15,
+      "top_text": "A7",
+      "timestamp": "2025-10-25T18:55:11.270023"
+    },
+    {
+      "page_number": 16,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:55:12.513794"
+    },
+    {
+      "page_number": 17,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:55:13.760234"
+    },
+    {
+      "page_number": 18,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:55:15.004886"
+    },
+    {
+      "page_number": 19,
+      "top_text": "And Har-ry does not mind",
+      "timestamp": "2025-10-25T18:55:16.517448"
+    },
+    {
+      "page_number": 20,
+      "top_text": "With the Sol - tune",
+      "timestamp": "2025-10-25T18:55:17.935122"
+    },
+    {
+      "page_number": 21,
+      "top_text": "drunk and dressed in their best brown bag, gigs and their flat plan",
+      "timestamp": "2025-10-25T18:55:19.843841"
+    },
+    {
+      "page_number": 22,
+      "top_text": "Yeah, The Sui - tans - are playing. Oce - ole.",
+      "timestamp": "2025-10-25T18:55:21.960103"
+    },
+    {
+      "page_number": 23,
+      "top_text": "Bd",
+      "timestamp": "2025-10-25T18:55:23.234548"
+    },
+    {
+      "page_number": 24,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:55:24.478021"
+    },
+    {
+      "page_number": 25,
+      "top_text": "swing",
+      "timestamp": "2025-10-25T18:55:25.668679"
+    },
+    {
+      "page_number": 26,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:55:26.938749"
+    },
+    {
+      "page_number": 27,
+      "top_text": "Brothers In Arms",
+      "timestamp": "2025-10-25T18:55:28.259893"
+    },
+    {
+      "page_number": 28,
+      "top_text": "Baij",
+      "timestamp": "2025-10-25T18:55:29.557695"
+    },
+    {
+      "page_number": 29,
+      "top_text": "E",
+      "timestamp": "2025-10-25T18:55:30.755511"
+    },
+    {
+      "page_number": 30,
+      "top_text": "E",
+      "timestamp": "2025-10-25T18:55:31.952177"
+    },
+    {
+      "page_number": 31,
+      "top_text": "world",
+      "timestamp": "2025-10-25T18:55:33.170905"
+    },
+    {
+      "page_number": 32,
+      "top_text": "F#",
+      "timestamp": "2025-10-25T18:55:34.419453"
+    },
+    {
+      "page_number": 33,
+      "top_text": "F#4",
+      "timestamp": "2025-10-25T18:55:35.720888"
+    },
+    {
+      "page_number": 34,
+      "top_text": "G#m",
+      "timestamp": "2025-10-25T18:55:37.050323"
+    },
+    {
+      "page_number": 35,
+      "top_text": "G#m",
+      "timestamp": "2025-10-25T18:55:38.363035"
+    },
+    {
+      "page_number": 36,
+      "top_text": "Romeo And Juliet",
+      "timestamp": "2025-10-25T18:55:39.683203"
+    },
+    {
+      "page_number": 37,
+      "top_text": "Caus#4",
+      "timestamp": "2025-10-25T18:55:41.097115"
+    },
+    {
+      "page_number": 38,
+      "top_text": "C G B M F A",
+      "timestamp": "2025-10-25T18:55:42.609877"
+    },
+    {
+      "page_number": 39,
+      "top_text": "you shouldn't come a round here",
+      "timestamp": "2025-10-25T18:55:44.248748"
+    },
+    {
+      "page_number": 40,
+      "top_text": "Bb",
+      "timestamp": "2025-10-25T18:55:45.591455"
+    },
+    {
+      "page_number": 41,
+      "top_text": "B��",
+      "timestamp": "2025-10-25T18:55:46.987887"
+    },
+    {
+      "page_number": 42,
+      "top_text": "And I dreamed your dream for you and now your dream is real",
+      "timestamp": "2025-10-25T18:55:48.958729"
+    },
+    {
+      "page_number": 43,
+      "top_text": "F",
+      "timestamp": "2025-10-25T18:55:50.278264"
+    },
+    {
+      "page_number": 44,
+      "top_text": "Bb",
+      "timestamp": "2025-10-25T18:55:51.679618"
+    },
+    {
+      "page_number": 45,
+      "top_text": "love you like the stars a love",
+      "timestamp": "2025-10-25T18:55:53.363715"
+    },
+    {
+      "page_number": 46,
+      "top_text": "When you go on a - a - a - line",
+      "timestamp": "2025-10-25T18:55:55.220736"
+    },
+    {
+      "page_number": 47,
+      "top_text": "B7F",
+      "timestamp": "2025-10-25T18:55:56.682488"
+    },
+    {
+      "page_number": 48,
+      "top_text": "And I do miss you.",
+      "timestamp": "2025-10-25T18:55:58.319953"
+    },
+    {
+      "page_number": 49,
+      "top_text": "love",
+      "timestamp": "2025-10-25T18:55:59.686529"
+    },
+    {
+      "page_number": 50,
+      "top_text": "F#A",
+      "timestamp": "2025-10-25T18:56:01.189562"
+    },
+    {
+      "page_number": 51,
+      "top_text": "B7",
+      "timestamp": "2025-10-25T18:56:02.633280"
+    },
+    {
+      "page_number": 52,
+      "top_text": "Bb",
+      "timestamp": "2025-10-25T18:56:04.093888"
+    },
+    {
+      "page_number": 53,
+      "top_text": "B",
+      "timestamp": "2025-10-25T18:56:05.498808"
+    },
+    {
+      "page_number": 54,
+      "top_text": "Private Investigations",
+      "timestamp": "2025-10-25T18:56:06.951954"
+    },
+    {
+      "page_number": 55,
+      "top_text": "VERSE 1",
+      "timestamp": "2025-10-25T18:56:08.466733"
+    },
+    {
+      "page_number": 56,
+      "top_text": "E_mG",
+      "timestamp": "2025-10-25T18:56:10.040607"
+    },
+    {
+      "page_number": 57,
+      "top_text": "Verse 2",
+      "timestamp": "2025-10-25T18:56:11.505944"
+    },
+    {
+      "page_number": 58,
+      "top_text": "Middle G",
+      "timestamp": "2025-10-25T18:56:12.973860"
+    },
+    {
+      "page_number": 59,
+      "top_text": "B7",
+      "timestamp": "2025-10-25T18:56:14.442592"
+    },
+    {
+      "page_number": 60,
+      "top_text": "Am",
+      "timestamp": "2025-10-25T18:56:15.863699"
+    },
+    {
+      "page_number": 61,
+      "top_text": "Em7",
+      "timestamp": "2025-10-25T18:56:17.337840"
+    },
+    {
+      "page_number": 62,
+      "top_text": "Em7",
+      "timestamp": "2025-10-25T18:56:18.801535"
+    },
+    {
+      "page_number": 63,
+      "top_text": "Em7",
+      "timestamp": "2025-10-25T18:56:20.265145"
+    },
+    {
+      "page_number": 64,
+      "top_text": "Em7",
+      "timestamp": "2025-10-25T18:56:22.305157"
+    },
+    {
+      "page_number": 65,
+      "top_text": "Telegraph Road",
+      "timestamp": "2025-10-25T18:56:23.983846"
+    },
+    {
+      "page_number": 66,
+      "top_text": "Keyboard Chords",
+      "timestamp": "2025-10-25T18:56:25.537003"
+    },
+    {
+      "page_number": 67,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:56:27.029165"
+    },
+    {
+      "page_number": 68,
+      "top_text": "Bb",
+      "timestamp": "2025-10-25T18:56:28.527067"
+    },
+    {
+      "page_number": 69,
+      "top_text": "Road",
+      "timestamp": "2025-10-25T18:56:29.970198"
+    },
+    {
+      "page_number": 70,
+      "top_text": "C",
+      "timestamp": "2025-10-25T18:56:31.413041"
+    },
+    {
+      "page_number": 71,
+      "top_text": "Gm7d11",
+      "timestamp": "2025-10-25T18:56:33.070542"
+    },
+    {
+      "page_number": 72,
+      "top_text": "Bb",
+      "timestamp": "2025-10-25T18:56:34.556352"
+    },
+    {
+      "page_number": 73,
+      "top_text": "B6",
+      "timestamp": "2025-10-25T18:56:36.049485"
+    },
+    {
+      "page_number": 74,
+      "top_text": "G",
+      "timestamp": "2025-10-25T18:56:37.489222"
+    },
+    {
+      "page_number": 75,
+      "top_text": "Bb",
+      "timestamp": "2025-10-25T18:56:38.978348"
+    },
+    {
+      "page_number": 76,
+      "top_text": "C",
+      "timestamp": "2025-10-25T18:56:40.409931"
+    },
+    {
+      "page_number": 77,
+      "top_text": "GM7",
+      "timestamp": "2025-10-25T18:56:41.901166"
+    },
+    {
+      "page_number": 78,
+      "top_text": "B",
+      "timestamp": "2025-10-25T18:56:43.339470"
+    },
+    {
+      "page_number": 79,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:56:44.824334"
+    },
+    {
+      "page_number": 80,
+      "top_text": "But just be - lieve in me by, and I'll take you a way - from out of this dark ness",
+      "timestamp": "2025-10-25T18:56:47.551670"
+    },
+    {
+      "page_number": 81,
+      "top_text": "Am",
+      "timestamp": "2025-10-25T18:56:48.918705"
+    },
+    {
+      "page_number": 82,
+      "top_text": "D",
+      "timestamp": "2025-10-25T18:56:50.331453"
+    },
+    {
+      "page_number": 83,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:56:51.793817"
+    },
+    {
+      "page_number": 84,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:56:53.265707"
+    },
+    {
+      "page_number": 85,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:56:54.717328"
+    },
+    {
+      "page_number": 86,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:56:56.180258"
+    },
+    {
+      "page_number": 87,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:56:57.621510"
+    },
+    {
+      "page_number": 88,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:56:59.071557"
+    },
+    {
+      "page_number": 89,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:57:00.524661"
+    },
+    {
+      "page_number": 90,
+      "top_text": "Money For Nothing",
+      "timestamp": "2025-10-25T18:57:02.031946"
+    },
+    {
+      "page_number": 91,
+      "top_text": "Harm",
+      "timestamp": "2025-10-25T18:57:03.433806"
+    },
+    {
+      "page_number": 92,
+      "top_text": "Harm",
+      "timestamp": "2025-10-25T18:57:04.855490"
+    },
+    {
+      "page_number": 93,
+      "top_text": "E6",
+      "timestamp": "2025-10-25T18:57:06.309023"
+    },
+    {
+      "page_number": 94,
+      "top_text": "co-cou-t T. V.",
+      "timestamp": "2025-10-25T18:57:08.244744"
+    },
+    {
+      "page_number": 95,
+      "top_text": "B6",
+      "timestamp": "2025-10-25T18:57:09.696383"
+    },
+    {
+      "page_number": 96,
+      "top_text": "G5 C5 B5 G5 C5",
+      "timestamp": "2025-10-25T18:57:11.569421"
+    },
+    {
+      "page_number": 97,
+      "top_text": "Vocal 2",
+      "timestamp": "2025-10-25T18:57:13.050126"
+    },
+    {
+      "page_number": 98,
+      "top_text": "Vocal C",
+      "timestamp": "2025-10-25T18:57:14.546123"
+    },
+    {
+      "page_number": 99,
+      "top_text": "I should - a learned - to play them drums...",
+      "timestamp": "2025-10-25T18:57:16.441394"
+    },
+    {
+      "page_number": 100,
+      "top_text": "B6",
+      "timestamp": "2025-10-25T18:57:17.860083"
+    },
+    {
+      "page_number": 101,
+      "top_text": "G5",
+      "timestamp": "2025-10-25T18:57:19.300676"
+    },
+    {
+      "page_number": 102,
+      "top_text": "G5",
+      "timestamp": "2025-10-25T18:57:20.750819"
+    },
+    {
+      "page_number": 103,
+      "top_text": "B-8",
+      "timestamp": "2025-10-25T18:57:22.266710"
+    },
+    {
+      "page_number": 104,
+      "top_text": "G5",
+      "timestamp": "2025-10-25T18:57:23.839718"
+    },
+    {
+      "page_number": 105,
+      "top_text": "Get your harm",
+      "timestamp": "2025-10-25T18:57:25.367040"
+    },
+    {
+      "page_number": 106,
+      "top_text": "Money for a 'nothin'",
+      "timestamp": "2025-10-25T18:57:27.131154"
+    },
+    {
+      "page_number": 107,
+      "top_text": "(G5)",
+      "timestamp": "2025-10-25T18:57:28.676801"
+    },
+    {
+      "page_number": 108,
+      "top_text": "G5",
+      "timestamp": "2025-10-25T18:57:30.132138"
+    },
+    {
+      "page_number": 109,
+      "top_text": "GS",
+      "timestamp": "2025-10-25T18:57:31.529754"
+    },
+    {
+      "page_number": 110,
+      "top_text": "F5",
+      "timestamp": "2025-10-25T18:57:32.986287"
+    },
+    {
+      "page_number": 111,
+      "top_text": "G5",
+      "timestamp": "2025-10-25T18:57:34.457922"
+    },
+    {
+      "page_number": 112,
+      "top_text": "C#sus4",
+      "timestamp": "2025-10-25T18:57:36.076555"
+    },
+    {
+      "page_number": 113,
+      "top_text": "B6",
+      "timestamp": "2025-10-25T18:57:37.536406"
+    },
+    {
+      "page_number": 114,
+      "top_text": "Walk Of Life",
+      "timestamp": "2025-10-25T18:57:39.125820"
+    },
+    {
+      "page_number": 115,
+      "top_text": "B",
+      "timestamp": "2025-10-25T18:57:40.539913"
+    },
+    {
+      "page_number": 116,
+      "top_text": "B",
+      "timestamp": "2025-10-25T18:57:41.959159"
+    },
+    {
+      "page_number": 117,
+      "top_text": "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20",
+      "timestamp": "2025-10-25T18:57:44.384547"
+    },
+    {
+      "page_number": 118,
+      "top_text": "A",
+      "timestamp": "2025-10-25T18:57:45.800662"
+    },
+    {
+      "page_number": 119,
+      "top_text": "song a - bout the knife",
+      "timestamp": "2025-10-25T18:57:47.462817"
+    },
+    {
+      "page_number": 120,
+      "top_text": "D.S.C.O.A.",
+      "timestamp": "2025-10-25T18:57:49.325644"
+    },
+    {
+      "page_number": 121,
+      "top_text": "CODA",
+      "timestamp": "2025-10-25T18:57:50.811064"
+    },
+    {
+      "page_number": 122,
+      "top_text": "B",
+      "timestamp": "2025-10-25T18:57:52.200453"
+    },
+    {
+      "page_number": 123,
+      "top_text": "Tunnel Of Love",
+      "timestamp": "2025-10-25T18:57:53.764441"
+    },
+    {
+      "page_number": 124,
+      "top_text": "Two gig part one for one gtr",
+      "timestamp": "2025-10-25T18:57:55.533464"
+    },
+    {
+      "page_number": 125,
+      "top_text": "ghost train",
+      "timestamp": "2025-10-25T18:57:56.978765"
+    },
+    {
+      "page_number": 126,
+      "top_text": "G5",
+      "timestamp": "2025-10-25T18:57:58.442474"
+    },
+    {
+      "page_number": 127,
+      "top_text": "Am",
+      "timestamp": "2025-10-25T18:57:59.855197"
+    },
+    {
+      "page_number": 128,
+      "top_text": "ds",
+      "timestamp": "2025-10-25T18:58:01.321577"
+    },
+    {
+      "page_number": 129,
+      "top_text": "And the big wheels keep on",
+      "timestamp": "2025-10-25T18:58:02.999366"
+    },
+    {
+      "page_number": 130,
+      "top_text": "D5",
+      "timestamp": "2025-10-25T18:58:04.466358"
+    },
+    {
+      "page_number": 131,
+      "top_text": "And girl it looks so pretty",
+      "timestamp": "2025-10-25T18:58:06.163510"
+    },
+    {
+      "page_number": 132,
+      "top_text": "Dm",
+      "timestamp": "2025-10-25T18:58:07.634216"
+    },
+    {
+      "page_number": 133,
+      "top_text": "Check it.",
+      "timestamp": "2025-10-25T18:58:09.394433"
+    },
+    {
+      "page_number": 134,
+      "top_text": "B7",
+      "timestamp": "2025-10-25T18:58:11.058170"
+    },
+    {
+      "page_number": 135,
+      "top_text": "G5",
+      "timestamp": "2025-10-25T18:58:12.687900"
+    },
+    {
+      "page_number": 136,
+      "top_text": "And the big wheel - keep on turning",
+      "timestamp": "2025-10-25T18:58:14.771210"
+    },
+    {
+      "page_number": 137,
+      "top_text": "love",
+      "timestamp": "2025-10-25T18:58:16.320039"
+    },
+    {
+      "page_number": 138,
+      "top_text": "rock - a way",
+      "timestamp": "2025-10-25T18:58:18.135111"
+    },
+    {
+      "page_number": 139,
+      "top_text": "F#A",
+      "timestamp": "2025-10-25T18:58:19.943586"
+    },
+    {
+      "page_number": 140,
+      "top_text": "F#A",
+      "timestamp": "2025-10-25T18:58:21.720840"
+    },
+    {
+      "page_number": 141,
+      "top_text": "C",
+      "timestamp": "2025-10-25T18:58:23.544560"
+    },
+    {
+      "page_number": 142,
+      "top_text": "F#A",
+      "timestamp": "2025-10-25T18:58:25.530893"
+    },
+    {
+      "page_number": 143,
+      "top_text": "C#",
+      "timestamp": "2025-10-25T18:58:27.274141"
+    },
+    {
+      "page_number": 144,
+      "top_text": "B/F#",
+      "timestamp": "2025-10-25T18:58:29.143030"
+    },
+    {
+      "page_number": 145,
+      "top_text": "F#A",
+      "timestamp": "2025-10-25T18:58:31.004126"
+    },
+    {
+      "page_number": 146,
+      "top_text": "JAM",
+      "timestamp": "2025-10-25T18:58:33.479887"
+    }
+  ]
+}
