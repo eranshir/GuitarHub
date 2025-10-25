@@ -68,16 +68,19 @@ def cleanup_with_openai(page_data_list, client):
             "text": stripped_text
         })
 
-    # Calculate optimal batch size by testing
-    max_tokens_per_batch = 115000  # Leave some headroom
+    # Use small batches for better accuracy
+    # Target ~5000-8000 tokens per batch for optimal GPT performance
+    target_tokens = 8000
+    max_tokens_per_batch = 115000  # Hard limit
 
     print(f"📊 Total pages to process: {len(pages_summary)}")
-    print(f"🧪 Testing batch sizes...\n")
+    print(f"🎯 Target: ~{target_tokens:,} tokens per batch for accuracy\n")
 
-    # Start with a conservative estimate and test
-    test_sizes = [1000, 500, 250, 100, 50]
+    # Test to find batch size closest to target
+    test_sizes = [200, 150, 100, 75, 50, 25]
     pages_per_batch = 50  # Default fallback
 
+    print("🧪 Testing batch sizes...")
     for test_size in test_sizes:
         if len(pages_summary) < test_size:
             continue
@@ -86,14 +89,16 @@ def cleanup_with_openai(page_data_list, client):
         test_prompt = create_batch_prompt(test_batch)
         test_tokens = count_tokens(test_prompt)
 
-        print(f"   {test_size} pages = {test_tokens:,} tokens", end="")
+        print(f"   {test_size:>3} pages = {test_tokens:>6,} tokens", end="")
 
-        if test_tokens < max_tokens_per_batch:
+        if test_tokens > max_tokens_per_batch:
+            print(f" ✗ (exceeds limit)")
+        elif test_tokens <= target_tokens * 1.5:  # Within 50% of target
             pages_per_batch = test_size
-            print(f" ✓ (will use this)")
+            print(f" ✓ (good fit)")
             break
         else:
-            print(f" ✗ (too large)")
+            print(f"   (checking smaller)")
 
     print(f"\n📦 Using batch size: {pages_per_batch} pages")
 
