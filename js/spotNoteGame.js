@@ -38,6 +38,22 @@ class SpotNoteGame {
 
         document.getElementById('spot-level').addEventListener('change', (e) => {
             this.level = parseInt(e.target.value);
+            // If session is active, regenerate question with new level
+            if (this.isSessionActive) {
+                this.generateQuestion();
+            }
+        });
+
+        document.getElementById('spot-include-sharps').addEventListener('change', (e) => {
+            this.settings.includeSharps = e.target.checked;
+        });
+
+        document.getElementById('spot-min-fret').addEventListener('change', (e) => {
+            this.settings.minFret = parseInt(e.target.value);
+        });
+
+        document.getElementById('spot-max-fret').addEventListener('change', (e) => {
+            this.settings.maxFret = parseInt(e.target.value);
         });
     }
 
@@ -59,7 +75,7 @@ class SpotNoteGame {
     endSession() {
         this.isSessionActive = false;
 
-        document.querySelector('#spot-note-module .game-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('#spot-note-module .game-content').forEach(c => c.classList.remove('active'));
         document.getElementById('spot-start-screen').classList.add('active');
         document.getElementById('spot-session-controls').style.display = 'none';
     }
@@ -92,9 +108,11 @@ class SpotNoteGame {
 
         // Clear fretboard and show prefilled
         this.fretboardDisplay.clearHighlights();
+        this.fretboardDisplay.setFretRange(this.settings.minFret, this.settings.maxFret);
+
         this.prefilledStrings.forEach(string => {
             const fret = this.correctPositions[string];
-            this.fretboardDisplay.highlightPosition(string, fret, 'prefilled');
+            this.fretboardDisplay.highlightPosition(string, fret);
             this.userSelections[string] = fret; // Mark as filled
         });
     }
@@ -113,18 +131,16 @@ class SpotNoteGame {
 
         // Show immediate feedback
         if (isCorrect) {
-            this.fretboardDisplay.highlightPosition(string, fret, 'correct');
+            this.fretboardDisplay.highlightPosition(string, fret);
             this.userSelections[string] = fret;
             this.showFeedback(`✓ Correct! ${this.currentNote} on string ${string}`, true);
         } else {
-            this.fretboardDisplay.highlightPosition(string, fret, 'incorrect-temp');
             const actualNote = this.guitar.getNoteAtFret(string, fret);
             this.showFeedback(`✗ Wrong! That's ${actualNote}. ${this.currentNote} is at fret ${correctFret}`, false);
-
-            // Show correct answer briefly
-            setTimeout(() => {
-                this.fretboardDisplay.clearPosition(string, fret);
-            }, 1500);
+            this.score.incorrect++;
+            this.score.streak = 0;
+            document.getElementById('spot-incorrect-count').textContent = this.score.incorrect;
+            document.getElementById('spot-streak-count').textContent = this.score.streak;
         }
 
         // Check if all strings are filled correctly
