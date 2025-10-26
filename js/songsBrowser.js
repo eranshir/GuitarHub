@@ -39,9 +39,11 @@ class SongsBrowser {
             'DIRE_STRAITS_index.json',
             'Disney_songs_index.json',
             'don_mclean_index.json',
+            'Enormous_Guitar_index.json',
             'Giant_Sheet_Music_index.json',
             'hebrew_songs_index.json',
-            'Love_The_Beatles_index.json'
+            'Love_The_Beatles_index.json',
+            'Piano_White_Pages_index.json'
         ];
 
         console.log('Loading book indices...');
