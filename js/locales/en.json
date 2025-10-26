@@ -7,6 +7,7 @@
     "fretboard": "Fretboard Memory",
     "intervals": "Intervals Memory",
     "chords": "Chords Memory",
+    "spotNote": "Spot a Note",
     "stats": "Statistics"
   },
   "common": {
