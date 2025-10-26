@@ -22,6 +22,7 @@ class MusicSheetAnalyzer:
         self.checkpoint_file = Path(pdf_path).stem + "_checkpoint.json"
         self.output_file = Path(pdf_path).stem + "_index.json"
         self.start_time = None
+        self.converted_pdf = None  # Will store converted PDF path for EPUBs
 
     def load_checkpoint(self):
         """Load progress from checkpoint file if it exists."""
@@ -79,31 +80,35 @@ class MusicSheetAnalyzer:
 
         print("   Converting EPUB to PDF (this preserves titles)...")
 
-        # Create temp PDF path
-        temp_pdf = epub_path.replace('.epub', '_temp.pdf')
+        # Create PDF path (save permanently for frontend use)
+        pdf_path = epub_path.replace('.epub', '.pdf')
 
         # Use ebook-convert (from Calibre) if available
         import subprocess
+        import os
         try:
-            subprocess.run([
-                'ebook-convert',
-                epub_path,
-                temp_pdf,
-                '--paper-size', 'letter',
-                '--pdf-page-margin-left', '36',
-                '--pdf-page-margin-right', '36',
-                '--pdf-page-margin-top', '36',
-                '--pdf-page-margin-bottom', '36'
-            ], check=True, capture_output=True)
+            # Only convert if PDF doesn't already exist
+            if not os.path.exists(pdf_path):
+                subprocess.run([
+                    'ebook-convert',
+                    epub_path,
+                    pdf_path,
+                    '--paper-size', 'letter',
+                    '--pdf-page-margin-left', '36',
+                    '--pdf-page-margin-right', '36',
+                    '--pdf-page-margin-top', '36',
+                    '--pdf-page-margin-bottom', '36'
+                ], check=True, capture_output=True)
 
-            print("   ✓ Converted to PDF")
+                print(f"   ✓ Converted to PDF: {pdf_path}")
+            else:
+                print(f"   ✓ Using existing PDF: {pdf_path}")
+
+            # Store the PDF path for the index
+            self.converted_pdf = pdf_path
 
             # Now extract images from the PDF
-            images = pdf2image.convert_from_path(temp_pdf)
-
-            # Clean up temp PDF
-            import os
-            os.remove(temp_pdf)
+            images = pdf2image.convert_from_path(pdf_path)
 
             return images
 
@@ -405,8 +410,12 @@ Respond with ONLY the JSON array, no other text."""
         print("🔨 Building final song index...")
         songs = self.build_song_index(song_starts, total_pages) if song_starts else []
 
+        # Determine the actual filename to use (converted PDF if EPUB)
+        actual_filename = Path(self.converted_pdf).name if self.converted_pdf else Path(self.pdf_path).name
+
         final_index = {
-            "filename": Path(self.pdf_path).name,
+            "filename": actual_filename,
+            "original_file": Path(self.pdf_path).name,
             "total_pages": total_pages,
             "total_songs": len(songs),
             "generated_at": datetime.now().isoformat(),
