@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import pdf2image
 from openai import OpenAI
-from ebooklib import epub
+from ebooklib import epub, ITEM_IMAGE
 from PIL import Image as PILImage
 import tiktoken
 
@@ -78,16 +78,20 @@ class MusicSheetAnalyzerOLMoOCR:
 
         # Get all image items from the EPUB
         for item in book.get_items():
-            if item.get_type() == epub.ITEM_IMAGE:
-                # Convert image bytes to PIL Image
-                img_data = item.get_content()
-                img = PILImage.open(BytesIO(img_data))
+            if item.get_type() == ITEM_IMAGE:
+                try:
+                    # Convert image bytes to PIL Image
+                    img_data = item.get_content()
+                    img = PILImage.open(BytesIO(img_data))
 
-                # Convert to RGB if necessary
-                if img.mode != 'RGB':
-                    img = img.convert('RGB')
+                    # Convert to RGB if necessary
+                    if img.mode != 'RGB':
+                        img = img.convert('RGB')
 
-                images.append(img)
+                    images.append(img)
+                except Exception as e:
+                    print(f"   Warning: Could not process image: {e}")
+                    continue
 
         return images
 
