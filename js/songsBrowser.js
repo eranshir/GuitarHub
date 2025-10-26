@@ -163,8 +163,12 @@ class SongsBrowser {
             this.zoom(0.8);
         });
 
-        // Fullscreen button
+        // Fullscreen buttons
         document.getElementById('fullscreen-btn').addEventListener('click', () => {
+            this.toggleFullscreen();
+        });
+
+        document.getElementById('exit-fullscreen-btn').addEventListener('click', () => {
             this.toggleFullscreen();
         });
 

@@ -1842,14 +1842,9 @@ body.rtl .setting-group label {
     background: #000;
 }
 
-.pdf-viewer.fullscreen-mode .pdf-viewer-header {
-    background: rgba(44, 62, 80, 0.95);
-    border-bottom-color: #333;
-}
-
-.pdf-viewer.fullscreen-mode .pdf-viewer-header h3,
-.pdf-viewer.fullscreen-mode .pdf-viewer-header span {
-    color: white;
+.pdf-viewer.fullscreen-mode .pdf-viewer-header,
+.pdf-viewer.fullscreen-mode .pdf-viewer-footer {
+    display: none;
 }
 
 .pdf-viewer.fullscreen-mode .pdf-viewer-content {
@@ -1858,20 +1853,43 @@ body.rtl .setting-group label {
 }
 
 .pdf-viewer.fullscreen-mode .pdf-canvas {
-    max-width: 100%;
+    max-width: 100vw;
     max-height: 100vh;
 }
 
-.pdf-viewer.fullscreen-mode .pdf-viewer-footer {
-    background: rgba(44, 62, 80, 0.95);
-    border-top-color: #333;
-}
-
 .pdf-viewer.fullscreen-mode .nav-btn {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(44, 62, 80, 0.8);
     backdrop-filter: blur(10px);
+    z-index: 1000;
 }
 
 .pdf-viewer.fullscreen-mode .nav-btn:hover {
-    background: rgba(102, 126, 234, 0.8);
+    background: rgba(102, 126, 234, 0.9);
+}
+
+/* Exit fullscreen button (appears only in fullscreen) */
+.exit-fullscreen-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(44, 62, 80, 0.8);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    z-index: 1001;
+    backdrop-filter: blur(10px);
+    transition: var(--transition);
+    display: none;
+}
+
+.pdf-viewer.fullscreen-mode .exit-fullscreen-btn {
+    display: block;
+}
+
+.exit-fullscreen-btn:hover {
+    background: rgba(102, 126, 234, 0.9);
+    transform: scale(1.05);
 }
