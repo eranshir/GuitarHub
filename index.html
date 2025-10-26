@@ -27,6 +27,7 @@
             <button class="module-btn active" data-module="fretboard" data-i18n="nav.fretboard">Fretboard Memory</button>
             <button class="module-btn" data-module="intervals" data-i18n="nav.intervals">Intervals Memory</button>
             <button class="module-btn" data-module="chords" data-i18n="nav.chords">Chords Memory</button>
+            <button class="module-btn" data-module="spot-note">Spot a Note</button>
             <button class="module-btn" data-module="stats" data-i18n="nav.stats">Statistics</button>
         </nav>
 
@@ -606,6 +607,72 @@
                 </div>
             </section>
 
+            <!-- Spot a Note Module -->
+            <section id="spot-note-module" class="module">
+                <div class="game-container">
+                    <div class="question-card">
+                        <div class="timer-display" id="spot-timer">00:00</div>
+                        <div class="score-display">
+                            <span class="correct">✓ <span id="spot-correct-count">0</span></span>
+                            <span class="incorrect">✗ <span id="spot-incorrect-count">0</span></span>
+                            <span class="streak">🔥 <span id="spot-streak-count">0</span></span>
+                        </div>
+
+                        <div class="session-controls" id="spot-session-controls" style="display: none;">
+                            <button id="spot-pause-btn" class="pause-btn">⏸ Pause</button>
+                            <button id="spot-resume-btn" class="resume-btn" style="display: none;">▶ Resume</button>
+                            <button id="spot-stop-btn" class="stop-btn">End Session</button>
+                        </div>
+
+                        <div class="feedback" id="spot-feedback"></div>
+
+                        <div id="spot-start-screen" class="game-content active">
+                            <h2 class="welcome-title">Spot a Note</h2>
+                            <p class="welcome-text">Find the same note across all strings on the fretboard.</p>
+                            <button id="spot-start-btn" class="start-btn">Start Practice Session</button>
+                        </div>
+
+                        <div id="spot-game" class="game-content">
+                            <h2 class="question">Find all instances of this note:</h2>
+                            <div class="note-display">
+                                <span class="note-name" id="spot-target-note">-</span>
+                            </div>
+                            <p class="instruction-text">Click on the fretboard to mark the note on each string:</p>
+                            <div class="fretboard-container">
+                                <div class="fretboard" id="fretboard-spot-note">
+                                    <!-- Fretboard will be generated dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-panel">
+                        <h3>Settings</h3>
+                        <div class="setting-group">
+                            <label>Difficulty Level:</label>
+                            <select id="spot-level">
+                                <option value="1">Level 1 - Find 1 string (5 shown)</option>
+                                <option value="2">Level 2 - Find 2 strings (4 shown)</option>
+                                <option value="3" selected>Level 3 - Find 3 strings (3 shown)</option>
+                                <option value="4">Level 4 - Find 4 strings (2 shown)</option>
+                                <option value="5">Level 5 - Find 5 strings (1 shown)</option>
+                            </select>
+                        </div>
+                        <div class="setting-group">
+                            <label>
+                                <input type="checkbox" id="spot-include-sharps" checked>
+                                Include sharps/flats
+                            </label>
+                        </div>
+                        <div class="setting-group">
+                            <label>Fret range:</label>
+                            <input type="number" id="spot-min-fret" min="0" max="24" value="0"> -
+                            <input type="number" id="spot-max-fret" min="0" max="24" value="12">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Statistics Module -->
             <section id="stats-module" class="module">
                 <div class="stats-container">
@@ -729,6 +796,7 @@
     <script src="js/game.js"></script>
     <script src="js/intervalGame.js"></script>
     <script src="js/chordGame.js"></script>
+    <script src="js/spotNoteGame.js"></script>
     <script src="js/statistics.js"></script>
     <script src="js/songsBrowser.js"></script>
     <script src="js/app.js"></script>

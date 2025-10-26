@@ -17,6 +17,7 @@ class App {
         this.game = new FretboardGame(this.guitar, this.statistics);
         this.intervalGame = new IntervalGame(this.guitar, this.statistics, this.intervalTheory);
         this.chordGame = new ChordGame(this.guitar, this.statistics, this.chordTheory);
+        this.spotNoteGame = new SpotNoteGame(this.guitar, this.statistics);
         this.setupModuleNavigation();
         this.setupAudioControls();
         this.setupStatisticsControls();
@@ -60,6 +61,8 @@ class App {
             document.getElementById('intervals-module').classList.add('active');
         } else if (moduleId === 'chords') {
             document.getElementById('chords-module').classList.add('active');
+        } else if (moduleId === 'spot-note') {
+            document.getElementById('spot-note-module').classList.add('active');
         } else if (moduleId === 'stats') {
             document.getElementById('stats-module').classList.add('active');
             this.updateStatisticsDisplay();
