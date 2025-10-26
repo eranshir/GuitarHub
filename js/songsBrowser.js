@@ -162,6 +162,55 @@ class SongsBrowser {
         document.getElementById('zoom-out').addEventListener('click', () => {
             this.zoom(0.8);
         });
+
+        // Fullscreen button
+        document.getElementById('fullscreen-btn').addEventListener('click', () => {
+            this.toggleFullscreen();
+        });
+
+        // Handle fullscreen change events
+        document.addEventListener('fullscreenchange', () => {
+            this.handleFullscreenChange();
+        });
+    }
+
+    toggleFullscreen() {
+        const pdfViewer = document.getElementById('pdf-viewer');
+
+        if (!document.fullscreenElement) {
+            // Enter fullscreen
+            pdfViewer.requestFullscreen().catch(err => {
+                console.error('Error entering fullscreen:', err);
+            });
+        } else {
+            // Exit fullscreen
+            document.exitFullscreen();
+        }
+    }
+
+    handleFullscreenChange() {
+        const pdfViewer = document.getElementById('pdf-viewer');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+
+        if (document.fullscreenElement) {
+            // Entered fullscreen
+            pdfViewer.classList.add('fullscreen-mode');
+            fullscreenBtn.textContent = '⛶ Exit Fullscreen';
+
+            // Re-render to fit fullscreen
+            if (this.pdfDoc) {
+                this.renderPage(this.currentPage);
+            }
+        } else {
+            // Exited fullscreen
+            pdfViewer.classList.remove('fullscreen-mode');
+            fullscreenBtn.textContent = '⛶ Fullscreen';
+
+            // Re-render to fit normal view
+            if (this.pdfDoc) {
+                this.renderPage(this.currentPage);
+            }
+        }
     }
 
     toggleBrowser() {

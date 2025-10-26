@@ -1819,3 +1819,59 @@ body.rtl .setting-group label {
     font-weight: bold;
     color: var(--primary-color);
 }
+
+.fullscreen-btn {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: var(--transition);
+    white-space: nowrap;
+}
+
+.fullscreen-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+}
+
+/* Fullscreen mode styles */
+.pdf-viewer.fullscreen-mode {
+    background: #000;
+}
+
+.pdf-viewer.fullscreen-mode .pdf-viewer-header {
+    background: rgba(44, 62, 80, 0.95);
+    border-bottom-color: #333;
+}
+
+.pdf-viewer.fullscreen-mode .pdf-viewer-header h3,
+.pdf-viewer.fullscreen-mode .pdf-viewer-header span {
+    color: white;
+}
+
+.pdf-viewer.fullscreen-mode .pdf-viewer-content {
+    background: #000;
+    padding: 0;
+}
+
+.pdf-viewer.fullscreen-mode .pdf-canvas {
+    max-width: 100%;
+    max-height: 100vh;
+}
+
+.pdf-viewer.fullscreen-mode .pdf-viewer-footer {
+    background: rgba(44, 62, 80, 0.95);
+    border-top-color: #333;
+}
+
+.pdf-viewer.fullscreen-mode .nav-btn {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.pdf-viewer.fullscreen-mode .nav-btn:hover {
+    background: rgba(102, 126, 234, 0.8);
+}
