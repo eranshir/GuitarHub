@@ -502,6 +502,9 @@ class SongsBrowser {
         document.getElementById('pdf-viewer').style.display = 'none';
         document.querySelector('.songs-browser-container').style.display = 'flex';
 
+        // Remove fullscreen-mode class immediately to fix interaction
+        document.getElementById('pdf-viewer').classList.remove('fullscreen-mode');
+
         // Clean up PDF
         if (this.pdfDoc) {
             this.pdfDoc.destroy();
