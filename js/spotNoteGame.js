@@ -113,12 +113,13 @@ class SpotNoteGame {
         this.fretboardDisplay.clearHighlights();
         this.fretboardDisplay.setFretRange(this.settings.minFret, this.settings.maxFret);
 
-        // Highlight pre-filled positions
+        // Highlight pre-filled positions (don't clear between highlights)
         console.log('Pre-filling strings:', this.prefilledStrings);
-        this.prefilledStrings.forEach(string => {
+        this.prefilledStrings.forEach((string, index) => {
             const fret = this.correctPositions[string];
             console.log(`  String ${string}: fret ${fret}`);
-            this.fretboardDisplay.highlightPosition(string, fret);
+            // First call clears, subsequent calls don't
+            this.fretboardDisplay.highlightPosition(string, fret, index === 0);
             this.userSelections[string] = fret; // Mark as filled
         });
 
@@ -140,7 +141,7 @@ class SpotNoteGame {
 
         // Show immediate feedback
         if (isCorrect) {
-            this.fretboardDisplay.highlightPosition(string, fret);
+            this.fretboardDisplay.highlightPosition(string, fret, false); // Don't clear existing highlights
             this.userSelections[string] = fret;
             this.showFeedback(`✓ Correct! ${this.currentNote} on string ${string}`, true);
         } else {
