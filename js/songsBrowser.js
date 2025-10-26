@@ -494,6 +494,11 @@ class SongsBrowser {
     }
 
     closePdfViewer() {
+        // Exit fullscreen if active
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        }
+
         document.getElementById('pdf-viewer').style.display = 'none';
         document.querySelector('.songs-browser-container').style.display = 'flex';
 
