@@ -105,6 +105,12 @@ class MusicSheetAnalyzerOLMoOCR:
     def analyze_page_with_olmocr(self, image, page_num):
         """Extract text from page using OLMoOCR via DeepInfra."""
 
+        # DEBUG: Save image for inspection
+        debug_dir = Path("debug_images")
+        debug_dir.mkdir(exist_ok=True)
+        debug_path = debug_dir / f"page_{page_num:04d}.png"
+        image.save(debug_path)
+
         # Convert image to base64
         image_base64 = self.image_to_base64(image)
 
