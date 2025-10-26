@@ -100,15 +100,22 @@ class MusicSheetAnalyzer:
         """Extract raw text from top of page - simple extraction, no complex logic."""
 
         # Query to extract the LARGEST, most prominent text
-        extraction_query = """Look at the top portion of this page (top 20%).
-What is the LARGEST, most prominent text you can see?
+        extraction_query = """Look at this music sheet page.
 
-Ignore:
-- Small text
-- Numbers
-- Musical notation
+What is the LARGEST, BOLDEST text at the very top of the page?
 
-Write the largest text you see:"""
+This is usually the song title. It's typically:
+- Much larger than other text
+- At the very top, above everything else
+- Often in all capitals
+
+DO NOT write:
+- Small text like tempo markings (Moderately, Slow, etc.)
+- Chord symbols (Am, G7, etc.)
+- Lyrics or sheet music text
+- Musical directions (To Coda, D.S., etc.)
+
+Write ONLY the largest, boldest text you see at the top:"""
 
         response = self.model.query(image, extraction_query)["answer"].strip()
 
