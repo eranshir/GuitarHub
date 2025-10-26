@@ -169,6 +169,7 @@ class SpotNoteGame {
 
         // Move to next question after delay
         setTimeout(() => {
+            this.clearFeedback();
             this.generateQuestion();
         }, 2000);
     }
@@ -178,8 +179,16 @@ class SpotNoteGame {
         feedback.textContent = message;
         feedback.className = 'feedback show ' + (isCorrect ? 'correct' : 'incorrect');
 
-        setTimeout(() => {
-            feedback.className = 'feedback';
-        }, isCorrect ? 2000 : 1500);
+        // Only clear feedback for incorrect answers
+        if (!isCorrect) {
+            setTimeout(() => {
+                feedback.className = 'feedback';
+            }, 1500);
+        }
+    }
+
+    clearFeedback() {
+        const feedback = document.getElementById('spot-feedback');
+        feedback.className = 'feedback';
     }
 }
