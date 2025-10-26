@@ -44,7 +44,8 @@ class SongsBrowser {
             'Giant_Sheet_Music_index.json',
             'hebrew_songs_index.json',
             'Love_The_Beatles_index.json',
-            'Piano_White_Pages_index.json'
+            'Piano_White_Pages_index.json',
+            'sting_index.json'
         ];
 
         console.log('Loading book indices...');
