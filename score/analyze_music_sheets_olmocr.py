@@ -72,7 +72,51 @@ class MusicSheetAnalyzerOLMoOCR:
             raise ValueError(f"Unsupported file format: {file_ext}. Only PDF and EPUB are supported.")
 
     def load_epub_images(self, epub_path):
-        """Extract images from EPUB file."""
+        """Convert EPUB to full-page images including titles."""
+        # For EPUBs, we need to render the HTML pages to images
+        # First, convert EPUB to PDF using external tool, then extract images
+
+        print("   Converting EPUB to PDF (this preserves titles)...")
+
+        # Create temp PDF path
+        temp_pdf = epub_path.replace('.epub', '_temp.pdf')
+
+        # Use ebook-convert (from Calibre) if available
+        import subprocess
+        try:
+            subprocess.run([
+                'ebook-convert',
+                epub_path,
+                temp_pdf,
+                '--paper-size', 'letter',
+                '--pdf-page-margin-left', '36',
+                '--pdf-page-margin-right', '36',
+                '--pdf-page-margin-top', '36',
+                '--pdf-page-margin-bottom', '36'
+            ], check=True, capture_output=True)
+
+            print("   ✓ Converted to PDF")
+
+            # Now extract images from the PDF
+            images = pdf2image.convert_from_path(temp_pdf)
+
+            # Clean up temp PDF
+            import os
+            os.remove(temp_pdf)
+
+            return images
+
+        except FileNotFoundError:
+            print("   ⚠️  ebook-convert not found. Install Calibre for EPUB support.")
+            print("   Falling back to image extraction (titles may be missing)...")
+            return self.load_epub_images_fallback(epub_path)
+        except Exception as e:
+            print(f"   ⚠️  Error converting EPUB: {e}")
+            print("   Falling back to image extraction...")
+            return self.load_epub_images_fallback(epub_path)
+
+    def load_epub_images_fallback(self, epub_path):
+        """Fallback: Extract embedded images only (may miss titles)."""
         book = epub.read_epub(epub_path)
         images = []
 
