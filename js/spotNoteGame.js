@@ -96,9 +96,12 @@ class SpotNoteGame {
         }
 
         // Select which strings to pre-fill based on level
-        const stringsToFill = 6 - this.level; // Level 1 = 5 filled, Level 5 = 1 filled
+        // Level 1 = show 5 (easiest), Level 5 = show 1 (hardest)
+        const stringsToShow = 6 - this.level;
         const allStrings = [1, 2, 3, 4, 5, 6].filter(s => this.correctPositions[s] !== undefined);
-        this.prefilledStrings = this.selectRandomStrings(allStrings, stringsToFill);
+        this.prefilledStrings = this.selectRandomStrings(allStrings, stringsToShow);
+
+        console.log(`Level ${this.level}: Showing ${stringsToShow} strings, user finds ${this.level}`);
 
         // Reset user selections
         this.userSelections = {};
