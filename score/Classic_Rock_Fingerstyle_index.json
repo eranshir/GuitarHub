@@ -1,0 +1,482 @@
+{
+  "filename": "Classic_Rock_Fingerstyle.pdf",
+  "original_file": "Classic_Rock_Fingerstyle.pdf",
+  "total_pages": 81,
+  "total_songs": 16,
+  "generated_at": "2025-10-26T20:09:06.508611",
+  "processing_time": "0:02:31",
+  "songs": [
+    {
+      "title": "ANGIE",
+      "start_page": 4,
+      "end_page": 6
+    },
+    {
+      "title": "DREAM ON",
+      "start_page": 7,
+      "end_page": 11
+    },
+    {
+      "title": "BABE, I'M GONNA LEAVE YOU",
+      "start_page": 12,
+      "end_page": 17
+    },
+    {
+      "title": "BROWN EYED GIRL",
+      "start_page": 18,
+      "end_page": 26
+    },
+    {
+      "title": "DUST IN THE WIND",
+      "start_page": 27,
+      "end_page": 31
+    },
+    {
+      "title": "EVERY BREATH YOU TAKE",
+      "start_page": 32,
+      "end_page": 37
+    },
+    {
+      "title": "FIRE AND RAIN",
+      "start_page": 38,
+      "end_page": 40
+    },
+    {
+      "title": "FREE BIRD",
+      "start_page": 41,
+      "end_page": 43
+    },
+    {
+      "title": "FREE FALLIN'",
+      "start_page": 44,
+      "end_page": 47
+    },
+    {
+      "title": "IMAGINE",
+      "start_page": 48,
+      "end_page": 50
+    },
+    {
+      "title": "LAYLA",
+      "start_page": 51,
+      "end_page": 53
+    },
+    {
+      "title": "JUST THE WAY YOU ARE",
+      "start_page": 54,
+      "end_page": 57
+    },
+    {
+      "title": "NEW KID IN TOWN",
+      "start_page": 58,
+      "end_page": 64
+    },
+    {
+      "title": "WONDERFUL TONIGHT",
+      "start_page": 65,
+      "end_page": 69
+    },
+    {
+      "title": "YOUR SONG",
+      "start_page": 70,
+      "end_page": 75
+    },
+    {
+      "title": "YOU'RE IN MY HEART",
+      "start_page": 76,
+      "end_page": 81
+    }
+  ],
+  "raw_page_data": [
+    {
+      "page_number": 4,
+      "top_text": "Angie",
+      "timestamp": "2025-10-26T20:06:55.304349"
+    },
+    {
+      "page_number": 5,
+      "top_text": "Em7B",
+      "timestamp": "2025-10-26T20:06:56.717184"
+    },
+    {
+      "page_number": 6,
+      "top_text": "Am",
+      "timestamp": "2025-10-26T20:06:58.025629"
+    },
+    {
+      "page_number": 7,
+      "top_text": "Dream On",
+      "timestamp": "2025-10-26T20:06:59.382849"
+    },
+    {
+      "page_number": 8,
+      "top_text": "It went by like",
+      "timestamp": "2025-10-26T20:07:00.856868"
+    },
+    {
+      "page_number": 9,
+      "top_text": "I know",
+      "timestamp": "2025-10-26T20:07:02.217281"
+    },
+    {
+      "page_number": 10,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T20:07:03.577004"
+    },
+    {
+      "page_number": 11,
+      "top_text": "Dream on.",
+      "timestamp": "2025-10-26T20:07:04.988229"
+    },
+    {
+      "page_number": 12,
+      "top_text": "Babe, I'm Gonna Leave You",
+      "timestamp": "2025-10-26T20:07:06.681639"
+    },
+    {
+      "page_number": 13,
+      "top_text": "I said",
+      "timestamp": "2025-10-26T20:07:08.049248"
+    },
+    {
+      "page_number": 14,
+      "top_text": "I'll",
+      "timestamp": "2025-10-26T20:07:09.408705"
+    },
+    {
+      "page_number": 15,
+      "top_text": "SUM - mer comes a long.",
+      "timestamp": "2025-10-26T20:07:11.106622"
+    },
+    {
+      "page_number": 16,
+      "top_text": "I don't wanna leave you.",
+      "timestamp": "2025-10-26T20:07:12.731535"
+    },
+    {
+      "page_number": 17,
+      "top_text": "RAMBLE",
+      "timestamp": "2025-10-26T20:07:14.096359"
+    },
+    {
+      "page_number": 18,
+      "top_text": "Brown Eyed Girl",
+      "timestamp": "2025-10-26T20:07:15.571344"
+    },
+    {
+      "page_number": 19,
+      "top_text": "Laughing and a running...",
+      "timestamp": "2025-10-26T20:07:17.144785"
+    },
+    {
+      "page_number": 20,
+      "top_text": "brown-eyed",
+      "timestamp": "2025-10-26T20:07:18.565874"
+    },
+    {
+      "page_number": 21,
+      "top_text": "A",
+      "timestamp": "2025-10-26T20:07:19.876459"
+    },
+    {
+      "page_number": 22,
+      "top_text": "Dreams",
+      "timestamp": "2025-10-26T20:07:21.186316"
+    },
+    {
+      "page_number": 23,
+      "top_text": "It's on",
+      "timestamp": "2025-10-26T20:07:22.623947"
+    },
+    {
+      "page_number": 24,
+      "top_text": "Oh",
+      "timestamp": "2025-10-26T20:07:23.977152"
+    },
+    {
+      "page_number": 25,
+      "top_text": "Play -ers on - ly love you when they're play -ing...",
+      "timestamp": "2025-10-26T20:07:26.192506"
+    },
+    {
+      "page_number": 26,
+      "top_text": "D.S. al Coda",
+      "timestamp": "2025-10-26T20:07:27.906682"
+    },
+    {
+      "page_number": 27,
+      "top_text": "Dust in the Wind",
+      "timestamp": "2025-10-26T20:07:29.461156"
+    },
+    {
+      "page_number": 28,
+      "top_text": "Am",
+      "timestamp": "2025-10-26T20:07:30.884152"
+    },
+    {
+      "page_number": 29,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T20:07:32.329446"
+    },
+    {
+      "page_number": 30,
+      "top_text": "Coda",
+      "timestamp": "2025-10-26T20:07:33.835402"
+    },
+    {
+      "page_number": 31,
+      "top_text": "All we are is dust in the wind.",
+      "timestamp": "2025-10-26T20:07:35.725934"
+    },
+    {
+      "page_number": 32,
+      "top_text": "Every Breath You Take",
+      "timestamp": "2025-10-26T20:07:37.345656"
+    },
+    {
+      "page_number": 33,
+      "top_text": "Em",
+      "timestamp": "2025-10-26T20:07:38.819133"
+    },
+    {
+      "page_number": 34,
+      "top_text": "Oh, can't you see",
+      "timestamp": "2025-10-26T20:07:40.579831"
+    },
+    {
+      "page_number": 35,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T20:07:42.177699"
+    },
+    {
+      "page_number": 36,
+      "top_text": "EB",
+      "timestamp": "2025-10-26T20:07:43.683994"
+    },
+    {
+      "page_number": 37,
+      "top_text": "Coda",
+      "timestamp": "2025-10-26T20:07:45.255663"
+    },
+    {
+      "page_number": 38,
+      "top_text": "Fire and Rain",
+      "timestamp": "2025-10-26T20:07:46.871367"
+    },
+    {
+      "page_number": 39,
+      "top_text": "I've just can't remember who to send it to.",
+      "timestamp": "2025-10-26T20:07:48.983460"
+    },
+    {
+      "page_number": 40,
+      "top_text": "sun - my days that I thought would never - end.",
+      "timestamp": "2025-10-26T20:07:51.049289"
+    },
+    {
+      "page_number": 41,
+      "top_text": "Free Bird",
+      "timestamp": "2025-10-26T20:07:52.569011"
+    },
+    {
+      "page_number": 42,
+      "top_text": "I'm sorry",
+      "timestamp": "2025-10-26T20:07:54.177281"
+    },
+    {
+      "page_number": 43,
+      "top_text": "And this bird you can not change.",
+      "timestamp": "2025-10-26T20:07:56.138700"
+    },
+    {
+      "page_number": 44,
+      "top_text": "Free Fallin'",
+      "timestamp": "2025-10-26T20:07:57.783293"
+    },
+    {
+      "page_number": 45,
+      "top_text": "Csus4",
+      "timestamp": "2025-10-26T20:07:59.432500"
+    },
+    {
+      "page_number": 46,
+      "top_text": "I am",
+      "timestamp": "2025-10-26T20:08:00.977460"
+    },
+    {
+      "page_number": 47,
+      "top_text": "Yeah, I'm free.",
+      "timestamp": "2025-10-26T20:08:02.748106"
+    },
+    {
+      "page_number": 48,
+      "top_text": "Imagine",
+      "timestamp": "2025-10-26T20:08:04.234526"
+    },
+    {
+      "page_number": 49,
+      "top_text": "Em",
+      "timestamp": "2025-10-26T20:08:05.736516"
+    },
+    {
+      "page_number": 50,
+      "top_text": "dream",
+      "timestamp": "2025-10-26T20:08:07.243027"
+    },
+    {
+      "page_number": 51,
+      "top_text": "Layla",
+      "timestamp": "2025-10-26T20:08:08.801055"
+    },
+    {
+      "page_number": 52,
+      "top_text": "You've been a fool - sing me and I'll we'll",
+      "timestamp": "2025-10-26T20:08:11.040654"
+    },
+    {
+      "page_number": 53,
+      "top_text": "C.",
+      "timestamp": "2025-10-26T20:08:12.565795"
+    },
+    {
+      "page_number": 54,
+      "top_text": "Just The Way You Are",
+      "timestamp": "2025-10-26T20:08:14.267471"
+    },
+    {
+      "page_number": 55,
+      "top_text": "Bm7",
+      "timestamp": "2025-10-26T20:08:15.858209"
+    },
+    {
+      "page_number": 56,
+      "top_text": "last time, D.S. (2nd ending)",
+      "timestamp": "2025-10-26T20:08:17.928725"
+    },
+    {
+      "page_number": 57,
+      "top_text": "D.S. al 2nd Ending",
+      "timestamp": "2025-10-26T20:08:19.754788"
+    },
+    {
+      "page_number": 58,
+      "top_text": "New Kid in Town",
+      "timestamp": "2025-10-26T20:08:21.370831"
+    },
+    {
+      "page_number": 59,
+      "top_text": "E",
+      "timestamp": "2025-10-26T20:08:22.838564"
+    },
+    {
+      "page_number": 60,
+      "top_text": "CHorus",
+      "timestamp": "2025-10-26T20:08:24.378010"
+    },
+    {
+      "page_number": 61,
+      "top_text": "E",
+      "timestamp": "2025-10-26T20:08:25.946280"
+    },
+    {
+      "page_number": 62,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T20:08:27.435404"
+    },
+    {
+      "page_number": 63,
+      "top_text": "Am",
+      "timestamp": "2025-10-26T20:08:28.933354"
+    },
+    {
+      "page_number": 64,
+      "top_text": "Outro",
+      "timestamp": "2025-10-26T20:08:30.476361"
+    },
+    {
+      "page_number": 65,
+      "top_text": "WONDERFUL TONIGHT",
+      "timestamp": "2025-10-26T20:08:32.280440"
+    },
+    {
+      "page_number": 66,
+      "top_text": "Am",
+      "timestamp": "2025-10-26T20:08:33.744024"
+    },
+    {
+      "page_number": 67,
+      "top_text": "won't der of it all",
+      "timestamp": "2025-10-26T20:08:35.496214"
+    },
+    {
+      "page_number": 68,
+      "top_text": "Something",
+      "timestamp": "2025-10-26T20:08:36.959775"
+    },
+    {
+      "page_number": 69,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T20:08:38.439974"
+    },
+    {
+      "page_number": 70,
+      "top_text": "Your Song",
+      "timestamp": "2025-10-26T20:08:39.980088"
+    },
+    {
+      "page_number": 71,
+      "top_text": "I don't know it's much",
+      "timestamp": "2025-10-26T20:08:41.773672"
+    },
+    {
+      "page_number": 72,
+      "top_text": "live.",
+      "timestamp": "2025-10-26T20:08:43.302945"
+    },
+    {
+      "page_number": 73,
+      "top_text": "It may be quite simple, but now that it's done.",
+      "timestamp": "2025-10-26T20:08:45.412693"
+    },
+    {
+      "page_number": 74,
+      "top_text": "Gsus4",
+      "timestamp": "2025-10-26T20:08:47.031359"
+    },
+    {
+      "page_number": 75,
+      "top_text": "you're in the world.",
+      "timestamp": "2025-10-26T20:08:48.771563"
+    },
+    {
+      "page_number": 76,
+      "top_text": "You're in My Heart",
+      "timestamp": "2025-10-26T20:08:50.442730"
+    },
+    {
+      "page_number": 77,
+      "top_text": "The Big bos-om'd la dy with the",
+      "timestamp": "2025-10-26T20:08:52.388244"
+    },
+    {
+      "page_number": 78,
+      "top_text": "You're in my",
+      "timestamp": "2025-10-26T20:08:54.000538"
+    },
+    {
+      "page_number": 79,
+      "top_text": "CLASSICAL GUITAR PUBLICATIONS",
+      "timestamp": "2025-10-26T20:08:55.844654"
+    },
+    {
+      "page_number": 80,
+      "top_text": "Eric Clapton Fingersprint",
+      "timestamp": "2025-10-26T20:08:57.618645"
+    },
+    {
+      "page_number": 81,
+      "top_text": "CLASSIC ROCK",
+      "timestamp": "2025-10-26T20:08:59.197529"
+    }
+  ]
+}
