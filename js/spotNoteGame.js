@@ -113,11 +113,17 @@ class SpotNoteGame {
         this.fretboardDisplay.clearHighlights();
         this.fretboardDisplay.setFretRange(this.settings.minFret, this.settings.maxFret);
 
+        // Highlight pre-filled positions
+        console.log('Pre-filling strings:', this.prefilledStrings);
         this.prefilledStrings.forEach(string => {
             const fret = this.correctPositions[string];
+            console.log(`  String ${string}: fret ${fret}`);
             this.fretboardDisplay.highlightPosition(string, fret);
             this.userSelections[string] = fret; // Mark as filled
         });
+
+        console.log('User needs to find strings:',
+            [1,2,3,4,5,6].filter(s => !this.prefilledStrings.includes(s) && this.correctPositions[s] !== undefined));
     }
 
     selectRandomStrings(arr, count) {
