@@ -100,12 +100,17 @@ class SongsBrowser {
             if (e.key === 'Escape' && this.isVisible) {
                 this.closeBrowser();
             }
-            // Arrow keys for PDF navigation (when viewer is open)
+            // PDF viewer is open
             if (this.pdfDoc && document.getElementById('pdf-viewer').style.display !== 'none') {
+                // Arrow keys for navigation
                 if (e.key === 'ArrowLeft') {
                     this.prevPage();
                 } else if (e.key === 'ArrowRight') {
                     this.nextPage();
+                }
+                // 'b' key to go back to list
+                else if (e.key === 'b' || e.key === 'B') {
+                    this.closePdfViewer();
                 }
             }
         });
