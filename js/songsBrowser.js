@@ -112,6 +112,10 @@ class SongsBrowser {
                 else if (e.key === 'b' || e.key === 'B') {
                     this.closePdfViewer();
                 }
+                // 'f' key to toggle fullscreen
+                else if (e.key === 'f' || e.key === 'F') {
+                    this.toggleFullscreen();
+                }
             }
         });
 
