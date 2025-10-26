@@ -619,25 +619,25 @@
                         </div>
 
                         <div class="session-controls" id="spot-session-controls" style="display: none;">
-                            <button id="spot-pause-btn" class="pause-btn">⏸ Pause</button>
-                            <button id="spot-resume-btn" class="resume-btn" style="display: none;">▶ Resume</button>
-                            <button id="spot-stop-btn" class="stop-btn">End Session</button>
+                            <button id="spot-pause-btn" class="pause-btn" data-i18n="common.pause">⏸ Pause</button>
+                            <button id="spot-resume-btn" class="resume-btn" style="display: none;" data-i18n="common.resume">▶ Resume</button>
+                            <button id="spot-stop-btn" class="stop-btn" data-i18n="common.endSession">End Session</button>
                         </div>
 
                         <div class="feedback" id="spot-feedback"></div>
 
                         <div id="spot-start-screen" class="game-content active">
-                            <h2 class="welcome-title">Spot a Note</h2>
-                            <p class="welcome-text">Find the same note across all strings on the fretboard.</p>
-                            <button id="spot-start-btn" class="start-btn">Start Practice Session</button>
+                            <h2 class="welcome-title" data-i18n="spotNote.title">Spot a Note</h2>
+                            <p class="welcome-text" data-i18n="spotNote.welcome">Find the same note across all strings on the fretboard.</p>
+                            <button id="spot-start-btn" class="start-btn" data-i18n="spotNote.startButton">Start Practice Session</button>
                         </div>
 
                         <div id="spot-game" class="game-content">
-                            <h2 class="question">Find all instances of this note:</h2>
+                            <h2 class="question" data-i18n="spotNote.question">Find all instances of this note:</h2>
                             <div class="note-display">
                                 <span class="note-name" id="spot-target-note">-</span>
                             </div>
-                            <p class="instruction-text">Click on the fretboard to mark the note on each string:</p>
+                            <p class="instruction-text" data-i18n="spotNote.instruction">Click on the fretboard to mark the note on each string:</p>
                             <div class="fretboard-container">
                                 <div class="fretboard" id="fretboard-spot-note">
                                     <!-- Fretboard will be generated dynamically -->
@@ -647,25 +647,25 @@
                     </div>
 
                     <div class="settings-panel">
-                        <h3>Settings</h3>
+                        <h3 data-i18n="common.settings">Settings</h3>
                         <div class="setting-group">
-                            <label>Difficulty Level:</label>
+                            <label data-i18n="spotNote.settings.difficultyLevel">Difficulty Level:</label>
                             <select id="spot-level">
-                                <option value="1">Level 1 - Find 1 string (5 shown)</option>
-                                <option value="2">Level 2 - Find 2 strings (4 shown)</option>
-                                <option value="3" selected>Level 3 - Find 3 strings (3 shown)</option>
-                                <option value="4">Level 4 - Find 4 strings (2 shown)</option>
-                                <option value="5">Level 5 - Find 5 strings (1 shown)</option>
+                                <option value="1" data-i18n="spotNote.settings.level1">Level 1 - Find 1 string (5 shown)</option>
+                                <option value="2" data-i18n="spotNote.settings.level2">Level 2 - Find 2 strings (4 shown)</option>
+                                <option value="3" selected data-i18n="spotNote.settings.level3">Level 3 - Find 3 strings (3 shown)</option>
+                                <option value="4" data-i18n="spotNote.settings.level4">Level 4 - Find 4 strings (2 shown)</option>
+                                <option value="5" data-i18n="spotNote.settings.level5">Level 5 - Find 5 strings (1 shown)</option>
                             </select>
                         </div>
                         <div class="setting-group">
                             <label>
                                 <input type="checkbox" id="spot-include-sharps" checked>
-                                Include sharps/flats
+                                <span data-i18n="spotNote.settings.includeSharps">Include sharps/flats</span>
                             </label>
                         </div>
                         <div class="setting-group">
-                            <label>Fret range:</label>
+                            <label data-i18n="spotNote.settings.fretRange">Fret range:</label>
                             <input type="number" id="spot-min-fret" min="0" max="24" value="0"> -
                             <input type="number" id="spot-max-fret" min="0" max="24" value="12">
                         </div>
@@ -716,13 +716,13 @@
         <div id="songs-browser-overlay" class="songs-browser-overlay" style="display: none;">
             <div class="songs-browser-container">
                 <div class="songs-browser-header">
-                    <h2>Songs Browser</h2>
-                    <button id="close-songs-browser" class="close-browser-btn">✕</button>
+                    <h2 data-i18n="songsBrowser.title">Songs Browser</h2>
+                    <button id="close-songs-browser" class="close-browser-btn" data-i18n="songsBrowser.close">✕</button>
                 </div>
 
                 <div class="songs-browser-tabs">
-                    <button class="browser-tab active" data-tab="browse">Browse by Book</button>
-                    <button class="browser-tab" data-tab="search">Search Songs</button>
+                    <button class="browser-tab active" data-tab="browse" data-i18n="songsBrowser.tabs.browse">Browse by Book</button>
+                    <button class="browser-tab" data-tab="search" data-i18n="songsBrowser.tabs.search">Search Songs</button>
                 </div>
 
                 <div class="songs-browser-content">
@@ -730,11 +730,11 @@
                     <div id="browse-tab" class="browser-tab-content active">
                         <div class="browse-controls">
                             <select id="book-selector" class="book-selector">
-                                <option value="">Select a book...</option>
+                                <option value="" data-i18n="songsBrowser.browse.selectBook">Select a book...</option>
                             </select>
                             <select id="sort-selector" class="sort-selector">
-                                <option value="original">Original Order</option>
-                                <option value="alphabetical">Alphabetical</option>
+                                <option value="original" data-i18n="songsBrowser.browse.originalOrder">Original Order</option>
+                                <option value="alphabetical" data-i18n="songsBrowser.browse.alphabetical">Alphabetical</option>
                             </select>
                         </div>
                         <div id="songs-list" class="songs-list">
@@ -745,7 +745,7 @@
                     <!-- Search Tab -->
                     <div id="search-tab" class="browser-tab-content">
                         <div class="search-controls">
-                            <input type="text" id="song-search-input" class="song-search-input" placeholder="Search for a song...">
+                            <input type="text" id="song-search-input" class="song-search-input" data-i18n-placeholder="songsBrowser.search.placeholder" placeholder="Search for a song...">
                             <div id="search-autocomplete" class="search-autocomplete" style="display: none;">
                                 <!-- Autocomplete suggestions will appear here -->
                             </div>
@@ -761,14 +761,14 @@
             <div id="pdf-viewer" class="pdf-viewer" style="display: none;">
                 <div class="pdf-viewer-header">
                     <div class="pdf-info">
-                        <button id="back-to-list" class="back-btn">← Back to List</button>
+                        <button id="back-to-list" class="back-btn" data-i18n="songsBrowser.viewer.backToList">← Back to List</button>
                         <h3 id="current-song-title">Song Title</h3>
                         <span id="current-page-info">Page 1 of 3</span>
-                        <button id="fullscreen-btn" class="fullscreen-btn">⛶ Fullscreen</button>
+                        <button id="fullscreen-btn" class="fullscreen-btn" data-i18n="songsBrowser.viewer.fullscreen">⛶ Fullscreen</button>
                     </div>
                 </div>
                 <div class="pdf-viewer-content">
-                    <button id="exit-fullscreen-btn" class="exit-fullscreen-btn">✕ Exit Fullscreen</button>
+                    <button id="exit-fullscreen-btn" class="exit-fullscreen-btn" data-i18n="songsBrowser.viewer.exitFullscreen">✕ Exit Fullscreen</button>
                     <button id="prev-page" class="nav-btn nav-btn-left">‹</button>
                     <canvas id="pdf-canvas" class="pdf-canvas"></canvas>
                     <button id="next-page" class="nav-btn nav-btn-right">›</button>

@@ -185,6 +185,52 @@
       "shellMin7b5": "Min7♭5"
     }
   },
+  "spotNote": {
+    "title": "זהה תו",
+    "welcome": "מצא את אותו תו על כל המיתרים בלוח הסריגים.",
+    "startButton": "התחל אימון",
+    "question": "מצא את כל המופעים של תו זה:",
+    "instruction": "לחץ על לוח הסריגים כדי לסמן את התו על כל מיתר:",
+    "settings": {
+      "difficultyLevel": "רמת קושי:",
+      "level1": "רמה 1 - מצא 1 מיתר (5 מוצגים)",
+      "level2": "רמה 2 - מצא 2 מיתרים (4 מוצגים)",
+      "level3": "רמה 3 - מצא 3 מיתרים (3 מוצגים)",
+      "level4": "רמה 4 - מצא 4 מיתרים (2 מוצגים)",
+      "level5": "רמה 5 - מצא 5 מיתרים (1 מוצג)",
+      "includeSharps": "כלול דיאזים/במולים",
+      "fretRange": "טווח סריגים:"
+    },
+    "feedback": {
+      "correct": "✓ נכון! {note} על מיתר {string}",
+      "incorrect": "✗ שגוי! זה {actualNote}. {targetNote} נמצא בסריג {fret}",
+      "complete": "🎉 מושלם! מצאת את כל המופעים של {note}!"
+    }
+  },
+  "songsBrowser": {
+    "title": "דפדפן שירים",
+    "close": "✕",
+    "tabs": {
+      "browse": "עיון לפי ספר",
+      "search": "חיפוש שירים"
+    },
+    "browse": {
+      "selectBook": "בחר ספר...",
+      "originalOrder": "סדר מקורי",
+      "alphabetical": "לפי א-ב",
+      "pages": "עמודים {start}-{end}"
+    },
+    "search": {
+      "placeholder": "חפש שיר...",
+      "noResults": "לא נמצאו שירים"
+    },
+    "viewer": {
+      "backToList": "← חזרה לרשימה",
+      "page": "עמוד {current} מתוך {total}",
+      "fullscreen": "⛶ מסך מלא",
+      "exitFullscreen": "✕ יציאה ממסך מלא"
+    }
+  },
   "statistics": {
     "title": "ההתקדמות שלך",
     "totalSessions": "סך אימונים",

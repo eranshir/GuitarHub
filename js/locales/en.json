@@ -185,6 +185,52 @@
       "shellMin7b5": "Min7♭5"
     }
   },
+  "spotNote": {
+    "title": "Spot a Note",
+    "welcome": "Find the same note across all strings on the fretboard.",
+    "startButton": "Start Practice Session",
+    "question": "Find all instances of this note:",
+    "instruction": "Click on the fretboard to mark the note on each string:",
+    "settings": {
+      "difficultyLevel": "Difficulty Level:",
+      "level1": "Level 1 - Find 1 string (5 shown)",
+      "level2": "Level 2 - Find 2 strings (4 shown)",
+      "level3": "Level 3 - Find 3 strings (3 shown)",
+      "level4": "Level 4 - Find 4 strings (2 shown)",
+      "level5": "Level 5 - Find 5 strings (1 shown)",
+      "includeSharps": "Include sharps/flats",
+      "fretRange": "Fret range:"
+    },
+    "feedback": {
+      "correct": "✓ Correct! {note} on string {string}",
+      "incorrect": "✗ Wrong! That's {actualNote}. {targetNote} is at fret {fret}",
+      "complete": "🎉 Perfect! You found all instances of {note}!"
+    }
+  },
+  "songsBrowser": {
+    "title": "Songs Browser",
+    "close": "✕",
+    "tabs": {
+      "browse": "Browse by Book",
+      "search": "Search Songs"
+    },
+    "browse": {
+      "selectBook": "Select a book...",
+      "originalOrder": "Original Order",
+      "alphabetical": "Alphabetical",
+      "pages": "Pages {start}-{end}"
+    },
+    "search": {
+      "placeholder": "Search for a song...",
+      "noResults": "No songs found"
+    },
+    "viewer": {
+      "backToList": "← Back to List",
+      "page": "Page {current} of {total}",
+      "fullscreen": "⛶ Fullscreen",
+      "exitFullscreen": "✕ Exit Fullscreen"
+    }
+  },
   "statistics": {
     "title": "Your Progress",
     "totalSessions": "Total Sessions",

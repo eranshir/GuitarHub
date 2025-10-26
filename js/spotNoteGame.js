@@ -143,10 +143,17 @@ class SpotNoteGame {
         if (isCorrect) {
             this.fretboardDisplay.highlightPosition(string, fret, false); // Don't clear existing highlights
             this.userSelections[string] = fret;
-            this.showFeedback(`✓ Correct! ${this.currentNote} on string ${string}`, true);
+            this.showFeedback(window.i18n.t('spotNote.feedback.correct', {
+                note: this.currentNote,
+                string: string
+            }), true);
         } else {
             const actualNote = this.guitar.getNoteAtFret(string, fret);
-            this.showFeedback(`✗ Wrong! That's ${actualNote}. ${this.currentNote} is at fret ${correctFret}`, false);
+            this.showFeedback(window.i18n.t('spotNote.feedback.incorrect', {
+                actualNote: actualNote,
+                targetNote: this.currentNote,
+                fret: correctFret
+            }), false);
             this.score.incorrect++;
             this.score.streak = 0;
             document.getElementById('spot-incorrect-count').textContent = this.score.incorrect;
@@ -172,7 +179,9 @@ class SpotNoteGame {
         document.getElementById('spot-correct-count').textContent = this.score.correct;
         document.getElementById('spot-streak-count').textContent = this.score.streak;
 
-        this.showFeedback(`🎉 Perfect! You found all instances of ${this.currentNote}!`, true);
+        this.showFeedback(window.i18n.t('spotNote.feedback.complete', {
+            note: this.currentNote
+        }), true);
 
         // Move to next question after delay
         setTimeout(() => {
