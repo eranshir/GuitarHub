@@ -12,6 +12,8 @@ from PIL import Image
 import pdf2image
 from openai import OpenAI
 import tiktoken
+from ebooklib import epub
+from io import BytesIO
 
 class MusicSheetAnalyzer:
     def __init__(self, pdf_path, model):
@@ -58,6 +60,37 @@ class MusicSheetAnalyzer:
     def format_time(self, seconds):
         """Format seconds into readable time string."""
         return str(timedelta(seconds=int(seconds)))
+
+    def load_document_images(self, file_path):
+        """Load images from PDF or EPUB file."""
+        file_ext = Path(file_path).suffix.lower()
+
+        if file_ext == '.pdf':
+            return pdf2image.convert_from_path(file_path)
+        elif file_ext == '.epub':
+            return self.load_epub_images(file_path)
+        else:
+            raise ValueError(f"Unsupported file format: {file_ext}. Only PDF and EPUB are supported.")
+
+    def load_epub_images(self, epub_path):
+        """Extract images from EPUB file."""
+        book = epub.read_epub(epub_path)
+        images = []
+
+        # Get all image items from the EPUB
+        for item in book.get_items():
+            if item.get_type() == epub.ITEM_IMAGE:
+                # Convert image bytes to PIL Image
+                img_data = item.get_content()
+                img = Image.open(BytesIO(img_data))
+
+                # Convert to RGB if necessary
+                if img.mode != 'RGB':
+                    img = img.convert('RGB')
+
+                images.append(img)
+
+        return images
 
     def analyze_page_for_song(self, image, page_num):
         """Extract raw text from top of page - simple extraction, no complex logic."""
@@ -260,9 +293,9 @@ Respond with ONLY the JSON array, no other text."""
             if start_page_override > 1:
                 print(f"⏩ Skipping pages 1-{start_page_override - 1}")
 
-        # Convert PDF to images
-        print("\n📄 Converting PDF to images...")
-        images = pdf2image.convert_from_path(self.pdf_path)
+        # Convert document to images (PDF or EPUB)
+        print(f"\n📄 Converting document to images...")
+        images = self.load_document_images(self.pdf_path)
         total_pages = len(images)
         print(f"✓ Found {total_pages} pages\n")
 
@@ -345,8 +378,9 @@ Respond with ONLY the JSON array, no other text."""
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python analyze_music_sheets.py <pdf_file> [--start-page N]")
-        print("\nThis script analyzes music sheet PDFs and creates an index of songs.")
+        print("Usage: python analyze_music_sheets.py <pdf_or_epub_file> [--start-page N]")
+        print("\nThis script analyzes music sheet PDFs/EPUBs and creates an index of songs.")
+        print("Supports both PDF and EPUB formats.")
         print("It tracks progress and can resume if interrupted.")
         print("\nOptions:")
         print("  --start-page N    Start analysis from page N (default: 1)")
@@ -371,8 +405,8 @@ def main():
         print(f"❌ Error: File '{pdf_path}' not found")
         sys.exit(1)
 
-    if not pdf_path.lower().endswith('.pdf'):
-        print(f"❌ Error: File must be a PDF")
+    if not (pdf_path.lower().endswith('.pdf') or pdf_path.lower().endswith('.epub')):
+        print(f"❌ Error: File must be a PDF or EPUB")
         sys.exit(1)
 
     print("="*50)

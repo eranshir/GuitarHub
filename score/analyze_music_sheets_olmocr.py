@@ -9,6 +9,8 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import pdf2image
 from openai import OpenAI
+from ebooklib import epub
+from PIL import Image as PILImage
 import tiktoken
 
 class MusicSheetAnalyzerOLMoOCR:
@@ -57,6 +59,37 @@ class MusicSheetAnalyzerOLMoOCR:
     def format_time(self, seconds):
         """Format seconds into readable time string."""
         return str(timedelta(seconds=int(seconds)))
+
+    def load_document_images(self, file_path):
+        """Load images from PDF or EPUB file."""
+        file_ext = Path(file_path).suffix.lower()
+
+        if file_ext == '.pdf':
+            return pdf2image.convert_from_path(file_path)
+        elif file_ext == '.epub':
+            return self.load_epub_images(file_path)
+        else:
+            raise ValueError(f"Unsupported file format: {file_ext}. Only PDF and EPUB are supported.")
+
+    def load_epub_images(self, epub_path):
+        """Extract images from EPUB file."""
+        book = epub.read_epub(epub_path)
+        images = []
+
+        # Get all image items from the EPUB
+        for item in book.get_items():
+            if item.get_type() == epub.ITEM_IMAGE:
+                # Convert image bytes to PIL Image
+                img_data = item.get_content()
+                img = PILImage.open(BytesIO(img_data))
+
+                # Convert to RGB if necessary
+                if img.mode != 'RGB':
+                    img = img.convert('RGB')
+
+                images.append(img)
+
+        return images
 
     def image_to_base64(self, image):
         """Convert PIL Image to base64 string."""
@@ -295,9 +328,9 @@ Respond with ONLY the JSON array, no other text."""
             if start_page_override > 1:
                 print(f"⏩ Skipping pages 1-{start_page_override - 1}")
 
-        # Convert PDF to images
-        print("\n📄 Converting PDF to images...")
-        images = pdf2image.convert_from_path(self.pdf_path)
+        # Convert document to images (PDF or EPUB)
+        print(f"\n📄 Converting document to images...")
+        images = self.load_document_images(self.pdf_path)
         total_pages = len(images)
         print(f"✓ Found {total_pages} pages\n")
 
@@ -380,8 +413,9 @@ Respond with ONLY the JSON array, no other text."""
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python analyze_music_sheets_olmocr.py <pdf_file> [--start-page N]")
-        print("\nThis script analyzes music sheet PDFs using OLMoOCR (supports Hebrew).")
+        print("Usage: python analyze_music_sheets_olmocr.py <pdf_or_epub_file> [--start-page N]")
+        print("\nThis script analyzes music sheet PDFs/EPUBs using OLMoOCR (supports Hebrew).")
+        print("Supports both PDF and EPUB formats.")
         print("It tracks progress and can resume if interrupted.")
         print("\nOptions:")
         print("  --start-page N    Start analysis from page N (default: 1)")
@@ -409,8 +443,8 @@ def main():
         print(f"❌ Error: File '{pdf_path}' not found")
         sys.exit(1)
 
-    if not pdf_path.lower().endswith('.pdf'):
-        print(f"❌ Error: File must be a PDF")
+    if not (pdf_path.lower().endswith('.pdf') or pdf_path.lower().endswith('.epub')):
+        print(f"❌ Error: File must be a PDF or EPUB")
         sys.exit(1)
 
     # Check for API keys
