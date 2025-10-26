@@ -1,0 +1,2672 @@
+{
+  "filename": "100_popular_fingerpicking.pdf",
+  "total_pages": 439,
+  "total_songs": 96,
+  "generated_at": "2025-10-26T15:08:58.919603",
+  "processing_time": "0:12:43",
+  "songs": [
+    {
+      "title": "Ain't No Sunshine",
+      "start_page": 16,
+      "end_page": 20
+    },
+    {
+      "title": "Babe, I'm Gonna Leave You",
+      "start_page": 21,
+      "end_page": 24
+    },
+    {
+      "title": "Blackbird",
+      "start_page": 25,
+      "end_page": 29
+    },
+    {
+      "title": "The Boxer",
+      "start_page": 30,
+      "end_page": 36
+    },
+    {
+      "title": "Brave",
+      "start_page": 37,
+      "end_page": 40
+    },
+    {
+      "title": "Careless Whisper",
+      "start_page": 41,
+      "end_page": 45
+    },
+    {
+      "title": "Circle Of Life",
+      "start_page": 46,
+      "end_page": 48
+    },
+    {
+      "title": "City Of Stars",
+      "start_page": 49,
+      "end_page": 52
+    },
+    {
+      "title": "Classical Gas",
+      "start_page": 53,
+      "end_page": 58
+    },
+    {
+      "title": "Come Sunday",
+      "start_page": 59,
+      "end_page": 61
+    },
+    {
+      "title": "Crazy",
+      "start_page": 62,
+      "end_page": 66
+    },
+    {
+      "title": "Creep",
+      "start_page": 67,
+      "end_page": 70
+    },
+    {
+      "title": "Danny's Song",
+      "start_page": 71,
+      "end_page": 74
+    },
+    {
+      "title": "Demons",
+      "start_page": 75,
+      "end_page": 78
+    },
+    {
+      "title": "Don't Think Twice, It's All Right",
+      "start_page": 79,
+      "end_page": 82
+    },
+    {
+      "title": "Dream On",
+      "start_page": 83,
+      "end_page": 88
+    },
+    {
+      "title": "Dust In The Wind",
+      "start_page": 89,
+      "end_page": 92
+    },
+    {
+      "title": "Every Breath You Take",
+      "start_page": 93,
+      "end_page": 96
+    },
+    {
+      "title": "Everybody Hurts",
+      "start_page": 97,
+      "end_page": 100
+    },
+    {
+      "title": "Final Countdown",
+      "start_page": 101,
+      "end_page": 103
+    },
+    {
+      "title": "Good Riddance Time Of Your Life",
+      "start_page": 104,
+      "end_page": 106
+    },
+    {
+      "title": "Fire And Rain",
+      "start_page": 107,
+      "end_page": 112
+    },
+    {
+      "title": "Free Fallin'",
+      "start_page": 113,
+      "end_page": 116
+    },
+    {
+      "title": "From A Distance",
+      "start_page": 117,
+      "end_page": 120
+    },
+    {
+      "title": "Fur Elise",
+      "start_page": 121,
+      "end_page": 122
+    },
+    {
+      "title": "Glory Of Love",
+      "start_page": 123,
+      "end_page": 128
+    },
+    {
+      "title": "Goodbye Pork Pie Hat",
+      "start_page": 129,
+      "end_page": 129
+    },
+    {
+      "title": "He's A Pirate",
+      "start_page": 130,
+      "end_page": 132
+    },
+    {
+      "title": "Havana",
+      "start_page": 133,
+      "end_page": 136
+    },
+    {
+      "title": "Hey, Soul Sister",
+      "start_page": 137,
+      "end_page": 140
+    },
+    {
+      "title": "Hey There Delilah",
+      "start_page": 141,
+      "end_page": 146
+    },
+    {
+      "title": "Homeward Bound",
+      "start_page": 147,
+      "end_page": 149
+    },
+    {
+      "title": "Hope I Don't Fall In Love With You",
+      "start_page": 150,
+      "end_page": 152
+    },
+    {
+      "title": "The House Of The Rising Sun",
+      "start_page": 153,
+      "end_page": 156
+    },
+    {
+      "title": "I Will",
+      "start_page": 157,
+      "end_page": 160
+    },
+    {
+      "title": "I'm Not The Only One",
+      "start_page": 161,
+      "end_page": 164
+    },
+    {
+      "title": "I'm Yours",
+      "start_page": 165,
+      "end_page": 170
+    },
+    {
+      "title": "Imagine",
+      "start_page": 171,
+      "end_page": 174
+    },
+    {
+      "title": "Iris",
+      "start_page": 175,
+      "end_page": 178
+    },
+    {
+      "title": "Is There Anybody Out There?",
+      "start_page": 179,
+      "end_page": 180
+    },
+    {
+      "title": "James Bond Theme",
+      "start_page": 181,
+      "end_page": 183
+    },
+    {
+      "title": "Julia",
+      "start_page": 184,
+      "end_page": 188
+    },
+    {
+      "title": "Lean On Me",
+      "start_page": 189,
+      "end_page": 191
+    },
+    {
+      "title": "Let Her Go",
+      "start_page": 192,
+      "end_page": 196
+    },
+    {
+      "title": "Let It Be",
+      "start_page": 197,
+      "end_page": 200
+    },
+    {
+      "title": "Listen To Your Heart",
+      "start_page": 201,
+      "end_page": 203
+    },
+    {
+      "title": "Mandy",
+      "start_page": 204,
+      "end_page": 206
+    },
+    {
+      "title": "The Long And Winding Road",
+      "start_page": 207,
+      "end_page": 210
+    },
+    {
+      "title": "Love Will Keep Us Alive",
+      "start_page": 211,
+      "end_page": 214
+    },
+    {
+      "title": "Love Yourself",
+      "start_page": 215,
+      "end_page": 218
+    },
+    {
+      "title": "Marrakesh Express",
+      "start_page": 219,
+      "end_page": 224
+    },
+    {
+      "title": "Mrs. Robinson",
+      "start_page": 225,
+      "end_page": 231
+    },
+    {
+      "title": "More Than Words",
+      "start_page": 232,
+      "end_page": 236
+    },
+    {
+      "title": "Nothing Else Matters",
+      "start_page": 237,
+      "end_page": 242
+    },
+    {
+      "title": "November Rain",
+      "start_page": 243,
+      "end_page": 251
+    },
+    {
+      "title": "Peaceful Easy Feeling",
+      "start_page": 252,
+      "end_page": 256
+    },
+    {
+      "title": "Octopus's Garden",
+      "start_page": 257,
+      "end_page": 262
+    },
+    {
+      "title": "One More Night",
+      "start_page": 263,
+      "end_page": 266
+    },
+    {
+      "title": "Open Arms",
+      "start_page": 267,
+      "end_page": 270
+    },
+    {
+      "title": "Operator That's Not The Way It Feels",
+      "start_page": 271,
+      "end_page": 274
+    },
+    {
+      "title": "People Get Ready",
+      "start_page": 275,
+      "end_page": 284
+    },
+    {
+      "title": "Redemption Song",
+      "start_page": 285,
+      "end_page": 289
+    },
+    {
+      "title": "Scarborough FairCanticle",
+      "start_page": 290,
+      "end_page": 292
+    },
+    {
+      "title": "Ribbon In The Sky",
+      "start_page": 293,
+      "end_page": 296
+    },
+    {
+      "title": "Right Here Waiting",
+      "start_page": 297,
+      "end_page": 300
+    },
+    {
+      "title": "Say You, Say Me",
+      "start_page": 301,
+      "end_page": 304
+    },
+    {
+      "title": "Shape Of My Heart",
+      "start_page": 305,
+      "end_page": 309
+    },
+    {
+      "title": "Some Nights",
+      "start_page": 310,
+      "end_page": 314
+    },
+    {
+      "title": "Shape Of You",
+      "start_page": 315,
+      "end_page": 320
+    },
+    {
+      "title": "Shes Got A Way",
+      "start_page": 321,
+      "end_page": 324
+    },
+    {
+      "title": "Skyfall",
+      "start_page": 325,
+      "end_page": 330
+    },
+    {
+      "title": "Smells Like Teen Spirit",
+      "start_page": 331,
+      "end_page": 334
+    },
+    {
+      "title": "The Sound Of Silence",
+      "start_page": 335,
+      "end_page": 339
+    },
+    {
+      "title": "Stay With Me",
+      "start_page": 340,
+      "end_page": 342
+    },
+    {
+      "title": "Stop This Train",
+      "start_page": 343,
+      "end_page": 347
+    },
+    {
+      "title": "Take Me Home, Country Roads",
+      "start_page": 348,
+      "end_page": 351
+    },
+    {
+      "title": "Yesterday",
+      "start_page": 352,
+      "end_page": 355
+    },
+    {
+      "title": "Tears In The Rain",
+      "start_page": 356,
+      "end_page": 358
+    },
+    {
+      "title": "Thinking Out Loud",
+      "start_page": 359,
+      "end_page": 362
+    },
+    {
+      "title": "A Thousand Years",
+      "start_page": 363,
+      "end_page": 368
+    },
+    {
+      "title": "Three Little Birds",
+      "start_page": 369,
+      "end_page": 372
+    },
+    {
+      "title": "Time After Time",
+      "start_page": 373,
+      "end_page": 377
+    },
+    {
+      "title": "Time In A Bottle",
+      "start_page": 378,
+      "end_page": 380
+    },
+    {
+      "title": "Unchained Melody",
+      "start_page": 381,
+      "end_page": 383
+    },
+    {
+      "title": "We Are The Champions",
+      "start_page": 384,
+      "end_page": 388
+    },
+    {
+      "title": "Wagon Wheel",
+      "start_page": 389,
+      "end_page": 392
+    },
+    {
+      "title": "When I Was Your Man",
+      "start_page": 393,
+      "end_page": 398
+    },
+    {
+      "title": "Wild World",
+      "start_page": 399,
+      "end_page": 402
+    },
+    {
+      "title": "With Or Without You",
+      "start_page": 403,
+      "end_page": 407
+    },
+    {
+      "title": "Wonderful Tonight",
+      "start_page": 408,
+      "end_page": 410
+    },
+    {
+      "title": "Wonderwall",
+      "start_page": 411,
+      "end_page": 415
+    },
+    {
+      "title": "Yesterday",
+      "start_page": 416,
+      "end_page": 418
+    },
+    {
+      "title": "You'll Be In My Heart",
+      "start_page": 419,
+      "end_page": 424
+    },
+    {
+      "title": "You've Got A Friend",
+      "start_page": 425,
+      "end_page": 429
+    },
+    {
+      "title": "You've Got To Hide Your Love Away",
+      "start_page": 430,
+      "end_page": 432
+    },
+    {
+      "title": "Your Song",
+      "start_page": 433,
+      "end_page": 439
+    }
+  ],
+  "raw_page_data": [
+    {
+      "page_number": 4,
+      "top_text": "I bless the rains down in Africa.",
+      "timestamp": "2025-10-26T14:45:40.621054"
+    },
+    {
+      "page_number": 5,
+      "top_text": "I bless the rains down in Africa.",
+      "timestamp": "2025-10-26T14:45:41.941966"
+    },
+    {
+      "page_number": 6,
+      "top_text": "Ain't no sunshine when she's gone.",
+      "timestamp": "2025-10-26T14:45:42.820164"
+    },
+    {
+      "page_number": 7,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T14:45:43.646717"
+    },
+    {
+      "page_number": 8,
+      "top_text": "Ain't no sunshine when she's gone, and this house just ain't no home any time she goes away.",
+      "timestamp": "2025-10-26T14:45:44.994089"
+    },
+    {
+      "page_number": 9,
+      "top_text": "I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know",
+      "timestamp": "2025-10-26T14:45:49.225115"
+    },
+    {
+      "page_number": 10,
+      "top_text": "Ain't no sunshine when she's away.",
+      "timestamp": "2025-10-26T14:45:50.278142"
+    },
+    {
+      "page_number": 11,
+      "top_text": "Intro\nModerately slow",
+      "timestamp": "2025-10-26T14:45:51.179547"
+    },
+    {
+      "page_number": 12,
+      "top_text": "She's coming in twelve thirty flight.\nI stopped an old man along the way,\nMoon-lit wings reflect the stars that guide me towards salient words or ancients.",
+      "timestamp": "2025-10-26T14:58:11.990562"
+    },
+    {
+      "page_number": 13,
+      "top_text": "It's gonna take a lot to drag me away from you.",
+      "timestamp": "2025-10-26T14:58:13.514332"
+    },
+    {
+      "page_number": 14,
+      "top_text": "I bless the rains down in Africa.",
+      "timestamp": "2025-10-26T14:58:14.860350"
+    },
+    {
+      "page_number": 15,
+      "top_text": "I bless the rains down in Africa.",
+      "timestamp": "2025-10-26T14:58:16.194815"
+    },
+    {
+      "page_number": 16,
+      "top_text": "Ain't No Sunshine",
+      "timestamp": "2025-10-26T14:58:17.433441"
+    },
+    {
+      "page_number": 17,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T14:58:18.659170"
+    },
+    {
+      "page_number": 18,
+      "top_text": "Ain't no sunshine when she's gone, and this house just ain't no home any time she goes away.",
+      "timestamp": "2025-10-26T14:58:20.118071"
+    },
+    {
+      "page_number": 19,
+      "top_text": "I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know, I know",
+      "timestamp": "2025-10-26T14:58:24.414734"
+    },
+    {
+      "page_number": 20,
+      "top_text": "Ain't no sunshine when she's away.",
+      "timestamp": "2025-10-26T14:58:25.734203"
+    },
+    {
+      "page_number": 21,
+      "top_text": "Babe, I'm Gonna Leave You",
+      "timestamp": "2025-10-26T14:58:27.065344"
+    },
+    {
+      "page_number": 22,
+      "top_text": "baby, you know I'm gonna leave you.\nI'll leave you when the summer time,\nleave you when the summer comes a rollin'.\nLeave you when the summer comes a -",
+      "timestamp": "2025-10-26T14:58:28.616644"
+    },
+    {
+      "page_number": 23,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T14:58:29.968059"
+    },
+    {
+      "page_number": 24,
+      "top_text": "baby, baby, I won't be there.",
+      "timestamp": "2025-10-26T14:58:31.440066"
+    },
+    {
+      "page_number": 25,
+      "top_text": "Blackbird",
+      "timestamp": "2025-10-26T14:58:32.704199"
+    },
+    {
+      "page_number": 26,
+      "top_text": "To Coda 2 t,",
+      "timestamp": "2025-10-26T14:58:34.149094"
+    },
+    {
+      "page_number": 27,
+      "top_text": "Blackbird",
+      "timestamp": "2025-10-26T14:58:35.597135"
+    },
+    {
+      "page_number": 28,
+      "top_text": "Coda 1",
+      "timestamp": "2025-10-26T14:58:36.901723"
+    },
+    {
+      "page_number": 29,
+      "top_text": "Coda 2",
+      "timestamp": "2025-10-26T14:58:38.199459"
+    },
+    {
+      "page_number": 30,
+      "top_text": "The Boxer",
+      "timestamp": "2025-10-26T14:58:39.517619"
+    },
+    {
+      "page_number": 31,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T14:58:40.797743"
+    },
+    {
+      "page_number": 32,
+      "top_text": "lie, lie, la, lie.",
+      "timestamp": "2025-10-26T14:58:42.154087"
+    },
+    {
+      "page_number": 33,
+      "top_text": "just a come-on from the whores on Seventh Avenue.",
+      "timestamp": "2025-10-26T14:58:43.470113"
+    },
+    {
+      "page_number": 34,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T14:58:44.730390"
+    },
+    {
+      "page_number": 35,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T14:58:46.044115"
+    },
+    {
+      "page_number": 36,
+      "top_text": "Outro-Chorus",
+      "timestamp": "2025-10-26T14:58:47.578258"
+    },
+    {
+      "page_number": 37,
+      "top_text": "Brave",
+      "timestamp": "2025-10-26T14:58:48.863431"
+    },
+    {
+      "page_number": 38,
+      "top_text": "Nothin's gonna hurt you the way that words do when they settle 'neath your skin,\nMaybe there's a way out of the cage where you live.\nkept on the inside and no sunlight. Sometimes a shadow\nMay be one of these days you can let the light\nwins.\nBut I wonder what would happen if you\nhow big your brave is.",
+      "timestamp": "2025-10-26T14:58:50.739233"
+    },
+    {
+      "page_number": 39,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T14:58:52.068587"
+    },
+    {
+      "page_number": 40,
+      "top_text": "I wanna see you be brave.",
+      "timestamp": "2025-10-26T14:58:53.443117"
+    },
+    {
+      "page_number": 41,
+      "top_text": "Careless Whisper",
+      "timestamp": "2025-10-26T14:58:54.727874"
+    },
+    {
+      "page_number": 42,
+      "top_text": "take your hand and lead you to the dance floor.\ncareless whisper of a good friend.\n\nAs the music dies,\nTo the heart and mind,\nsomething in your eyes\nignorance is kind.\n\ncalls to mind the silver screen and you're its sad good-byes.\nThere's no comfort in the truth, pain is all you'll find.\n\nI'm never gonna dance again,\nguilty feet have got no rhythm",
+      "timestamp": "2025-10-26T14:58:56.620996"
+    },
+    {
+      "page_number": 43,
+      "top_text": "Though it's easy to pretend, I know you're not a fool.\nI should have known better than to cheat a friend, and waste a chance that I've been given.\n\nSo, I'm never gonna dance again, the way I danced with you.",
+      "timestamp": "2025-10-26T14:58:58.281100"
+    },
+    {
+      "page_number": 44,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T14:58:59.785428"
+    },
+    {
+      "page_number": 45,
+      "top_text": "could have lived this dance for ev - er, but now who's gon - na dance with me?",
+      "timestamp": "2025-10-26T14:59:01.144202"
+    },
+    {
+      "page_number": 46,
+      "top_text": "Circle Of Life\nfrom THE LION KING\nMusic by Elton John\nLyrics by Tim Rice",
+      "timestamp": "2025-10-26T14:59:02.729552"
+    },
+    {
+      "page_number": 47,
+      "top_text": "It's the circle of life",
+      "timestamp": "2025-10-26T14:59:04.356749"
+    },
+    {
+      "page_number": 48,
+      "top_text": "through faith and love.\nTill we found our place on the path unwinding,\nin the circle, the circle of life.\nIt's the circle of life.",
+      "timestamp": "2025-10-26T14:59:05.815833"
+    },
+    {
+      "page_number": 49,
+      "top_text": "City Of Stars",
+      "timestamp": "2025-10-26T14:59:07.050444"
+    },
+    {
+      "page_number": 50,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T14:59:08.367846"
+    },
+    {
+      "page_number": 51,
+      "top_text": "Yes, all we're looking for is love from someone else.",
+      "timestamp": "2025-10-26T14:59:10.513837"
+    },
+    {
+      "page_number": 52,
+      "top_text": "this crazy feeling, a rat-tat-tat on my heart... Think I want it to stay.\nCit-y of stars, are you shining just for me?\nCit-y of stars,\nyou never shined so brightly.",
+      "timestamp": "2025-10-26T14:59:12.117041"
+    },
+    {
+      "page_number": 53,
+      "top_text": "Classical Gas",
+      "timestamp": "2025-10-26T14:59:13.650916"
+    },
+    {
+      "page_number": 54,
+      "top_text": "Am G/B C Am F Esus4",
+      "timestamp": "2025-10-26T14:59:14.961305"
+    },
+    {
+      "page_number": 55,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T14:59:16.245405"
+    },
+    {
+      "page_number": 56,
+      "top_text": "G/B",
+      "timestamp": "2025-10-26T14:59:17.489017"
+    },
+    {
+      "page_number": 57,
+      "top_text": "D.S. al Coda",
+      "timestamp": "2025-10-26T14:59:18.799716"
+    },
+    {
+      "page_number": 58,
+      "top_text": "Dadd9/A",
+      "timestamp": "2025-10-26T14:59:20.282017"
+    },
+    {
+      "page_number": 59,
+      "top_text": "Come Sunday\nfrom BLACK, BROWN & BEIGE\nBy Duke Ellington",
+      "timestamp": "2025-10-26T14:59:21.678405"
+    },
+    {
+      "page_number": 60,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T14:59:23.175777"
+    },
+    {
+      "page_number": 61,
+      "top_text": "moon up in the sky.\nI don't mind the gray skies 'cause they're just clouds passing by.\nsee my people through.",
+      "timestamp": "2025-10-26T14:59:24.632480"
+    },
+    {
+      "page_number": 62,
+      "top_text": "Crazy",
+      "timestamp": "2025-10-26T14:59:25.937274"
+    },
+    {
+      "page_number": 63,
+      "top_text": "I wish I was special.",
+      "timestamp": "2025-10-26T14:59:27.508341"
+    },
+    {
+      "page_number": 64,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T14:59:28.812807"
+    },
+    {
+      "page_number": 65,
+      "top_text": "She's running out. She run, run, run, run.",
+      "timestamp": "2025-10-26T14:59:30.376290"
+    },
+    {
+      "page_number": 66,
+      "top_text": "D.S. al Coda\n(take 1st ending)",
+      "timestamp": "2025-10-26T14:59:31.690747"
+    },
+    {
+      "page_number": 67,
+      "top_text": "Creep",
+      "timestamp": "2025-10-26T14:59:32.933072"
+    },
+    {
+      "page_number": 68,
+      "top_text": "crazy for feelin' so blue.",
+      "timestamp": "2025-10-26T14:59:34.240609"
+    },
+    {
+      "page_number": 69,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T14:59:35.497746"
+    },
+    {
+      "page_number": 70,
+      "top_text": "I'm crazy for tryin', and I'm crazy for cryin', and I'm crazy for lovin' you.",
+      "timestamp": "2025-10-26T14:59:36.952214"
+    },
+    {
+      "page_number": 71,
+      "top_text": "Danny's Song",
+      "timestamp": "2025-10-26T14:59:38.198714"
+    },
+    {
+      "page_number": 72,
+      "top_text": "He will be like she and me, as free as a dove, conceived in love, sun is gonna shine above.",
+      "timestamp": "2025-10-26T14:59:39.586280"
+    },
+    {
+      "page_number": 73,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T14:59:40.962174"
+    },
+    {
+      "page_number": 74,
+      "top_text": "when I rise, __",
+      "timestamp": "2025-10-26T14:59:42.289197"
+    },
+    {
+      "page_number": 75,
+      "top_text": "Demons",
+      "timestamp": "2025-10-26T14:59:43.552837"
+    },
+    {
+      "page_number": 76,
+      "top_text": "I wanna hide the truth, I wanna shelter you. But with the beast inside, there's no where we can hide. No matter what we breed, we still are made of greed. This is my kingdom come, this is my kingdom come. When you feel my heat, look into my eyes. It's where my demons hide.",
+      "timestamp": "2025-10-26T14:59:45.311416"
+    },
+    {
+      "page_number": 77,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T14:59:46.612365"
+    },
+    {
+      "page_number": 78,
+      "top_text": "It's woven in my soul, I need to let you go. Your eyes, they shine so bright, I wanna save that light. I can't escape this now, unless you show me how. It's where my demons hide.",
+      "timestamp": "2025-10-26T14:59:48.401647"
+    },
+    {
+      "page_number": 79,
+      "top_text": "Don't Think Twice, It's All Right",
+      "timestamp": "2025-10-26T14:59:49.776875"
+    },
+    {
+      "page_number": 80,
+      "top_text": "if 'n you don't know—by now.",
+      "timestamp": "2025-10-26T14:59:51.171581"
+    },
+    {
+      "page_number": 81,
+      "top_text": "look out your window and I'll be gone.",
+      "timestamp": "2025-10-26T14:59:52.555827"
+    },
+    {
+      "page_number": 82,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T14:59:53.911052"
+    },
+    {
+      "page_number": 83,
+      "top_text": "Dream On",
+      "timestamp": "2025-10-26T14:59:55.204554"
+    },
+    {
+      "page_number": 84,
+      "top_text": "Pre-Chorus",
+      "timestamp": "2025-10-26T14:59:56.574336"
+    },
+    {
+      "page_number": 85,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T14:59:57.972784"
+    },
+    {
+      "page_number": 86,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T14:59:59.375257"
+    },
+    {
+      "page_number": 87,
+      "top_text": "Dream on, dream on, dream on.",
+      "timestamp": "2025-10-26T15:00:00.765187"
+    },
+    {
+      "page_number": 88,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:00:02.146808"
+    },
+    {
+      "page_number": 89,
+      "top_text": "Dust In The Wind",
+      "timestamp": "2025-10-26T15:00:03.464902"
+    },
+    {
+      "page_number": 90,
+      "top_text": "Dust in the wind.",
+      "timestamp": "2025-10-26T15:00:04.769247"
+    },
+    {
+      "page_number": 91,
+      "top_text": "All they are is dust in the wind.",
+      "timestamp": "2025-10-26T15:00:06.113750"
+    },
+    {
+      "page_number": 92,
+      "top_text": "Dust in the wind.",
+      "timestamp": "2025-10-26T15:00:07.430845"
+    },
+    {
+      "page_number": 93,
+      "top_text": "Every Breath You Take",
+      "timestamp": "2025-10-26T15:00:08.736358"
+    },
+    {
+      "page_number": 94,
+      "top_text": "I'll be watching you.",
+      "timestamp": "2025-10-26T15:00:10.444874"
+    },
+    {
+      "page_number": 95,
+      "top_text": "Since you've gone I been lost without a trace.",
+      "timestamp": "2025-10-26T15:00:11.929660"
+    },
+    {
+      "page_number": 96,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T15:00:13.276195"
+    },
+    {
+      "page_number": 97,
+      "top_text": "Everybody Hurts",
+      "timestamp": "2025-10-26T15:00:14.559789"
+    },
+    {
+      "page_number": 98,
+      "top_text": "When you're sure you've had enough of this life, well, hang on.",
+      "timestamp": "2025-10-26T15:00:16.349874"
+    },
+    {
+      "page_number": 99,
+      "top_text": "And ev'rybody hurts some times.\nSometimes everything is wrong.\nNow it's time to sing a long.",
+      "timestamp": "2025-10-26T15:00:17.888464"
+    },
+    {
+      "page_number": 100,
+      "top_text": "When you feel like you're alone, no, no, no, you are not alone.",
+      "timestamp": "2025-10-26T15:00:19.424119"
+    },
+    {
+      "page_number": 101,
+      "top_text": "Final Countdown",
+      "timestamp": "2025-10-26T15:00:20.749013"
+    },
+    {
+      "page_number": 102,
+      "top_text": "Will things ever be the same again?",
+      "timestamp": "2025-10-26T15:00:22.105902"
+    },
+    {
+      "page_number": 103,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:00:23.394416"
+    },
+    {
+      "page_number": 104,
+      "top_text": "Good Riddance (Time Of Your Life)",
+      "timestamp": "2025-10-26T15:00:24.751583"
+    },
+    {
+      "page_number": 105,
+      "top_text": "So make the best of this test and don't ask why.\nTattoos of memories and dead skin on trial.\n\nIt's not a question but a lesson learned in time.\nFor what it's worth it was worth all the while.\n\nChorus\nsomething unpredictable and in the end it's right,\nI hope you had the time of your life.",
+      "timestamp": "2025-10-26T15:00:26.579058"
+    },
+    {
+      "page_number": 106,
+      "top_text": "It's",
+      "timestamp": "2025-10-26T15:00:27.887605"
+    },
+    {
+      "page_number": 107,
+      "top_text": "Fire And Rain",
+      "timestamp": "2025-10-26T15:00:29.143711"
+    },
+    {
+      "page_number": 108,
+      "top_text": "Suzanne",
+      "timestamp": "2025-10-26T15:00:30.430350"
+    },
+    {
+      "page_number": 109,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:00:31.739493"
+    },
+    {
+      "page_number": 110,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:00:33.077032"
+    },
+    {
+      "page_number": 111,
+      "top_text": "My body's aching, and my telephone line to time is at hand, talk about things to come.",
+      "timestamp": "2025-10-26T15:00:34.676712"
+    },
+    {
+      "page_number": 112,
+      "top_text": "Coda",
+      "timestamp": "2025-10-26T15:00:37.066979"
+    },
+    {
+      "page_number": 113,
+      "top_text": "Free Fallin'",
+      "timestamp": "2025-10-26T15:00:38.461073"
+    },
+    {
+      "page_number": 114,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:00:39.770300"
+    },
+    {
+      "page_number": 115,
+      "top_text": "Yeah I'm free,",
+      "timestamp": "2025-10-26T15:00:41.057246"
+    },
+    {
+      "page_number": 116,
+      "top_text": "Free Falling",
+      "timestamp": "2025-10-26T15:00:42.479040"
+    },
+    {
+      "page_number": 117,
+      "top_text": "From A Distance",
+      "timestamp": "2025-10-26T15:00:43.837012"
+    },
+    {
+      "page_number": 118,
+      "top_text": "distance, the ocean meets the stream, and the eagle takes to flight.\nFrom a distance there is harmony, and it echoes through the land.\nIt's the voice of hope, it's the voice of peace. It's the voice of every man.",
+      "timestamp": "2025-10-26T15:00:45.468087"
+    },
+    {
+      "page_number": 119,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:00:46.844013"
+    },
+    {
+      "page_number": 120,
+      "top_text": "From a Distance",
+      "timestamp": "2025-10-26T15:00:48.325383"
+    },
+    {
+      "page_number": 121,
+      "top_text": "Für Elise, WoO 59",
+      "timestamp": "2025-10-26T15:00:49.580000"
+    },
+    {
+      "page_number": 122,
+      "top_text": "E",
+      "timestamp": "2025-10-26T15:00:50.805624"
+    },
+    {
+      "page_number": 123,
+      "top_text": "Glory Of Love\nTheme from KARATE KID PART II",
+      "timestamp": "2025-10-26T15:00:52.443435"
+    },
+    {
+      "page_number": 124,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:00:53.767682"
+    },
+    {
+      "page_number": 125,
+      "top_text": "I don't want to lose you,\nI have always needed you.\nI could never make it alone.\nI am a man who would fight for your honor,",
+      "timestamp": "2025-10-26T15:00:55.257889"
+    },
+    {
+      "page_number": 126,
+      "top_text": "I'll be the hero you're dreaming of.",
+      "timestamp": "2025-10-26T15:00:56.566535"
+    },
+    {
+      "page_number": 127,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:00:58.122604"
+    },
+    {
+      "page_number": 128,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T15:00:59.442650"
+    },
+    {
+      "page_number": 129,
+      "top_text": "Goodbye Pork Pie Hat",
+      "timestamp": "2025-10-26T15:01:00.790316"
+    },
+    {
+      "page_number": 130,
+      "top_text": "He's A Pirate",
+      "timestamp": "2025-10-26T15:01:02.218641"
+    },
+    {
+      "page_number": 131,
+      "top_text": "C",
+      "timestamp": "2025-10-26T15:01:03.680892"
+    },
+    {
+      "page_number": 132,
+      "top_text": "D",
+      "timestamp": "2025-10-26T15:01:04.908178"
+    },
+    {
+      "page_number": 133,
+      "top_text": "Havana",
+      "timestamp": "2025-10-26T15:01:06.235736"
+    },
+    {
+      "page_number": 134,
+      "top_text": "Havana",
+      "timestamp": "2025-10-26T15:01:07.597854"
+    },
+    {
+      "page_number": 135,
+      "top_text": "He got me feelin' like, oo, I knew it when I met him, I loved him when I left him. Got me feelin' like, oo, and then I had to tell him I had to go. Oh, na, na, na, na, na. Ha-",
+      "timestamp": "2025-10-26T15:01:09.350173"
+    },
+    {
+      "page_number": 136,
+      "top_text": "Coda",
+      "timestamp": "2025-10-26T15:01:10.797846"
+    },
+    {
+      "page_number": 137,
+      "top_text": "Hey, Soul Sister",
+      "timestamp": "2025-10-26T15:01:12.082380"
+    },
+    {
+      "page_number": 138,
+      "top_text": "Your sweet moon-beam,\nI'm so obsessed,\n3. See additional lyrics",
+      "timestamp": "2025-10-26T15:01:13.545059"
+    },
+    {
+      "page_number": 139,
+      "top_text": "Hey, soul sister",
+      "timestamp": "2025-10-26T15:01:14.869323"
+    },
+    {
+      "page_number": 140,
+      "top_text": "Hey, soul sister, I don't wanna miss a single thing you do tonight. Hey, hey, hey, tonight.",
+      "timestamp": "2025-10-26T15:01:16.339069"
+    },
+    {
+      "page_number": 141,
+      "top_text": "Hey There Delilah",
+      "timestamp": "2025-10-26T15:01:17.672420"
+    },
+    {
+      "page_number": 142,
+      "top_text": "Times Square can't shine as bright as you; I swear it's true. Hey there, Delilah, don't you",
+      "timestamp": "2025-10-26T15:01:19.189736"
+    },
+    {
+      "page_number": 143,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:01:20.751116"
+    },
+    {
+      "page_number": 144,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:01:22.052802"
+    },
+    {
+      "page_number": 145,
+      "top_text": "Our friends would all make fun of us, and we'll just laugh along because we know that none of them have felt this way. Delilah, I can promise you that",
+      "timestamp": "2025-10-26T15:01:23.696449"
+    },
+    {
+      "page_number": 146,
+      "top_text": "by the time that we get through the world will never ever be the same, and you're to blame.",
+      "timestamp": "2025-10-26T15:01:25.812461"
+    },
+    {
+      "page_number": 147,
+      "top_text": "Homeward Bound",
+      "timestamp": "2025-10-26T15:01:27.056450"
+    },
+    {
+      "page_number": 148,
+      "top_text": "On a tour of one night stands, my suitcase and guitar in hand and every stop is neatly planned for a poet and a one-man band.",
+      "timestamp": "2025-10-26T15:01:28.500167"
+    },
+    {
+      "page_number": 149,
+      "top_text": "Home, where my thoughts escaping. Home, where my music's playing.\nHome, where my love lies waiting silently for me.",
+      "timestamp": "2025-10-26T15:01:30.123974"
+    },
+    {
+      "page_number": 150,
+      "top_text": "Hope I Don't Fall In Love With You",
+      "timestamp": "2025-10-26T15:01:31.429504"
+    },
+    {
+      "page_number": 151,
+      "top_text": "music plays and you display your heart for me to see.\nI had a beer and now I hear you calling out for me.\n\nTo Coda",
+      "timestamp": "2025-10-26T15:01:32.886315"
+    },
+    {
+      "page_number": 152,
+      "top_text": "D.S. al Coda",
+      "timestamp": "2025-10-26T15:01:34.370580"
+    },
+    {
+      "page_number": 153,
+      "top_text": "The House Of The Rising Sun",
+      "timestamp": "2025-10-26T15:01:35.689938"
+    },
+    {
+      "page_number": 154,
+      "top_text": "Rising Sun.",
+      "timestamp": "2025-10-26T15:01:37.189583"
+    },
+    {
+      "page_number": 155,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:01:38.468337"
+    },
+    {
+      "page_number": 156,
+      "top_text": "man down in New Orleans.",
+      "timestamp": "2025-10-26T15:01:39.986437"
+    },
+    {
+      "page_number": 157,
+      "top_text": "I Will",
+      "timestamp": "2025-10-26T15:01:41.286500"
+    },
+    {
+      "page_number": 158,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:01:42.560663"
+    },
+    {
+      "page_number": 159,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:01:43.793127"
+    },
+    {
+      "page_number": 160,
+      "top_text": "Outro",
+      "timestamp": "2025-10-26T15:01:45.096487"
+    },
+    {
+      "page_number": 161,
+      "top_text": "I'm Not The Only One",
+      "timestamp": "2025-10-26T15:01:46.612779"
+    },
+    {
+      "page_number": 162,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:01:47.973452"
+    },
+    {
+      "page_number": 163,
+      "top_text": "But when you call me baby, I know I'm not the only one.",
+      "timestamp": "2025-10-26T15:01:49.595190"
+    },
+    {
+      "page_number": 164,
+      "top_text": "I know I'm not the only one.",
+      "timestamp": "2025-10-26T15:01:51.064025"
+    },
+    {
+      "page_number": 165,
+      "top_text": "I'm Yours",
+      "timestamp": "2025-10-26T15:01:52.374876"
+    },
+    {
+      "page_number": 166,
+      "top_text": "Now I'm trying to get back.",
+      "timestamp": "2025-10-26T15:01:53.789958"
+    },
+    {
+      "page_number": 167,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:01:55.102661"
+    },
+    {
+      "page_number": 168,
+      "top_text": "A, look into your heart and you'll find that love, the sky is yours.",
+      "timestamp": "2025-10-26T15:01:56.597651"
+    },
+    {
+      "page_number": 169,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:01:58.019264"
+    },
+    {
+      "page_number": 170,
+      "top_text": "D.S. al Coda",
+      "timestamp": "2025-10-26T15:01:59.483302"
+    },
+    {
+      "page_number": 171,
+      "top_text": "Imagine",
+      "timestamp": "2025-10-26T15:02:00.748069"
+    },
+    {
+      "page_number": 172,
+      "top_text": "Imagine",
+      "timestamp": "2025-10-26T15:02:02.019423"
+    },
+    {
+      "page_number": 173,
+      "top_text": "Imagine all the people living life in peace. You, you may say I'm a",
+      "timestamp": "2025-10-26T15:02:03.438164"
+    },
+    {
+      "page_number": 174,
+      "top_text": "Imagine",
+      "timestamp": "2025-10-26T15:02:04.737340"
+    },
+    {
+      "page_number": 175,
+      "top_text": "Iris\nfrom the Motion Picture CITY OF ANGELS\nWords and Music by John Rzeznik",
+      "timestamp": "2025-10-26T15:02:06.333863"
+    },
+    {
+      "page_number": 176,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:02:07.676073"
+    },
+    {
+      "page_number": 177,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:02:09.005269"
+    },
+    {
+      "page_number": 178,
+      "top_text": "D.S. al Coda",
+      "timestamp": "2025-10-26T15:02:10.366506"
+    },
+    {
+      "page_number": 179,
+      "top_text": "Is There Anybody Out There?",
+      "timestamp": "2025-10-26T15:02:11.671177"
+    },
+    {
+      "page_number": 180,
+      "top_text": "Am",
+      "timestamp": "2025-10-26T15:02:12.965963"
+    },
+    {
+      "page_number": 181,
+      "top_text": "James Bond Theme",
+      "timestamp": "2025-10-26T15:02:14.252507"
+    },
+    {
+      "page_number": 182,
+      "top_text": "3rd time, To Coda",
+      "timestamp": "2025-10-26T15:02:15.638401"
+    },
+    {
+      "page_number": 183,
+      "top_text": "D.S. al Coda (no repeat)",
+      "timestamp": "2025-10-26T15:02:17.074967"
+    },
+    {
+      "page_number": 184,
+      "top_text": "Julia",
+      "timestamp": "2025-10-26T15:02:18.578882"
+    },
+    {
+      "page_number": 185,
+      "top_text": "All",
+      "timestamp": "2025-10-26T15:02:20.274716"
+    },
+    {
+      "page_number": 186,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:02:21.601596"
+    },
+    {
+      "page_number": 187,
+      "top_text": "Ju - li - a.",
+      "timestamp": "2025-10-26T15:02:23.011721"
+    },
+    {
+      "page_number": 188,
+      "top_text": "Julia",
+      "timestamp": "2025-10-26T15:02:24.331276"
+    },
+    {
+      "page_number": 189,
+      "top_text": "Lean On Me",
+      "timestamp": "2025-10-26T15:02:25.658488"
+    },
+    {
+      "page_number": 190,
+      "top_text": "Lean on Me",
+      "timestamp": "2025-10-26T15:02:27.109246"
+    },
+    {
+      "page_number": 191,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:02:28.431350"
+    },
+    {
+      "page_number": 192,
+      "top_text": "Let Her Go",
+      "timestamp": "2025-10-26T15:02:29.811988"
+    },
+    {
+      "page_number": 193,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T15:02:31.103180"
+    },
+    {
+      "page_number": 194,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:02:32.559944"
+    },
+    {
+      "page_number": 195,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:02:33.945571"
+    },
+    {
+      "page_number": 196,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:02:35.261732"
+    },
+    {
+      "page_number": 197,
+      "top_text": "Let It Be",
+      "timestamp": "2025-10-26T15:02:36.638554"
+    },
+    {
+      "page_number": 198,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:02:37.967119"
+    },
+    {
+      "page_number": 199,
+      "top_text": "There will be an answer, let it be.",
+      "timestamp": "2025-10-26T15:02:39.353997"
+    },
+    {
+      "page_number": 200,
+      "top_text": "Let it be",
+      "timestamp": "2025-10-26T15:02:40.698558"
+    },
+    {
+      "page_number": 201,
+      "top_text": "Listen To Your Heart",
+      "timestamp": "2025-10-26T15:02:41.976245"
+    },
+    {
+      "page_number": 202,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:02:43.302872"
+    },
+    {
+      "page_number": 203,
+      "top_text": "Listen to your heart, when he's calling for you. Listen to your heart, there's nothing else you can do. I don't know where you're going and I don't know why but listen to your heart, before you tell him goodbye.",
+      "timestamp": "2025-10-26T15:02:44.956762"
+    },
+    {
+      "page_number": 204,
+      "top_text": "Mandy",
+      "timestamp": "2025-10-26T15:02:46.202499"
+    },
+    {
+      "page_number": 205,
+      "top_text": "All",
+      "timestamp": "2025-10-26T15:02:47.524331"
+    },
+    {
+      "page_number": 206,
+      "top_text": "Mandy",
+      "timestamp": "2025-10-26T15:02:48.817534"
+    },
+    {
+      "page_number": 207,
+      "top_text": "The Long And Winding Road",
+      "timestamp": "2025-10-26T15:02:50.121172"
+    },
+    {
+      "page_number": 208,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:02:51.592196"
+    },
+    {
+      "page_number": 209,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:02:53.267183"
+    },
+    {
+      "page_number": 210,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:02:54.554307"
+    },
+    {
+      "page_number": 211,
+      "top_text": "Love Will Keep Us Alive",
+      "timestamp": "2025-10-26T15:02:55.786526"
+    },
+    {
+      "page_number": 212,
+      "top_text": "You were searching for a place to hide.\nLost and lonely,\nnow you've given me the will to survive.\nWhen we're hungry, love will keep us alive.",
+      "timestamp": "2025-10-26T15:02:58.626855"
+    },
+    {
+      "page_number": 213,
+      "top_text": "Don't You Die for You",
+      "timestamp": "2025-10-26T15:03:00.187525"
+    },
+    {
+      "page_number": 214,
+      "top_text": "Coda",
+      "timestamp": "2025-10-26T15:03:01.570242"
+    },
+    {
+      "page_number": 215,
+      "top_text": "Love Yourself",
+      "timestamp": "2025-10-26T15:03:02.898925"
+    },
+    {
+      "page_number": 216,
+      "top_text": "write a song",
+      "timestamp": "2025-10-26T15:03:04.387818"
+    },
+    {
+      "page_number": 217,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:03:05.897366"
+    },
+    {
+      "page_number": 218,
+      "top_text": "you should go and love yourself.",
+      "timestamp": "2025-10-26T15:03:07.547088"
+    },
+    {
+      "page_number": 219,
+      "top_text": "Marrakesh Express",
+      "timestamp": "2025-10-26T15:03:08.857376"
+    },
+    {
+      "page_number": 220,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:03:10.207702"
+    },
+    {
+      "page_number": 221,
+      "top_text": "train. All on - board the",
+      "timestamp": "2025-10-26T15:03:11.776638"
+    },
+    {
+      "page_number": 222,
+      "top_text": "Would you know we're riding on the Mar-rakesh express?",
+      "timestamp": "2025-10-26T15:03:13.182392"
+    },
+    {
+      "page_number": 223,
+      "top_text": "Mission: Impossible Theme\nfrom the Paramount Television Series MISSION: IMPOSSIBLE\nBy Lalo Schifrin",
+      "timestamp": "2025-10-26T15:03:14.559663"
+    },
+    {
+      "page_number": 224,
+      "top_text": "D",
+      "timestamp": "2025-10-26T15:03:15.801468"
+    },
+    {
+      "page_number": 225,
+      "top_text": "Mrs. Robinson",
+      "timestamp": "2025-10-26T15:03:17.429875"
+    },
+    {
+      "page_number": 226,
+      "top_text": "Misses Robinson.",
+      "timestamp": "2025-10-26T15:03:18.787977"
+    },
+    {
+      "page_number": 227,
+      "top_text": "Misses Robinson",
+      "timestamp": "2025-10-26T15:03:20.134728"
+    },
+    {
+      "page_number": 228,
+      "top_text": "We'd like to help you learn to help yourself.",
+      "timestamp": "2025-10-26T15:03:21.537307"
+    },
+    {
+      "page_number": 229,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:03:22.890932"
+    },
+    {
+      "page_number": 230,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T15:03:24.204043"
+    },
+    {
+      "page_number": 231,
+      "top_text": "Most of all, you've got to hide it from the kids. Coo-coo-ca-choo,",
+      "timestamp": "2025-10-26T15:03:25.668236"
+    },
+    {
+      "page_number": 232,
+      "top_text": "More Than Words",
+      "timestamp": "2025-10-26T15:03:27.214323"
+    },
+    {
+      "page_number": 233,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:03:28.524866"
+    },
+    {
+      "page_number": 234,
+      "top_text": "that your love for me is real. What would you say if I took those words away? Then you couldn't make things new just by saying \"I love you.\" La, dee, da, la, dee, da, dee, dai, dai, da. More than words. La, dee, da, dai,",
+      "timestamp": "2025-10-26T15:03:30.472404"
+    },
+    {
+      "page_number": 235,
+      "top_text": "More than words.",
+      "timestamp": "2025-10-26T15:03:32.042716"
+    },
+    {
+      "page_number": 236,
+      "top_text": "Ooh.",
+      "timestamp": "2025-10-26T15:03:33.357478"
+    },
+    {
+      "page_number": 237,
+      "top_text": "Nothing Else Matters",
+      "timestamp": "2025-10-26T15:03:34.663095"
+    },
+    {
+      "page_number": 238,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:03:35.976523"
+    },
+    {
+      "page_number": 239,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:03:37.492196"
+    },
+    {
+      "page_number": 240,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:03:38.755675"
+    },
+    {
+      "page_number": 241,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:03:40.168289"
+    },
+    {
+      "page_number": 242,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T15:03:41.624257"
+    },
+    {
+      "page_number": 243,
+      "top_text": "November Rain",
+      "timestamp": "2025-10-26T15:03:43.153027"
+    },
+    {
+      "page_number": 244,
+      "top_text": "Noth-in' lasts for-ev-er, and we both know hearts can change.\nAnd it's hard to hold a candle in the cold November rain.",
+      "timestamp": "2025-10-26T15:03:44.650680"
+    },
+    {
+      "page_number": 245,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:03:45.949555"
+    },
+    {
+      "page_number": 246,
+      "top_text": "we could take the time to lay it on the line, I could rest my head just know-in' that you were mine, all mine. So if you want to love me, then dar-lin' don't re-fain, or I'll just end up walkin' in the cold November rain.",
+      "timestamp": "2025-10-26T15:03:47.685822"
+    },
+    {
+      "page_number": 247,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:03:48.959656"
+    },
+    {
+      "page_number": 248,
+      "top_text": "need some time all alone?",
+      "timestamp": "2025-10-26T15:03:50.230400"
+    },
+    {
+      "page_number": 249,
+      "top_text": "wouldn't time be out to charm you?",
+      "timestamp": "2025-10-26T15:03:51.556456"
+    },
+    {
+      "page_number": 250,
+      "top_text": "love me when there's no one left to blame.",
+      "timestamp": "2025-10-26T15:03:52.912091"
+    },
+    {
+      "page_number": 251,
+      "top_text": "Interlude Faster",
+      "timestamp": "2025-10-26T15:03:54.241423"
+    },
+    {
+      "page_number": 252,
+      "top_text": "Peaceful Easy Feeling",
+      "timestamp": "2025-10-26T15:03:55.538817"
+    },
+    {
+      "page_number": 253,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:03:56.893749"
+    },
+    {
+      "page_number": 254,
+      "top_text": "and I know you won't let me down, 'cause I'm ready standing",
+      "timestamp": "2025-10-26T15:03:58.181269"
+    },
+    {
+      "page_number": 255,
+      "top_text": "on ___ the ground.___",
+      "timestamp": "2025-10-26T15:03:59.403586"
+    },
+    {
+      "page_number": 256,
+      "top_text": "Yes, I'm standing on the ground.",
+      "timestamp": "2025-10-26T15:04:00.761805"
+    },
+    {
+      "page_number": 257,
+      "top_text": "Octopus's Garden",
+      "timestamp": "2025-10-26T15:04:02.326672"
+    },
+    {
+      "page_number": 258,
+      "top_text": "He'd let us in, know where we've been, in his octopus's garden in the shade.\n\nPre-Chorus\nI'd ask my friends to come and see an octopus's garden with me.",
+      "timestamp": "2025-10-26T15:04:03.841017"
+    },
+    {
+      "page_number": 259,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:04:05.071930"
+    },
+    {
+      "page_number": 260,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:04:06.308897"
+    },
+    {
+      "page_number": 261,
+      "top_text": "Oh, what joy for ev'ry girl and boy, knowing they're happy and they're safe.",
+      "timestamp": "2025-10-26T15:04:07.756921"
+    },
+    {
+      "page_number": 262,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:04:09.080627"
+    },
+    {
+      "page_number": 263,
+      "top_text": "One More Night",
+      "timestamp": "2025-10-26T15:04:10.544309"
+    },
+    {
+      "page_number": 264,
+      "top_text": "let you know how I feel.\njust staring at the phone,\nAnd if I stumble, if I fall,\nand I was wondering should I call you?\nso I can make you see.\nmay be you're not alone.",
+      "timestamp": "2025-10-26T15:04:12.109765"
+    },
+    {
+      "page_number": 265,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:04:13.470203"
+    },
+    {
+      "page_number": 266,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:04:14.778693"
+    },
+    {
+      "page_number": 267,
+      "top_text": "Open Arms",
+      "timestamp": "2025-10-26T15:04:16.006056"
+    },
+    {
+      "page_number": 268,
+      "top_text": "Softly you whisper; you're so sincere.\nWanting to hold you, wanting you near;\nHow could our love be so blind?\nWe But how much I wanted you home.\nsailed on together; we drifted apart.\nAnd now that you've come back,\nturned night into day,\nhere you are by my side.\nI need you to stay.",
+      "timestamp": "2025-10-26T15:04:17.758244"
+    },
+    {
+      "page_number": 269,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:04:19.105626"
+    },
+    {
+      "page_number": 270,
+      "top_text": "love means to me; open arms.",
+      "timestamp": "2025-10-26T15:04:20.429648"
+    },
+    {
+      "page_number": 271,
+      "top_text": "Operator (That's Not The Way It Feels)",
+      "timestamp": "2025-10-26T15:04:21.766047"
+    },
+    {
+      "page_number": 272,
+      "top_text": "Isn't That the Way They Say It Goes?",
+      "timestamp": "2025-10-26T15:04:23.178416"
+    },
+    {
+      "page_number": 273,
+      "top_text": "But let's forget all that, and give me the number, if you can find it, so I can call just to tell them I'm fine and to show I've overcome the blow, I've learned to take it well. I only wish my words could just convince myself that it just wasn't real,",
+      "timestamp": "2025-10-26T15:04:24.874923"
+    },
+    {
+      "page_number": 274,
+      "top_text": "but that's not the way it feels.",
+      "timestamp": "2025-10-26T15:04:26.271117"
+    },
+    {
+      "page_number": 275,
+      "top_text": "People Get Ready",
+      "timestamp": "2025-10-26T15:04:27.604796"
+    },
+    {
+      "page_number": 276,
+      "top_text": "Additional Lyrics",
+      "timestamp": "2025-10-26T15:04:28.973374"
+    },
+    {
+      "page_number": 277,
+      "top_text": "The Pink Panther from THE PINK PANTHER",
+      "timestamp": "2025-10-26T15:04:30.281310"
+    },
+    {
+      "page_number": 278,
+      "top_text": "Em N.C.",
+      "timestamp": "2025-10-26T15:04:31.615858"
+    },
+    {
+      "page_number": 279,
+      "top_text": "Recuerdos de la Alhambra",
+      "timestamp": "2025-10-26T15:04:32.975299"
+    },
+    {
+      "page_number": 280,
+      "top_text": "5/6CVIII",
+      "timestamp": "2025-10-26T15:04:34.364592"
+    },
+    {
+      "page_number": 281,
+      "top_text": "CI",
+      "timestamp": "2025-10-26T15:04:35.723730"
+    },
+    {
+      "page_number": 282,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:04:37.184090"
+    },
+    {
+      "page_number": 283,
+      "top_text": "Coda",
+      "timestamp": "2025-10-26T15:04:38.564176"
+    },
+    {
+      "page_number": 284,
+      "top_text": "2/3CII",
+      "timestamp": "2025-10-26T15:04:40.008361"
+    },
+    {
+      "page_number": 285,
+      "top_text": "Redemption Song",
+      "timestamp": "2025-10-26T15:04:41.302495"
+    },
+    {
+      "page_number": 286,
+      "top_text": "I from the bottomless pit. But my hand was made strong by the hand of the Almighty. We forward in this generation triumphantly. Won't you help to sing",
+      "timestamp": "2025-10-26T15:04:42.792578"
+    },
+    {
+      "page_number": 287,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:04:44.315167"
+    },
+    {
+      "page_number": 288,
+      "top_text": "Have no fear for atomic energy, 'cause none of them can stop the time. How long shall they kill our prophets while we stand aside and look?",
+      "timestamp": "2025-10-26T15:04:45.817407"
+    },
+    {
+      "page_number": 289,
+      "top_text": "Won't you help to sing—",
+      "timestamp": "2025-10-26T15:04:47.179572"
+    },
+    {
+      "page_number": 290,
+      "top_text": "Scarborough Fair/Canticle",
+      "timestamp": "2025-10-26T15:04:48.450704"
+    },
+    {
+      "page_number": 291,
+      "top_text": "Parsley, sage, rosemary and thyme.",
+      "timestamp": "2025-10-26T15:04:49.800943"
+    },
+    {
+      "page_number": 292,
+      "top_text": "She was once a true love of mine.",
+      "timestamp": "2025-10-26T15:04:51.172035"
+    },
+    {
+      "page_number": 293,
+      "top_text": "Ribbon In The Sky",
+      "timestamp": "2025-10-26T15:04:52.464779"
+    },
+    {
+      "page_number": 294,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:04:53.857873"
+    },
+    {
+      "page_number": 295,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:04:55.211431"
+    },
+    {
+      "page_number": 296,
+      "top_text": "Outro",
+      "timestamp": "2025-10-26T15:04:56.609932"
+    },
+    {
+      "page_number": 297,
+      "top_text": "Right Here Waiting",
+      "timestamp": "2025-10-26T15:04:58.108675"
+    },
+    {
+      "page_number": 298,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:04:59.603480"
+    },
+    {
+      "page_number": 299,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:05:00.879510"
+    },
+    {
+      "page_number": 300,
+      "top_text": "Pre-Chorus",
+      "timestamp": "2025-10-26T15:05:02.205039"
+    },
+    {
+      "page_number": 301,
+      "top_text": "Say You, Say Me",
+      "timestamp": "2025-10-26T15:05:03.725547"
+    },
+    {
+      "page_number": 302,
+      "top_text": "awesome dream, people in the park playin' games in the dark. And what they played was a masquerade. But from behind the walls of doubt, a voice was crying out.",
+      "timestamp": "2025-10-26T15:05:05.281894"
+    },
+    {
+      "page_number": 303,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:05:06.625123"
+    },
+    {
+      "page_number": 304,
+      "top_text": "It's time to start believin', oh, yes. Believe in who you are; you are a shining star.",
+      "timestamp": "2025-10-26T15:05:08.507383"
+    },
+    {
+      "page_number": 305,
+      "top_text": "Shape Of My Heart",
+      "timestamp": "2025-10-26T15:05:09.788865"
+    },
+    {
+      "page_number": 306,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:05:11.281137"
+    },
+    {
+      "page_number": 307,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:05:12.609784"
+    },
+    {
+      "page_number": 308,
+      "top_text": "That's not ___ the shape, ____________ shape of ___ my heart.",
+      "timestamp": "2025-10-26T15:05:13.989661"
+    },
+    {
+      "page_number": 309,
+      "top_text": "That's not ___ the shape of ___ my heart.",
+      "timestamp": "2025-10-26T15:05:15.401101"
+    },
+    {
+      "page_number": 310,
+      "top_text": "Some Nights",
+      "timestamp": "2025-10-26T15:05:16.747372"
+    },
+    {
+      "page_number": 311,
+      "top_text": "Rock",
+      "timestamp": "2025-10-26T15:05:18.104988"
+    },
+    {
+      "page_number": 312,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:05:20.829368"
+    },
+    {
+      "page_number": 313,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:05:22.329358"
+    },
+    {
+      "page_number": 314,
+      "top_text": "Coda",
+      "timestamp": "2025-10-26T15:05:23.584338"
+    },
+    {
+      "page_number": 315,
+      "top_text": "Shape Of You",
+      "timestamp": "2025-10-26T15:05:25.044186"
+    },
+    {
+      "page_number": 316,
+      "top_text": "Girl, you know I want your love. Your love was hand-made for somebody like me. Come on, now, follow my lead. I may be crazy; don’t mind me. Say,",
+      "timestamp": "2025-10-26T15:05:26.612642"
+    },
+    {
+      "page_number": 317,
+      "top_text": "Boy, let's not talk too much. Grab on my waist and put that body on me.' Come on, now, follow my lead. Come, come on now, follow my lead.\" Mm.",
+      "timestamp": "2025-10-26T15:05:28.182979"
+    },
+    {
+      "page_number": 318,
+      "top_text": "Last night you were in my room, and now my bed sheets smell like you. Ev'ry day discovering something brand new. Well, I'm in love with your body.",
+      "timestamp": "2025-10-26T15:05:29.766220"
+    },
+    {
+      "page_number": 319,
+      "top_text": "Well, I'm in love with your body.",
+      "timestamp": "2025-10-26T15:05:31.361268"
+    },
+    {
+      "page_number": 320,
+      "top_text": "Come on, be my baby, come on.\nI'm in love with your body.\nEv'ry day discovering something brand new.\nI'm in love with the shape of you.",
+      "timestamp": "2025-10-26T15:05:32.871929"
+    },
+    {
+      "page_number": 321,
+      "top_text": "Shes Got A Way",
+      "timestamp": "2025-10-26T15:05:34.604199"
+    },
+    {
+      "page_number": 322,
+      "top_text": "don't know what it is, but there doesn't have to be a reason anyway.",
+      "timestamp": "2025-10-26T15:05:36.005760"
+    },
+    {
+      "page_number": 323,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:05:37.528798"
+    },
+    {
+      "page_number": 324,
+      "top_text": "but I have to laugh when she reveals me.\nShe's got a way about her.\nI don't know what it is,\nbut I know that I can't live without her anyway.",
+      "timestamp": "2025-10-26T15:05:39.176362"
+    },
+    {
+      "page_number": 325,
+      "top_text": "Skyfall",
+      "timestamp": "2025-10-26T15:05:40.412236"
+    },
+    {
+      "page_number": 326,
+      "top_text": "count to ten.",
+      "timestamp": "2025-10-26T15:05:41.658190"
+    },
+    {
+      "page_number": 327,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:05:42.911689"
+    },
+    {
+      "page_number": 328,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:05:44.183597"
+    },
+    {
+      "page_number": 329,
+      "top_text": "Sky-Fall",
+      "timestamp": "2025-10-26T15:05:45.475238"
+    },
+    {
+      "page_number": 330,
+      "top_text": "never be me without the security of your loving arms keeping me from harm. Put your hand in my hand and we'll stand. Let the",
+      "timestamp": "2025-10-26T15:05:46.920111"
+    },
+    {
+      "page_number": 331,
+      "top_text": "Smells Like Teen Spirit",
+      "timestamp": "2025-10-26T15:05:48.353685"
+    },
+    {
+      "page_number": 332,
+      "top_text": "Pre-Chorus",
+      "timestamp": "2025-10-26T15:05:49.738236"
+    },
+    {
+      "page_number": 333,
+      "top_text": "Here we are now.",
+      "timestamp": "2025-10-26T15:05:51.061679"
+    },
+    {
+      "page_number": 334,
+      "top_text": "Yay!",
+      "timestamp": "2025-10-26T15:05:52.427378"
+    },
+    {
+      "page_number": 335,
+      "top_text": "The Sound Of Silence",
+      "timestamp": "2025-10-26T15:05:53.680182"
+    },
+    {
+      "page_number": 336,
+      "top_text": "To Coda 1",
+      "timestamp": "2025-10-26T15:05:55.047276"
+    },
+    {
+      "page_number": 337,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:05:56.419026"
+    },
+    {
+      "page_number": 338,
+      "top_text": "To Coda 2",
+      "timestamp": "2025-10-26T15:05:57.681420"
+    },
+    {
+      "page_number": 339,
+      "top_text": "D.S.S. al Coda 2",
+      "timestamp": "2025-10-26T15:05:59.045128"
+    },
+    {
+      "page_number": 340,
+      "top_text": "Stay With Me",
+      "timestamp": "2025-10-26T15:06:00.546495"
+    },
+    {
+      "page_number": 341,
+      "top_text": "These nights never seem to go to plan.\nAnd deep down I know this never works.\n\nI don't want you to leave, will you hold my hand?\nBut you can lay with me so it doesn't hurt.\nOh, won't you stay with me?\n'Cause you're all I need.",
+      "timestamp": "2025-10-26T15:06:02.194921"
+    },
+    {
+      "page_number": 342,
+      "top_text": "This ain't love, it's clear to see. But, darling, stay with me. Oh, oh, oh. Oh, won't you",
+      "timestamp": "2025-10-26T15:06:03.678473"
+    },
+    {
+      "page_number": 343,
+      "top_text": "Stop This Train",
+      "timestamp": "2025-10-26T15:06:04.954856"
+    },
+    {
+      "page_number": 344,
+      "top_text": "All Sic",
+      "timestamp": "2025-10-26T15:06:06.251105"
+    },
+    {
+      "page_number": 345,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:06:07.752439"
+    },
+    {
+      "page_number": 346,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:06:09.094196"
+    },
+    {
+      "page_number": 347,
+      "top_text": "Coda",
+      "timestamp": "2025-10-26T15:06:10.440542"
+    },
+    {
+      "page_number": 348,
+      "top_text": "Take Me Home, Country Roads",
+      "timestamp": "2025-10-26T15:06:11.793635"
+    },
+    {
+      "page_number": 349,
+      "top_text": "Country Roads",
+      "timestamp": "2025-10-26T15:06:13.065824"
+    },
+    {
+      "page_number": 350,
+      "top_text": "I belong:",
+      "timestamp": "2025-10-26T15:06:14.354350"
+    },
+    {
+      "page_number": 351,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:06:15.735902"
+    },
+    {
+      "page_number": 352,
+      "top_text": "Yesterday",
+      "timestamp": "2025-10-26T15:06:17.126086"
+    },
+    {
+      "page_number": 353,
+      "top_text": "Teach Your Children",
+      "timestamp": "2025-10-26T15:06:18.393338"
+    },
+    {
+      "page_number": 354,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:06:19.877146"
+    },
+    {
+      "page_number": 355,
+      "top_text": "pick's the one you'll know by.",
+      "timestamp": "2025-10-26T15:06:21.199116"
+    },
+    {
+      "page_number": 356,
+      "top_text": "Additional Lyrics",
+      "timestamp": "2025-10-26T15:06:22.480193"
+    },
+    {
+      "page_number": 357,
+      "top_text": "Tears In The Rain",
+      "timestamp": "2025-10-26T15:06:23.782283"
+    },
+    {
+      "page_number": 358,
+      "top_text": "Cmaj13",
+      "timestamp": "2025-10-26T15:06:25.401534"
+    },
+    {
+      "page_number": 359,
+      "top_text": "Thinking Out Loud",
+      "timestamp": "2025-10-26T15:06:26.749411"
+    },
+    {
+      "page_number": 360,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:06:28.327762"
+    },
+    {
+      "page_number": 361,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:06:29.801631"
+    },
+    {
+      "page_number": 362,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:06:31.163423"
+    },
+    {
+      "page_number": 363,
+      "top_text": "A Thousand Years",
+      "timestamp": "2025-10-26T15:06:32.439906"
+    },
+    {
+      "page_number": 364,
+      "top_text": "How to be brave?",
+      "timestamp": "2025-10-26T15:06:34.032899"
+    },
+    {
+      "page_number": 365,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:06:35.356272"
+    },
+    {
+      "page_number": 366,
+      "top_text": "I'll love you for a thousand more.",
+      "timestamp": "2025-10-26T15:06:36.744908"
+    },
+    {
+      "page_number": 367,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T15:06:38.130940"
+    },
+    {
+      "page_number": 368,
+      "top_text": "One step closer.",
+      "timestamp": "2025-10-26T15:06:39.445849"
+    },
+    {
+      "page_number": 369,
+      "top_text": "Three Little Birds",
+      "timestamp": "2025-10-26T15:06:40.761280"
+    },
+    {
+      "page_number": 370,
+      "top_text": "wor - ry a - bout a thing, — 'cause ev - 'ry lit - tle thing gon - na be al - right.__",
+      "timestamp": "2025-10-26T15:06:42.385701"
+    },
+    {
+      "page_number": 371,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:06:43.743124"
+    },
+    {
+      "page_number": 372,
+      "top_text": "wor - ry a - bout a thing, — 'cause",
+      "timestamp": "2025-10-26T15:06:45.082527"
+    },
+    {
+      "page_number": 373,
+      "top_text": "Time After Time",
+      "timestamp": "2025-10-26T15:06:46.389074"
+    },
+    {
+      "page_number": 374,
+      "top_text": "Pre-Chorus",
+      "timestamp": "2025-10-26T15:06:48.081597"
+    },
+    {
+      "page_number": 375,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:06:49.350347"
+    },
+    {
+      "page_number": 376,
+      "top_text": "time after time.",
+      "timestamp": "2025-10-26T15:06:50.665550"
+    },
+    {
+      "page_number": 377,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T15:06:51.923074"
+    },
+    {
+      "page_number": 378,
+      "top_text": "Time In A Bottle",
+      "timestamp": "2025-10-26T15:06:53.230524"
+    },
+    {
+      "page_number": 379,
+      "top_text": "I'd like to do.",
+      "timestamp": "2025-10-26T15:06:54.625195"
+    },
+    {
+      "page_number": 380,
+      "top_text": "looked around enough to know that you're the one I want to go through time with.",
+      "timestamp": "2025-10-26T15:06:56.495248"
+    },
+    {
+      "page_number": 381,
+      "top_text": "Unchained Melody",
+      "timestamp": "2025-10-26T15:06:57.764744"
+    },
+    {
+      "page_number": 382,
+      "top_text": "I need your love.",
+      "timestamp": "2025-10-26T15:06:59.040938"
+    },
+    {
+      "page_number": 383,
+      "top_text": "Lonely rivers sigh,\nAll alone I gaze\nat the stars,\nat the stars,\nI'll be coming home,\ndreaming of my love far away.",
+      "timestamp": "2025-10-26T15:07:00.503226"
+    },
+    {
+      "page_number": 384,
+      "top_text": "We Are The Champions",
+      "timestamp": "2025-10-26T15:07:01.774413"
+    },
+    {
+      "page_number": 385,
+      "top_text": "We are the champions, my friend.",
+      "timestamp": "2025-10-26T15:07:03.123466"
+    },
+    {
+      "page_number": 386,
+      "top_text": "We are the champions.",
+      "timestamp": "2025-10-26T15:07:04.475299"
+    },
+    {
+      "page_number": 387,
+      "top_text": "You brought me fame and fortune and everything that goes with it. I thank you all. But it's been no bed of roses, no pleasure cruise. I consider it a challenge before the whole human race and I ain't gonna lose. And I need to go on, and on, and on, and on.",
+      "timestamp": "2025-10-26T15:07:06.146990"
+    },
+    {
+      "page_number": 388,
+      "top_text": "We are the champions.",
+      "timestamp": "2025-10-26T15:07:07.482828"
+    },
+    {
+      "page_number": 389,
+      "top_text": "Wagon Wheel",
+      "timestamp": "2025-10-26T15:07:08.832803"
+    },
+    {
+      "page_number": 390,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:07:10.094078"
+    },
+    {
+      "page_number": 391,
+      "top_text": "me, ma-ma, any way you feel. Hey, ma-ma, rock me. Rock me, ma-ma, like the wind and the rain. Rock me, ma-ma, like a",
+      "timestamp": "2025-10-26T15:07:11.566947"
+    },
+    {
+      "page_number": 392,
+      "top_text": "south-bound train.",
+      "timestamp": "2025-10-26T15:07:12.834318"
+    },
+    {
+      "page_number": 393,
+      "top_text": "When I Was Your Man",
+      "timestamp": "2025-10-26T15:07:14.311270"
+    },
+    {
+      "page_number": 394,
+      "top_text": "When our friends talk about you, all it does is just tear me down, never, never get to clean up the mess I've made, 'cause my heart breaks a little when I hear your name. It all just sounds like, and it haunts me every time I close my eyes.",
+      "timestamp": "2025-10-26T15:07:15.985157"
+    },
+    {
+      "page_number": 395,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:07:17.461211"
+    },
+    {
+      "page_number": 396,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:07:18.687151"
+    },
+    {
+      "page_number": 397,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:07:20.006006"
+    },
+    {
+      "page_number": 398,
+      "top_text": "D.S. al Coda",
+      "timestamp": "2025-10-26T15:07:21.307953"
+    },
+    {
+      "page_number": 399,
+      "top_text": "Wild World",
+      "timestamp": "2025-10-26T15:07:22.596334"
+    },
+    {
+      "page_number": 400,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:07:23.881753"
+    },
+    {
+      "page_number": 401,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:07:25.141965"
+    },
+    {
+      "page_number": 402,
+      "top_text": "I'll always remember you like a child, girl.",
+      "timestamp": "2025-10-26T15:07:26.463228"
+    },
+    {
+      "page_number": 403,
+      "top_text": "With Or Without You",
+      "timestamp": "2025-10-26T15:07:27.779578"
+    },
+    {
+      "page_number": 404,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:07:29.145443"
+    },
+    {
+      "page_number": 405,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T15:07:30.447423"
+    },
+    {
+      "page_number": 406,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:07:31.736802"
+    },
+    {
+      "page_number": 407,
+      "top_text": "Interlude",
+      "timestamp": "2025-10-26T15:07:33.019859"
+    },
+    {
+      "page_number": 408,
+      "top_text": "Wonderful Tonight",
+      "timestamp": "2025-10-26T15:07:34.267066"
+    },
+    {
+      "page_number": 409,
+      "top_text": "And then she asks me,\n\"Do I look all right?\"\nAnd I say,\n\"Yes, you look wonderful tonight.\"\nI feel wonderful because I see the love light in your eyes.\nAnd the wonder of it all is that you just don't rea-",
+      "timestamp": "2025-10-26T15:07:35.915435"
+    },
+    {
+      "page_number": 410,
+      "top_text": "Oh, my darlin', you were wonderful tonight.",
+      "timestamp": "2025-10-26T15:07:37.613951"
+    },
+    {
+      "page_number": 411,
+      "top_text": "Wonderwall",
+      "timestamp": "2025-10-26T15:07:38.921344"
+    },
+    {
+      "page_number": 412,
+      "top_text": "I don't believe that anybody feels the way I do about you now.",
+      "timestamp": "2025-10-26T15:07:41.655748"
+    },
+    {
+      "page_number": 413,
+      "top_text": "I don't believe that anybody feels the way I do about you now.",
+      "timestamp": "2025-10-26T15:07:43.229721"
+    },
+    {
+      "page_number": 414,
+      "top_text": "There are many things that I would like to say to you, but I don't know how.",
+      "timestamp": "2025-10-26T15:07:44.857882"
+    },
+    {
+      "page_number": 415,
+      "top_text": "you're my wonderwall.",
+      "timestamp": "2025-10-26T15:07:46.363127"
+    },
+    {
+      "page_number": 416,
+      "top_text": "Yesterday",
+      "timestamp": "2025-10-26T15:07:47.828861"
+    },
+    {
+      "page_number": 417,
+      "top_text": "Bridge",
+      "timestamp": "2025-10-26T15:07:49.191954"
+    },
+    {
+      "page_number": 418,
+      "top_text": "love was such an easy game to play. Now I need a place to hide away, oh, I believe in yesterday.",
+      "timestamp": "2025-10-26T15:07:50.620491"
+    },
+    {
+      "page_number": 419,
+      "top_text": "You'll Be In My Heart (Pop Version)*",
+      "timestamp": "2025-10-26T15:07:51.985574"
+    },
+    {
+      "page_number": 420,
+      "top_text": "Verse",
+      "timestamp": "2025-10-26T15:07:53.349027"
+    },
+    {
+      "page_number": 421,
+      "top_text": "To Coda",
+      "timestamp": "2025-10-26T15:07:54.689275"
+    },
+    {
+      "page_number": 422,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:07:55.988834"
+    },
+    {
+      "page_number": 423,
+      "top_text": "Believe me, you'll be in my heart.",
+      "timestamp": "2025-10-26T15:07:57.529084"
+    },
+    {
+      "page_number": 424,
+      "top_text": "I'll be with you.",
+      "timestamp": "2025-10-26T15:07:58.902614"
+    },
+    {
+      "page_number": 425,
+      "top_text": "You've Got A Friend",
+      "timestamp": "2025-10-26T15:08:00.312819"
+    },
+    {
+      "page_number": 426,
+      "top_text": "nothing is going right; wind should begin to blow; close your eyes and think of me, keep your head together and soon I will be there loud, now.",
+      "timestamp": "2025-10-26T15:08:01.790768"
+    },
+    {
+      "page_number": 427,
+      "top_text": "Chorus",
+      "timestamp": "2025-10-26T15:08:03.113872"
+    },
+    {
+      "page_number": 428,
+      "top_text": "You've got a friend.",
+      "timestamp": "2025-10-26T15:08:04.442044"
+    },
+    {
+      "page_number": 429,
+      "top_text": "people can be so cold?",
+      "timestamp": "2025-10-26T15:08:05.793227"
+    },
+    {
+      "page_number": 430,
+      "top_text": "You've Got To Hide Your Love Away",
+      "timestamp": "2025-10-26T15:08:07.095058"
+    },
+    {
+      "page_number": 431,
+      "top_text": "Hey! You've got to hide your love away.",
+      "timestamp": "2025-10-26T15:08:08.527631"
+    },
+    {
+      "page_number": 432,
+      "top_text": "Hey! You've got to hide your love away.",
+      "timestamp": "2025-10-26T15:08:09.923086"
+    },
+    {
+      "page_number": 433,
+      "top_text": "Your Song",
+      "timestamp": "2025-10-26T15:08:11.209365"
+    },
+    {
+      "page_number": 434,
+      "top_text": "Don't have much money, but, boy, if I did,",
+      "timestamp": "2025-10-26T15:08:12.696133"
+    },
+    {
+      "page_number": 435,
+      "top_text": "It may be quite simple, but now that it's done,\nI hope you don't mind, I hope you don't mind that I put down in words how wonderful life is while you're in the world.",
+      "timestamp": "2025-10-26T15:08:14.292871"
+    },
+    {
+      "page_number": 436,
+      "top_text": "I hope you don't mind,",
+      "timestamp": "2025-10-26T15:08:15.711791"
+    },
+    {
+      "page_number": 437,
+      "top_text": "INTRODUCTION TO FINGERSTYLE GUITAR",
+      "timestamp": "2025-10-26T15:08:17.893254"
+    },
+    {
+      "page_number": 438,
+      "top_text": "Africa\nTOTO",
+      "timestamp": "2025-10-26T15:08:20.330156"
+    },
+    {
+      "page_number": 439,
+      "top_text": "None",
+      "timestamp": "2025-10-26T15:08:21.276773"
+    }
+  ],
+  "original_file": "100_popular_fingerpicking.epub"
+}

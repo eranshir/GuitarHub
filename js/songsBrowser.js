@@ -36,6 +36,7 @@ class SongsBrowser {
         // List of books to load
         const bookFiles = [
             '59_hits_index.json',
+            '100_popular_fingerpicking_index.json',
             'DIRE_STRAITS_index.json',
             'Disney_songs_index.json',
             'don_mclean_index.json',
