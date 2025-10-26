@@ -1401,6 +1401,13 @@ body.rtl .setting-group label {
     text-align: right;
 }
 
+/* Keep fretboard left-to-right in all languages */
+body.rtl .fretboard-container,
+body.rtl .fretboard,
+body.rtl .fretboard-grid {
+    direction: ltr;
+}
+
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;
