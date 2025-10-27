@@ -1,0 +1,297 @@
+{
+  "filename": "fingerpicking_paul_simon.pdf",
+  "original_file": "fingerpicking_paul_simon.pdf",
+  "total_pages": 44,
+  "total_songs": 18,
+  "generated_at": "2025-10-27T18:40:32.091148",
+  "processing_time": "0:01:55",
+  "songs": [
+    {
+      "title": "MRS. ROBINSON",
+      "start_page": 6,
+      "end_page": 6
+    },
+    {
+      "title": "THE ROVERS",
+      "start_page": 7,
+      "end_page": 8
+    },
+    {
+      "title": "THE BOXER",
+      "start_page": 9,
+      "end_page": 11
+    },
+    {
+      "title": "THE 59TH STREET BRIDGE SONG FEELIN' GROOVY",
+      "start_page": 12,
+      "end_page": 13
+    },
+    {
+      "title": "SCARBOROUGH FAIRCANTICLE",
+      "start_page": 14,
+      "end_page": 15
+    },
+    {
+      "title": "THE SOUND OF SILENCE",
+      "start_page": 16,
+      "end_page": 16
+    },
+    {
+      "title": "HOMEWARD BOUND",
+      "start_page": 17,
+      "end_page": 19
+    },
+    {
+      "title": "KATHY'S SONG",
+      "start_page": 20,
+      "end_page": 21
+    },
+    {
+      "title": "DUNCAN",
+      "start_page": 22,
+      "end_page": 23
+    },
+    {
+      "title": "FIFTY WAYS TO LEAVE YOUR LOVER",
+      "start_page": 24,
+      "end_page": 25
+    },
+    {
+      "title": "I DO IT FOR YOUR LOVE",
+      "start_page": 26,
+      "end_page": 27
+    },
+    {
+      "title": "MOTHER AND CHILD REUNION",
+      "start_page": 28,
+      "end_page": 29
+    },
+    {
+      "title": "LOVES ME LIKE A ROCK",
+      "start_page": 30,
+      "end_page": 31
+    },
+    {
+      "title": "AMERICAN TUNE",
+      "start_page": 32,
+      "end_page": 33
+    },
+    {
+      "title": "KODACHROME",
+      "start_page": 34,
+      "end_page": 37
+    },
+    {
+      "title": "THAT'S WHY GOD MADE THE MOVIES",
+      "start_page": 38,
+      "end_page": 39
+    },
+    {
+      "title": "GRACELAND",
+      "start_page": 40,
+      "end_page": 43
+    },
+    {
+      "title": "FINGERPICKING PAUL SIMON ROBINSON",
+      "start_page": 44,
+      "end_page": 44
+    }
+  ],
+  "raw_page_data": [
+    {
+      "page_number": 6,
+      "top_text": "Mrs. Robinson",
+      "timestamp": "2025-10-27T18:39:12.111368"
+    },
+    {
+      "page_number": 7,
+      "top_text": "The Rovers",
+      "timestamp": "2025-10-27T18:39:13.772618"
+    },
+    {
+      "page_number": 8,
+      "top_text": "D.S. at Coda",
+      "timestamp": "2025-10-27T18:39:15.823234"
+    },
+    {
+      "page_number": 9,
+      "top_text": "The Boxer",
+      "timestamp": "2025-10-27T18:39:17.492938"
+    },
+    {
+      "page_number": 10,
+      "top_text": "A",
+      "timestamp": "2025-10-27T18:39:19.052122"
+    },
+    {
+      "page_number": 11,
+      "top_text": "A",
+      "timestamp": "2025-10-27T18:39:20.617568"
+    },
+    {
+      "page_number": 12,
+      "top_text": "The 59th Street Bridge Song (Feelin' Groovy)",
+      "timestamp": "2025-10-27T18:39:22.856606"
+    },
+    {
+      "page_number": 13,
+      "top_text": "Am7",
+      "timestamp": "2025-10-27T18:39:24.476525"
+    },
+    {
+      "page_number": 14,
+      "top_text": "Scarborough Fair/Canticle",
+      "timestamp": "2025-10-27T18:39:26.381648"
+    },
+    {
+      "page_number": 15,
+      "top_text": "Am",
+      "timestamp": "2025-10-27T18:39:27.948659"
+    },
+    {
+      "page_number": 16,
+      "top_text": "The Sound Of Silence",
+      "timestamp": "2025-10-27T18:39:29.718862"
+    },
+    {
+      "page_number": 17,
+      "top_text": "Homeward Bound",
+      "timestamp": "2025-10-27T18:39:31.513140"
+    },
+    {
+      "page_number": 18,
+      "top_text": "F",
+      "timestamp": "2025-10-27T18:39:33.183045"
+    },
+    {
+      "page_number": 19,
+      "top_text": "G",
+      "timestamp": "2025-10-27T18:39:34.890536"
+    },
+    {
+      "page_number": 20,
+      "top_text": "Kathy's Song",
+      "timestamp": "2025-10-27T18:39:36.730764"
+    },
+    {
+      "page_number": 21,
+      "top_text": "Bm",
+      "timestamp": "2025-10-27T18:39:38.541233"
+    },
+    {
+      "page_number": 22,
+      "top_text": "Duncan",
+      "timestamp": "2025-10-27T18:39:40.329166"
+    },
+    {
+      "page_number": 23,
+      "top_text": "G7",
+      "timestamp": "2025-10-27T18:39:42.196188"
+    },
+    {
+      "page_number": 24,
+      "top_text": "Fifty Ways To Leave Your Lover",
+      "timestamp": "2025-10-27T18:39:44.274793"
+    },
+    {
+      "page_number": 25,
+      "top_text": "Em7",
+      "timestamp": "2025-10-27T18:39:46.149430"
+    },
+    {
+      "page_number": 26,
+      "top_text": "I Do It For Your Love",
+      "timestamp": "2025-10-27T18:39:48.242384"
+    },
+    {
+      "page_number": 27,
+      "top_text": "D.D.dim",
+      "timestamp": "2025-10-27T18:39:50.285040"
+    },
+    {
+      "page_number": 28,
+      "top_text": "Mother And Child Reunion",
+      "timestamp": "2025-10-27T18:39:52.343365"
+    },
+    {
+      "page_number": 29,
+      "top_text": "Am",
+      "timestamp": "2025-10-27T18:39:54.197649"
+    },
+    {
+      "page_number": 30,
+      "top_text": "Loves Me Like A Rock",
+      "timestamp": "2025-10-27T18:39:56.316080"
+    },
+    {
+      "page_number": 31,
+      "top_text": "E",
+      "timestamp": "2025-10-27T18:39:58.156234"
+    },
+    {
+      "page_number": 32,
+      "top_text": "American Tune",
+      "timestamp": "2025-10-27T18:40:00.061121"
+    },
+    {
+      "page_number": 33,
+      "top_text": "D/F#",
+      "timestamp": "2025-10-27T18:40:02.071246"
+    },
+    {
+      "page_number": 34,
+      "top_text": "Kodachrome",
+      "timestamp": "2025-10-27T18:40:04.011551"
+    },
+    {
+      "page_number": 35,
+      "top_text": "E7",
+      "timestamp": "2025-10-27T18:40:05.943581"
+    },
+    {
+      "page_number": 36,
+      "top_text": "Think Too Much(b)",
+      "timestamp": "2025-10-27T18:40:08.066891"
+    },
+    {
+      "page_number": 37,
+      "top_text": "D",
+      "timestamp": "2025-10-27T18:40:09.913177"
+    },
+    {
+      "page_number": 38,
+      "top_text": "That's Why God Made The Movies",
+      "timestamp": "2025-10-27T18:40:12.069638"
+    },
+    {
+      "page_number": 39,
+      "top_text": "AmA7",
+      "timestamp": "2025-10-27T18:40:14.012042"
+    },
+    {
+      "page_number": 40,
+      "top_text": "Graceland",
+      "timestamp": "2025-10-27T18:40:16.004812"
+    },
+    {
+      "page_number": 41,
+      "top_text": "C CIVII",
+      "timestamp": "2025-10-27T18:40:18.022836"
+    },
+    {
+      "page_number": 42,
+      "top_text": "F��",
+      "timestamp": "2025-10-27T18:40:19.981086"
+    },
+    {
+      "page_number": 43,
+      "top_text": "Much larger than other text",
+      "timestamp": "2025-10-27T18:40:22.039447"
+    },
+    {
+      "page_number": 44,
+      "top_text": "FINGERPICKING PAUL SIMON ROBINSON",
+      "timestamp": "2025-10-27T18:40:24.564266"
+    }
+  ]
+}

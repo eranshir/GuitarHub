@@ -43,6 +43,7 @@ class SongsBrowser {
             'Disney_songs_index.json',
             'don_mclean_index.json',
             'Enormous_Guitar_index.json',
+            'fingerpicking_paul_simon_index.json',
             'Giant_Sheet_Music_index.json',
             'hebrew_songs_index.json',
             'Love_The_Beatles_index.json',
