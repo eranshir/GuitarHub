@@ -46,6 +46,7 @@ class SongsBrowser {
             'Giant_Sheet_Music_index.json',
             'hebrew_songs_index.json',
             'Love_The_Beatles_index.json',
+            'paul_simon_complete_index.json',
             'Piano_White_Pages_index.json',
             'sting_index.json'
         ];
