@@ -28,6 +28,7 @@
             <button class="module-btn" data-module="intervals" data-i18n="nav.intervals">Intervals Memory</button>
             <button class="module-btn" data-module="chords" data-i18n="nav.chords">Chords Memory</button>
             <button class="module-btn" data-module="spot-note" data-i18n="nav.spotNote">Spot a Note</button>
+            <button class="module-btn" data-module="assistant" data-i18n="nav.assistant">Assistant</button>
             <button class="module-btn" data-module="stats" data-i18n="nav.stats">Statistics</button>
         </nav>
 
@@ -290,6 +291,7 @@
                 <div class="game-mode-selector">
                     <button class="chord-mode-btn active" data-mode="chord-fret-to-name" data-i18n="chords.modes.fretToName">Fret → Chord</button>
                     <button class="chord-mode-btn" data-mode="chord-name-to-fret" data-i18n="chords.modes.nameToFret">Chord → Fret</button>
+                    <button class="chord-mode-btn" data-mode="chord-positions" data-i18n="chords.modes.chordPositions">Chord Positions</button>
                 </div>
 
                 <div class="game-container">
@@ -603,6 +605,121 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div id="chord-positions-game" class="game-content">
+                            <h2 class="question">Practice Chord Positions</h2>
+                            <div class="chord-positions-layout">
+                                <div class="chord-positions-main">
+                                    <div class="current-chord-display">
+                                        <span class="chord-name" id="positions-chord-name">-</span>
+                                        <span class="position-info" id="positions-info">Position 1 of 5</span>
+                                    </div>
+
+                                    <div class="metronome-controls">
+                                        <label>BPM: <span id="bpm-display">80</span></label>
+                                        <input type="range" id="bpm-slider" min="40" max="200" value="80" step="5">
+                                        <button id="toggle-metronome" class="metronome-btn">Start</button>
+                                        <button id="play-current-shape" class="play-sound-btn">🔊 Play Current Shape</button>
+                                    </div>
+
+                                    <div class="fretboard-container">
+                                        <div class="fretboard" id="fretboard-chord-positions">
+                                            <!-- Fretboard will be generated dynamically -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="chord-positions-settings">
+                                    <!-- Root Note Selection -->
+                                    <div class="accordion-section">
+                                        <button class="accordion-toggle active" data-target="root-note-selector">
+                                            <span>Root Note</span>
+                                            <span class="accordion-icon">▼</span>
+                                        </button>
+                                        <div id="root-note-selector" class="accordion-content show">
+                                            <div class="note-buttons-grid">
+                                                <button class="root-note-btn" data-note="C">C</button>
+                                                <button class="root-note-btn" data-note="C#">C#/Db</button>
+                                                <button class="root-note-btn" data-note="D">D</button>
+                                                <button class="root-note-btn" data-note="D#">D#/Eb</button>
+                                                <button class="root-note-btn" data-note="E">E</button>
+                                                <button class="root-note-btn" data-note="F">F</button>
+                                                <button class="root-note-btn" data-note="F#">F#/Gb</button>
+                                                <button class="root-note-btn" data-note="G">G</button>
+                                                <button class="root-note-btn" data-note="G#">G#/Ab</button>
+                                                <button class="root-note-btn" data-note="A">A</button>
+                                                <button class="root-note-btn" data-note="A#">A#/Bb</button>
+                                                <button class="root-note-btn" data-note="B">B</button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Chord Quality Selection -->
+                                    <div class="accordion-section">
+                                        <button class="accordion-toggle active" data-target="chord-quality-selector">
+                                            <span>Chord Type</span>
+                                            <span class="accordion-icon">▼</span>
+                                        </button>
+                                        <div id="chord-quality-selector" class="accordion-content show chord-quality-scroll">
+                                            <div class="chord-quality-toggles">
+                                                <h5 class="quality-group-title">Basic Triads</h5>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="major" checked> Major</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="minor"> Minor</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="diminished"> Diminished (dim)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="augmented"> Augmented (+)</label>
+
+                                                <h5 class="quality-group-title">Suspended</h5>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="sus2"> Sus2</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="sus4"> Sus4</label>
+
+                                                <h5 class="quality-group-title">Seventh Chords</h5>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="dominant7"> 7 (Dominant 7th)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="major7"> maj7 (Major 7th)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="minor7"> m7 (Minor 7th)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="diminished7"> dim7</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="minorMajor7"> m(maj7)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="7sus4"> 7sus4</label>
+
+                                                <h5 class="quality-group-title">Altered Dominants</h5>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="7b5"> 7♭5</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="7b9"> 7♭9</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="7sharp9"> 7♯9</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="7sharp11"> 7♯11</label>
+
+                                                <h5 class="quality-group-title">Added Note Chords</h5>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="add9"> add9</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="6"> 6 (Sixth)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="6add9"> 6/9</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="m6"> m6 (Minor 6th)</label>
+
+                                                <h5 class="quality-group-title">Extended Chords</h5>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="9"> 9 (Ninth)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="11"> 11 (Eleventh)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="13"> 13 (Thirteenth)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="m9"> m9 (Minor 9th)</label>
+                                                <label><input type="checkbox" class="quality-toggle" data-quality="maj9"> maj9 (Major 9th)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- String Set Selection -->
+                                    <div class="accordion-section">
+                                        <button class="accordion-toggle active" data-target="string-set-selector">
+                                            <span>Voicing Types</span>
+                                            <span class="accordion-icon">▼</span>
+                                        </button>
+                                        <div id="string-set-selector" class="accordion-content show">
+                                            <div class="string-set-toggles">
+                                                <label><input type="checkbox" class="string-set-toggle" data-set="all" checked> All Shapes</label>
+                                                <label><input type="checkbox" class="string-set-toggle" data-set="6-string"> Focus: 6-String Voicings</label>
+                                                <label><input type="checkbox" class="string-set-toggle" data-set="4-string"> Focus: 4-String Voicings</label>
+                                                <label><input type="checkbox" class="string-set-toggle" data-set="3-string"> Focus: 3-String Voicings</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -668,6 +785,70 @@
                             <label data-i18n="spotNote.settings.fretRange">Fret range:</label>
                             <input type="number" id="spot-min-fret" min="0" max="24" value="0"> -
                             <input type="number" id="spot-max-fret" min="0" max="24" value="12">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Assistant Module -->
+            <section id="assistant-module" class="module">
+                <div class="assistant-container">
+                    <div class="assistant-main">
+                        <div class="current-chord-display">
+                            <span class="chord-name" id="assistant-chord-name">-</span>
+                            <span class="position-info" id="assistant-position-info">Ready</span>
+                        </div>
+
+                        <div class="fretboard-container">
+                            <div class="fretboard" id="fretboard-assistant">
+                                <!-- Fretboard will be generated dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="playback-controls">
+                            <div class="bpm-control">
+                                <label>BPM: <span id="assistant-bpm-display">80</span></label>
+                                <input type="range" id="assistant-bpm-slider" min="40" max="200" value="80" step="5">
+                            </div>
+                            <div class="control-buttons">
+                                <button id="assistant-start" class="control-btn start-btn" data-i18n="assistant.controls.start">▶ Start</button>
+                                <button id="assistant-pause" class="control-btn pause-btn" style="display: none;" data-i18n="common.pause">⏸ Pause</button>
+                                <button id="assistant-resume" class="control-btn resume-btn" style="display: none;" data-i18n="common.resume">▶ Resume</button>
+                                <button id="assistant-stop" class="control-btn stop-btn" style="display: none;" data-i18n="assistant.controls.stop">⏹ Stop</button>
+                                <button id="assistant-play-shape" class="control-btn play-btn" data-i18n="assistant.controls.playShape">🔊 Play Current Shape</button>
+                            </div>
+                        </div>
+
+                        <div class="tab-display-container">
+                            <h4 data-i18n="assistant.tabDisplay">Tablature:</h4>
+                            <pre id="assistant-tab-display" class="tab-display">Ready for instructions...</pre>
+                        </div>
+
+                        <div class="additional-notes-container">
+                            <div id="assistant-additional-notes" class="additional-notes"></div>
+                        </div>
+                    </div>
+
+                    <div class="chat-interface">
+                        <div class="chat-header">
+                            <h3 data-i18n="assistant.chatTitle">Guitar Assistant</h3>
+                            <button id="clear-chat" class="clear-chat-btn" data-i18n="assistant.clearChat">Clear Chat</button>
+                        </div>
+                        <div id="chat-messages" class="chat-messages">
+                            <div class="chat-message assistant-message">
+                                <div class="message-avatar">🤖</div>
+                                <div class="message-content">
+                                    <p data-i18n="assistant.welcome">Hi! I'm your guitar assistant. Ask me about chord progressions, scales, techniques, or anything guitar-related. I can show you shapes on the fretboard!</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <textarea id="chat-input" class="chat-input" placeholder="Ask me anything about guitar..." data-i18n-placeholder="assistant.inputPlaceholder" rows="2"></textarea>
+                            <button id="send-message" class="send-btn" data-i18n="assistant.send">Send</button>
+                        </div>
+                        <div id="loading-indicator" class="loading-indicator" style="display: none;">
+                            <div class="loading-spinner"></div>
+                            <span data-i18n="assistant.thinking">Assistant is thinking...</span>
                         </div>
                     </div>
                 </div>
@@ -796,7 +977,9 @@
     <script src="js/game.js"></script>
     <script src="js/intervalGame.js"></script>
     <script src="js/chordGame.js"></script>
+    <script src="js/chordPositionsGame.js"></script>
     <script src="js/spotNoteGame.js"></script>
+    <script src="js/assistantGame.js"></script>
     <script src="js/statistics.js"></script>
     <script src="js/songsBrowser.js"></script>
     <script src="js/app.js"></script>

@@ -8,6 +8,7 @@
     "intervals": "זיכרון אינטרוולים",
     "chords": "זיכרון אקורדים",
     "spotNote": "מצא את התו",
+    "assistant": "עוזר",
     "stats": "סטטיסטיקה"
   },
   "common": {
@@ -122,7 +123,8 @@
     "startButton": "התחל אימון אקורדים",
     "modes": {
       "fretToName": "סריג → אקורד",
-      "nameToFret": "אקורד → סריג"
+      "nameToFret": "אקורד → סריג",
+      "chordPositions": "צורות של אקורד"
     },
     "questions": {
       "fretToName": "איזה אקורד זה?",
@@ -230,6 +232,20 @@
       "page": "עמוד {current} מתוך {total}",
       "fullscreen": "⛶ מסך מלא",
       "exitFullscreen": "✕ יציאה ממסך מלא"
+    }
+  },
+  "assistant": {
+    "chatTitle": "עוזר גיטרה",
+    "welcome": "שלום! אני העוזר שלך לגיטרה. שאל אותי על הרמוניה, סולמות, טכניקה, או כל דבר הקשור לגיטרה. אני יכול להראות לך צורות על לוח הסריגים!",
+    "inputPlaceholder": "שאל אותי כל דבר על גיטרה...",
+    "send": "שלח",
+    "clearChat": "נקה שיחה",
+    "thinking": "העוזר חושב...",
+    "tabDisplay": "טאב:",
+    "controls": {
+      "start": "▶ התחל",
+      "stop": "⏹ עצור",
+      "playShape": "🔊 נגן צורה נוכחית"
     }
   },
   "statistics": {

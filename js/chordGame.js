@@ -86,16 +86,24 @@ class ChordGame {
         document.querySelectorAll('.chord-mode-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 if (this.isSessionActive) return;
-                
+
                 document.querySelectorAll('.chord-mode-btn').forEach(b => b.classList.remove('active'));
                 e.target.classList.add('active');
                 this.currentMode = e.target.dataset.mode;
-                
-                // Keep the start screen visible until session starts
+
+                // Hide all game content
                 document.querySelectorAll('#chords-module .game-content').forEach(content => {
                     content.classList.remove('active');
                 });
-                document.getElementById('chord-start-screen').classList.add('active');
+
+                // Show appropriate content based on mode
+                if (this.currentMode === 'chord-positions') {
+                    // Chord positions game handles its own display
+                    document.getElementById('chord-positions-game').classList.add('active');
+                } else {
+                    // Keep the start screen visible until session starts for other modes
+                    document.getElementById('chord-start-screen').classList.add('active');
+                }
             });
         });
         

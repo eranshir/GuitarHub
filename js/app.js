@@ -8,15 +8,19 @@ class App {
         this.game = null;
         this.intervalGame = null;
         this.chordGame = null;
+        this.chordPositionsGame = null;
+        this.assistantGame = null;
         this.charts = {};
-        
+
         this.init();
     }
-    
+
     init() {
         this.game = new FretboardGame(this.guitar, this.statistics);
         this.intervalGame = new IntervalGame(this.guitar, this.statistics, this.intervalTheory);
         this.chordGame = new ChordGame(this.guitar, this.statistics, this.chordTheory);
+        this.chordPositionsGame = new ChordPositionsGame(this.guitar, this.audio, this.chordTheory);
+        this.assistantGame = new AssistantGame(this.guitar, this.audio, this.chordTheory);
         this.spotNoteGame = new SpotNoteGame(this.guitar, this.statistics);
         this.setupModuleNavigation();
         this.setupAudioControls();
@@ -63,6 +67,8 @@ class App {
             document.getElementById('chords-module').classList.add('active');
         } else if (moduleId === 'spot-note') {
             document.getElementById('spot-note-module').classList.add('active');
+        } else if (moduleId === 'assistant') {
+            document.getElementById('assistant-module').classList.add('active');
         } else if (moduleId === 'stats') {
             document.getElementById('stats-module').classList.add('active');
             this.updateStatisticsDisplay();

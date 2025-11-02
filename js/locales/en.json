@@ -8,6 +8,7 @@
     "intervals": "Intervals Memory",
     "chords": "Chords Memory",
     "spotNote": "Spot a Note",
+    "assistant": "Assistant",
     "stats": "Statistics"
   },
   "common": {
@@ -122,7 +123,8 @@
     "startButton": "Start Chord Session",
     "modes": {
       "fretToName": "Fret → Chord",
-      "nameToFret": "Chord → Fret"
+      "nameToFret": "Chord → Fret",
+      "chordPositions": "Chord Positions"
     },
     "questions": {
       "fretToName": "What chord is this?",
@@ -230,6 +232,20 @@
       "page": "Page {current} of {total}",
       "fullscreen": "⛶ Fullscreen",
       "exitFullscreen": "✕ Exit Fullscreen"
+    }
+  },
+  "assistant": {
+    "chatTitle": "Guitar Assistant",
+    "welcome": "Hi! I'm your guitar assistant. Ask me about chord progressions, scales, techniques, or anything guitar-related. I can show you shapes on the fretboard!",
+    "inputPlaceholder": "Ask me anything about guitar...",
+    "send": "Send",
+    "clearChat": "Clear Chat",
+    "thinking": "Assistant is thinking...",
+    "tabDisplay": "Tablature:",
+    "controls": {
+      "start": "▶ Start",
+      "stop": "⏹ Stop",
+      "playShape": "🔊 Play Current Shape"
     }
   },
   "statistics": {
