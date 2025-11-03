@@ -153,8 +153,14 @@ class FretboardDisplay {
     clearHighlights() {
         if (!this.container) return;
         this.container.querySelectorAll('.position-marker').forEach(marker => {
-            marker.classList.remove('active', 'previous-chord');
+            marker.classList.remove('active', 'previous-chord', 'playing-now');
             marker.style.opacity = '';
+
+            // Remove finger number and right-finger elements
+            const fingerNum = marker.querySelector('.finger-number');
+            const rightFinger = marker.querySelector('.right-finger');
+            if (fingerNum) fingerNum.remove();
+            if (rightFinger) rightFinger.remove();
         });
     }
     
