@@ -182,27 +182,100 @@ CRITICAL: You MUST respond with valid JSON in exactly this format:
     {
       "chord_name": "Dm7",           // Displayed above fretboard
       "positions": [                  // REQUIRED - fret positions
-        {"string": 1, "fret": 5},    // string 1 = high E
-        {"string": 2, "fret": 6},    // string 2 = B
-        {"string": 3, "fret": 5},    // string 3 = G
-        {"string": 4, "fret": 7},    // string 4 = D
-        {"string": 5, "fret": 5},    // string 5 = A
-        {"string": 6, "fret": 0}     // string 6 = low E (0 = open)
+        {"string": 1, "fret": 5, "left_finger": 1},    // left_finger optional (1-4)
+        {"string": 2, "fret": 6, "left_finger": 3},
+        {"string": 3, "fret": 5, "left_finger": 1},    // Same finger = barre
+        {"string": 4, "fret": 7, "left_finger": 4},
+        {"string": 5, "fret": 5, "left_finger": 1},
+        {"string": 6, "fret": 0}                       // Open string
       ],
-      "muted": [6],                   // Array of string numbers to mute (show X)
-      "duration_beats": 4,            // How many beats to display (4/4 time)
-      "notes": "The ii chord - minor quality"  // Brief teaching note
+      "muted": [],                    // Array of string numbers to mute (show X)
+      "duration_beats": 4,            // Total beats for this shape
+      "strumming_pattern": [          // OPTIONAL - detailed strumming sequence
+        {
+          "strings": [5],             // String(s) to play
+          "duration_beats": 1,        // Duration in beats
+          "right_finger": "p"         // Optional: p, i, m, a (PIMA)
+        },
+        {
+          "strings": [3, 2, 1],       // Play multiple strings together
+          "duration_beats": 1,
+          "right_finger": "i"
+        },
+        {
+          "strings": [4],
+          "duration_beats": 1,
+          "right_finger": "m"
+        },
+        {
+          "strings": [3, 2, 1],
+          "duration_beats": 1,
+          "right_finger": "a"
+        }
+      ],
+      "notes": "Travis picking pattern - bass note on beat 1"
     }
   ]
   ```
 
+- **NEW OPTIONAL FIELDS for Advanced Teaching**:
+
+  **left_finger** (in positions array): Shows which left-hand finger (1-4) to use
+  - **Frontend Display**: Number displayed inside the red circle on the fretboard
+  - **Usage**: Teach proper fingering technique
+  - **Example**: {"string": 3, "fret": 2, "left_finger": 2} → Shows "2" in circle
+  - **Barre chords**: Use same finger number for multiple strings
+  - **Open strings**: Don't specify left_finger for fret 0
+
+  **strumming_pattern** (array): Defines WHICH strings to play and WHEN
+  - **Frontend Display**:
+    - Strings light up GREEN one at a time as they're played
+    - Shows right_finger letter (P/I/M/A) inside green circle during playback
+    - Synchronized with metronome timing
+    - Plays actual notes via audio engine
+
+  - **When to use**:
+    - Fingerpicking patterns (Travis picking, classical patterns)
+    - Specific strumming patterns (down-up patterns)
+    - Arpeggios
+    - Teaching proper picking technique
+
+  - **Structure**:
+    ```json
+    "strumming_pattern": [
+      {
+        "strings": [5],              // String(s) to play (can be single or multiple)
+        "duration_beats": 0.5,       // Can use fractional beats (0.25, 0.5, 1, 2, 4)
+        "right_finger": "p",         // Optional: p=thumb, i=index, m=middle, a=ring
+        "notes": "Bass note"         // Optional: brief note about this strum
+      },
+      {
+        "strings": [3, 2, 1],        // Playing multiple strings = chord/strum
+        "duration_beats": 0.5,
+        "right_finger": "i",
+        "notes": "Treble strings together"
+      }
+    ]
+    ```
+
+  - **Timing Rules**:
+    - Total strumming_pattern duration should equal shape's duration_beats
+    - Example: If duration_beats is 4, strumming pattern should sum to 4 beats
+    - Use 0.25 for sixteenth notes, 0.5 for eighth notes, 1 for quarter notes
+
+  - **If strumming_pattern is NOT provided**:
+    - Frontend plays entire chord as a strum (all non-muted strings)
+    - No detailed visualization, just shows the shape
+
 - **IMPORTANT Rules**:
-  - ALWAYS provide all 6 strings (or mark as muted)
+  - ALWAYS provide all 6 strings in positions (or mark as muted)
   - Use fret 0 for open strings
   - String numbering: 1=high E, 2=B, 3=G, 4=D, 5=A, 6=low E
   - duration_beats should be multiples of 4 (4, 8, 12, 16) for clean measures
   - Each position object MUST have both "string" and "fret" fields
   - Only include playable chord shapes (4 fingers or fewer)
+  - left_finger: 1=index, 2=middle, 3=ring, 4=pinky
+  - right_finger: p=thumb (pulgar), i=index, m=middle, a=ring (anular)
 
 ### 3. tab_display (OPTIONAL - provide when showing tablature)
 - **Frontend Display**:
@@ -242,7 +315,7 @@ CRITICAL: You MUST respond with valid JSON in exactly this format:
 
 ## Example Scenarios:
 
-### Scenario 1: Chord Progression Request
+### Scenario 1: Simple Chord Progression (No Strumming Pattern)
 User: "Show me a 2-5-1 in C Major"
 Response:
 ```json
@@ -324,6 +397,123 @@ Response:
 }
 ```
 
+### Scenario 4: Travis Picking Pattern (WITH Strumming Pattern)
+User: "Show me a Travis picking pattern on C major"
+Response:
+```json
+{
+  "chat_response": "Here's a classic Travis picking pattern on C major. This alternating bass pattern is fundamental to fingerstyle guitar. The thumb (p) plays the bass notes while the fingers (i, m, a) play the treble strings.",
+  "fretboard_sequence": [
+    {
+      "chord_name": "C Major (Travis Pattern)",
+      "positions": [
+        {"string": 1, "fret": 0},
+        {"string": 2, "fret": 1, "left_finger": 1},
+        {"string": 3, "fret": 0},
+        {"string": 4, "fret": 2, "left_finger": 2},
+        {"string": 5, "fret": 3, "left_finger": 3},
+        {"string": 6, "fret": 0}
+      ],
+      "muted": [],
+      "duration_beats": 4,
+      "strumming_pattern": [
+        {
+          "strings": [5],
+          "duration_beats": 1,
+          "right_finger": "p",
+          "notes": "Bass - A string"
+        },
+        {
+          "strings": [3, 2, 1],
+          "duration_beats": 1,
+          "right_finger": "i",
+          "notes": "Treble triplet"
+        },
+        {
+          "strings": [4],
+          "duration_beats": 1,
+          "right_finger": "p",
+          "notes": "Alternating bass - D string"
+        },
+        {
+          "strings": [3, 2, 1],
+          "duration_beats": 1,
+          "right_finger": "m",
+          "notes": "Treble triplet"
+        }
+      ],
+      "notes": "Keep steady bass alternation with thumb"
+    }
+  ],
+  "tab_display": "     C (Travis Pattern)\\n     p   i   p   m\\ne|--0-------0-------0-------0----|\\nB|--1-------1-------1-------1----|\\nG|--0-------0-------0-------0----|\\nD|----------2--------------2----|\\nA|--3-----------------------3----|\\nE|------------------------------|",
+  "additional_notes": "Practice slowly at first. The thumb alternates between the 5th and 4th strings while fingers pluck the top 3 strings together. This creates the signature 'boom-chick' sound of Travis picking."
+}
+```
+
+### Scenario 5: Arpeggio Pattern
+User: "Teach me an arpeggio pattern on Am"
+Response:
+```json
+{
+  "chat_response": "Here's a beautiful Am arpeggio pattern. Each string is played individually in sequence, creating a flowing, harp-like sound.",
+  "fretboard_sequence": [
+    {
+      "chord_name": "Am Arpeggio",
+      "positions": [
+        {"string": 1, "fret": 0},
+        {"string": 2, "fret": 1, "left_finger": 1},
+        {"string": 3, "fret": 2, "left_finger": 3},
+        {"string": 4, "fret": 2, "left_finger": 2},
+        {"string": 5, "fret": 0},
+        {"string": 6, "fret": 0}
+      ],
+      "muted": [6],
+      "duration_beats": 4,
+      "strumming_pattern": [
+        {"strings": [5], "duration_beats": 0.5, "right_finger": "p"},
+        {"strings": [4], "duration_beats": 0.5, "right_finger": "i"},
+        {"strings": [3], "duration_beats": 0.5, "right_finger": "m"},
+        {"strings": [2], "duration_beats": 0.5, "right_finger": "a"},
+        {"strings": [3], "duration_beats": 0.5, "right_finger": "m"},
+        {"strings": [2], "duration_beats": 0.5, "right_finger": "i"},
+        {"strings": [1], "duration_beats": 0.5, "right_finger": "i"},
+        {"strings": [2], "duration_beats": 0.5, "right_finger": "m"}
+      ],
+      "notes": "Classic 8-note arpeggio pattern"
+    }
+  ],
+  "tab_display": "     Am Arpeggio\\n     p i m a m i i m\\ne|------------------0----------|\\nB|----------1---1-------1------|\\nG|------2-------2--------------|\\nD|--2--------------------------|\\nA|--0--------------------------|\\nE|-----------------------------|",
+  "additional_notes": "Practice with a metronome. Each note should ring clearly. Let notes sustain - don't mute them as you play the next note."
+}
+```
+
+### Scenario 6: Barre Chord with Fingering
+User: "Show me how to finger F major barre chord"
+Response:
+```json
+{
+  "chat_response": "The F major barre chord uses your index finger to barre across all 6 strings at the first fret. Here's the proper fingering.",
+  "fretboard_sequence": [
+    {
+      "chord_name": "F Major (Barre)",
+      "positions": [
+        {"string": 1, "fret": 1, "left_finger": 1},
+        {"string": 2, "fret": 1, "left_finger": 1},
+        {"string": 3, "fret": 2, "left_finger": 2},
+        {"string": 4, "fret": 3, "left_finger": 4},
+        {"string": 5, "fret": 3, "left_finger": 3},
+        {"string": 6, "fret": 1, "left_finger": 1}
+      ],
+      "muted": [],
+      "duration_beats": 8,
+      "notes": "Notice finger 1 barres strings 1, 2, and 6"
+    }
+  ],
+  "tab_display": "e|--1--| (finger 1)\\nB|--1--| (finger 1)\\nG|--2--| (finger 2)\\nD|--3--| (finger 4)\\nA|--3--| (finger 3)\\nE|--1--| (finger 1 barre)",
+  "additional_notes": "The index finger (1) barres across frets 1, 2, and 6. Apply pressure with the side of your finger, not the flat part. Fingers 2, 3, and 4 form an E-shape above the barre."
+}
+```
+
 ## CRITICAL Rules:
 1. ALWAYS return valid JSON
 2. ALWAYS include chat_response (never null)
@@ -332,6 +522,9 @@ Response:
 5. Use proper string numbering (1-6, where 1 is high E)
 6. Duration should make musical sense (typically 4, 8, or 16 beats)
 7. If user asks for multiple voicings, include them all in the sequence
+8. left_finger and strumming_pattern are OPTIONAL - only use when teaching technique
+9. If using strumming_pattern, total duration must equal duration_beats
+10. right_finger uses PIMA notation (classical guitar convention)
 ```
 
 ## Security on Your VM:

@@ -278,8 +278,15 @@ class AssistantGame {
         // Calculate timing
         const beatDuration = (60 / this.bpm) * 1000; // ms per beat
 
-        // Start advancing through sequence
-        this.scheduleNextShape(beatDuration);
+        // Check if current shape has strumming pattern
+        const currentShape = this.currentSequence[this.currentIndex];
+        if (currentShape.strumming_pattern && currentShape.strumming_pattern.length > 0) {
+            // Play with strumming pattern animation
+            this.playStrummingPattern(currentShape, beatDuration);
+        } else {
+            // Simple advance after duration
+            this.scheduleNextShape(beatDuration);
+        }
     }
 
     scheduleNextShape(beatDuration) {
@@ -399,6 +406,21 @@ class AssistantGame {
                         marker.classList.remove('previous-chord');
                         marker.style.opacity = '1';
                     }
+
+                    // Add left-hand finger number if provided (only for current shape)
+                    if (!isPrevious && pos.left_finger) {
+                        const fingerNum = document.createElement('span');
+                        fingerNum.className = 'finger-number';
+                        fingerNum.textContent = pos.left_finger;
+                        marker.appendChild(fingerNum);
+                    }
+
+                    // Prepare right-hand finger indicator (hidden until played)
+                    if (!isPrevious) {
+                        const rightFinger = document.createElement('span');
+                        rightFinger.className = 'right-finger';
+                        marker.appendChild(rightFinger);
+                    }
                 }
             }
         });
@@ -426,19 +448,133 @@ class AssistantGame {
         }
     }
 
+    playStrummingPattern(shape, beatDuration) {
+        if (!shape.strumming_pattern || !this.isPlaying) return;
+
+        let cumulativeDelay = 0;
+
+        shape.strumming_pattern.forEach((strum, index) => {
+            const delay = cumulativeDelay;
+            const duration = strum.duration_beats * beatDuration;
+
+            setTimeout(() => {
+                if (!this.isPlaying || this.isPaused) return;
+
+                // Highlight the strings being played (green)
+                this.highlightPlayingStrings(strum.strings, strum.right_finger);
+
+                // Play the notes
+                this.playStrings(shape, strum.strings);
+
+                // Remove green highlight after a short time
+                setTimeout(() => {
+                    this.clearPlayingHighlights();
+                }, Math.min(duration * 0.8, 400));
+
+            }, delay);
+
+            cumulativeDelay += duration;
+        });
+
+        // After pattern completes, advance to next shape
+        setTimeout(() => {
+            if (!this.isPlaying || this.isPaused) return;
+
+            this.advanceToNextShape();
+
+            // Schedule next shape
+            if (this.isPlaying && this.currentIndex < this.currentSequence.length) {
+                const nextShape = this.currentSequence[this.currentIndex];
+                const nextBeatDuration = (60 / this.bpm) * 1000;
+
+                if (nextShape.strumming_pattern && nextShape.strumming_pattern.length > 0) {
+                    this.playStrummingPattern(nextShape, nextBeatDuration);
+                } else {
+                    this.scheduleNextShape(nextBeatDuration);
+                }
+            } else {
+                this.stopPlayback();
+                this.addSystemMessage('Sequence complete! Click "Start" to play again.');
+            }
+        }, cumulativeDelay);
+    }
+
+    highlightPlayingStrings(strings, rightFinger) {
+        if (!this.fretboardDisplay.container) return;
+
+        strings.forEach(stringNum => {
+            // Find the position for this string in current shape
+            const currentShape = this.currentSequence[this.currentIndex];
+            const pos = currentShape.positions.find(p => p.string === stringNum);
+
+            if (pos) {
+                const position = this.fretboardDisplay.container.querySelector(`#pos-${pos.string}-${pos.fret}`);
+                if (position) {
+                    const marker = position.querySelector('.position-marker');
+                    if (marker) {
+                        marker.classList.add('playing-now');
+
+                        // Show right finger if provided
+                        if (rightFinger) {
+                            const rightFingerSpan = marker.querySelector('.right-finger');
+                            if (rightFingerSpan) {
+                                rightFingerSpan.textContent = rightFinger.toUpperCase();
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    clearPlayingHighlights() {
+        if (!this.fretboardDisplay.container) return;
+
+        this.fretboardDisplay.container.querySelectorAll('.playing-now').forEach(marker => {
+            marker.classList.remove('playing-now');
+        });
+    }
+
+    playStrings(shape, strings) {
+        // Play the notes for the specified strings
+        const frequencies = [];
+
+        strings.forEach(stringNum => {
+            const pos = shape.positions.find(p => p.string === stringNum);
+            if (pos && !shape.muted.includes(stringNum)) {
+                const freq = this.guitar.getFrequency(pos.string, pos.fret);
+                if (freq) frequencies.push(freq);
+            }
+        });
+
+        if (frequencies.length > 0) {
+            if (frequencies.length === 1) {
+                this.audio.playNote(frequencies[0], 800);
+            } else {
+                this.audio.playChord(frequencies, 800);
+            }
+        }
+    }
+
     playCurrentShape() {
         if (this.currentSequence.length === 0) return;
 
         const currentShape = this.currentSequence[this.currentIndex];
         if (!currentShape) return;
 
-        // Build chord object compatible with chordTheory.playChord
-        const chordData = {
-            positions: currentShape.positions,
-            muted: currentShape.muted || []
-        };
+        // If has strumming pattern, play through it
+        if (currentShape.strumming_pattern && currentShape.strumming_pattern.length > 0) {
+            const beatDuration = (60 / this.bpm) * 1000;
+            this.playStrummingPattern(currentShape, beatDuration);
+        } else {
+            // Build chord object compatible with chordTheory.playChord
+            const chordData = {
+                positions: currentShape.positions,
+                muted: currentShape.muted || []
+            };
 
-        this.chordTheory.playChord(chordData, this.guitar, this.audio);
+            this.chordTheory.playChord(chordData, this.guitar, this.audio);
+        }
     }
 
     saveSettings() {
