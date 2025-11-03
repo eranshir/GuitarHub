@@ -131,6 +131,11 @@ class AssistantGame {
 
             const data = await response.json();
 
+            // DEBUG: Log the full response from GPT
+            console.log('=== GPT Response ===');
+            console.log(JSON.stringify(data, null, 2));
+            console.log('==================');
+
             // Add to conversation history
             this.conversationHistory.push(
                 { role: 'user', content: message },
@@ -159,7 +164,16 @@ class AssistantGame {
 
         // Handle fretboard sequence if provided
         if (data.fretboard_sequence && Array.isArray(data.fretboard_sequence) && data.fretboard_sequence.length > 0) {
+            console.log('Loading sequence:', data.fretboard_sequence);
             this.loadSequence(data.fretboard_sequence);
+
+            // Check if any shapes have strumming patterns
+            const hasStrumming = data.fretboard_sequence.some(s => s.strumming_pattern && s.strumming_pattern.length > 0);
+            const hasFingers = data.fretboard_sequence.some(s => s.positions.some(p => p.left_finger));
+
+            console.log('Has strumming patterns:', hasStrumming);
+            console.log('Has finger numbers:', hasFingers);
+
             this.addSystemMessage(`Loaded ${data.fretboard_sequence.length} shapes. Click "Start" to play through the sequence.`);
         }
 
