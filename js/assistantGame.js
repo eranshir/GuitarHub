@@ -6,7 +6,11 @@ class AssistantGame {
         this.chordTheory = chordTheory;
 
         // API endpoint
-        this.apiEndpoint = 'http://localhost:5001/api/assistant';
+        // For local development: http://localhost:5001/api/assistant
+        // For production: https://livehive.events/guitar-api/api/assistant
+        this.apiEndpoint = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:5001/api/assistant'
+            : 'https://livehive.events/guitar-api/api/assistant';
 
         // Chat state
         this.conversationHistory = [];

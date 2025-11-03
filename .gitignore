@@ -25,6 +25,19 @@ Thumbs.db
 # Debug images
 score/debug_images/
 
+# Large music files (PDFs, EPUBs)
+score/*.pdf
+score/*.epub
+*.pdf
+*.epub
+
+# Temporary chord analysis files
+*_chords.json
+vincent*.pdf
+imagine*.pdf
+28.pdf
+29.pdf
+
 # Temporary files
 *.log
 *.tmp
