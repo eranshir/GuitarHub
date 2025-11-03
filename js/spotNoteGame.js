@@ -10,6 +10,7 @@ class SpotNoteGame {
         this.prefilledStrings = []; // Strings shown to user
         this.score = { correct: 0, incorrect: 0, streak: 0 };
         this.isSessionActive = false;
+        this.revealUsed = false;
         this.settings = {
             includeSharps: true,
             minFret: 0,
@@ -34,6 +35,14 @@ class SpotNoteGame {
 
         document.getElementById('spot-stop-btn').addEventListener('click', () => {
             this.endSession();
+        });
+
+        document.getElementById('spot-reveal-btn')?.addEventListener('click', () => {
+            this.revealAnswer();
+        });
+
+        document.getElementById('spot-next-btn')?.addEventListener('click', () => {
+            this.nextQuestion();
         });
 
         document.getElementById('spot-level').addEventListener('change', (e) => {
@@ -83,6 +92,11 @@ class SpotNoteGame {
     generateQuestion() {
         if (!this.isSessionActive) return;
 
+        // Reset reveal state
+        this.revealUsed = false;
+        document.getElementById('spot-reveal-btn').style.display = 'inline-block';
+        document.getElementById('spot-next-btn').style.display = 'none';
+
         // Pick random note
         this.currentNote = this.guitar.getRandomNote(this.settings.includeSharps);
 
@@ -125,6 +139,36 @@ class SpotNoteGame {
 
         console.log('User needs to find strings:',
             [1,2,3,4,5,6].filter(s => !this.prefilledStrings.includes(s) && this.correctPositions[s] !== undefined));
+    }
+
+    revealAnswer() {
+        if (!this.isSessionActive || this.revealUsed) return;
+
+        this.revealUsed = true;
+
+        // Mark as incorrect since they gave up
+        this.score.incorrect++;
+        this.score.streak = 0;
+        document.getElementById('spot-incorrect-count').textContent = this.score.incorrect;
+        document.getElementById('spot-streak-count').textContent = this.score.streak;
+
+        // Show all correct positions on the fretboard
+        this.fretboardDisplay.clearHighlights();
+        Object.entries(this.correctPositions).forEach(([string, fret]) => {
+            this.fretboardDisplay.highlightPosition(parseInt(string), fret, false);
+        });
+
+        // Show feedback
+        this.showFeedback(`All positions revealed for ${this.currentNote}. Study them carefully!`, false);
+
+        // Switch buttons
+        document.getElementById('spot-reveal-btn').style.display = 'none';
+        document.getElementById('spot-next-btn').style.display = 'inline-block';
+    }
+
+    nextQuestion() {
+        this.clearFeedback();
+        this.generateQuestion();
     }
 
     selectRandomStrings(arr, count) {

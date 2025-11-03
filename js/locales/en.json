@@ -194,6 +194,7 @@
     "startButton": "Start Practice Session",
     "question": "Find all instances of this note:",
     "instruction": "Click on the fretboard to mark the note on each string:",
+    "reveal": "Reveal",
     "settings": {
       "difficultyLevel": "Difficulty Level:",
       "level1": "Level 1 - Find 1 string (5 shown)",
