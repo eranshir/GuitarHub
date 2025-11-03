@@ -39,18 +39,22 @@ class IntervalTheory {
     getIntervalBetweenNotes(note1, note2) {
         const index1 = this.notes.indexOf(note1);
         const index2 = this.notes.indexOf(note2);
-        
+
         if (index1 === -1 || index2 === -1) return null;
-        
+
         let semitones = index2 - index1;
         if (semitones < 0) semitones += 12;
-        
+
+        // Normalize to within one octave (0-12 semitones)
+        semitones = semitones % 12;
+        if (semitones === 0) semitones = 12; // 0 semitones difference = octave (12 semitones)
+
         for (const [key, interval] of Object.entries(this.intervals)) {
             if (interval.semitones === semitones) {
                 return key;
             }
         }
-        
+
         return null;
     }
     
