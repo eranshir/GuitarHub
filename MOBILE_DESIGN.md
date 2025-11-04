@@ -10,7 +10,19 @@
 
 ## Design Strategy
 
-### Portrait Mode
+### Special Case: Songs Browser (Music Sheets)
+The Songs Browser is DIFFERENT from other modules:
+- **Optimized for Portrait** - Sheet music is vertical, PDF viewers work best in portrait
+- **Full-Screen Experience** - Should take over entire screen
+- **Portrait Encouraged** - Don't show rotation warning when Songs Browser is active
+
+### Mobile Trigger for Songs Browser
+Since Shift+S doesn't work on mobile, add:
+- **Triple-tap gesture** in bottom-right corner (within 1 second)
+- **Visual indicator** - Small "📚" icon appears briefly after 2 taps
+- **Alternative**: Add "Songs" to hamburger menu (☰) for discoverability
+
+### Portrait Mode (Main App)
 Show a full-screen overlay asking user to rotate device:
 ```
 ┌─────────────────┐
@@ -208,5 +220,67 @@ Show a full-screen overlay asking user to rotate device:
 4. ✅ Touch-optimized controls (better usability)
 5. ⏰ Chat slide-out for Assistant (nice-to-have)
 6. ⏰ Fine-tuning and polish
+
+## Songs Browser Mobile Behavior
+
+### When Songs Browser Opens:
+1. **Dismiss portrait warning** - If showing, hide it
+2. **Allow portrait mode** - Don't re-show warning
+3. **Full-screen takeover** - Browser overlay covers everything
+4. **Optimize for portrait PDFs** - Sheet music displays vertically
+5. **Touch-friendly navigation** - Larger page turn buttons, swipe gestures
+
+### Mobile-Specific Enhancements for Songs Browser:
+- **Swipe gestures** - Swipe left/right to change pages
+- **Pinch to zoom** - Touch-native zoom controls
+- **Tap zones** - Left/right third of screen = prev/next page
+- **Larger controls** - Bigger back button, page slider
+- **Auto-hide controls** - Tap screen to show/hide navigation
+- **Portrait-optimized layout** - Maximize vertical space for PDF
+
+### Triple-Tap Gesture Implementation:
+```javascript
+// Detect 3 taps in bottom-right corner within 1 second
+let tapCount = 0;
+let tapTimer = null;
+const CORNER_SIZE = 80; // 80x80px corner area
+
+document.addEventListener('touchstart', (e) => {
+  const touch = e.touches[0];
+  const isBottomRight =
+    touch.clientX > window.innerWidth - CORNER_SIZE &&
+    touch.clientY > window.innerHeight - CORNER_SIZE;
+
+  if (isBottomRight) {
+    tapCount++;
+
+    if (tapCount === 2) {
+      // Show hint after 2 taps
+      showBriefIcon('📚');
+    }
+
+    if (tapCount === 3) {
+      // Open Songs Browser
+      window.songsBrowser.openBrowser();
+      tapCount = 0;
+    }
+
+    // Reset after 1 second
+    clearTimeout(tapTimer);
+    tapTimer = setTimeout(() => { tapCount = 0; }, 1000);
+  }
+});
+```
+
+## Implementation Priority (Updated)
+
+1. ✅ Portrait warning with Songs Browser exception
+2. ✅ Triple-tap gesture for Songs Browser
+3. ✅ Hamburger menu navigation
+4. ✅ Slide-out settings panel
+5. ✅ Touch-optimized controls
+6. ✅ Chat slide-out for Assistant
+7. ⏰ Swipe gestures for Songs Browser PDF
+8. ⏰ Fine-tuning and polish
 
 Would you like me to proceed with implementation?

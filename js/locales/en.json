@@ -9,7 +9,13 @@
     "chords": "Chords Memory",
     "spotNote": "Spot a Note",
     "assistant": "Assistant",
-    "stats": "Statistics"
+    "stats": "Statistics",
+    "songs": "Songs Browser"
+  },
+  "mobile": {
+    "rotateTitle": "Please Rotate Your Device",
+    "rotateMessage": "GuitarHub works best in landscape mode for the full fretboard experience.",
+    "continueAnyway": "Continue Anyway"
   },
   "common": {
     "start": "Start Practice Session",

@@ -7,8 +7,54 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Portrait Warning Overlay (Mobile Only) -->
+    <div id="portrait-warning" class="portrait-warning" style="display: none;">
+        <div class="warning-content">
+            <div class="rotate-icon">🔄</div>
+            <h2 data-i18n="mobile.rotateTitle">Please Rotate Your Device</h2>
+            <p data-i18n="mobile.rotateMessage">GuitarHub works best in landscape mode for the full fretboard experience.</p>
+            <button id="dismiss-portrait-warning" class="dismiss-warning-btn" data-i18n="mobile.continueAnyway">Continue Anyway</button>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-nav-overlay" class="mobile-nav-overlay" style="display: none;">
+        <div class="mobile-nav-backdrop"></div>
+        <div class="mobile-nav-drawer">
+            <div class="drawer-header">
+                <h2 data-i18n="app.title">GuitarHub</h2>
+                <button id="close-mobile-nav" class="close-drawer-btn">✕</button>
+            </div>
+            <nav class="drawer-nav">
+                <button class="drawer-nav-btn active" data-module="fretboard" data-i18n="nav.fretboard">Fretboard Memory</button>
+                <button class="drawer-nav-btn" data-module="intervals" data-i18n="nav.intervals">Intervals Memory</button>
+                <button class="drawer-nav-btn" data-module="chords" data-i18n="nav.chords">Chords Memory</button>
+                <button class="drawer-nav-btn" data-module="spot-note" data-i18n="nav.spotNote">Spot a Note</button>
+                <button class="drawer-nav-btn" data-module="assistant" data-i18n="nav.assistant">Assistant</button>
+                <button class="drawer-nav-btn" data-module="stats" data-i18n="nav.stats">Statistics</button>
+                <button class="drawer-nav-btn" id="mobile-songs-btn" data-i18n="nav.songs">Songs Browser</button>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Triple-tap indicator -->
+    <div id="tap-indicator" class="tap-indicator" style="display: none;">📚</div>
+
     <div class="container">
-        <header>
+        <!-- Mobile Header (Hidden on Desktop) -->
+        <div class="mobile-header">
+            <button id="mobile-menu-toggle" class="icon-btn" aria-label="Menu">☰</button>
+            <div class="mobile-title">
+                <h1 data-i18n="app.title">GuitarHub</h1>
+            </div>
+            <div class="mobile-actions">
+                <button id="mobile-settings-toggle" class="icon-btn" aria-label="Settings">⚙️</button>
+                <button id="mobile-chat-toggle" class="icon-btn" aria-label="Chat" style="display: none;">💬</button>
+            </div>
+        </div>
+
+        <!-- Desktop Header (Hidden on Mobile) -->
+        <header class="desktop-header">
             <div class="header-content">
                 <div class="header-title">
                     <h1 data-i18n="app.title">GuitarHub</h1>
@@ -23,7 +69,7 @@
             </div>
         </header>
 
-        <nav class="module-nav">
+        <nav class="module-nav desktop-nav">
             <button class="module-btn active" data-module="fretboard" data-i18n="nav.fretboard">Fretboard Memory</button>
             <button class="module-btn" data-module="intervals" data-i18n="nav.intervals">Intervals Memory</button>
             <button class="module-btn" data-module="chords" data-i18n="nav.chords">Chords Memory</button>
@@ -986,6 +1032,7 @@
     <script src="js/assistantGame.js"></script>
     <script src="js/statistics.js"></script>
     <script src="js/songsBrowser.js"></script>
+    <script src="js/mobileManager.js"></script>
     <script src="js/app.js"></script>
     <script>
         // Initialize language selector

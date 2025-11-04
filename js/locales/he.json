@@ -9,7 +9,13 @@
     "chords": "זיכרון אקורדים",
     "spotNote": "מצא את התו",
     "assistant": "עוזר",
-    "stats": "סטטיסטיקה"
+    "stats": "סטטיסטיקה",
+    "songs": "דפדפן שירים"
+  },
+  "mobile": {
+    "rotateTitle": "אנא סובב את המכשיר",
+    "rotateMessage": "GuitarHub עובד הכי טוב במצב אופקי להצגה מלאה של לוח הסריגים.",
+    "continueAnyway": "המשך בכל זאת"
   },
   "common": {
     "start": "התחל אימון",

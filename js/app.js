@@ -10,6 +10,7 @@ class App {
         this.chordGame = null;
         this.chordPositionsGame = null;
         this.assistantGame = null;
+        this.mobileManager = null;
         this.charts = {};
 
         this.init();
@@ -22,6 +23,7 @@ class App {
         this.chordPositionsGame = new ChordPositionsGame(this.guitar, this.audio, this.chordTheory);
         this.assistantGame = new AssistantGame(this.guitar, this.audio, this.chordTheory);
         this.spotNoteGame = new SpotNoteGame(this.guitar, this.statistics);
+        this.mobileManager = new MobileManager(this);
         this.setupModuleNavigation();
         this.setupAudioControls();
         this.setupStatisticsControls();
