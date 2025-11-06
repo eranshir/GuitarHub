@@ -3382,6 +3382,13 @@ body.rtl .mobile-header {
     cursor: pointer;
     transition: var(--transition);
     transform: translateY(-50%);
+    min-width: 20px;
+    text-align: center;
+}
+
+/* Add spacing after each beat in the measure */
+.tab-line {
+    min-width: 400px; /* Ensure measures have minimum width for spacing */
 }
 
 .tab-note:hover {

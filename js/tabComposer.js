@@ -93,17 +93,35 @@ class TabComposition {
     }
 
     renderMeasureAsText(measure) {
-        // Simple text rendering (improved version will come in TABRenderer)
-        const strings = ['e', 'B', 'G', 'D', 'A', 'E'];
-        let lines = strings.map(s => `${s}|`);
+        // Text rendering for export - standard TAB order (high e to low E)
+        const stringNames = ['e', 'B', 'G', 'D', 'A', 'E'];
+        const stringNumbers = [1, 2, 3, 4, 5, 6];
+        let lines = stringNames.map(s => `${s}|`);
 
-        // Sort events by time
-        const sorted = [...measure.events].sort((a, b) => a.time - b.time);
+        // Group events by time for vertical alignment
+        const eventsByTime = {};
+        measure.events.forEach(event => {
+            const timeKey = event.time.toFixed(4);
+            if (!eventsByTime[timeKey]) {
+                eventsByTime[timeKey] = {};
+            }
+            eventsByTime[timeKey][event.string] = event.fret;
+        });
 
-        // Render each event
-        sorted.forEach(event => {
-            const stringIdx = 6 - event.string; // Reverse for display
-            lines[stringIdx] += `--${event.fret}--`;
+        // Sort times
+        const times = Object.keys(eventsByTime).map(parseFloat).sort((a, b) => a - b);
+
+        // Build each column
+        times.forEach(time => {
+            const eventsAtTime = eventsByTime[time.toFixed(4)];
+
+            stringNumbers.forEach((stringNum, idx) => {
+                if (eventsAtTime[stringNum] !== undefined) {
+                    lines[idx] += `--${eventsAtTime[stringNum]}--`;
+                } else {
+                    lines[idx] += '-----';
+                }
+            });
         });
 
         // Close lines
