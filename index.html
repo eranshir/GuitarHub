@@ -869,20 +869,80 @@
                             </div>
                         </div>
 
-                        <div class="tab-display-container">
-                            <h4 data-i18n="assistant.tabDisplay">Tablature:</h4>
-                            <pre id="assistant-tab-display" class="tab-display">Ready for instructions...</pre>
+                        <!-- Composer Mode UI -->
+                        <div id="composer-controls" class="composer-controls" style="display: none;">
+                            <div class="detected-chord-display">
+                                <span class="detected-label" data-i18n="composer.detected">Detected:</span>
+                                <span id="detected-chord-name" class="detected-chord">-</span>
+                                <button id="add-chord-btn" class="add-chord-btn" data-i18n="composer.addChord" disabled>Add Chord</button>
+                            </div>
+
+                            <div class="duration-selector">
+                                <label data-i18n="composer.noteDuration">Note Duration:</label>
+                                <div class="duration-buttons">
+                                    <button class="duration-btn" data-duration="0.0625" data-key="1">1/16</button>
+                                    <button class="duration-btn" data-duration="0.125" data-key="2">1/8</button>
+                                    <button class="duration-btn active" data-duration="0.25" data-key="3">1/4</button>
+                                    <button class="duration-btn" data-duration="0.375" data-key="4">3/8</button>
+                                    <button class="duration-btn" data-duration="0.5" data-key="5">1/2</button>
+                                    <button class="duration-btn" data-duration="0.75" data-key="6">3/4</button>
+                                    <button class="duration-btn" data-duration="1" data-key="7">1</button>
+                                </div>
+                            </div>
+
+                            <div class="composition-actions">
+                                <button id="add-note-btn" class="add-note-btn" data-i18n="composer.addNote">Add Note (Enter)</button>
+                                <button id="clear-fretboard-btn" class="secondary-btn" data-i18n="composer.clear">Clear</button>
+                            </div>
+
+                            <div class="time-signature-selector">
+                                <label data-i18n="composer.timeSignature">Time Signature:</label>
+                                <select id="time-signature-select">
+                                    <option value="4/4" selected>4/4</option>
+                                    <option value="3/4">3/4</option>
+                                    <option value="6/8">6/8</option>
+                                    <option value="12/8">12/8</option>
+                                    <option value="5/4">5/4</option>
+                                    <option value="7/8">7/8</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="additional-notes-container">
-                            <div id="assistant-additional-notes" class="additional-notes"></div>
+                        <!-- TAB Display for Composition -->
+                        <div id="composition-tab-container" class="composition-tab-container" style="display: none;">
+                            <div class="tab-header">
+                                <h4 data-i18n="composer.yourComposition">Your Composition</h4>
+                                <div class="tab-actions">
+                                    <button id="save-composition-btn" class="secondary-btn" data-i18n="composer.save">Save</button>
+                                    <button id="export-tab-btn" class="secondary-btn" data-i18n="composer.export">Export</button>
+                                </div>
+                            </div>
+                            <div id="composition-tab-display" class="composition-tab-display">
+                                <!-- TAB will be rendered here -->
+                            </div>
+                        </div>
+
+                        <!-- Assistant Mode Display -->
+                        <div id="assistant-display-container" class="assistant-display-container">
+                            <div class="tab-display-container">
+                                <h4 data-i18n="assistant.tabDisplay">Tablature:</h4>
+                                <pre id="assistant-tab-display" class="tab-display">Ready for instructions...</pre>
+                            </div>
+
+                            <div class="additional-notes-container">
+                                <div id="assistant-additional-notes" class="additional-notes"></div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="chat-interface">
                         <div class="chat-header">
-                            <h3 data-i18n="assistant.chatTitle">Guitar Assistant</h3>
-                            <button id="clear-chat" class="clear-chat-btn" data-i18n="assistant.clearChat">Clear Chat</button>
+                            <h3 data-i18n="assistant.chatTitle">Composer & Assistant</h3>
+                            <div class="mode-toggle-group">
+                                <button id="mode-assistant" class="mode-toggle-btn active" data-i18n="composer.modeAssistant">Assistant</button>
+                                <button id="mode-composer" class="mode-toggle-btn" data-i18n="composer.modeComposer">Compose</button>
+                            </div>
+                            <button id="clear-chat" class="clear-chat-btn" data-i18n="assistant.clearChat">Clear</button>
                         </div>
                         <div id="chat-messages" class="chat-messages">
                             <div class="chat-message assistant-message">
@@ -1029,6 +1089,7 @@
     <script src="js/chordGame.js"></script>
     <script src="js/chordPositionsGame.js"></script>
     <script src="js/spotNoteGame.js"></script>
+    <script src="js/tabComposer.js"></script>
     <script src="js/assistantGame.js"></script>
     <script src="js/statistics.js"></script>
     <script src="js/songsBrowser.js"></script>

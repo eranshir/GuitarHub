@@ -242,8 +242,8 @@
     }
   },
   "assistant": {
-    "chatTitle": "Guitar Assistant",
-    "welcome": "Hi! I'm your guitar assistant. Ask me about chord progressions, scales, techniques, or anything guitar-related. I can show you shapes on the fretboard!",
+    "chatTitle": "Composer & Assistant",
+    "welcome": "Hi! I can help you compose music and answer guitar questions. Click frets to compose TAB, or ask me anything!",
     "inputPlaceholder": "Ask me anything about guitar...",
     "send": "Send",
     "clearChat": "Clear Chat",

@@ -12,17 +12,27 @@ class AssistantGame {
             ? 'http://localhost:5001/api/assistant'
             : 'https://livehive.events/guitar-api/api/assistant';
 
+        // Mode: 'assistant' or 'composer'
+        this.mode = 'assistant';
+
         // Chat state
         this.conversationHistory = [];
         this.isWaitingForResponse = false;
 
-        // Fretboard sequence state
+        // Fretboard sequence state (Assistant mode)
         this.currentSequence = [];
         this.currentIndex = 0;
         this.previousIndex = null;
 
+        // Composition state (Composer mode)
+        this.composition = new TabComposition();
+        this.tabRenderer = null;
+        this.fretboardState = new FretboardState();
+        this.selectedDuration = 0.25; // Default: quarter note
+        this.detectedChord = null;
+
         // Metronome state
-        this.bpm = 80;
+        this.bpm = 120;
         this.metronomeInterval = null;
         this.isPlaying = false;
         this.isPaused = false;
@@ -36,14 +46,27 @@ class AssistantGame {
 
     init() {
         this.initializeFretboard();
+        this.initializeComposer();
         this.setupEventListeners();
+        this.setupComposerEventListeners();
         this.loadSettings();
     }
 
     initializeFretboard() {
         if (!this.fretboardDisplay) {
+            // In composer mode, fretboard needs to be interactive
             this.fretboardDisplay = new FretboardDisplay('fretboard-assistant', false, 15);
         }
+    }
+
+    initializeComposer() {
+        // Initialize TAB renderer
+        this.tabRenderer = new TabRenderer('composition-tab-display');
+
+        // Set up note click handler for editing
+        this.tabRenderer.setNoteClickHandler((measureIndex, event) => {
+            this.loadNoteForEditing(measureIndex, event);
+        });
     }
 
     setupEventListeners() {
