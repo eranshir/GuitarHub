@@ -197,26 +197,40 @@ class TabRenderer {
             tabLinesDiv.appendChild(stringDiv);
         });
 
-        // Add notes to the lines
+        // Group events by time (notes at same time = vertical alignment)
+        const eventsByTime = {};
         measure.events.forEach(event => {
-            const stringIdx = 6 - event.string;
-            const stringDiv = stringDivs[stringIdx];
-            const line = stringDiv.querySelector('.tab-line');
+            const timeKey = event.time.toFixed(4); // Use fixed precision to group same-time events
+            if (!eventsByTime[timeKey]) {
+                eventsByTime[timeKey] = [];
+            }
+            eventsByTime[timeKey].push(event);
+        });
 
-            const note = document.createElement('span');
-            note.className = 'tab-note';
-            note.dataset.time = event.time;
-            note.dataset.string = event.string;
-            note.dataset.fret = event.fret;
-            note.style.left = `${event.time * 80}px`; // 80px per beat
-            note.textContent = event.fret;
+        // Add notes to the lines - all notes at same time get same horizontal position
+        Object.entries(eventsByTime).forEach(([timeKey, events]) => {
+            const time = parseFloat(timeKey);
 
-            // Click to edit
-            note.addEventListener('click', () => {
-                this.onNoteClick && this.onNoteClick(measureIndex, event);
+            events.forEach(event => {
+                const stringIdx = 6 - event.string;
+                const stringDiv = stringDivs[stringIdx];
+                const line = stringDiv.querySelector('.tab-line');
+
+                const note = document.createElement('span');
+                note.className = 'tab-note';
+                note.dataset.time = event.time;
+                note.dataset.string = event.string;
+                note.dataset.fret = event.fret;
+                note.style.left = `${time * 80}px`; // 80px per beat - same position for all notes at this time
+                note.textContent = event.fret;
+
+                // Click to edit
+                note.addEventListener('click', () => {
+                    this.onNoteClick && this.onNoteClick(measureIndex, event);
+                });
+
+                line.appendChild(note);
             });
-
-            line.appendChild(note);
         });
 
         measureDiv.appendChild(tabLinesDiv);
