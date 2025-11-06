@@ -3415,3 +3415,14 @@ body.rtl .mobile-header {
         max-height: 300px;
     }
 }
+
+/* Danger button variant for destructive actions */
+.secondary-btn.danger {
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.secondary-btn.danger:hover {
+    background: var(--secondary-color);
+    color: white;
+}

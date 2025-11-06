@@ -671,13 +671,19 @@ class AssistantGame {
             this.addChordToComposition();
         });
 
-        // Save/Export buttons
+        // Save/Export/Clear buttons
         document.getElementById('save-composition-btn')?.addEventListener('click', () => {
             this.saveComposition();
         });
 
         document.getElementById('export-tab-btn')?.addEventListener('click', () => {
             this.exportComposition();
+        });
+
+        document.getElementById('clear-composition-btn')?.addEventListener('click', () => {
+            if (confirm('Clear entire composition? This cannot be undone.')) {
+                this.clearComposition();
+            }
         });
 
         // Time signature selector
@@ -901,6 +907,14 @@ class AssistantGame {
 
         URL.revokeObjectURL(url);
         this.addSystemMessage('Composition exported!');
+    }
+
+    clearComposition() {
+        this.composition = new TabComposition();
+        this.renderComposition();
+        this.clearComposerFretboard();
+        localStorage.removeItem('guitarHubComposition');
+        this.addSystemMessage('Composition cleared!');
     }
 
     cleanup() {

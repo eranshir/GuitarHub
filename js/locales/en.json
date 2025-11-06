@@ -266,7 +266,8 @@
     "timeSignature": "Time Signature:",
     "yourComposition": "Your Composition",
     "save": "Save",
-    "export": "Export"
+    "export": "Export",
+    "clearComposition": "Clear All"
   },
   "statistics": {
     "title": "Your Progress",
