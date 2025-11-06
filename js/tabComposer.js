@@ -172,17 +172,18 @@ class TabRenderer {
             measureDiv.appendChild(chordLine);
         }
 
-        // TAB lines (6 strings)
+        // TAB lines (6 strings) - Standard TAB order: high e to low E
         const tabLinesDiv = document.createElement('div');
         tabLinesDiv.className = 'tab-lines';
 
-        const stringNames = ['e', 'B', 'G', 'D', 'A', 'E'];
+        const stringNames = ['e', 'B', 'G', 'D', 'A', 'E']; // High to low
+        const stringNumbers = [1, 2, 3, 4, 5, 6]; // Corresponding string numbers
         const stringDivs = [];
 
         stringNames.forEach((name, idx) => {
             const stringDiv = document.createElement('div');
             stringDiv.className = 'tab-string-line';
-            stringDiv.dataset.string = 6 - idx;
+            stringDiv.dataset.string = stringNumbers[idx];
 
             const label = document.createElement('span');
             label.className = 'string-label-tab';
@@ -212,7 +213,8 @@ class TabRenderer {
             const time = parseFloat(timeKey);
 
             events.forEach(event => {
-                const stringIdx = 6 - event.string;
+                // Find the correct string div (string 1 = index 0, string 6 = index 5)
+                const stringIdx = event.string - 1; // Direct mapping: string 1 -> idx 0
                 const stringDiv = stringDivs[stringIdx];
                 const line = stringDiv.querySelector('.tab-line');
 
@@ -221,7 +223,7 @@ class TabRenderer {
                 note.dataset.time = event.time;
                 note.dataset.string = event.string;
                 note.dataset.fret = event.fret;
-                note.style.left = `${time * 80}px`; // 80px per beat - same position for all notes at this time
+                note.style.left = `${time * 80}px`; // 80px per beat - SAME position for all notes at this time
                 note.textContent = event.fret;
 
                 // Click to edit
