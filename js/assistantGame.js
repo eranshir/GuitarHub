@@ -819,10 +819,24 @@ class AssistantGame {
 
         const notes = this.fretboardState.getNotes();
 
-        // Add each note to composition
+        // All notes in this shape should have the SAME time (they're played together)
+        const currentTime = this.composition.currentTime;
+
+        // Add each note to composition at the same time
         notes.forEach(note => {
-            this.composition.addEvent(note.string, note.fret, this.selectedDuration);
+            this.composition.addEvent(note.string, note.fret, this.selectedDuration, null, currentTime);
         });
+
+        // Now advance time only once (after all notes added)
+        this.composition.currentTime += this.selectedDuration;
+
+        // Check if we need a new measure
+        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+        if (this.composition.currentTime >= beatsPerMeasure) {
+            this.composition.currentTime = 0;
+            this.composition.currentMeasure++;
+            this.composition.addMeasure();
+        }
 
         // Clear fretboard state
         this.clearComposerFretboard();

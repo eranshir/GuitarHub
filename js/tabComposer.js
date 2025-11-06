@@ -11,14 +11,14 @@ class TabComposition {
         this.currentTime = 0; // Current position in beats within measure
     }
 
-    addEvent(string, fret, duration, leftFinger = null) {
+    addEvent(string, fret, duration, leftFinger = null, timeOverride = null) {
         // Ensure we have a measure
         if (this.measures.length === 0) {
             this.addMeasure();
         }
 
         const event = {
-            time: this.currentTime,
+            time: timeOverride !== null ? timeOverride : this.currentTime,
             string: string,
             fret: fret,
             duration: duration,
@@ -27,16 +27,8 @@ class TabComposition {
 
         this.measures[this.currentMeasure].events.push(event);
 
-        // Advance current time
-        this.currentTime += duration;
-
-        // Check if we need a new measure
-        const beatsPerMeasure = this.getBeatsPerMeasure();
-        if (this.currentTime >= beatsPerMeasure) {
-            this.currentTime = 0;
-            this.currentMeasure++;
-            this.addMeasure();
-        }
+        // Don't auto-advance time here - let the caller handle it
+        // This allows multiple notes to be added at the same time
 
         return event;
     }
