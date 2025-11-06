@@ -246,7 +246,7 @@
     "welcome": "Hi! I can help you compose music and answer guitar questions. Click frets to compose TAB, or ask me anything!",
     "inputPlaceholder": "Ask me anything about guitar...",
     "send": "Send",
-    "clearChat": "Clear Chat",
+    "clearChat": "Clear",
     "thinking": "Assistant is thinking...",
     "tabDisplay": "Tablature:",
     "controls": {
@@ -254,6 +254,19 @@
       "stop": "⏹ Stop",
       "playShape": "🔊 Play Current Shape"
     }
+  },
+  "composer": {
+    "modeAssistant": "Assistant",
+    "modeComposer": "Compose",
+    "detected": "Detected:",
+    "addChord": "Add Chord",
+    "noteDuration": "Note Duration:",
+    "addNote": "Add Note (Enter)",
+    "clear": "Clear",
+    "timeSignature": "Time Signature:",
+    "yourComposition": "Your Composition",
+    "save": "Save",
+    "export": "Export"
   },
   "statistics": {
     "title": "Your Progress",

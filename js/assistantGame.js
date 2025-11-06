@@ -50,6 +50,7 @@ class AssistantGame {
         this.setupEventListeners();
         this.setupComposerEventListeners();
         this.loadSettings();
+        this.loadComposition(); // Load saved composition if exists
     }
 
     initializeFretboard() {
@@ -70,6 +71,15 @@ class AssistantGame {
     }
 
     setupEventListeners() {
+        // Mode toggle buttons
+        document.getElementById('mode-assistant')?.addEventListener('click', () => {
+            this.switchMode('assistant');
+        });
+
+        document.getElementById('mode-composer')?.addEventListener('click', () => {
+            this.switchMode('composer');
+        });
+
         // BPM control
         const bpmSlider = document.getElementById('assistant-bpm-slider');
         const bpmDisplay = document.getElementById('assistant-bpm-display');
@@ -636,6 +646,261 @@ class AssistantGame {
                 bpmDisplay.textContent = this.bpm;
             }
         }
+    }
+
+    setupComposerEventListeners() {
+        // Duration buttons
+        document.querySelectorAll('.duration-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.selectDuration(parseFloat(e.target.dataset.duration));
+            });
+        });
+
+        // Add Note button
+        document.getElementById('add-note-btn')?.addEventListener('click', () => {
+            this.addNoteToComposition();
+        });
+
+        // Clear fretboard button
+        document.getElementById('clear-fretboard-btn')?.addEventListener('click', () => {
+            this.clearComposerFretboard();
+        });
+
+        // Add Chord button
+        document.getElementById('add-chord-btn')?.addEventListener('click', () => {
+            this.addChordToComposition();
+        });
+
+        // Save/Export buttons
+        document.getElementById('save-composition-btn')?.addEventListener('click', () => {
+            this.saveComposition();
+        });
+
+        document.getElementById('export-tab-btn')?.addEventListener('click', () => {
+            this.exportComposition();
+        });
+
+        // Time signature selector
+        document.getElementById('time-signature-select')?.addEventListener('change', (e) => {
+            this.composition.timeSignature = e.target.value;
+        });
+
+        // Keyboard shortcuts for Composer mode
+        document.addEventListener('keydown', (e) => {
+            if (this.mode !== 'composer') return;
+
+            // Number keys 1-7 for duration selection
+            if (e.key >= '1' && e.key <= '7' && !e.ctrlKey && !e.metaKey) {
+                const durations = [0.0625, 0.125, 0.25, 0.375, 0.5, 0.75, 1];
+                const idx = parseInt(e.key) - 1;
+                if (idx < durations.length) {
+                    this.selectDuration(durations[idx]);
+                    e.preventDefault();
+                }
+            }
+
+            // Enter key to add note
+            if (e.key === 'Enter' && !this.fretboardState.isEmpty()) {
+                this.addNoteToComposition();
+                e.preventDefault();
+            }
+
+            // Backspace/Delete to clear fretboard
+            if ((e.key === 'Backspace' || e.key === 'Delete') && !this.fretboardState.isEmpty()) {
+                this.clearComposerFretboard();
+                e.preventDefault();
+            }
+
+            // Ctrl+S to save
+            if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
+                this.saveComposition();
+                e.preventDefault();
+            }
+        });
+
+        // Make fretboard interactive in composer mode
+        if (this.fretboardDisplay && this.fretboardDisplay.container) {
+            this.fretboardDisplay.container.addEventListener('click', (e) => {
+                if (this.mode !== 'composer') return;
+
+                const pos = e.target.closest('.fret-position');
+                if (pos) {
+                    const string = parseInt(pos.dataset.string);
+                    const fret = parseInt(pos.dataset.fret);
+                    this.handleComposerFretboardClick(string, fret);
+                }
+            });
+        }
+    }
+
+    switchMode(mode) {
+        this.mode = mode;
+
+        // Update mode toggle buttons
+        document.querySelectorAll('.mode-toggle-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        if (mode === 'assistant') {
+            document.getElementById('mode-assistant')?.classList.add('active');
+            // Show assistant controls, hide composer controls
+            document.getElementById('composer-controls').style.display = 'none';
+            document.getElementById('composition-tab-container').style.display = 'none';
+            document.getElementById('assistant-display-container').style.display = 'block';
+            document.querySelector('.playback-controls').style.display = 'block';
+        } else {
+            document.getElementById('mode-composer')?.classList.add('active');
+            // Hide assistant controls, show composer controls
+            document.getElementById('composer-controls').style.display = 'block';
+            document.getElementById('composition-tab-container').style.display = 'block';
+            document.getElementById('assistant-display-container').style.display = 'none';
+            document.querySelector('.playback-controls').style.display = 'none';
+
+            // Render current composition
+            this.renderComposition();
+        }
+    }
+
+    handleComposerFretboardClick(string, fret) {
+        // Add or update note in fretboard state
+        this.fretboardState.addNote(string, fret);
+
+        // Update visual display
+        this.displayComposerFretboard();
+
+        // Detect chord
+        this.updateDetectedChord();
+    }
+
+    displayComposerFretboard() {
+        if (!this.fretboardDisplay) return;
+
+        this.fretboardDisplay.clearHighlights();
+
+        const notes = this.fretboardState.getNotes();
+        notes.forEach(note => {
+            this.fretboardDisplay.highlightPosition(note.string, note.fret, false);
+        });
+    }
+
+    updateDetectedChord() {
+        const chordName = this.fretboardState.detectChord(this.chordTheory);
+        this.detectedChord = chordName;
+
+        const chordDisplay = document.getElementById('detected-chord-name');
+        const addChordBtn = document.getElementById('add-chord-btn');
+
+        if (chordDisplay) {
+            chordDisplay.textContent = chordName || '-';
+        }
+
+        if (addChordBtn) {
+            addChordBtn.disabled = !chordName;
+        }
+    }
+
+    selectDuration(duration) {
+        this.selectedDuration = duration;
+
+        // Update button states
+        document.querySelectorAll('.duration-btn').forEach(btn => {
+            btn.classList.toggle('active', parseFloat(btn.dataset.duration) === duration);
+        });
+    }
+
+    addNoteToComposition() {
+        if (this.fretboardState.isEmpty()) return;
+
+        const notes = this.fretboardState.getNotes();
+
+        // Add each note to composition
+        notes.forEach(note => {
+            this.composition.addEvent(note.string, note.fret, this.selectedDuration);
+        });
+
+        // Clear fretboard state
+        this.clearComposerFretboard();
+
+        // Re-render composition
+        this.renderComposition();
+
+        // Auto-save
+        this.autoSaveComposition();
+    }
+
+    clearComposerFretboard() {
+        this.fretboardState.clear();
+        this.displayComposerFretboard();
+        this.updateDetectedChord();
+    }
+
+    addChordToComposition() {
+        if (!this.detectedChord) return;
+
+        // Add chord annotation at current position
+        const measureIdx = this.composition.currentMeasure;
+        const time = this.composition.currentTime;
+
+        this.composition.addChordAnnotation(measureIdx, time, this.detectedChord);
+
+        // Re-render
+        this.renderComposition();
+
+        // Auto-save
+        this.autoSaveComposition();
+    }
+
+    renderComposition() {
+        if (this.tabRenderer) {
+            this.tabRenderer.render(this.composition);
+        }
+    }
+
+    loadNoteForEditing(measureIndex, event) {
+        // Future: Load note onto fretboard for editing
+        console.log('Edit note:', measureIndex, event);
+    }
+
+    saveComposition() {
+        const data = this.composition.serialize();
+        localStorage.setItem('guitarHubComposition', data);
+        console.log('Composition saved');
+        this.addSystemMessage('Composition saved!');
+    }
+
+    autoSaveComposition() {
+        // Auto-save with debounce
+        clearTimeout(this._autoSaveTimer);
+        this._autoSaveTimer = setTimeout(() => {
+            this.saveComposition();
+        }, 2000);
+    }
+
+    loadComposition() {
+        const data = localStorage.getItem('guitarHubComposition');
+        if (data) {
+            try {
+                this.composition = TabComposition.deserialize(data);
+                this.renderComposition();
+                console.log('Composition loaded');
+            } catch (e) {
+                console.error('Error loading composition:', e);
+            }
+        }
+    }
+
+    exportComposition() {
+        const textTab = this.composition.exportAsText();
+        const blob = new Blob([textTab], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${this.composition.title || 'composition'}.txt`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+        this.addSystemMessage('Composition exported!');
     }
 
     cleanup() {

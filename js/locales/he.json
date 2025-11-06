@@ -246,7 +246,7 @@
     "welcome": "שלום! אני יכול לעזור לך להלחין מוזיקה ולענות על שאלות. לחץ על סריגים כדי להלחין TAB, או שאל אותי כל דבר!",
     "inputPlaceholder": "שאל אותי כל דבר על גיטרה...",
     "send": "שלח",
-    "clearChat": "נקה שיחה",
+    "clearChat": "נקה",
     "thinking": "העוזר חושב...",
     "tabDisplay": "טאב:",
     "controls": {
@@ -254,6 +254,19 @@
       "stop": "⏹ עצור",
       "playShape": "🔊 נגן צורה נוכחית"
     }
+  },
+  "composer": {
+    "modeAssistant": "עוזר",
+    "modeComposer": "הלחן",
+    "detected": "זוהה:",
+    "addChord": "הוסף אקורד",
+    "noteDuration": "משך תו:",
+    "addNote": "הוסף תו (Enter)",
+    "clear": "נקה",
+    "timeSignature": "משקל:",
+    "yourComposition": "ההלחנה שלך",
+    "save": "שמור",
+    "export": "ייצא"
   },
   "statistics": {
     "title": "ההתקדמות שלך",

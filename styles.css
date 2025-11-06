@@ -3068,3 +3068,350 @@ body.rtl .drawer-nav-btn {
 body.rtl .mobile-header {
     flex-direction: row-reverse;
 }
+
+/* ========================================
+   COMPOSER MODE STYLES
+   ======================================== */
+
+/* Mode toggle buttons in chat header */
+.mode-toggle-group {
+    display: flex;
+    gap: 5px;
+    background: rgba(0, 0, 0, 0.1);
+    padding: 3px;
+    border-radius: 6px;
+}
+
+.mode-toggle-btn {
+    padding: 6px 16px;
+    background: transparent;
+    color: var(--text-color);
+    border: none;
+    border-radius: 4px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 500;
+}
+
+.mode-toggle-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-weight: bold;
+}
+
+.mode-toggle-btn:hover:not(.active) {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Composer Controls */
+.composer-controls {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: var(--border-radius);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.detected-chord-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    padding: 12px;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #e0e0e0;
+}
+
+.detected-label {
+    font-weight: 600;
+    color: #666;
+}
+
+.detected-chord {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--primary-color);
+    min-width: 80px;
+}
+
+.add-chord-btn {
+    margin-left: auto;
+    padding: 8px 16px;
+    background: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+}
+
+.add-chord-btn:hover:not(:disabled) {
+    background: #229954;
+    transform: translateY(-1px);
+}
+
+.add-chord-btn:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Duration Selector */
+.duration-selector {
+    margin-bottom: 15px;
+}
+
+.duration-selector label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.duration-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.duration-btn {
+    padding: 10px 16px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.duration-btn:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.duration-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.duration-btn::after {
+    content: ' (' attr(data-key) ')';
+    font-size: 0.75em;
+    opacity: 0.6;
+}
+
+/* Composition Actions */
+.composition-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.add-note-btn {
+    flex: 1;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.add-note-btn:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+}
+
+.secondary-btn {
+    padding: 10px 20px;
+    background: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+}
+
+.secondary-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Time Signature Selector */
+.time-signature-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.time-signature-selector label {
+    font-weight: 600;
+}
+
+.time-signature-selector select {
+    padding: 8px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+/* Composition TAB Display */
+.composition-tab-container {
+    margin: 20px 0;
+    padding: 20px;
+    background: white;
+    border-radius: var(--border-radius);
+    border: 2px solid #e0e0e0;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.tab-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.tab-header h4 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.tab-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.composition-tab-display {
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    line-height: 1.6;
+}
+
+.empty-tab {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-style: italic;
+}
+
+/* TAB Measure Styling */
+.tab-measure {
+    position: relative;
+    margin-bottom: 30px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.measure-number {
+    position: absolute;
+    top: -15px;
+    left: 10px;
+    background: var(--primary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.chord-line {
+    position: relative;
+    height: 25px;
+    margin-bottom: 5px;
+}
+
+.chord-annotation {
+    position: absolute;
+    font-weight: bold;
+    color: var(--primary-color);
+    font-size: 1.1em;
+}
+
+.tab-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.tab-string-line {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 20px;
+}
+
+.string-label-tab {
+    width: 20px;
+    font-weight: bold;
+    color: #666;
+}
+
+.tab-line {
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: #333;
+    margin: 0 10px;
+}
+
+.tab-note {
+    position: absolute;
+    background: var(--primary-color);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition);
+    transform: translateY(-50%);
+}
+
+.tab-note:hover {
+    background: var(--secondary-color);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Mobile adjustments for composer */
+@media (max-width: 768px) {
+    .mode-toggle-group {
+        order: -1;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .chat-header {
+        flex-wrap: wrap;
+    }
+
+    .duration-buttons {
+        justify-content: space-between;
+    }
+
+    .duration-btn {
+        flex: 1;
+        min-width: 60px;
+        font-size: 0.85em;
+        padding: 8px 12px;
+    }
+
+    .composition-tab-container {
+        max-height: 300px;
+    }
+}
