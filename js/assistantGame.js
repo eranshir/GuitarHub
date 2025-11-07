@@ -1115,24 +1115,45 @@ class AssistantGame {
     }
 
     applyTabAdditions(tabAdditions) {
-        // Add each suggested note to the composition
-        tabAdditions.forEach(note => {
-            const targetMeasure = this.composition.currentMeasure + (note.measure_offset || 0);
+        // Sort by time to maintain sequence
+        const sortedAdditions = [...tabAdditions].sort((a, b) => (a.time || 0) - (b.time || 0));
 
-            // Ensure measure exists
-            while (this.composition.measures.length <= targetMeasure) {
+        // Add each suggested note to the composition sequentially
+        let currentTime = this.composition.currentTime;
+        let currentMeasure = this.composition.currentMeasure;
+
+        sortedAdditions.forEach(note => {
+            // Ensure we have a measure
+            if (this.composition.measures.length === 0) {
                 this.composition.addMeasure();
             }
 
-            // Add event to the target measure
-            this.composition.measures[targetMeasure].events.push({
-                time: note.time || 0,
+            // Add the note at the current cursor position
+            this.composition.measures[currentMeasure].events.push({
+                time: currentTime,
                 string: note.string,
                 fret: note.fret,
                 duration: note.duration || 0.25,
                 leftFinger: null
             });
+
+            // Advance time
+            currentTime += (note.duration || 0.25);
+
+            // Check if we need a new measure
+            const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+            if (currentTime >= beatsPerMeasure) {
+                currentTime = 0;
+                currentMeasure++;
+                if (currentMeasure >= this.composition.measures.length) {
+                    this.composition.addMeasure();
+                }
+            }
         });
+
+        // Update composition cursor to end of added notes
+        this.composition.currentTime = currentTime;
+        this.composition.currentMeasure = currentMeasure;
 
         // Re-render and save
         this.renderComposition();
