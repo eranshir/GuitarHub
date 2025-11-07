@@ -903,18 +903,20 @@ class AssistantGame {
         console.log('Edit note:', measureIndex, event);
     }
 
-    saveComposition() {
+    saveComposition(showMessage = true) {
         const data = this.composition.serialize();
         localStorage.setItem('guitarHubComposition', data);
         console.log('Composition saved');
-        this.addSystemMessage('Composition saved!');
+        if (showMessage) {
+            this.addSystemMessage('Composition saved!');
+        }
     }
 
     autoSaveComposition() {
-        // Auto-save with debounce
+        // Auto-save with debounce - silent (no chat message)
         clearTimeout(this._autoSaveTimer);
         this._autoSaveTimer = setTimeout(() => {
-            this.saveComposition();
+            this.saveComposition(false); // false = don't show message
         }, 2000);
     }
 
