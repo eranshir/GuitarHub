@@ -3491,9 +3491,15 @@ body.rtl .mobile-header {
     border-radius: 6px;
     cursor: pointer;
     transition: var(--transition);
-    font-size: 0.85em;
-    font-weight: 600;
+    font-size: 0.9em;
+    font-weight: 500;
     min-width: 45px;
+}
+
+.duration-btn-compact .note-symbol {
+    font-family: "Segoe UI Symbol", "Apple Color Emoji", "Noto Music", "Symbola", sans-serif;
+    font-size: 1.1em;
+    display: inline-block;
 }
 
 .duration-btn-compact:hover {
