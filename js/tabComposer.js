@@ -269,8 +269,12 @@ class TabRenderer {
         });
 
         // Add notes to the lines - all notes at same time get same horizontal position
-        Object.entries(eventsByTime).forEach(([timeKey, events]) => {
-            const time = parseFloat(timeKey);
+        // Position based on sequence order, not duration (uniform spacing)
+        const sortedTimes = Object.keys(eventsByTime).map(parseFloat).sort((a, b) => a - b);
+
+        sortedTimes.forEach((time, position) => {
+            const timeKey = time.toFixed(4);
+            const events = eventsByTime[timeKey];
 
             events.forEach(event => {
                 // Find the correct string div (string 1 = index 0, string 6 = index 5)
@@ -284,7 +288,7 @@ class TabRenderer {
                 note.dataset.string = event.string;
                 note.dataset.fret = event.fret;
                 note.dataset.duration = event.duration;
-                note.style.left = `${time * 120}px`; // 120px per beat - more spacing for readability
+                note.style.left = `${position * 50}px`; // Uniform 50px spacing per note
                 note.textContent = event.fret;
 
                 // Click to edit
@@ -302,14 +306,15 @@ class TabRenderer {
         const durationLine = document.createElement('div');
         durationLine.className = 'duration-line';
 
-        Object.entries(eventsByTime).forEach(([timeKey, events]) => {
-            const time = parseFloat(timeKey);
+        sortedTimes.forEach((time, position) => {
+            const timeKey = time.toFixed(4);
+            const events = eventsByTime[timeKey];
             // Use duration from first event (all events at same time should have same duration)
             const duration = events[0]?.duration || 0.25; // Default to quarter note if missing
 
             const durationSymbol = document.createElement('span');
             durationSymbol.className = 'duration-symbol';
-            durationSymbol.style.left = `${time * 120}px`;
+            durationSymbol.style.left = `${position * 50}px`; // Match note spacing
             durationSymbol.innerHTML = this.getDurationSymbolSVG(duration);
 
             durationLine.appendChild(durationSymbol);
@@ -317,9 +322,9 @@ class TabRenderer {
 
         measureDiv.appendChild(durationLine);
 
-        // Calculate measure width based on content
-        const beatsPerMeasure = this.composition?.getBeatsPerMeasure() || 1;
-        const measureWidth = (beatsPerMeasure * 120) + 60; // 120px per beat + padding
+        // Calculate measure width based on number of notes (uniform spacing)
+        const noteCount = sortedTimes.length;
+        const measureWidth = (noteCount * 50) + 60; // 50px per note + padding
         measureDiv.style.minWidth = `${measureWidth}px`;
 
         return measureDiv;
