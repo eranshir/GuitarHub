@@ -1891,7 +1891,140 @@ class ChordTheory {
             }
         }
 
+        // If still no match, analyze the notes using music theory
+        if (!bestMatch) {
+            return this.analyzeChordByNotes(positions, mutedStrings);
+        }
+
         return bestMatch;
+    }
+
+    // Analyze chord by actual notes using music theory
+    analyzeChordByNotes(positions, mutedStrings = []) {
+        if (positions.length === 0) return null;
+
+        // Standard tuning note names for each string (open position)
+        const stringNotes = ['E', 'A', 'D', 'G', 'B', 'E']; // Strings 6-1
+        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+        // Convert positions to actual note names
+        const notes = [];
+        for (const pos of positions) {
+            const openNote = stringNotes[6 - pos.string]; // String 6 = index 0
+            const openNoteIndex = noteNames.indexOf(openNote);
+            const actualNoteIndex = (openNoteIndex + pos.fret) % 12;
+            const noteName = noteNames[actualNoteIndex];
+            notes.push(noteName);
+        }
+
+        // Find the lowest note (bass note - determines root for most chords)
+        const bassPosition = positions.reduce((lowest, pos) =>
+            pos.string > lowest.string ? pos : lowest
+        );
+        const bassOpenNote = stringNotes[6 - bassPosition.string];
+        const bassNoteIndex = noteNames.indexOf(bassOpenNote);
+        const bassNote = noteNames[(bassNoteIndex + bassPosition.fret) % 12];
+
+        // Count unique notes and remove duplicates
+        const uniqueNotes = [...new Set(notes)];
+
+        // Calculate intervals from bass note
+        const intervals = uniqueNotes.map(note => {
+            const noteIndex = noteNames.indexOf(note);
+            const bassIndex = noteNames.indexOf(bassNote);
+            return (noteIndex - bassIndex + 12) % 12;
+        }).sort((a, b) => a - b);
+
+        // Identify chord quality based on intervals
+        const chordName = this.identifyChordFromIntervals(bassNote, intervals, uniqueNotes.length);
+
+        if (chordName) {
+            return {
+                key: 'analyzed_' + chordName.replace(/[^a-zA-Z0-9]/g, '_'),
+                name: chordName,
+                type: 'analyzed',
+                root: bassNote,
+                positions: positions,
+                muted: mutedStrings,
+                isAnalyzed: true
+            };
+        }
+
+        return null;
+    }
+
+    // Identify chord type from intervals
+    identifyChordFromIntervals(root, intervals, noteCount) {
+        // Common interval patterns (semitones from root)
+        const patterns = {
+            // Triads
+            'major': [0, 4, 7],
+            'minor': [0, 3, 7],
+            'dim': [0, 3, 6],
+            'aug': [0, 4, 8],
+            'sus2': [0, 2, 7],
+            'sus4': [0, 5, 7],
+            '5': [0, 7], // Power chord
+
+            // 7th chords
+            '7': [0, 4, 7, 10], // Dominant 7
+            'maj7': [0, 4, 7, 11],
+            'm7': [0, 3, 7, 10],
+            'm7b5': [0, 3, 6, 10], // Half-diminished
+            'dim7': [0, 3, 6, 9],
+
+            // 6th chords
+            '6': [0, 4, 7, 9],
+            'm6': [0, 3, 7, 9],
+
+            // 9th chords (9th = 2 semitones from root, octave up)
+            '9': [0, 2, 4, 7, 10], // Dominant 9
+            'maj9': [0, 2, 4, 7, 11],
+            'm9': [0, 2, 3, 7, 10],
+            'add9': [0, 2, 4, 7],
+
+            // 11th chords
+            '11': [0, 2, 4, 5, 7, 10],
+            'm11': [0, 2, 3, 5, 7, 10],
+
+            // 13th chords
+            '13': [0, 2, 4, 7, 9, 10],
+
+            // Altered dominants
+            '7#5': [0, 4, 8, 10],
+            '7b5': [0, 4, 6, 10],
+            '7#9': [0, 3, 4, 7, 10],
+            '7b9': [0, 1, 4, 7, 10]
+        };
+
+        // Try to match intervals to known patterns
+        for (const [suffix, pattern] of Object.entries(patterns)) {
+            if (this.intervalsMatch(intervals, pattern)) {
+                if (suffix === 'major') {
+                    return root;
+                } else if (suffix === 'minor') {
+                    return root + 'm';
+                } else if (suffix === '5') {
+                    return root + '5';
+                } else if (suffix === 'dim') {
+                    return root + '°';
+                } else if (suffix === 'aug') {
+                    return root + '+';
+                } else {
+                    return root + suffix;
+                }
+            }
+        }
+
+        // If no exact match, return generic description
+        return root + ' (' + noteCount + ' notes)';
+    }
+
+    intervalsMatch(actual, pattern) {
+        if (actual.length !== pattern.length) return false;
+
+        // Check if all pattern intervals are present in actual
+        return pattern.every(interval => actual.includes(interval));
     }
 
     compareMutedStrings(chordMuted, userMuted) {
