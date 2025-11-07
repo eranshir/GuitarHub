@@ -286,45 +286,70 @@ class TabRenderer {
 // Current Fretboard State - Tracks what user is building
 class FretboardState {
     constructor() {
-        this.selectedNotes = []; // [{string, fret}]
+        this.selectedNotes = []; // [{string, fret, muted: boolean}]
+        this.mutedStrings = new Set(); // Track explicitly muted strings
     }
 
     addNote(string, fret) {
         // Check if already selected
         const exists = this.selectedNotes.find(n => n.string === string);
-        if (exists) {
-            // Replace existing note on this string
-            exists.fret = fret;
+
+        if (fret === -1) {
+            // Fret -1 means "mute this string"
+            if (exists) {
+                this.selectedNotes = this.selectedNotes.filter(n => n.string !== string);
+            }
+            this.mutedStrings.add(string);
         } else {
-            this.selectedNotes.push({ string, fret });
+            // Remove from muted if adding a note
+            this.mutedStrings.delete(string);
+
+            if (exists) {
+                // Replace existing note on this string
+                exists.fret = fret;
+            } else {
+                this.selectedNotes.push({ string, fret });
+            }
         }
     }
 
     removeNote(string) {
         this.selectedNotes = this.selectedNotes.filter(n => n.string !== string);
+        this.mutedStrings.delete(string);
     }
 
     clear() {
         this.selectedNotes = [];
+        this.mutedStrings.clear();
     }
 
     getNotes() {
         return [...this.selectedNotes];
     }
 
+    getMutedStrings() {
+        return Array.from(this.mutedStrings);
+    }
+
     isEmpty() {
-        return this.selectedNotes.length === 0;
+        return this.selectedNotes.length === 0 && this.mutedStrings.size === 0;
+    }
+
+    isStringMuted(string) {
+        return this.mutedStrings.has(string);
     }
 
     // Detect chord from current shape
     detectChord(chordTheory) {
-        if (this.isEmpty()) return null;
+        if (this.selectedNotes.length === 0) return null;
 
         // Create positions array compatible with chordTheory
         const positions = this.selectedNotes.map(n => ({ string: n.string, fret: n.fret }));
+        const muted = Array.from(this.mutedStrings);
 
         // Try to find matching chord
-        const chord = chordTheory.getChordByPositions(positions);
+        const chord = chordTheory.getChordByPositions(positions, muted);
+
         return chord ? chord.name : null;
     }
 }

@@ -868,13 +868,40 @@ class AssistantGame {
     }
 
     handleComposerFretboardClick(string, fret) {
-        // Add or update note in fretboard state
-        this.fretboardState.addNote(string, fret);
+        const notes = this.fretboardState.getNotes();
+        const existingNote = notes.find(n => n.string === string && n.fret === fret);
+        const isMuted = this.fretboardState.isStringMuted(string);
+
+        if (fret === 0) {
+            // Clicking nut (fret 0)
+            if (existingNote || isMuted) {
+                // If string has a note at fret 0 or is muted, cycle: open → muted → clear
+                if (existingNote && !isMuted) {
+                    // Currently open (fret 0) → mute it
+                    this.fretboardState.addNote(string, -1);
+                } else {
+                    // Currently muted → clear
+                    this.fretboardState.removeNote(string);
+                }
+            } else {
+                // Add open string (fret 0)
+                this.fretboardState.addNote(string, 0);
+            }
+        } else {
+            // Clicking regular fret
+            if (existingNote) {
+                // Remove note if clicking same position
+                this.fretboardState.removeNote(string);
+            } else {
+                // Add or update note in fretboard state
+                this.fretboardState.addNote(string, fret);
+            }
+        }
 
         // Update visual display
         this.displayComposerFretboard();
 
-        // Detect chord
+        // Detect chord (always update after any fretboard change)
         this.updateDetectedChord();
     }
 
@@ -883,9 +910,36 @@ class AssistantGame {
 
         this.fretboardDisplay.clearHighlights();
 
+        // Clear all muted string markers first
+        for (let string = 1; string <= 6; string++) {
+            const position = this.fretboardDisplay.container.querySelector(`#pos-${string}-0`);
+            if (position) {
+                const marker = position.querySelector('.position-marker');
+                if (marker) {
+                    marker.classList.remove('muted-string');
+                    marker.textContent = '';
+                }
+            }
+        }
+
+        // Display notes
         const notes = this.fretboardState.getNotes();
         notes.forEach(note => {
             this.fretboardDisplay.highlightPosition(note.string, note.fret, false);
+        });
+
+        // Display muted strings with X
+        const mutedStrings = this.fretboardState.getMutedStrings();
+        mutedStrings.forEach(stringNum => {
+            const position = this.fretboardDisplay.container.querySelector(`#pos-${stringNum}-0`);
+            if (position) {
+                const marker = position.querySelector('.position-marker');
+                if (marker) {
+                    marker.classList.add('active', 'muted-string');
+                    marker.textContent = 'X';
+                    marker.style.opacity = '1';
+                }
+            }
         });
     }
 
@@ -897,8 +951,13 @@ class AssistantGame {
         const addChordBtn = document.getElementById('add-chord-btn');
 
         // Update input field with detected chord (user can edit it)
-        if (chordInput && chordName) {
-            chordInput.value = chordName;
+        if (chordInput) {
+            if (chordName) {
+                chordInput.value = chordName;
+            } else if (this.fretboardState.isEmpty()) {
+                // Clear input when fretboard is empty
+                chordInput.value = '';
+            }
         }
 
         if (addChordBtn) {
@@ -909,36 +968,27 @@ class AssistantGame {
     loadChordShape(chordName) {
         if (!chordName) return;
 
-        console.log('Loading chord shape:', chordName);
-
-        // Find chord in chordTheory
-        const chord = this.chordTheory.chords[chordName];
+        // Find chord in chordTheory (case-insensitive)
+        const chord = this.chordTheory.getChord(chordName);
 
         if (!chord) {
-            console.log('Chord not found:', chordName);
-            console.log('Available chords:', Object.keys(this.chordTheory.chords));
             this.showTransientNotification(`Chord "${chordName}" not found. Try: C, Am, G7, etc.`);
             return;
         }
-
-        console.log('Found chord:', chord);
 
         // Clear current fretboard state
         this.fretboardState.clear();
 
         // Load chord positions onto fretboard
         chord.positions.forEach(pos => {
-            console.log('Adding position:', pos);
             this.fretboardState.addNote(pos.string, pos.fret);
         });
-
-        console.log('Fretboard state after loading:', this.fretboardState.getNotes());
 
         // Display on fretboard
         this.displayComposerFretboard();
 
-        // Update the detected chord (it should match what was typed)
-        this.detectedChord = chordName;
+        // Detect chord (should match what was typed, but allow detection to verify)
+        this.updateDetectedChord();
 
         this.showTransientNotification(`Loaded ${chord.name} onto fretboard`);
     }
