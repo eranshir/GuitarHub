@@ -731,6 +731,26 @@ class AssistantGame {
             this.clearComposerFretboard();
         });
 
+        // Chord name input - bidirectional
+        const chordInput = document.getElementById('chord-name-input');
+        if (chordInput) {
+            // Enter key to load chord shape onto fretboard
+            chordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    this.loadChordShape(chordInput.value.trim());
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Load Chord button
+        document.getElementById('load-chord-btn')?.addEventListener('click', () => {
+            const chordInput = document.getElementById('chord-name-input');
+            if (chordInput) {
+                this.loadChordShape(chordInput.value.trim());
+            }
+        });
+
         // Add Chord button
         document.getElementById('add-chord-btn')?.addEventListener('click', () => {
             this.addChordToComposition();
@@ -880,16 +900,45 @@ class AssistantGame {
         const chordName = this.fretboardState.detectChord(this.chordTheory);
         this.detectedChord = chordName;
 
-        const chordDisplay = document.getElementById('detected-chord-name');
+        const chordInput = document.getElementById('chord-name-input');
         const addChordBtn = document.getElementById('add-chord-btn');
 
-        if (chordDisplay) {
-            chordDisplay.textContent = chordName || '-';
+        // Update input field with detected chord (user can edit it)
+        if (chordInput && chordName) {
+            chordInput.value = chordName;
         }
 
         if (addChordBtn) {
-            addChordBtn.disabled = !chordName;
+            addChordBtn.disabled = !chordName && !chordInput?.value.trim();
         }
+    }
+
+    loadChordShape(chordName) {
+        if (!chordName) return;
+
+        // Find chord in chordTheory
+        const chord = this.chordTheory.chords[chordName];
+
+        if (!chord) {
+            this.showTransientNotification(`Chord "${chordName}" not found. Try: C, Am, G7, etc.`);
+            return;
+        }
+
+        // Clear current fretboard state
+        this.fretboardState.clear();
+
+        // Load chord positions onto fretboard
+        chord.positions.forEach(pos => {
+            this.fretboardState.addNote(pos.string, pos.fret);
+        });
+
+        // Display on fretboard
+        this.displayComposerFretboard();
+
+        // Update the detected chord (it should match what was typed)
+        this.detectedChord = chordName;
+
+        this.showTransientNotification(`Loaded ${chord.name} onto fretboard`);
     }
 
     selectDuration(duration) {
@@ -970,19 +1019,24 @@ class AssistantGame {
     }
 
     addChordToComposition() {
-        if (!this.detectedChord) return;
+        const chordInput = document.getElementById('chord-name-input');
+        const chordName = chordInput?.value.trim() || this.detectedChord;
+
+        if (!chordName) return;
 
         // Add chord annotation at current position
         const measureIdx = this.composition.currentMeasure;
         const time = this.composition.currentTime;
 
-        this.composition.addChordAnnotation(measureIdx, time, this.detectedChord);
+        this.composition.addChordAnnotation(measureIdx, time, chordName);
 
         // Re-render
         this.renderComposition();
 
         // Auto-save
         this.autoSaveComposition();
+
+        this.showTransientNotification(`Added "${chordName}" annotation`);
     }
 
     renderComposition() {
