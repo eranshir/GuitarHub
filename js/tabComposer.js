@@ -238,6 +238,12 @@ class TabRenderer {
         // Group events by time (notes at same time = vertical alignment)
         const eventsByTime = {};
         measure.events.forEach(event => {
+            // Safety check for malformed events
+            if (!event || event.time === null || event.time === undefined) {
+                console.warn('Skipping malformed event:', event);
+                return;
+            }
+
             const timeKey = event.time.toFixed(4); // Use fixed precision to group same-time events
             if (!eventsByTime[timeKey]) {
                 eventsByTime[timeKey] = [];
@@ -282,7 +288,7 @@ class TabRenderer {
         Object.entries(eventsByTime).forEach(([timeKey, events]) => {
             const time = parseFloat(timeKey);
             // Use duration from first event (all events at same time should have same duration)
-            const duration = events[0].duration;
+            const duration = events[0]?.duration || 0.25; // Default to quarter note if missing
 
             const durationSymbol = document.createElement('span');
             durationSymbol.className = 'duration-symbol';
