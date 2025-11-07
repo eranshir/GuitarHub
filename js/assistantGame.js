@@ -748,23 +748,41 @@ class AssistantGame {
         });
 
         if (mode === 'assistant') {
-            document.getElementById('mode-assistant')?.classList.add('active');
+            const modeBtn = document.getElementById('mode-assistant');
+            if (modeBtn) modeBtn.classList.add('active');
+
             // Show assistant controls, hide composer controls
-            document.getElementById('composer-controls-compact')?.style.display = 'none';
-            document.getElementById('composer-chord-detector')?.style.display = 'none';
-            document.getElementById('composition-tab-container').style.display = 'none';
-            document.getElementById('assistant-display-container').style.display = 'block';
-            document.querySelector('.playback-controls').style.display = 'block';
-            document.querySelector('.current-chord-display').style.display = 'block';
+            const composerControls = document.getElementById('composer-controls-compact');
+            const chordDetector = document.getElementById('composer-chord-detector');
+            const compositionTab = document.getElementById('composition-tab-container');
+            const assistantDisplay = document.getElementById('assistant-display-container');
+            const playbackControls = document.querySelector('.playback-controls');
+            const chordDisplay = document.querySelector('.current-chord-display');
+
+            if (composerControls) composerControls.style.display = 'none';
+            if (chordDetector) chordDetector.style.display = 'none';
+            if (compositionTab) compositionTab.style.display = 'none';
+            if (assistantDisplay) assistantDisplay.style.display = 'block';
+            if (playbackControls) playbackControls.style.display = 'block';
+            if (chordDisplay) chordDisplay.style.display = 'block';
         } else {
-            document.getElementById('mode-composer')?.classList.add('active');
+            const modeBtn = document.getElementById('mode-composer');
+            if (modeBtn) modeBtn.classList.add('active');
+
             // Hide assistant controls, show composer controls
-            document.getElementById('composer-controls-compact').style.display = 'flex';
-            document.getElementById('composer-chord-detector').style.display = 'flex';
-            document.getElementById('composition-tab-container').style.display = 'block';
-            document.getElementById('assistant-display-container').style.display = 'none';
-            document.querySelector('.playback-controls').style.display = 'none';
-            document.querySelector('.current-chord-display').style.display = 'none';
+            const composerControls = document.getElementById('composer-controls-compact');
+            const chordDetector = document.getElementById('composer-chord-detector');
+            const compositionTab = document.getElementById('composition-tab-container');
+            const assistantDisplay = document.getElementById('assistant-display-container');
+            const playbackControls = document.querySelector('.playback-controls');
+            const chordDisplay = document.querySelector('.current-chord-display');
+
+            if (composerControls) composerControls.style.display = 'flex';
+            if (chordDetector) chordDetector.style.display = 'flex';
+            if (compositionTab) compositionTab.style.display = 'block';
+            if (assistantDisplay) assistantDisplay.style.display = 'none';
+            if (playbackControls) playbackControls.style.display = 'none';
+            if (chordDisplay) chordDisplay.style.display = 'none';
 
             // Render current composition
             this.renderComposition();
