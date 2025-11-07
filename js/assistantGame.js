@@ -30,6 +30,7 @@ class AssistantGame {
         this.fretboardState = new FretboardState();
         this.selectedDuration = 0.25; // Default: quarter note
         this.detectedChord = null;
+        this.editContext = null; // {measureIndex, time, originalEvents} when editing
 
         // Metronome state
         this.bpm = 120;
@@ -841,23 +842,51 @@ class AssistantGame {
 
         const notes = this.fretboardState.getNotes();
 
-        // All notes in this shape should have the SAME time (they're played together)
-        const currentTime = this.composition.currentTime;
+        // Check if we're editing existing notes
+        if (this.editContext) {
+            // Remove old events at this time
+            const measure = this.composition.measures[this.editContext.measureIndex];
+            if (measure) {
+                measure.events = measure.events.filter(e =>
+                    Math.abs(e.time - this.editContext.time) >= 0.001
+                );
 
-        // Add each note to composition at the same time
-        notes.forEach(note => {
-            this.composition.addEvent(note.string, note.fret, this.selectedDuration, null, currentTime);
-        });
+                // Add updated notes at the same time position
+                notes.forEach(note => {
+                    measure.events.push({
+                        time: this.editContext.time,
+                        string: note.string,
+                        fret: note.fret,
+                        duration: this.selectedDuration,
+                        leftFinger: null
+                    });
+                });
 
-        // Now advance time only once (after all notes added)
-        this.composition.currentTime += this.selectedDuration;
+                this.addSystemMessage('Notes updated!');
+            }
 
-        // Check if we need a new measure
-        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
-        if (this.composition.currentTime >= beatsPerMeasure) {
-            this.composition.currentTime = 0;
-            this.composition.currentMeasure++;
-            this.composition.addMeasure();
+            // Clear edit context
+            this.editContext = null;
+
+        } else {
+            // Normal add mode - append new notes
+            const currentTime = this.composition.currentTime;
+
+            // Add each note to composition at the same time
+            notes.forEach(note => {
+                this.composition.addEvent(note.string, note.fret, this.selectedDuration, null, currentTime);
+            });
+
+            // Now advance time only once (after all notes added)
+            this.composition.currentTime += this.selectedDuration;
+
+            // Check if we need a new measure
+            const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+            if (this.composition.currentTime >= beatsPerMeasure) {
+                this.composition.currentTime = 0;
+                this.composition.currentMeasure++;
+                this.composition.addMeasure();
+            }
         }
 
         // Clear fretboard state
@@ -899,8 +928,40 @@ class AssistantGame {
     }
 
     loadNoteForEditing(measureIndex, event) {
-        // Future: Load note onto fretboard for editing
         console.log('Edit note:', measureIndex, event);
+
+        // Find all notes at the same time position in this measure
+        const measure = this.composition.measures[measureIndex];
+        if (!measure) return;
+
+        const notesAtSameTime = measure.events.filter(e =>
+            Math.abs(e.time - event.time) < 0.001 // Same time (with floating point tolerance)
+        );
+
+        // Load these notes onto the fretboard
+        this.fretboardState.clear();
+        notesAtSameTime.forEach(note => {
+            this.fretboardState.addNote(note.string, note.fret);
+        });
+
+        // Display on fretboard
+        this.displayComposerFretboard();
+
+        // Update detected chord
+        this.updateDetectedChord();
+
+        // Store edit context so we know to update rather than append
+        this.editContext = {
+            measureIndex: measureIndex,
+            time: event.time,
+            originalEvents: notesAtSameTime
+        };
+
+        // Show visual feedback
+        this.addSystemMessage(`Editing notes at measure ${measureIndex + 1}, beat ${event.time + 1}. Press Enter to save changes.`);
+
+        // Scroll to top to see fretboard
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     saveComposition(showMessage = true) {
