@@ -3298,15 +3298,17 @@ body.rtl .mobile-header {
 
 .tab-measure {
     position: relative;
-    padding: 10px 15px;
+    padding: 10px 20px 10px 10px;
     background: #f8f9fa;
     border-right: 3px solid #333;
-    min-width: 200px;
     flex-shrink: 0;
+    display: inline-flex;
+    flex-direction: column;
 }
 
 .tab-measure:first-child {
     border-left: 3px solid #333;
+    padding-left: 20px;
 }
 
 .measure-number {
@@ -3379,7 +3381,8 @@ body.rtl .mobile-header {
 
 /* Add spacing after each beat in the measure */
 .tab-line {
-    min-width: 600px; /* Ensure measures have minimum width for spacing */
+    position: relative;
+    min-width: 150px; /* Smaller minimum, grows with content */
 }
 
 .tab-note:hover {

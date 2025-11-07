@@ -317,6 +317,11 @@ class TabRenderer {
 
         measureDiv.appendChild(durationLine);
 
+        // Calculate measure width based on content
+        const beatsPerMeasure = this.composition?.getBeatsPerMeasure() || 1;
+        const measureWidth = (beatsPerMeasure * 120) + 60; // 120px per beat + padding
+        measureDiv.style.minWidth = `${measureWidth}px`;
+
         return measureDiv;
     }
 
