@@ -3289,13 +3289,24 @@ body.rtl .mobile-header {
 }
 
 /* TAB Measure Styling */
+.tab-row {
+    display: flex;
+    gap: 0;
+    margin-bottom: 30px;
+    overflow-x: auto;
+}
+
 .tab-measure {
     position: relative;
-    margin-bottom: 30px;
-    padding: 10px;
+    padding: 10px 15px;
     background: #f8f9fa;
-    border-radius: 8px;
-    border: 1px solid #e0e0e0;
+    border-right: 3px solid #333;
+    min-width: 200px;
+    flex-shrink: 0;
+}
+
+.tab-measure:first-child {
+    border-left: 3px solid #333;
 }
 
 .measure-number {

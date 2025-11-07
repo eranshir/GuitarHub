@@ -184,10 +184,20 @@ class TabRenderer {
             return;
         }
 
-        // Render each measure
+        // Render measures in rows (4 measures per row)
+        const measuresPerRow = 4;
+        let currentRow = null;
+
         composition.measures.forEach((measure, idx) => {
+            // Create new row every 4 measures
+            if (idx % measuresPerRow === 0) {
+                currentRow = document.createElement('div');
+                currentRow.className = 'tab-row';
+                this.container.appendChild(currentRow);
+            }
+
             const measureEl = this.renderMeasure(measure, idx);
-            this.container.appendChild(measureEl);
+            currentRow.appendChild(measureEl);
         });
     }
 
