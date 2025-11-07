@@ -1045,9 +1045,14 @@ class AssistantGame {
             // Now advance time only once (after all notes added)
             this.composition.currentTime += this.selectedDuration;
 
+            console.log('After adding note: currentTime =', this.composition.currentTime, 'duration =', this.selectedDuration);
+
             // Check if we need a new measure
             const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+            console.log('Beats per measure:', beatsPerMeasure, 'Time signature:', this.composition.timeSignature);
+
             if (this.composition.currentTime >= beatsPerMeasure) {
+                console.log('Creating new measure! currentTime:', this.composition.currentTime, '>=', beatsPerMeasure);
                 this.composition.currentTime = 0;
                 this.composition.currentMeasure++;
                 this.composition.addMeasure();

@@ -55,8 +55,15 @@ class TabComposition {
 
     getBeatsPerMeasure() {
         const [numerator, denominator] = this.timeSignature.split('/').map(Number);
-        // For now, simple calculation (assumes denominator is beat unit)
-        return numerator;
+        // Calculate total beats in measure
+        // Duration values are in whole notes (1 = whole, 0.5 = half, 0.25 = quarter)
+        // We need to convert to measure capacity in same units
+        // Example: 4/4 means 4 quarter notes = 4 * 0.25 = 1.0 whole notes
+        // Example: 3/4 means 3 quarter notes = 3 * 0.25 = 0.75 whole notes
+        // Example: 6/8 means 6 eighth notes = 6 * 0.125 = 0.75 whole notes
+
+        const beatValue = 1 / denominator; // e.g., 1/4 = 0.25 for quarter note
+        return numerator * beatValue; // e.g., 4 * 0.25 = 1.0 whole notes
     }
 
     serialize() {
