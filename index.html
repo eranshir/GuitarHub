@@ -875,25 +875,50 @@
                             </select>
                             <div class="duration-buttons-compact">
                                 <button class="duration-btn-compact" data-duration="0.0625" title="Sixteenth note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M18 3v11.5c0 2.5-2 4.5-4.5 4.5S9 17 9 14.5s2-4.5 4.5-4.5c.8 0 1.5.2 2.2.5V6l-7 1.5v9.5c0 2.5-2 4.5-4.5 4.5S0 19.5 0 17s2-4.5 4.5-4.5c.8 0 1.5.2 2.2.5V3l11.3 0z"/></svg>
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
+                                        <!-- Filled note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
+                                        <!-- Two flags --><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z M11.5 5 Q15 7 15 10 L11.5 9 Z"/>
+                                    </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="0.125" title="Eighth note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v11.5c0 2.5-2 4.5-4.5 4.5S3 17 3 14.5s2-4.5 4.5-4.5c.8 0 1.5.2 2.2.5V3h2.3z"/></svg>
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
+                                        <!-- Filled note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
+                                        <!-- One flag --><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/>
+                                    </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="0.375" title="Dotted eighth note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v11.5c0 2.5-2 4.5-4.5 4.5S3 17 3 14.5s2-4.5 4.5-4.5c.8 0 1.5.2 2.2.5V3h2.3z"/><circle cx="15" cy="12" r="1.5"/></svg>
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
+                                        <!-- Filled note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
+                                        <!-- One flag --><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/>
+                                        <!-- Dot --><circle cx="13" cy="16" r="1.2"/>
+                                    </svg>
                                 </button>
                                 <button class="duration-btn-compact active" data-duration="0.25" title="Quarter note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v11.5c0 2.5-2 4.5-4.5 4.5S3 17 3 14.5s2-4.5 4.5-4.5c.8 0 1.5.2 2.2.5V3h2.3z"/></svg>
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
+                                        <!-- Filled note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
+                                    </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="0.5" title="Half note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v11.5c0 .8-.2 1.6-.6 2.3-.4.7-1 1.3-1.7 1.7-.7.4-1.5.6-2.2.6-.8 0-1.6-.2-2.3-.6-.7-.4-1.3-1-1.7-1.7C3.2 16.1 3 15.3 3 14.5c0-.8.2-1.6.6-2.3.4-.7 1-1.3 1.7-1.7.7-.4 1.5-.6 2.2-.6.8 0 1.5.2 2.2.5V3h2.3zm-2.3 11.5c0-.6-.2-1.1-.6-1.5-.4-.4-.9-.6-1.6-.6-.6 0-1.1.2-1.5.6-.4.4-.6.9-.6 1.5s.2 1.1.6 1.5c.4.4.9.6 1.5.6.6 0 1.2-.2 1.6-.6.4-.4.6-.9.6-1.5z"/></svg>
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
+                                        <!-- Hollow note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/>
+                                    </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="0.75" title="Dotted half note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v11.5c0 .8-.2 1.6-.6 2.3-.4.7-1 1.3-1.7 1.7-.7.4-1.5.6-2.2.6-.8 0-1.6-.2-2.3-.6-.7-.4-1.3-1-1.7-1.7C3.2 16.1 3 15.3 3 14.5c0-.8.2-1.6.6-2.3.4-.7 1-1.3 1.7-1.7.7-.4 1.5-.6 2.2-.6.8 0 1.5.2 2.2.5V3h2.3zm-2.3 11.5c0-.6-.2-1.1-.6-1.5-.4-.4-.9-.6-1.6-.6-.6 0-1.1.2-1.5.6-.4.4-.6.9-.6 1.5s.2 1.1.6 1.5c.4.4.9.6 1.5.6.6 0 1.2-.2 1.6-.6.4-.4.6-.9.6-1.5z"/><circle cx="15" cy="12" r="1.5"/></svg>
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
+                                        <!-- Hollow note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/>
+                                        <!-- Dot --><circle cx="13" cy="16" r="1.2"/>
+                                    </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="1" title="Whole note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor"><ellipse cx="7.5" cy="14.5" rx="4.5" ry="3" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <!-- Hollow oval (no stem) --><ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/>
+                                    </svg>
                                 </button>
                             </div>
                             <button id="clear-fretboard-btn" class="icon-action-btn" title="Clear (Backspace)">🗑️</button>

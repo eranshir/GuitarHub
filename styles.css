@@ -3513,6 +3513,11 @@ body.rtl .mobile-header {
     color: white;
 }
 
+.duration-btn-compact.active .note-icon ellipse[fill="white"] {
+    fill: var(--primary-color);
+    stroke: white;
+}
+
 .duration-btn-compact:hover {
     border-color: var(--primary-color);
 }
