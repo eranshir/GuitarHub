@@ -3541,3 +3541,25 @@ body.rtl .mobile-header {
 .composer-controls {
     display: none !important;
 }
+
+/* Transient notification (doesn't persist in chat) */
+.transient-notification {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 25px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.transient-notification.show {
+    opacity: 1;
+}

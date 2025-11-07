@@ -262,6 +262,31 @@ class AssistantGame {
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
+    showTransientNotification(message) {
+        // Show a temporary notification that doesn't clutter the chat
+        let notification = document.getElementById('transient-notification');
+
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'transient-notification';
+            notification.className = 'transient-notification';
+            document.body.appendChild(notification);
+        }
+
+        notification.textContent = message;
+        notification.style.display = 'block';
+        notification.classList.add('show');
+
+        // Auto-hide after 3 seconds
+        clearTimeout(this._notificationTimer);
+        this._notificationTimer = setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 300);
+        }, 3000);
+    }
+
     escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
@@ -862,7 +887,7 @@ class AssistantGame {
                     });
                 });
 
-                this.addSystemMessage('Notes updated!');
+                this.showTransientNotification('Notes updated!');
             }
 
             // Clear edit context
@@ -957,8 +982,8 @@ class AssistantGame {
             originalEvents: notesAtSameTime
         };
 
-        // Show visual feedback
-        this.addSystemMessage(`Editing notes at measure ${measureIndex + 1}, beat ${event.time + 1}. Press Enter to save changes.`);
+        // Show transient feedback (doesn't persist in chat)
+        this.showTransientNotification(`Editing notes at measure ${measureIndex + 1}. Press Enter to save changes.`);
 
         // Scroll to top to see fretboard
         window.scrollTo({ top: 0, behavior: 'smooth' });
