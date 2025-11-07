@@ -2352,31 +2352,11 @@ body.rtl .metronome-controls {
 }
 
 .chat-header {
-    padding: 20px;
+    padding: 15px 20px;
     border-bottom: 2px solid #e0e0e0;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-}
-
-.chat-header h3 {
-    margin: 0;
-    color: var(--primary-color);
-}
-
-.clear-chat-btn {
-    padding: 8px 16px;
-    background: var(--secondary-color);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9em;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.clear-chat-btn:hover {
-    background: #c0392b;
 }
 
 .chat-messages {
