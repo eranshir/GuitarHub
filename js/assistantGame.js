@@ -780,23 +780,16 @@ class AssistantGame {
         document.addEventListener('keydown', (e) => {
             if (this.mode !== 'composer') return;
 
-            // Number keys 1-7 for duration selection
-            if (e.key >= '1' && e.key <= '7' && !e.ctrlKey && !e.metaKey) {
-                const durations = [0.0625, 0.125, 0.25, 0.375, 0.5, 0.75, 1];
-                const idx = parseInt(e.key) - 1;
-                if (idx < durations.length) {
-                    this.selectDuration(durations[idx]);
-                    e.preventDefault();
-                }
-            }
+            // Don't intercept if typing in chord input field
+            if (e.target.id === 'chord-name-input') return;
 
-            // Enter key to add note
+            // Enter key to add note (only if not in input field and fretboard has notes)
             if (e.key === 'Enter' && !this.fretboardState.isEmpty()) {
                 this.addNoteToComposition();
                 e.preventDefault();
             }
 
-            // Backspace/Delete to clear fretboard
+            // Backspace/Delete to clear fretboard (only if not in input field)
             if ((e.key === 'Backspace' || e.key === 'Delete') && !this.fretboardState.isEmpty()) {
                 this.clearComposerFretboard();
                 e.preventDefault();
