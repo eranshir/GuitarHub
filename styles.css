@@ -3376,6 +3376,25 @@ body.rtl .mobile-header {
     transform: translateY(-50%) scale(1.1);
 }
 
+.duration-line {
+    position: relative;
+    height: 25px;
+    margin-top: 8px;
+    margin-left: 30px;
+}
+
+.duration-symbol {
+    position: absolute;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+}
+
+.duration-symbol svg {
+    width: 100%;
+    height: 100%;
+}
+
 /* Mobile adjustments for composer */
 @media (max-width: 768px) {
     .mode-toggle-group {

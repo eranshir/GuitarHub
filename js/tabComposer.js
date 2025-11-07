@@ -260,6 +260,7 @@ class TabRenderer {
                 note.dataset.time = event.time;
                 note.dataset.string = event.string;
                 note.dataset.fret = event.fret;
+                note.dataset.duration = event.duration;
                 note.style.left = `${time * 120}px`; // 120px per beat - more spacing for readability
                 note.textContent = event.fret;
 
@@ -274,7 +275,40 @@ class TabRenderer {
 
         measureDiv.appendChild(tabLinesDiv);
 
+        // Add duration symbols below the TAB
+        const durationLine = document.createElement('div');
+        durationLine.className = 'duration-line';
+
+        Object.entries(eventsByTime).forEach(([timeKey, events]) => {
+            const time = parseFloat(timeKey);
+            // Use duration from first event (all events at same time should have same duration)
+            const duration = events[0].duration;
+
+            const durationSymbol = document.createElement('span');
+            durationSymbol.className = 'duration-symbol';
+            durationSymbol.style.left = `${time * 120}px`;
+            durationSymbol.innerHTML = this.getDurationSymbolSVG(duration);
+
+            durationLine.appendChild(durationSymbol);
+        });
+
+        measureDiv.appendChild(durationLine);
+
         return measureDiv;
+    }
+
+    getDurationSymbolSVG(duration) {
+        const symbols = {
+            0.0625: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z M11.5 5 Q15 7 15 10 L11.5 9 Z"/></svg>', // 16th
+            0.125: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/></svg>', // 8th
+            0.25: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/></svg>', // Quarter
+            0.375: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/><circle cx="13" cy="16" r="1.2"/></svg>', // Dotted 8th
+            0.5: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>', // Half
+            0.75: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="16" r="1.2"/></svg>', // Dotted half
+            1: '<svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>' // Whole
+        };
+
+        return symbols[duration] || symbols[0.25]; // Default to quarter note
     }
 
     setNoteClickHandler(handler) {
