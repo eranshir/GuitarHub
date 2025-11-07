@@ -233,7 +233,7 @@ class TabRenderer {
                 note.dataset.time = event.time;
                 note.dataset.string = event.string;
                 note.dataset.fret = event.fret;
-                note.style.left = `${time * 80}px`; // 80px per beat - SAME position for all notes at this time
+                note.style.left = `${time * 120}px`; // 120px per beat - more spacing for readability
                 note.textContent = event.fret;
 
                 // Click to edit
