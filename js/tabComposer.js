@@ -76,6 +76,33 @@ class TabComposition {
         composition.tempo = data.tempo;
         composition.timeSignature = data.timeSignature;
         composition.measures = data.measures;
+
+        // Set cursor to end of composition
+        if (composition.measures.length > 0) {
+            composition.currentMeasure = composition.measures.length - 1;
+
+            // Find the latest time in the last measure
+            const lastMeasure = composition.measures[composition.currentMeasure];
+            let maxTime = 0;
+
+            lastMeasure.events.forEach(event => {
+                const endTime = event.time + event.duration;
+                if (endTime > maxTime) {
+                    maxTime = endTime;
+                }
+            });
+
+            composition.currentTime = maxTime;
+
+            // If at end of measure, move to next measure
+            const beatsPerMeasure = composition.getBeatsPerMeasure();
+            if (composition.currentTime >= beatsPerMeasure) {
+                composition.currentTime = 0;
+                composition.currentMeasure++;
+                composition.addMeasure();
+            }
+        }
+
         return composition;
     }
 
