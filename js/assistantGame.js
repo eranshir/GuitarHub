@@ -649,8 +649,8 @@ class AssistantGame {
     }
 
     setupComposerEventListeners() {
-        // Duration buttons
-        document.querySelectorAll('.duration-btn').forEach(btn => {
+        // Duration buttons (both old and new compact versions)
+        document.querySelectorAll('.duration-btn, .duration-btn-compact').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 this.selectDuration(parseFloat(e.target.dataset.duration));
             });
@@ -750,17 +750,21 @@ class AssistantGame {
         if (mode === 'assistant') {
             document.getElementById('mode-assistant')?.classList.add('active');
             // Show assistant controls, hide composer controls
-            document.getElementById('composer-controls').style.display = 'none';
+            document.getElementById('composer-controls-compact')?.style.display = 'none';
+            document.getElementById('composer-chord-detector')?.style.display = 'none';
             document.getElementById('composition-tab-container').style.display = 'none';
             document.getElementById('assistant-display-container').style.display = 'block';
             document.querySelector('.playback-controls').style.display = 'block';
+            document.querySelector('.current-chord-display').style.display = 'block';
         } else {
             document.getElementById('mode-composer')?.classList.add('active');
             // Hide assistant controls, show composer controls
-            document.getElementById('composer-controls').style.display = 'block';
+            document.getElementById('composer-controls-compact').style.display = 'flex';
+            document.getElementById('composer-chord-detector').style.display = 'flex';
             document.getElementById('composition-tab-container').style.display = 'block';
             document.getElementById('assistant-display-container').style.display = 'none';
             document.querySelector('.playback-controls').style.display = 'none';
+            document.querySelector('.current-chord-display').style.display = 'none';
 
             // Render current composition
             this.renderComposition();
@@ -808,8 +812,8 @@ class AssistantGame {
     selectDuration(duration) {
         this.selectedDuration = duration;
 
-        // Update button states
-        document.querySelectorAll('.duration-btn').forEach(btn => {
+        // Update button states (both old and compact versions)
+        document.querySelectorAll('.duration-btn, .duration-btn-compact').forEach(btn => {
             btn.classList.toggle('active', parseFloat(btn.dataset.duration) === duration);
         });
     }

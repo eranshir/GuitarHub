@@ -844,6 +844,13 @@
             <section id="assistant-module" class="module">
                 <div class="assistant-container">
                     <div class="assistant-main">
+                        <!-- Detected Chord (Composer Mode Only) -->
+                        <div id="composer-chord-detector" class="composer-chord-detector" style="display: none;">
+                            <span class="detected-label" data-i18n="composer.detected">Detected:</span>
+                            <span id="detected-chord-name" class="detected-chord">-</span>
+                            <button id="add-chord-btn" class="add-chord-btn-compact" data-i18n="composer.addChord" disabled>Add Chord</button>
+                        </div>
+
                         <div class="current-chord-display">
                             <span class="chord-name" id="assistant-chord-name">-</span>
                             <span class="position-info" id="assistant-position-info">Ready</span>
@@ -853,6 +860,29 @@
                             <div class="fretboard" id="fretboard-assistant">
                                 <!-- Fretboard will be generated dynamically -->
                             </div>
+                        </div>
+
+                        <!-- Compact Composer Controls (Single Row) -->
+                        <div id="composer-controls-compact" class="composer-controls-compact" style="display: none;">
+                            <select id="time-signature-select" class="time-sig-compact">
+                                <option value="4/4" selected>4/4</option>
+                                <option value="3/4">3/4</option>
+                                <option value="6/8">6/8</option>
+                                <option value="12/8">12/8</option>
+                                <option value="5/4">5/4</option>
+                                <option value="7/8">7/8</option>
+                            </select>
+                            <div class="duration-buttons-compact">
+                                <button class="duration-btn-compact" data-duration="0.0625" title="1/16 (key 1)">1/16</button>
+                                <button class="duration-btn-compact" data-duration="0.125" title="1/8 (key 2)">1/8</button>
+                                <button class="duration-btn-compact active" data-duration="0.25" title="1/4 (key 3)">1/4</button>
+                                <button class="duration-btn-compact" data-duration="0.375" title="3/8 (key 4)">3/8</button>
+                                <button class="duration-btn-compact" data-duration="0.5" title="1/2 (key 5)">1/2</button>
+                                <button class="duration-btn-compact" data-duration="0.75" title="3/4 (key 6)">3/4</button>
+                                <button class="duration-btn-compact" data-duration="1" title="Whole (key 7)">1</button>
+                            </div>
+                            <button id="clear-fretboard-btn" class="icon-action-btn" title="Clear (Backspace)">🗑️</button>
+                            <button id="add-note-btn" class="icon-action-btn primary" title="Add Note (Enter)">⏎</button>
                         </div>
 
                         <div class="playback-controls">
@@ -869,44 +899,6 @@
                             </div>
                         </div>
 
-                        <!-- Composer Mode UI -->
-                        <div id="composer-controls" class="composer-controls" style="display: none;">
-                            <div class="detected-chord-display">
-                                <span class="detected-label" data-i18n="composer.detected">Detected:</span>
-                                <span id="detected-chord-name" class="detected-chord">-</span>
-                                <button id="add-chord-btn" class="add-chord-btn" data-i18n="composer.addChord" disabled>Add Chord</button>
-                            </div>
-
-                            <div class="duration-selector">
-                                <label data-i18n="composer.noteDuration">Note Duration:</label>
-                                <div class="duration-buttons">
-                                    <button class="duration-btn" data-duration="0.0625" data-key="1">1/16</button>
-                                    <button class="duration-btn" data-duration="0.125" data-key="2">1/8</button>
-                                    <button class="duration-btn active" data-duration="0.25" data-key="3">1/4</button>
-                                    <button class="duration-btn" data-duration="0.375" data-key="4">3/8</button>
-                                    <button class="duration-btn" data-duration="0.5" data-key="5">1/2</button>
-                                    <button class="duration-btn" data-duration="0.75" data-key="6">3/4</button>
-                                    <button class="duration-btn" data-duration="1" data-key="7">1</button>
-                                </div>
-                            </div>
-
-                            <div class="composition-actions">
-                                <button id="add-note-btn" class="add-note-btn" data-i18n="composer.addNote">Add Note (Enter)</button>
-                                <button id="clear-fretboard-btn" class="secondary-btn" data-i18n="composer.clear">Clear</button>
-                            </div>
-
-                            <div class="time-signature-selector">
-                                <label data-i18n="composer.timeSignature">Time Signature:</label>
-                                <select id="time-signature-select">
-                                    <option value="4/4" selected>4/4</option>
-                                    <option value="3/4">3/4</option>
-                                    <option value="6/8">6/8</option>
-                                    <option value="12/8">12/8</option>
-                                    <option value="5/4">5/4</option>
-                                    <option value="7/8">7/8</option>
-                                </select>
-                            </div>
-                        </div>
 
                         <!-- TAB Display for Composition -->
                         <div id="composition-tab-container" class="composition-tab-container" style="display: none;">
