@@ -3563,3 +3563,39 @@ body.rtl .mobile-header {
 .transient-notification.show {
     opacity: 1;
 }
+
+/* TAB Preview with Accept/Reject buttons */
+.tab-preview .preview-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+    justify-content: center;
+}
+
+.preview-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.preview-btn.accept {
+    background: var(--success-color);
+    color: white;
+}
+
+.preview-btn.accept:hover {
+    background: #229954;
+    transform: translateY(-1px);
+}
+
+.preview-btn.reject {
+    background: #e0e0e0;
+    color: #666;
+}
+
+.preview-btn.reject:hover {
+    background: #d0d0d0;
+}

@@ -127,7 +127,7 @@ def composer_suggest():
         # Format composition as text for GPT
         tab_context = format_composition_for_gpt(composition, selected_region)
 
-        # Build GPT prompt
+        # Build GPT prompt with structured response requirement
         composer_prompt = f"""You are a guitar composition assistant. The user is working on a guitar tablature composition.
 
 Current composition:
@@ -135,15 +135,31 @@ Current composition:
 
 User request: {user_message}
 
-Provide suggestions in a conversational way. If suggesting specific TAB modifications, format them clearly.
-You can suggest:
-- Bass lines for chord progressions
-- Harmonies (3rds, 6ths, octaves)
-- Improvements to existing sections
-- Complete new sections based on descriptions
-- Music theory explanations
+You MUST respond with valid JSON in this format:
 
-Respond naturally and helpfully."""
+{{
+  "chat_response": "Your explanation and teaching (required)",
+  "tab_additions": [
+    {{
+      "string": 1,
+      "fret": 0,
+      "duration": 0.25,
+      "measure_offset": 0
+    }}
+  ] or null
+}}
+
+- chat_response: Explain your suggestion conversationally
+- tab_additions: Array of notes to add to the composition (optional)
+  - string: 1-6 (1=high e, 6=low E)
+  - fret: 0-15
+  - duration: 0.0625, 0.125, 0.25, 0.5, 0.75, 1
+  - measure_offset: which measure to add to (0=current, 1=next, etc.)
+
+If the user asks for TAB/patterns/arpeggios/bass lines, include tab_additions.
+If just explaining theory, set tab_additions to null.
+
+Provide helpful, musical suggestions!"""
 
         # Call OpenAI
         response = client.chat.completions.create(
@@ -153,13 +169,15 @@ Respond naturally and helpfully."""
                 {"role": "user", "content": user_message}
             ],
             temperature=0.7,
-            max_tokens=1500
+            max_tokens=1500,
+            response_format={"type": "json_object"}
         )
 
-        suggestion = response.choices[0].message.content
+        result = json.loads(response.choices[0].message.content)
 
         return jsonify({
-            'suggestion': suggestion,
+            'chat_response': result.get('chat_response', ''),
+            'tab_additions': result.get('tab_additions'),
             'tab_context_used': tab_context
         }), 200
 

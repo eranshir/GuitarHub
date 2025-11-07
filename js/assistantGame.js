@@ -201,8 +201,14 @@ class AssistantGame {
 
             if (this.mode === 'composer') {
                 // Handle composer suggestion
-                this.addMessageToChat(data.suggestion, 'assistant');
+                this.addMessageToChat(data.chat_response, 'assistant');
                 console.log('TAB context sent to GPT:', data.tab_context_used);
+
+                // If GPT provided structured TAB additions, offer to apply them
+                if (data.tab_additions && data.tab_additions.length > 0) {
+                    console.log('GPT suggested TAB additions:', data.tab_additions);
+                    this.showTabAdditionsPreview(data.tab_additions);
+                }
             } else {
                 // Handle assistant response (fretboard sequences)
                 this.conversationHistory.push(
@@ -1071,7 +1077,66 @@ class AssistantGame {
         this.renderComposition();
         this.clearComposerFretboard();
         localStorage.removeItem('guitarHubComposition');
-        this.addSystemMessage('Composition cleared!');
+        this.showTransientNotification('Composition cleared!');
+    }
+
+    showTabAdditionsPreview(tabAdditions) {
+        // Create a preview message with Accept/Reject buttons
+        const chatMessages = document.getElementById('chat-messages');
+        const previewDiv = document.createElement('div');
+        previewDiv.className = 'chat-message system-message tab-preview';
+
+        const content = document.createElement('div');
+        content.className = 'message-content';
+        content.innerHTML = `
+            <p>💡 GPT suggested ${tabAdditions.length} notes to add to your composition.</p>
+            <div class="preview-actions">
+                <button class="preview-btn accept">✓ Add to Composition</button>
+                <button class="preview-btn reject">✗ Decline</button>
+            </div>
+        `;
+
+        // Accept button
+        content.querySelector('.accept').addEventListener('click', () => {
+            this.applyTabAdditions(tabAdditions);
+            previewDiv.remove();
+            this.showTransientNotification('Notes added to composition!');
+        });
+
+        // Reject button
+        content.querySelector('.reject').addEventListener('click', () => {
+            previewDiv.remove();
+            this.showTransientNotification('Suggestion declined');
+        });
+
+        previewDiv.appendChild(content);
+        chatMessages.appendChild(previewDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    applyTabAdditions(tabAdditions) {
+        // Add each suggested note to the composition
+        tabAdditions.forEach(note => {
+            const targetMeasure = this.composition.currentMeasure + (note.measure_offset || 0);
+
+            // Ensure measure exists
+            while (this.composition.measures.length <= targetMeasure) {
+                this.composition.addMeasure();
+            }
+
+            // Add event to the target measure
+            this.composition.measures[targetMeasure].events.push({
+                time: note.time || 0,
+                string: note.string,
+                fret: note.fret,
+                duration: note.duration || 0.25,
+                leftFinger: null
+            });
+        });
+
+        // Re-render and save
+        this.renderComposition();
+        this.autoSaveComposition();
     }
 
     cleanup() {
