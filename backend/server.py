@@ -100,6 +100,125 @@ def assistant():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/api/composer/suggest', methods=['POST'])
+def composer_suggest():
+    """
+    Handle composition suggestion requests.
+
+    Expected request body:
+    {
+        "message": "Add a bass line to this progression",
+        "composition": {...},  // Full or partial TAB data
+        "selected_region": {"start_measure": 0, "end_measure": 3},  // Optional
+        "context": {"tempo": 120, "time_signature": "4/4"}
+    }
+    """
+    try:
+        data = request.get_json()
+
+        if not data or 'message' not in data:
+            return jsonify({'error': 'Missing message in request'}), 400
+
+        user_message = data['message']
+        composition = data.get('composition', {})
+        selected_region = data.get('selected_region')
+        context = data.get('context', {})
+
+        # Format composition as text for GPT
+        tab_context = format_composition_for_gpt(composition, selected_region)
+
+        # Build GPT prompt
+        composer_prompt = f"""You are a guitar composition assistant. The user is working on a guitar tablature composition.
+
+Current composition:
+{tab_context}
+
+User request: {user_message}
+
+Provide suggestions in a conversational way. If suggesting specific TAB modifications, format them clearly.
+You can suggest:
+- Bass lines for chord progressions
+- Harmonies (3rds, 6ths, octaves)
+- Improvements to existing sections
+- Complete new sections based on descriptions
+- Music theory explanations
+
+Respond naturally and helpfully."""
+
+        # Call OpenAI
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {"role": "system", "content": composer_prompt},
+                {"role": "user", "content": user_message}
+            ],
+            temperature=0.7,
+            max_tokens=1500
+        )
+
+        suggestion = response.choices[0].message.content
+
+        return jsonify({
+            'suggestion': suggestion,
+            'tab_context_used': tab_context
+        }), 200
+
+    except Exception as e:
+        print(f"Error in composer suggest: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+def format_composition_for_gpt(composition, selected_region=None):
+    """Format composition data as readable text for GPT context."""
+    if not composition or 'measures' not in composition:
+        return "No composition data available."
+
+    output = []
+    measures = composition['measures']
+
+    # Determine which measures to include
+    if selected_region:
+        start = selected_region.get('start_measure', 0)
+        end = selected_region.get('end_measure', len(measures))
+        measures_to_format = measures[start:end+1]
+        output.append(f"Selected region: Measures {start+1} to {end+1}")
+    else:
+        measures_to_format = measures[-8:] if len(measures) > 8 else measures
+        if len(measures) > 8:
+            output.append(f"Showing last 8 measures (total: {len(measures)} measures)")
+
+    output.append(f"Time Signature: {composition.get('timeSignature', '4/4')}")
+    output.append(f"Tempo: {composition.get('tempo', 120)} BPM\n")
+
+    # Format each measure
+    for idx, measure in enumerate(measures_to_format):
+        measure_num = idx + 1 if not selected_region else selected_region.get('start_measure', 0) + idx + 1
+        output.append(f"Measure {measure_num}:")
+
+        # Show chord annotations
+        if measure.get('chords'):
+            chords_str = ", ".join([f"{c['name']} at beat {c['time']+1}" for c in measure['chords']])
+            output.append(f"  Chords: {chords_str}")
+
+        # Show events (notes)
+        events = measure.get('events', [])
+        if events:
+            # Group by time
+            events_by_time = {}
+            for event in events:
+                t = event['time']
+                if t not in events_by_time:
+                    events_by_time[t] = []
+                events_by_time[t].append(f"String {event['string']} Fret {event['fret']}")
+
+            for time in sorted(events_by_time.keys()):
+                output.append(f"  Beat {time+1}: {', '.join(events_by_time[time])}")
+
+        output.append("")
+
+    return "\n".join(output)
+
+
 @app.route('/health', methods=['GET'])
 def health():
     """Health check endpoint."""

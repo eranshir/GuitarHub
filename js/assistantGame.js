@@ -143,21 +143,50 @@ class AssistantGame {
         this.isWaitingForResponse = true;
 
         try {
-            // Call backend API
-            const response = await fetch(this.apiEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: message,
-                    conversation_history: this.conversationHistory,
-                    context: {
-                        bpm: this.bpm,
-                        fretboard_range: [0, 15]
-                    }
-                })
-            });
+            let response;
+
+            // Different endpoints for different modes
+            if (this.mode === 'composer') {
+                // Composer mode - send composition context
+                const composerEndpoint = this.apiEndpoint.replace('/api/assistant', '/api/composer/suggest');
+
+                response = await fetch(composerEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        composition: {
+                            title: this.composition.title,
+                            tempo: this.composition.tempo,
+                            timeSignature: this.composition.timeSignature,
+                            measures: this.composition.measures
+                        },
+                        selected_region: null, // TODO: Implement region selection
+                        context: {
+                            tempo: this.composition.tempo,
+                            time_signature: this.composition.timeSignature
+                        }
+                    })
+                });
+            } else {
+                // Assistant mode - original behavior
+                response = await fetch(this.apiEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        conversation_history: this.conversationHistory,
+                        context: {
+                            bpm: this.bpm,
+                            fretboard_range: [0, 15]
+                        }
+                    })
+                });
+            }
 
             if (!response.ok) {
                 throw new Error(`API error: ${response.status}`);
@@ -170,14 +199,18 @@ class AssistantGame {
             console.log(JSON.stringify(data, null, 2));
             console.log('==================');
 
-            // Add to conversation history
-            this.conversationHistory.push(
-                { role: 'user', content: message },
-                { role: 'assistant', content: data.chat_response }
-            );
-
-            // Display assistant response
-            this.handleAssistantResponse(data);
+            if (this.mode === 'composer') {
+                // Handle composer suggestion
+                this.addMessageToChat(data.suggestion, 'assistant');
+                console.log('TAB context sent to GPT:', data.tab_context_used);
+            } else {
+                // Handle assistant response (fretboard sequences)
+                this.conversationHistory.push(
+                    { role: 'user', content: message },
+                    { role: 'assistant', content: data.chat_response }
+                );
+                this.handleAssistantResponse(data);
+            }
 
         } catch (error) {
             console.error('Error calling assistant API:', error);
