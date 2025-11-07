@@ -717,7 +717,10 @@ class AssistantGame {
         // Duration buttons (both old and new compact versions)
         document.querySelectorAll('.duration-btn, .duration-btn-compact').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                this.selectDuration(parseFloat(e.target.dataset.duration));
+                // Use currentTarget to always get the button, not the SVG child
+                const duration = parseFloat(e.currentTarget.dataset.duration);
+                console.log('Duration button clicked:', duration);
+                this.selectDuration(duration);
             });
         });
 
@@ -1042,13 +1045,17 @@ class AssistantGame {
                 this.composition.addMeasure();
             }
 
+            console.log('Before adding: currentMeasure =', this.composition.currentMeasure, 'currentTime =', currentTime);
+
             // Add each note to composition at the same time
             notes.forEach(note => {
-                this.composition.addEvent(note.string, note.fret, this.selectedDuration, null, currentTime);
+                const event = this.composition.addEvent(note.string, note.fret, this.selectedDuration, null, currentTime);
+                console.log('Added event:', event);
             });
 
             // Now advance time only once (after all notes added)
             this.composition.currentTime += this.selectedDuration;
+            console.log('After advancing time: currentTime =', this.composition.currentTime);
 
             // Check if we need a new measure
             const beatsPerMeasure = this.composition.getBeatsPerMeasure();
