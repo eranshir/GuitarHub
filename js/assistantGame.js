@@ -56,7 +56,7 @@ class AssistantGame {
 
     initializeFretboard() {
         if (!this.fretboardDisplay) {
-            // In composer mode, fretboard needs to be interactive
+            // Fretboard for Assistant/Composer - not using built-in click handler
             this.fretboardDisplay = new FretboardDisplay('fretboard-assistant', false, 15);
         }
     }
@@ -916,21 +916,30 @@ class AssistantGame {
     loadChordShape(chordName) {
         if (!chordName) return;
 
+        console.log('Loading chord shape:', chordName);
+
         // Find chord in chordTheory
         const chord = this.chordTheory.chords[chordName];
 
         if (!chord) {
+            console.log('Chord not found:', chordName);
+            console.log('Available chords:', Object.keys(this.chordTheory.chords));
             this.showTransientNotification(`Chord "${chordName}" not found. Try: C, Am, G7, etc.`);
             return;
         }
+
+        console.log('Found chord:', chord);
 
         // Clear current fretboard state
         this.fretboardState.clear();
 
         // Load chord positions onto fretboard
         chord.positions.forEach(pos => {
+            console.log('Adding position:', pos);
             this.fretboardState.addNote(pos.string, pos.fret);
         });
+
+        console.log('Fretboard state after loading:', this.fretboardState.getNotes());
 
         // Display on fretboard
         this.displayComposerFretboard();
