@@ -3502,6 +3502,17 @@ body.rtl .mobile-header {
     display: inline-block;
 }
 
+.duration-btn-compact .note-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.duration-btn-compact.active .note-icon {
+    color: white;
+}
+
 .duration-btn-compact:hover {
     border-color: var(--primary-color);
 }
