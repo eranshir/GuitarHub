@@ -25,6 +25,7 @@ class App {
         this.spotNoteGame = new SpotNoteGame(this.guitar, this.statistics);
         this.mobileManager = new MobileManager(this);
         this.setupModuleNavigation();
+        this.setupURLRouting();
         this.setupAudioControls();
         this.setupStatisticsControls();
         this.updateStatisticsDisplay();
@@ -42,6 +43,46 @@ class App {
             this.statistics.endChordSession();
         });
     }
+
+    setupURLRouting() {
+        // Handle hash changes for deep linking
+        window.addEventListener('hashchange', () => {
+            this.handleURLRoute();
+        });
+
+        // Handle initial route on page load
+        this.handleURLRoute();
+    }
+
+    handleURLRoute() {
+        const hash = window.location.hash.substring(1); // Remove '#'
+        if (!hash) return;
+
+        const [module, mode] = hash.split('/');
+
+        // Switch to module if specified
+        if (module) {
+            this.switchModule(module);
+
+            // Switch to mode if specified
+            if (mode) {
+                if (module === 'assistant') {
+                    // Switch assistant mode (assistant/composer)
+                    if (mode === 'composer') {
+                        this.assistantGame.switchMode('composer');
+                    } else if (mode === 'assistant') {
+                        this.assistantGame.switchMode('assistant');
+                    }
+                }
+                // Add other mode handling as needed
+            }
+        }
+    }
+
+    updateURL(module, mode = null) {
+        const hash = mode ? `#${module}/${mode}` : `#${module}`;
+        window.location.hash = hash;
+    }
     
     setupModuleNavigation() {
         document.querySelectorAll('.module-btn').forEach(btn => {
@@ -56,23 +97,29 @@ class App {
         document.querySelectorAll('.module-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.module === moduleId);
         });
-        
+
         document.querySelectorAll('.module').forEach(module => {
             module.classList.remove('active');
         });
-        
+
         if (moduleId === 'fretboard') {
             document.getElementById('fretboard-module').classList.add('active');
+            this.updateURL('fretboard');
         } else if (moduleId === 'intervals') {
             document.getElementById('intervals-module').classList.add('active');
+            this.updateURL('intervals');
         } else if (moduleId === 'chords') {
             document.getElementById('chords-module').classList.add('active');
+            this.updateURL('chords');
         } else if (moduleId === 'spot-note') {
             document.getElementById('spot-note-module').classList.add('active');
+            this.updateURL('spot-note');
         } else if (moduleId === 'assistant') {
             document.getElementById('assistant-module').classList.add('active');
+            this.updateURL('assistant');
         } else if (moduleId === 'stats') {
             document.getElementById('stats-module').classList.add('active');
+            this.updateURL('stats');
             this.updateStatisticsDisplay();
             this.updateCharts();
         }

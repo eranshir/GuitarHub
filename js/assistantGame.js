@@ -850,6 +850,9 @@ class AssistantGame {
             if (assistantDisplay) assistantDisplay.style.display = 'block';
             if (playbackControls) playbackControls.style.display = 'block';
             if (chordDisplay) chordDisplay.style.display = 'block';
+
+            // Update URL
+            window.location.hash = '#assistant/assistant';
         } else {
             const modeBtn = document.getElementById('mode-composer');
             if (modeBtn) modeBtn.classList.add('active');
@@ -872,6 +875,9 @@ class AssistantGame {
             // Update composition title and render
             this.updateCompositionTitle();
             this.renderComposition();
+
+            // Update URL
+            window.location.hash = '#assistant/composer';
         }
     }
 
