@@ -285,11 +285,14 @@ class TabRenderer {
 
         // Add notes to the lines - all notes at same time get same horizontal position
         // Position based on sequence order, not duration (uniform spacing)
+        // Combine note times and rest times for correct sequential positioning
+        const allTimes = [...new Set([...Object.keys(eventsByTime).map(parseFloat), ...Object.keys(restsByTime).map(parseFloat)])].sort((a, b) => a - b);
         const sortedTimes = Object.keys(eventsByTime).map(parseFloat).sort((a, b) => a - b);
 
-        sortedTimes.forEach((time, position) => {
+        sortedTimes.forEach((time) => {
             const timeKey = time.toFixed(4);
             const events = eventsByTime[timeKey];
+            const position = allTimes.indexOf(time); // Use position in combined sequence
 
             events.forEach(event => {
                 // Skip rests (they don't have string/fret)
@@ -321,9 +324,6 @@ class TabRenderer {
         });
 
         measureDiv.appendChild(tabLinesDiv);
-
-        // Combine notes and rests times for consistent positioning
-        const allTimes = [...new Set([...sortedTimes, ...Object.keys(restsByTime).map(parseFloat)])].sort((a, b) => a - b);
 
         // Add rest markers on the TAB (clickable)
         Object.keys(restsByTime).forEach(timeKey => {
