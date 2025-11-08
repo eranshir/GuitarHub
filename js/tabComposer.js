@@ -292,9 +292,14 @@ class TabRenderer {
             const events = eventsByTime[timeKey];
 
             events.forEach(event => {
+                // Skip rests (they don't have string/fret)
+                if (!event.string || event.isRest) return;
+
                 // Find the correct string div (string 1 = index 0, string 6 = index 5)
                 const stringIdx = event.string - 1; // Direct mapping: string 1 -> idx 0
                 const stringDiv = stringDivs[stringIdx];
+                if (!stringDiv) return; // Safety check
+
                 const line = stringDiv.querySelector('.tab-line');
 
                 const note = document.createElement('span');
