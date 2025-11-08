@@ -3487,6 +3487,21 @@ body.rtl .mobile-header {
     z-index: 10;
 }
 
+.tab-note.selected {
+    background: #f39c12;
+    color: white;
+    border-color: #e67e22;
+    box-shadow: 0 0 8px rgba(243, 156, 18, 0.6);
+}
+
+.selection-box {
+    position: fixed;
+    border: 2px dashed var(--primary-color);
+    background: rgba(52, 152, 219, 0.1);
+    pointer-events: none;
+    z-index: 1000;
+}
+
 .duration-line {
     position: relative;
     height: 25px;

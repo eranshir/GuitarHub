@@ -38,6 +38,12 @@ class AssistantGame {
         this.currentPlaybackMeasure = 0;
         this.currentPlaybackTime = 0;
 
+        // Selection state for editing
+        this.selectionStart = null;
+        this.selectionEnd = null;
+        this.selectedNotes = [];
+        this.isSelecting = false;
+
         // Metronome state
         this.bpm = 120;
         this.metronomeInterval = null;
@@ -75,6 +81,108 @@ class AssistantGame {
         this.tabRenderer.setNoteClickHandler((measureIndex, event) => {
             this.loadNoteForEditing(measureIndex, event);
         });
+
+        // Set up drag selection
+        this.setupDragSelection();
+    }
+
+    setupDragSelection() {
+        const container = document.getElementById('composition-tab-display');
+        if (!container) return;
+
+        let selectionBox = null;
+        let startX = 0, startY = 0;
+
+        container.addEventListener('mousedown', (e) => {
+            // Only in composer mode and if not clicking on a note/button
+            if (this.mode !== 'composer') return;
+            if (e.target.closest('.tab-note') || e.target.closest('button')) return;
+
+            this.isSelecting = true;
+            startX = e.clientX;
+            startY = e.clientY;
+
+            // Create selection box
+            selectionBox = document.createElement('div');
+            selectionBox.className = 'selection-box';
+            selectionBox.style.left = `${e.pageX}px`;
+            selectionBox.style.top = `${e.pageY}px`;
+            document.body.appendChild(selectionBox);
+
+            e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!this.isSelecting || !selectionBox) return;
+
+            const currentX = e.clientX;
+            const currentY = e.clientY;
+
+            const left = Math.min(startX, currentX);
+            const top = Math.min(startY, currentY);
+            const width = Math.abs(currentX - startX);
+            const height = Math.abs(currentY - startY);
+
+            selectionBox.style.left = `${e.pageX - (currentX - left)}px`;
+            selectionBox.style.top = `${e.pageY - (currentY - top)}px`;
+            selectionBox.style.width = `${width}px`;
+            selectionBox.style.height = `${height}px`;
+        });
+
+        document.addEventListener('mouseup', (e) => {
+            if (!this.isSelecting) return;
+
+            this.isSelecting = false;
+
+            if (selectionBox) {
+                // Get selection bounds
+                const rect = selectionBox.getBoundingClientRect();
+
+                // Find all notes within selection
+                this.selectNotesInRegion(rect);
+
+                // Remove selection box
+                selectionBox.remove();
+                selectionBox = null;
+            }
+        });
+    }
+
+    selectNotesInRegion(selectionRect) {
+        // Clear previous selection
+        document.querySelectorAll('.tab-note.selected').forEach(note => {
+            note.classList.remove('selected');
+        });
+
+        this.selectedNotes = [];
+
+        // Find all notes that overlap with selection rectangle
+        document.querySelectorAll('.tab-note').forEach(noteEl => {
+            const noteRect = noteEl.getBoundingClientRect();
+
+            // Check if rectangles overlap
+            if (!(noteRect.right < selectionRect.left ||
+                  noteRect.left > selectionRect.right ||
+                  noteRect.bottom < selectionRect.top ||
+                  noteRect.top > selectionRect.bottom)) {
+
+                noteEl.classList.add('selected');
+
+                // Store note data
+                this.selectedNotes.push({
+                    measureIndex: parseInt(noteEl.closest('[data-measure-index]')?.dataset.measureIndex),
+                    time: parseFloat(noteEl.dataset.time),
+                    string: parseInt(noteEl.dataset.string),
+                    fret: parseInt(noteEl.dataset.fret),
+                    duration: parseFloat(noteEl.dataset.duration)
+                });
+            }
+        });
+
+        if (this.selectedNotes.length > 0) {
+            this.showTransientNotification(`Selected ${this.selectedNotes.length} notes`);
+            console.log('Selected notes:', this.selectedNotes);
+        }
     }
 
     setupEventListeners() {
@@ -156,6 +264,12 @@ class AssistantGame {
                 // Composer mode - send composition context
                 const composerEndpoint = this.apiEndpoint.replace('/api/assistant', '/api/composer/suggest');
 
+                // Prepare selected region if notes are selected
+                const selectedRegion = this.selectedNotes.length > 0 ? {
+                    notes: this.selectedNotes,
+                    count: this.selectedNotes.length
+                } : null;
+
                 response = await fetch(composerEndpoint, {
                     method: 'POST',
                     headers: {
@@ -169,10 +283,11 @@ class AssistantGame {
                             timeSignature: this.composition.timeSignature,
                             measures: this.composition.measures
                         },
-                        selected_region: null, // TODO: Implement region selection
+                        selected_region: selectedRegion,
                         context: {
                             tempo: this.composition.tempo,
-                            time_signature: this.composition.timeSignature
+                            time_signature: this.composition.timeSignature,
+                            has_selection: !!selectedRegion
                         }
                     })
                 });
@@ -213,7 +328,8 @@ class AssistantGame {
                 // If GPT provided structured TAB additions, offer to apply them
                 if (data.tab_additions && data.tab_additions.length > 0) {
                     console.log('GPT suggested TAB additions:', data.tab_additions);
-                    this.showTabAdditionsPreview(data.tab_additions);
+                    const hasSelection = this.selectedNotes.length > 0;
+                    this.showTabAdditionsPreview(data.tab_additions, hasSelection);
                 }
             } else {
                 // Handle assistant response (fretboard sequences)
@@ -1394,7 +1510,7 @@ class AssistantGame {
         this.showTransientNotification('Started new composition! Previous work is still saved.');
     }
 
-    showTabAdditionsPreview(tabAdditions) {
+    showTabAdditionsPreview(tabAdditions, isReplacement = false) {
         // Create a preview message with Accept/Reject buttons
         const chatMessages = document.getElementById('chat-messages');
         const previewDiv = document.createElement('div');
@@ -1402,19 +1518,28 @@ class AssistantGame {
 
         const content = document.createElement('div');
         content.className = 'message-content';
+
+        const actionText = isReplacement
+            ? `💡 GPT suggested ${tabAdditions.length} notes to replace your selection.`
+            : `💡 GPT suggested ${tabAdditions.length} notes to add to your composition.`;
+
         content.innerHTML = `
-            <p>💡 GPT suggested ${tabAdditions.length} notes to add to your composition.</p>
+            <p>${actionText}</p>
             <div class="preview-actions">
-                <button class="preview-btn accept">✓ Add to Composition</button>
+                <button class="preview-btn accept">✓ ${isReplacement ? 'Replace Selection' : 'Add to Composition'}</button>
                 <button class="preview-btn reject">✗ Decline</button>
             </div>
         `;
 
         // Accept button
         content.querySelector('.accept').addEventListener('click', () => {
-            this.applyTabAdditions(tabAdditions);
+            if (isReplacement) {
+                this.replaceSelectedNotes(tabAdditions);
+            } else {
+                this.applyTabAdditions(tabAdditions);
+            }
             previewDiv.remove();
-            this.showTransientNotification('Notes added to composition!');
+            this.showTransientNotification(isReplacement ? 'Selection replaced!' : 'Notes added to composition!');
         });
 
         // Reject button
@@ -1426,6 +1551,74 @@ class AssistantGame {
         previewDiv.appendChild(content);
         chatMessages.appendChild(previewDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    replaceSelectedNotes(newNotes) {
+        if (this.selectedNotes.length === 0) return;
+
+        // Group selected notes by measure
+        const byMeasure = {};
+        this.selectedNotes.forEach(note => {
+            if (!byMeasure[note.measureIndex]) {
+                byMeasure[note.measureIndex] = [];
+            }
+            byMeasure[note.measureIndex].push(note);
+        });
+
+        // Find the earliest selected note (where to insert replacements)
+        const firstNote = this.selectedNotes.reduce((earliest, note) => {
+            const noteAbsTime = this.getAbsoluteTime(note.measureIndex, note.time);
+            const earliestAbsTime = this.getAbsoluteTime(earliest.measureIndex, earliest.time);
+            return noteAbsTime < earliestAbsTime ? note : earliest;
+        });
+
+        // Remove all selected notes from their measures
+        Object.entries(byMeasure).forEach(([measureIdx, notes]) => {
+            const measure = this.composition.measures[measureIdx];
+            if (measure) {
+                notes.forEach(note => {
+                    measure.events = measure.events.filter(e =>
+                        !(Math.abs(e.time - note.time) < 0.001 && e.string === note.string)
+                    );
+                });
+            }
+        });
+
+        // Clear selection visually
+        document.querySelectorAll('.tab-note.selected').forEach(note => {
+            note.classList.remove('selected');
+        });
+        this.selectedNotes = [];
+
+        // Insert new notes at the position of the first selected note
+        let currentTime = firstNote.time;
+        let currentMeasure = firstNote.measureIndex;
+
+        newNotes.forEach(note => {
+            if (currentMeasure >= this.composition.measures.length) {
+                this.composition.addMeasure();
+            }
+
+            this.composition.measures[currentMeasure].events.push({
+                time: currentTime,
+                string: note.string,
+                fret: note.fret,
+                duration: note.duration || 0.25,
+                leftFinger: null
+            });
+
+            currentTime += (note.duration || 0.25);
+
+            const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+            if (currentTime >= beatsPerMeasure) {
+                currentTime = 0;
+                currentMeasure++;
+            }
+        });
+
+        // Re-render and save
+        this.renderComposition();
+        this.autoSaveComposition();
     }
 
     applyTabAdditions(tabAdditions) {
