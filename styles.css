@@ -3303,6 +3303,26 @@ body.rtl .mobile-header {
     font-weight: 600;
 }
 
+.play-btn-icon {
+    width: 40px;
+    height: 40px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.play-btn-icon:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+}
+
 .load-composition-wrapper {
     position: relative;
 }
