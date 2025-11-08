@@ -799,13 +799,26 @@ class AssistantGame {
         });
 
         // Composition tempo control
-        document.getElementById('composition-tempo')?.addEventListener('change', (e) => {
-            const tempo = parseInt(e.target.value);
-            if (tempo >= 40 && tempo <= 240) {
-                this.composition.tempo = tempo;
-                this.autoSaveComposition();
-            }
-        });
+        const tempoInput = document.getElementById('composition-tempo');
+        if (tempoInput) {
+            // Update on input (real-time)
+            tempoInput.addEventListener('input', (e) => {
+                const tempo = parseInt(e.target.value);
+                if (tempo >= 40 && tempo <= 240) {
+                    this.composition.tempo = tempo;
+                    console.log('Tempo updated to:', tempo);
+                }
+            });
+
+            // Auto-save on change (when user finishes editing)
+            tempoInput.addEventListener('change', (e) => {
+                const tempo = parseInt(e.target.value);
+                if (tempo >= 40 && tempo <= 240) {
+                    this.composition.tempo = tempo;
+                    this.autoSaveComposition();
+                }
+            });
+        }
 
         // Time signature selector
         document.getElementById('time-signature-select')?.addEventListener('change', (e) => {
