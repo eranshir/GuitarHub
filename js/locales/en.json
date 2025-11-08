@@ -258,14 +258,16 @@
   "composer": {
     "modeAssistant": "Assistant",
     "modeComposer": "Compose",
+    "chord": "Chord:",
     "detected": "Detected:",
-    "addChord": "Add Chord",
+    "addChord": "Add to TAB",
     "noteDuration": "Note Duration:",
     "addNote": "Add Note (Enter)",
     "clear": "Clear",
     "timeSignature": "Time Signature:",
     "yourComposition": "Your Composition",
     "save": "Save",
+    "load": "Load",
     "export": "Export",
     "clearComposition": "Clear All"
   },

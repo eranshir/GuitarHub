@@ -258,14 +258,16 @@
   "composer": {
     "modeAssistant": "עוזר",
     "modeComposer": "הלחן",
+    "chord": "אקורד:",
     "detected": "זוהה:",
-    "addChord": "הוסף אקורד",
+    "addChord": "הוסף ל-TAB",
     "noteDuration": "משך תו:",
     "addNote": "הוסף תו (Enter)",
     "clear": "נקה",
     "timeSignature": "משקל:",
     "yourComposition": "ההלחנה שלך",
     "save": "שמור",
+    "load": "טען",
     "export": "ייצא",
     "clearComposition": "נקה הכל"
   },
