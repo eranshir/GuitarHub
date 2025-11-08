@@ -32,6 +32,12 @@ class AssistantGame {
         this.detectedChord = null;
         this.editContext = null; // {measureIndex, time, originalEvents} when editing
 
+        // Playback state for composition
+        this.isPlayingComposition = false;
+        this.playbackTimeout = null;
+        this.currentPlaybackMeasure = 0;
+        this.currentPlaybackTime = 0;
+
         // Metronome state
         this.bpm = 120;
         this.metronomeInterval = null;
@@ -778,6 +784,11 @@ class AssistantGame {
             }
         });
 
+        // Play composition button
+        document.getElementById('play-composition-btn')?.addEventListener('click', () => {
+            this.toggleCompositionPlayback();
+        });
+
         // Time signature selector
         document.getElementById('time-signature-select')?.addEventListener('change', (e) => {
             this.composition.timeSignature = e.target.value;
@@ -1391,7 +1402,145 @@ class AssistantGame {
         this.autoSaveComposition();
     }
 
+    toggleCompositionPlayback() {
+        if (this.isPlayingComposition) {
+            this.stopCompositionPlayback();
+        } else {
+            this.startCompositionPlayback();
+        }
+    }
+
+    startCompositionPlayback() {
+        if (!this.composition || this.composition.measures.length === 0) {
+            this.showTransientNotification('No composition to play!');
+            return;
+        }
+
+        this.isPlayingComposition = true;
+        this.currentPlaybackMeasure = 0;
+        this.currentPlaybackTime = 0;
+
+        // Update button to show pause icon
+        const playBtn = document.getElementById('play-composition-btn');
+        if (playBtn) {
+            playBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                </svg>
+                Pause
+            `;
+        }
+
+        this.scheduleNextNote();
+    }
+
+    scheduleNextNote() {
+        if (!this.isPlayingComposition) return;
+
+        // Get all events from all measures in chronological order
+        const allEvents = [];
+        this.composition.measures.forEach((measure, measureIdx) => {
+            measure.events.forEach(event => {
+                if (event && event.time !== null && event.time !== undefined) {
+                    allEvents.push({
+                        ...event,
+                        measureIndex: measureIdx,
+                        absoluteTime: this.getAbsoluteTime(measureIdx, event.time)
+                    });
+                }
+            });
+        });
+
+        // Sort by absolute time
+        allEvents.sort((a, b) => a.absoluteTime - b.absoluteTime);
+
+        if (allEvents.length === 0) {
+            this.stopCompositionPlayback();
+            return;
+        }
+
+        // Play each event
+        this.playEventsSequence(allEvents, 0);
+    }
+
+    getAbsoluteTime(measureIndex, timeInMeasure) {
+        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+        return (measureIndex * beatsPerMeasure) + timeInMeasure;
+    }
+
+    playEventsSequence(events, index) {
+        if (!this.isPlayingComposition || index >= events.length) {
+            this.stopCompositionPlayback();
+            return;
+        }
+
+        const event = events[index];
+        const nextEvent = events[index + 1];
+
+        // Highlight current note
+        this.highlightPlayingNote(event.measureIndex, event.time);
+
+        // Play the note
+        const freq = this.guitar.getFrequency(event.string, event.fret);
+        if (freq) {
+            this.audio.playNote(freq, event.duration * 1000);
+        }
+
+        // Calculate delay until next note
+        const delay = nextEvent
+            ? (nextEvent.absoluteTime - event.absoluteTime) * (60000 / this.composition.tempo)
+            : event.duration * (60000 / this.composition.tempo);
+
+        // Schedule next note
+        this.playbackTimeout = setTimeout(() => {
+            this.playEventsSequence(events, index + 1);
+        }, delay);
+    }
+
+    highlightPlayingNote(measureIndex, time) {
+        // Remove previous highlights
+        document.querySelectorAll('.tab-note.playing').forEach(note => {
+            note.classList.remove('playing');
+        });
+
+        // Find and highlight current notes
+        const notes = document.querySelectorAll(`.tab-note[data-time="${time}"]`);
+        const measure = document.querySelector(`[data-measure-index="${measureIndex}"]`);
+
+        if (measure) {
+            measure.querySelectorAll(`.tab-note[data-time="${time}"]`).forEach(note => {
+                note.classList.add('playing');
+            });
+        }
+    }
+
+    stopCompositionPlayback() {
+        this.isPlayingComposition = false;
+
+        if (this.playbackTimeout) {
+            clearTimeout(this.playbackTimeout);
+            this.playbackTimeout = null;
+        }
+
+        // Clear highlights
+        document.querySelectorAll('.tab-note.playing').forEach(note => {
+            note.classList.remove('playing');
+        });
+
+        // Update button to show play icon
+        const playBtn = document.getElementById('play-composition-btn');
+        if (playBtn) {
+            playBtn.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                    <path d="M8 5v14l11-7z"/>
+                </svg>
+                Play
+            `;
+        }
+    }
+
     cleanup() {
         this.stopPlayback();
+        this.stopCompositionPlayback();
     }
 }

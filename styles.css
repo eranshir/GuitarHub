@@ -3431,6 +3431,14 @@ body.rtl .mobile-header {
     transform: translateY(-50%) scale(1.1);
 }
 
+.tab-note.playing {
+    background: #27ae60;
+    color: white;
+    transform: translateY(-50%) scale(1.2);
+    box-shadow: 0 0 10px rgba(39, 174, 96, 0.5);
+    z-index: 10;
+}
+
 .duration-line {
     position: relative;
     height: 25px;
