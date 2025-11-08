@@ -804,7 +804,7 @@ class AssistantGame {
             // Update on input (real-time)
             tempoInput.addEventListener('input', (e) => {
                 const tempo = parseInt(e.target.value);
-                if (tempo >= 40 && tempo <= 240) {
+                if (tempo >= 1 && tempo <= 300) {
                     this.composition.tempo = tempo;
                     console.log('Tempo updated to:', tempo);
                 }
