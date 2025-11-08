@@ -2068,7 +2068,7 @@ class ChordTheory {
         return { matchedCount, totalScore };
     }
 
-    // Case-insensitive chord lookup
+    // Case-insensitive chord lookup with 'b' as alternative to '♭'
     getChord(chordName) {
         if (!chordName) return null;
 
@@ -2077,8 +2077,20 @@ class ChordTheory {
             return this.chords[chordName];
         }
 
+        // Normalize: replace 'b' with '♭' for flat symbols
+        // But be careful not to replace 'b' in note names like 'Bb' or 'B'
+        let normalizedName = chordName
+            .replace(/([A-G])(b)([^a-z]|$)/gi, '$1♭$3')  // Ab, Bb, etc.
+            .replace(/b5/gi, '♭5')                         // m7b5 → m7♭5
+            .replace(/b9/gi, '♭9');                        // 7b9 → 7♭9
+
+        // Try normalized exact match
+        if (this.chords[normalizedName]) {
+            return this.chords[normalizedName];
+        }
+
         // Try case-insensitive match
-        const lowerName = chordName.toLowerCase();
+        const lowerName = normalizedName.toLowerCase();
         for (const [key, chord] of Object.entries(this.chords)) {
             if (key.toLowerCase() === lowerName) {
                 return chord;
