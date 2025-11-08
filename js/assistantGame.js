@@ -759,9 +759,13 @@ class AssistantGame {
             this.addChordToComposition();
         });
 
-        // Save/Export/Clear buttons
+        // Save/Load/Export/Clear buttons
         document.getElementById('save-composition-btn')?.addEventListener('click', () => {
             this.saveComposition();
+        });
+
+        document.getElementById('load-composition-btn')?.addEventListener('click', () => {
+            this.toggleLoadCompositionsList();
         });
 
         document.getElementById('export-tab-btn')?.addEventListener('click', () => {
@@ -769,7 +773,7 @@ class AssistantGame {
         });
 
         document.getElementById('clear-composition-btn')?.addEventListener('click', () => {
-            if (confirm('Clear entire composition? This cannot be undone.')) {
+            if (confirm('Start a new composition? Current work will be saved.')) {
                 this.clearComposition();
             }
         });
@@ -865,7 +869,8 @@ class AssistantGame {
             if (playbackControls) playbackControls.style.display = 'none';
             if (chordDisplay) chordDisplay.style.display = 'none';
 
-            // Render current composition
+            // Update composition title and render
+            this.updateCompositionTitle();
             this.renderComposition();
         }
     }
@@ -1148,11 +1153,49 @@ class AssistantGame {
     }
 
     saveComposition(showMessage = true) {
+        // Prompt for name if composition doesn't have one or is still "Untitled"
+        if (!this.composition.title || this.composition.title === 'Untitled') {
+            const name = prompt('Name your composition:', this.composition.title);
+            if (!name) return; // User cancelled
+            this.composition.title = name.trim();
+        }
+
+        // Save to localStorage with composition name as part of key
         const data = this.composition.serialize();
-        localStorage.setItem('guitarHubComposition', data);
-        console.log('Composition saved');
+        const storageKey = `guitarHub_composition_${this.composition.title}`;
+        localStorage.setItem(storageKey, data);
+
+        // Update list of saved compositions
+        this.updateSavedCompositionsList(this.composition.title);
+
+        // Update UI title
+        this.updateCompositionTitle();
+
+        console.log('Composition saved:', this.composition.title);
         if (showMessage) {
-            this.addSystemMessage('Composition saved!');
+            this.addSystemMessage(`Composition "${this.composition.title}" saved!`);
+        }
+    }
+
+    updateSavedCompositionsList(compositionName) {
+        // Get existing list
+        const savedList = JSON.parse(localStorage.getItem('guitarHub_compositions_list') || '[]');
+
+        // Add current composition if not already in list
+        if (!savedList.includes(compositionName)) {
+            savedList.push(compositionName);
+            localStorage.setItem('guitarHub_compositions_list', JSON.stringify(savedList));
+        }
+    }
+
+    getSavedCompositionsList() {
+        return JSON.parse(localStorage.getItem('guitarHub_compositions_list') || '[]');
+    }
+
+    updateCompositionTitle() {
+        const titleElement = document.getElementById('composition-title');
+        if (titleElement) {
+            titleElement.textContent = this.composition.title;
         }
     }
 
@@ -1165,12 +1208,25 @@ class AssistantGame {
     }
 
     loadComposition() {
-        const data = localStorage.getItem('guitarHubComposition');
+        // Try to load the most recently saved composition
+        const savedList = this.getSavedCompositionsList();
+        if (savedList.length > 0) {
+            // Load the last saved composition
+            const lastComposition = savedList[savedList.length - 1];
+            this.loadCompositionByName(lastComposition);
+        }
+    }
+
+    loadCompositionByName(name) {
+        const storageKey = `guitarHub_composition_${name}`;
+        const data = localStorage.getItem(storageKey);
+
         if (data) {
             try {
                 this.composition = TabComposition.deserialize(data);
+                this.updateCompositionTitle();
                 this.renderComposition();
-                console.log('Composition loaded');
+                console.log('Composition loaded:', name);
             } catch (e) {
                 console.error('Error loading composition:', e);
             }
@@ -1191,12 +1247,56 @@ class AssistantGame {
         this.addSystemMessage('Composition exported!');
     }
 
+    toggleLoadCompositionsList() {
+        const listContainer = document.getElementById('saved-compositions-list');
+        if (!listContainer) return;
+
+        if (listContainer.style.display === 'none') {
+            // Show list and populate it
+            this.populateSavedCompositionsList();
+            listContainer.style.display = 'block';
+        } else {
+            // Hide list
+            listContainer.style.display = 'none';
+        }
+    }
+
+    populateSavedCompositionsList() {
+        const listContainer = document.getElementById('saved-compositions-list');
+        if (!listContainer) return;
+
+        const savedList = this.getSavedCompositionsList();
+
+        if (savedList.length === 0) {
+            listContainer.innerHTML = '<div class="no-compositions">No saved compositions yet</div>';
+            return;
+        }
+
+        listContainer.innerHTML = '';
+
+        savedList.forEach(name => {
+            const item = document.createElement('div');
+            item.className = 'composition-list-item';
+            item.textContent = name;
+
+            item.addEventListener('click', () => {
+                this.loadCompositionByName(name);
+                listContainer.style.display = 'none';
+                this.showTransientNotification(`Loaded "${name}"`);
+            });
+
+            listContainer.appendChild(item);
+        });
+    }
+
     clearComposition() {
+        // Reset to new composition (don't delete saved compositions)
         this.composition = new TabComposition();
+        this.composition.title = 'Untitled';
+        this.updateCompositionTitle();
         this.renderComposition();
         this.clearComposerFretboard();
-        localStorage.removeItem('guitarHubComposition');
-        this.showTransientNotification('Composition cleared!');
+        this.showTransientNotification('Started new composition! Previous work is still saved.');
     }
 
     showTabAdditionsPreview(tabAdditions) {

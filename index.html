@@ -943,9 +943,15 @@
                         <!-- TAB Display for Composition -->
                         <div id="composition-tab-container" class="composition-tab-container" style="display: none;">
                             <div class="tab-header">
-                                <h4 data-i18n="composer.yourComposition">Your Composition</h4>
+                                <h4 id="composition-title">Untitled</h4>
                                 <div class="tab-actions">
                                     <button id="clear-composition-btn" class="secondary-btn danger" data-i18n="composer.clearComposition">Clear All</button>
+                                    <div class="load-composition-wrapper">
+                                        <button id="load-composition-btn" class="secondary-btn" data-i18n="composer.load">Load</button>
+                                        <div id="saved-compositions-list" class="saved-compositions-list" style="display: none;">
+                                            <!-- List will be populated dynamically -->
+                                        </div>
+                                    </div>
                                     <button id="save-composition-btn" class="secondary-btn" data-i18n="composer.save">Save</button>
                                     <button id="export-tab-btn" class="secondary-btn" data-i18n="composer.export">Export</button>
                                 </div>
