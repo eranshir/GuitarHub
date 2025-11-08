@@ -789,6 +789,15 @@ class AssistantGame {
             this.toggleCompositionPlayback();
         });
 
+        // Composition tempo control
+        document.getElementById('composition-tempo')?.addEventListener('change', (e) => {
+            const tempo = parseInt(e.target.value);
+            if (tempo >= 40 && tempo <= 240) {
+                this.composition.tempo = tempo;
+                this.autoSaveComposition();
+            }
+        });
+
         // Time signature selector
         document.getElementById('time-signature-select')?.addEventListener('change', (e) => {
             this.composition.timeSignature = e.target.value;
@@ -1242,11 +1251,19 @@ class AssistantGame {
             try {
                 this.composition = TabComposition.deserialize(data);
                 this.updateCompositionTitle();
+                this.updateTempoDisplay();
                 this.renderComposition();
                 console.log('Composition loaded:', name);
             } catch (e) {
                 console.error('Error loading composition:', e);
             }
+        }
+    }
+
+    updateTempoDisplay() {
+        const tempoInput = document.getElementById('composition-tempo');
+        if (tempoInput) {
+            tempoInput.value = this.composition.tempo;
         }
     }
 

@@ -945,12 +945,18 @@
                             <div class="tab-header">
                                 <h4 id="composition-title">Untitled</h4>
                                 <div class="tab-actions">
-                                    <button id="play-composition-btn" class="secondary-btn primary" title="Play composition">
-                                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                                            <path d="M8 5v14l11-7z"/>
-                                        </svg>
-                                        Play
-                                    </button>
+                                    <div class="playback-controls-compact">
+                                        <button id="play-composition-btn" class="secondary-btn primary" title="Play composition">
+                                            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                            Play
+                                        </button>
+                                        <div class="bpm-control-compact">
+                                            <label for="composition-tempo">BPM:</label>
+                                            <input type="number" id="composition-tempo" min="40" max="240" value="120" step="5">
+                                        </div>
+                                    </div>
                                     <button id="clear-composition-btn" class="secondary-btn danger" data-i18n="composer.clearComposition">Clear All</button>
                                     <div class="load-composition-wrapper">
                                         <button id="load-composition-btn" class="secondary-btn" data-i18n="composer.load">Load</button>

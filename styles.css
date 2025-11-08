@@ -3273,6 +3273,34 @@ body.rtl .mobile-header {
 .tab-actions {
     display: flex;
     gap: 10px;
+    align-items: center;
+}
+
+.playback-controls-compact {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.bpm-control-compact {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.9em;
+}
+
+.bpm-control-compact label {
+    font-weight: 600;
+    color: #666;
+}
+
+.bpm-control-compact input[type="number"] {
+    width: 60px;
+    padding: 5px 8px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.95em;
+    font-weight: 600;
 }
 
 .load-composition-wrapper {
