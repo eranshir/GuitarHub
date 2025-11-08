@@ -1238,13 +1238,19 @@ class AssistantGame {
         const blob = new Blob([textTab], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
 
+        // Use composition title, sanitize for filename
+        const filename = (this.composition.title || 'composition')
+            .replace(/[^a-z0-9_\-]/gi, '_') // Replace invalid chars with underscore
+            .replace(/_+/g, '_') // Replace multiple underscores with single
+            .toLowerCase();
+
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${this.composition.title || 'composition'}.txt`;
+        a.download = `${filename}.txt`;
         a.click();
 
         URL.revokeObjectURL(url);
-        this.addSystemMessage('Composition exported!');
+        this.addSystemMessage(`Exported "${this.composition.title}" as ${filename}.txt`);
     }
 
     toggleLoadCompositionsList() {
