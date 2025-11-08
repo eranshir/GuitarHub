@@ -876,48 +876,58 @@
                             <div class="duration-buttons-compact">
                                 <button class="duration-btn-compact" data-duration="0.0625" title="Sixteenth note">
                                     <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
-                                        <!-- Filled note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
-                                        <!-- Two flags --><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z M11.5 5 Q15 7 15 10 L11.5 9 Z"/>
+                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z M11.5 5 Q15 7 15 10 L11.5 9 Z"/>
                                     </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="0.125" title="Eighth note">
                                     <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
-                                        <!-- Filled note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
-                                        <!-- One flag --><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/>
+                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/>
                                     </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="0.375" title="Dotted eighth note">
                                     <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
-                                        <!-- Filled note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
-                                        <!-- One flag --><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/>
-                                        <!-- Dot --><circle cx="13" cy="16" r="1.2"/>
+                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/><circle cx="13" cy="16" r="1.2"/>
                                     </svg>
                                 </button>
                                 <button class="duration-btn-compact active" data-duration="0.25" title="Quarter note">
                                     <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
-                                        <!-- Filled note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
+                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
                                     </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="0.5" title="Half note">
                                     <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
-                                        <!-- Hollow note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/>
+                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/>
                                     </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="0.75" title="Dotted half note">
                                     <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <!-- Stem --><rect x="10" y="2" width="1.5" height="14"/>
-                                        <!-- Hollow note head --><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/>
-                                        <!-- Dot --><circle cx="13" cy="16" r="1.2"/>
+                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="16" r="1.2"/>
                                     </svg>
                                 </button>
                                 <button class="duration-btn-compact" data-duration="1" title="Whole note">
                                     <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <!-- Hollow oval (no stem) --><ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/>
+                                        <ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/>
+                                    </svg>
+                                </button>
+                                <span class="duration-separator">|</span>
+                                <button class="rest-btn-compact" data-rest="0.125" title="Eighth rest">
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 3 L8 9 L12 9 L8 15 L12 15 L8 21"/>
+                                    </svg>
+                                </button>
+                                <button class="rest-btn-compact" data-rest="0.25" title="Quarter rest">
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M10 3 Q12 5 10 7 Q8 9 10 11 L12 15 Q10 17 12 19 L10 21"/>
+                                    </svg>
+                                </button>
+                                <button class="rest-btn-compact" data-rest="0.5" title="Half rest">
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <rect x="6" y="10" width="12" height="3"/>
+                                    </svg>
+                                </button>
+                                <button class="rest-btn-compact" data-rest="1" title="Whole rest">
+                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
+                                        <rect x="6" y="11" width="12" height="3"/>
                                     </svg>
                                 </button>
                             </div>

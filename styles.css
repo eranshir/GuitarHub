@@ -3658,6 +3658,35 @@ body.rtl .mobile-header {
     border-color: var(--primary-color);
 }
 
+.duration-separator {
+    color: #ccc;
+    font-size: 1.5em;
+    margin: 0 5px;
+}
+
+.rest-btn-compact {
+    padding: 6px 10px;
+    background: #f8f9fa;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9em;
+    font-weight: 500;
+    min-width: 45px;
+}
+
+.rest-btn-compact:hover {
+    border-color: #e74c3c;
+    background: rgba(231, 76, 60, 0.05);
+}
+
+.rest-btn-compact .note-icon {
+    font-family: "Segoe UI Symbol", "Apple Color Emoji", "Noto Music", "Symbola", sans-serif;
+    font-size: 1.1em;
+    display: inline-block;
+}
+
 .icon-action-btn {
     padding: 8px 14px;
     background: white;

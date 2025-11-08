@@ -260,6 +260,8 @@ class TabRenderer {
 
         // Group events by time (notes at same time = vertical alignment)
         const eventsByTime = {};
+        const restsByTime = {}; // Track rests separately
+
         measure.events.forEach(event => {
             // Safety check for malformed events
             if (!event || event.time === null || event.time === undefined) {
@@ -267,11 +269,18 @@ class TabRenderer {
                 return;
             }
 
-            const timeKey = event.time.toFixed(4); // Use fixed precision to group same-time events
-            if (!eventsByTime[timeKey]) {
-                eventsByTime[timeKey] = [];
+            const timeKey = event.time.toFixed(4);
+
+            if (event.isRest) {
+                // Track rests separately
+                restsByTime[timeKey] = event;
+            } else {
+                // Regular notes
+                if (!eventsByTime[timeKey]) {
+                    eventsByTime[timeKey] = [];
+                }
+                eventsByTime[timeKey].push(event);
             }
-            eventsByTime[timeKey].push(event);
         });
 
         // Add notes to the lines - all notes at same time get same horizontal position
@@ -308,20 +317,26 @@ class TabRenderer {
 
         measureDiv.appendChild(tabLinesDiv);
 
-        // Add duration symbols below the TAB
+        // Add duration symbols below the TAB (including rests)
         const durationLine = document.createElement('div');
         durationLine.className = 'duration-line';
 
-        sortedTimes.forEach((time, position) => {
+        // Combine notes and rests for duration display
+        const allTimes = [...new Set([...sortedTimes, ...Object.keys(restsByTime).map(parseFloat)])].sort((a, b) => a - b);
+
+        allTimes.forEach((time, position) => {
             const timeKey = time.toFixed(4);
             const events = eventsByTime[timeKey];
-            // Use duration from first event (all events at same time should have same duration)
-            const duration = events[0]?.duration || 0.25; // Default to quarter note if missing
+            const rest = restsByTime[timeKey];
+
+            // Use duration from events or rest
+            const duration = rest ? rest.duration : (events[0]?.duration || 0.25);
+            const isRest = !!rest;
 
             const durationSymbol = document.createElement('span');
-            durationSymbol.className = 'duration-symbol';
-            durationSymbol.style.left = `${position * 50}px`; // Match note spacing
-            durationSymbol.innerHTML = this.getDurationSymbolSVG(duration);
+            durationSymbol.className = 'duration-symbol' + (isRest ? ' rest-symbol' : '');
+            durationSymbol.style.left = `${position * 50}px`;
+            durationSymbol.innerHTML = isRest ? this.getRestSymbolSVG(duration) : this.getDurationSymbolSVG(duration);
 
             durationLine.appendChild(durationSymbol);
         });
@@ -348,6 +363,17 @@ class TabRenderer {
         };
 
         return symbols[duration] || symbols[0.25]; // Default to quarter note
+    }
+
+    getRestSymbolSVG(duration) {
+        const symbols = {
+            0.125: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 L8 9 L12 9 L8 15 L12 15 L8 21"/></svg>', // 8th rest
+            0.25: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 3 Q12 5 10 7 Q8 9 10 11 L12 15 Q10 17 12 19 L10 21"/></svg>', // Quarter rest
+            0.5: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="10" width="12" height="3"/></svg>', // Half rest
+            1: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="11" width="12" height="3"/></svg>' // Whole rest
+        };
+
+        return symbols[duration] || symbols[0.25];
     }
 
     setNoteClickHandler(handler) {

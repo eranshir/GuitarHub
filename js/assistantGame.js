@@ -730,6 +730,15 @@ class AssistantGame {
             });
         });
 
+        // Rest buttons
+        document.querySelectorAll('.rest-btn-compact').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const duration = parseFloat(e.currentTarget.dataset.rest);
+                console.log('Rest button clicked:', duration);
+                this.addRestToComposition(duration);
+            });
+        });
+
         // Add Note button
         document.getElementById('add-note-btn')?.addEventListener('click', () => {
             this.addNoteToComposition();
@@ -1034,6 +1043,39 @@ class AssistantGame {
         document.querySelectorAll('.duration-btn, .duration-btn-compact').forEach(btn => {
             btn.classList.toggle('active', parseFloat(btn.dataset.duration) === duration);
         });
+    }
+
+    addRestToComposition(duration) {
+        // Ensure we have the current measure
+        if (this.composition.currentMeasure >= this.composition.measures.length) {
+            this.composition.addMeasure();
+        }
+
+        // Add a rest event (special event with no string/fret, just duration)
+        this.composition.measures[this.composition.currentMeasure].events.push({
+            time: this.composition.currentTime,
+            string: null,
+            fret: null,
+            duration: duration,
+            isRest: true
+        });
+
+        // Advance time
+        this.composition.currentTime += duration;
+
+        // Check if we need a new measure
+        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+        if (this.composition.currentTime >= beatsPerMeasure) {
+            this.composition.currentTime = 0;
+            this.composition.currentMeasure++;
+            this.composition.addMeasure();
+        }
+
+        // Re-render and save
+        this.renderComposition();
+        this.autoSaveComposition();
+
+        this.showTransientNotification(`Added ${duration === 0.25 ? 'quarter' : duration === 0.5 ? 'half' : duration === 1 ? 'whole' : 'eighth'} rest`);
     }
 
     addNoteToComposition() {
@@ -1494,16 +1536,19 @@ class AssistantGame {
         const event = events[index];
         const nextEvent = events[index + 1];
 
-        // Highlight current note
-        this.highlightPlayingNote(event.measureIndex, event.time);
+        // Only play and highlight if not a rest
+        if (!event.isRest) {
+            // Highlight current note
+            this.highlightPlayingNote(event.measureIndex, event.time);
 
-        // Play the note
-        const freq = this.guitar.getFrequency(event.string, event.fret);
-        if (freq) {
-            this.audio.playNote(freq, event.duration * 1000);
+            // Play the note
+            const freq = this.guitar.getFrequency(event.string, event.fret);
+            if (freq) {
+                this.audio.playNote(freq, event.duration * 1000);
+            }
         }
 
-        // Calculate delay until next note
+        // Calculate delay until next note (same for notes and rests)
         const delay = nextEvent
             ? (nextEvent.absoluteTime - event.absoluteTime) * (60000 / this.composition.tempo)
             : event.duration * (60000 / this.composition.tempo);
