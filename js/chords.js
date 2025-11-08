@@ -2089,10 +2089,18 @@ class ChordTheory {
             return this.chords[normalizedName];
         }
 
-        // Try case-insensitive match
+        // Try case-insensitive match by key
         const lowerName = normalizedName.toLowerCase();
         for (const [key, chord] of Object.entries(this.chords)) {
             if (key.toLowerCase() === lowerName) {
+                return chord;
+            }
+        }
+
+        // Try matching by display name (e.g., "C Major 7" → Cmaj7)
+        const lowerInput = chordName.toLowerCase().trim();
+        for (const [key, chord] of Object.entries(this.chords)) {
+            if (chord.name.toLowerCase() === lowerInput) {
                 return chord;
             }
         }
