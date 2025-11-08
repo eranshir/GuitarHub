@@ -317,12 +317,34 @@ class TabRenderer {
 
         measureDiv.appendChild(tabLinesDiv);
 
+        // Combine notes and rests times for consistent positioning
+        const allTimes = [...new Set([...sortedTimes, ...Object.keys(restsByTime).map(parseFloat)])].sort((a, b) => a - b);
+
+        // Add rest markers on the TAB (clickable)
+        Object.keys(restsByTime).forEach(timeKey => {
+            const time = parseFloat(timeKey);
+            const rest = restsByTime[timeKey];
+            const position = allTimes.indexOf(time);
+
+            // Create a rest marker that spans all strings
+            const restMarker = document.createElement('div');
+            restMarker.className = 'rest-marker';
+            restMarker.style.left = `${position * 50 + 30}px`; // Offset for string labels
+            restMarker.title = 'Click to edit rest';
+
+            // Click to edit rest
+            restMarker.addEventListener('click', () => {
+                this.onNoteClick && this.onNoteClick(measureIndex, rest);
+            });
+
+            tabLinesDiv.appendChild(restMarker);
+        });
+
+        measureDiv.appendChild(tabLinesDiv);
+
         // Add duration symbols below the TAB (including rests)
         const durationLine = document.createElement('div');
         durationLine.className = 'duration-line';
-
-        // Combine notes and rests for duration display
-        const allTimes = [...new Set([...sortedTimes, ...Object.keys(restsByTime).map(parseFloat)])].sort((a, b) => a - b);
 
         allTimes.forEach((time, position) => {
             const timeKey = time.toFixed(4);
@@ -343,9 +365,9 @@ class TabRenderer {
 
         measureDiv.appendChild(durationLine);
 
-        // Calculate measure width based on number of notes (uniform spacing)
-        const noteCount = sortedTimes.length;
-        const measureWidth = (noteCount * 50) + 60; // 50px per note + padding
+        // Calculate measure width based on number of notes + rests (uniform spacing)
+        const totalEvents = allTimes.length;
+        const measureWidth = (totalEvents * 50) + 60; // 50px per event + padding
         measureDiv.style.minWidth = `${measureWidth}px`;
 
         return measureDiv;
