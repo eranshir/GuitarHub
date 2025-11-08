@@ -842,7 +842,7 @@ class AssistantGame {
             const compositionTab = document.getElementById('composition-tab-container');
             const assistantDisplay = document.getElementById('assistant-display-container');
             const playbackControls = document.querySelector('.playback-controls');
-            const chordDisplay = document.querySelector('.current-chord-display');
+            const chordDisplay = document.querySelector('#assistant-module .current-chord-display');
 
             if (composerControls) composerControls.style.display = 'none';
             if (chordDetector) chordDetector.style.display = 'none';
@@ -863,7 +863,7 @@ class AssistantGame {
             const compositionTab = document.getElementById('composition-tab-container');
             const assistantDisplay = document.getElementById('assistant-display-container');
             const playbackControls = document.querySelector('.playback-controls');
-            const chordDisplay = document.querySelector('.current-chord-display');
+            const chordDisplay = document.querySelector('#assistant-module .current-chord-display');
 
             if (composerControls) composerControls.style.display = 'flex';
             if (chordDetector) chordDetector.style.display = 'flex';
