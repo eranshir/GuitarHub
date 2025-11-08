@@ -135,6 +135,12 @@ class TabComposition {
         // Group events by time for vertical alignment
         const eventsByTime = {};
         measure.events.forEach(event => {
+            // Safety check for malformed events
+            if (!event || event.time === null || event.time === undefined) {
+                console.warn('Skipping malformed event during export:', event);
+                return;
+            }
+
             const timeKey = event.time.toFixed(4);
             if (!eventsByTime[timeKey]) {
                 eventsByTime[timeKey] = {};
