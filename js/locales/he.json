@@ -268,8 +268,12 @@
     "yourComposition": "ההלחנה שלך",
     "save": "שמור",
     "load": "טען",
+    "share": "שתף",
     "export": "ייצא",
-    "clearComposition": "נקה הכל"
+    "clearComposition": "נקה הכל",
+    "shareSuccess": "הקישור הועתק ללוח!",
+    "shareError": "נכשל בהעתקת הקישור. אנא העתק אותו ידנית:",
+    "loadedFromURL": "הלחנה נטענה מקישור משותף!"
   },
   "statistics": {
     "title": "ההתקדמות שלך",

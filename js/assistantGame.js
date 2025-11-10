@@ -68,7 +68,29 @@ class AssistantGame {
         this.setupEventListeners();
         this.setupComposerEventListeners();
         this.loadSettings();
-        this.loadComposition(); // Load saved composition if exists
+
+        // Check if there's a shared composition in the URL
+        const sharedComposition = CompositionShareUtils.loadFromURL();
+        if (sharedComposition) {
+            this.composition = sharedComposition;
+            this.updateCompositionTitle();
+            this.updateTempoDisplay();
+            this.renderComposition();
+
+            // Switch to composer mode to show the loaded composition
+            this.switchMode('composer');
+
+            // Show notification
+            const message = window.i18n?.t('composer.loadedFromURL') || 'Composition loaded from shared link!';
+            setTimeout(() => {
+                this.showTransientNotification(message);
+            }, 500);
+
+            console.log('Loaded composition from URL:', sharedComposition.title);
+        } else {
+            // Load saved composition if exists (only if no URL composition)
+            this.loadComposition();
+        }
     }
 
     initializeFretboard() {
@@ -986,6 +1008,10 @@ class AssistantGame {
             this.toggleLoadCompositionsList();
         });
 
+        document.getElementById('share-composition-btn')?.addEventListener('click', () => {
+            this.shareComposition();
+        });
+
         document.getElementById('export-tab-btn')?.addEventListener('click', () => {
             this.exportComposition();
         });
@@ -1542,6 +1568,44 @@ class AssistantGame {
         if (tempoInput) {
             tempoInput.value = this.composition.tempo;
         }
+    }
+
+    shareComposition() {
+        if (this.composition.measures.length === 0) {
+            this.showTransientNotification('Nothing to share! Compose something first.');
+            return;
+        }
+
+        try {
+            // Generate shareable URL
+            const shareURL = CompositionShareUtils.generateShareURL(this.composition);
+
+            // Try to copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(shareURL).then(() => {
+                    // Get translated message
+                    const message = window.i18n?.t('composer.shareSuccess') || 'Link copied to clipboard!';
+                    this.showTransientNotification(message);
+                }).catch(err => {
+                    console.error('Failed to copy to clipboard:', err);
+                    this.showShareURLDialog(shareURL);
+                });
+            } else {
+                // Fallback for browsers that don't support clipboard API
+                this.showShareURLDialog(shareURL);
+            }
+        } catch (error) {
+            console.error('Error generating share URL:', error);
+            this.showTransientNotification('Failed to generate share link. Try again.');
+        }
+    }
+
+    showShareURLDialog(url) {
+        // Get translated message
+        const message = window.i18n?.t('composer.shareError') || 'Failed to copy link. Please copy it manually:';
+
+        // Show prompt with URL for manual copying
+        prompt(message, url);
     }
 
     exportComposition() {

@@ -479,3 +479,98 @@ class FretboardState {
         return chord ? chord.name : null;
     }
 }
+
+
+// URL Encoding/Decoding Utilities for sharing compositions
+class CompositionShareUtils {
+    // Encode composition data to a URL-safe string
+    static encodeComposition(composition) {
+        const data = {
+            title: composition.title,
+            tempo: composition.tempo,
+            timeSignature: composition.timeSignature,
+            measures: composition.measures,
+            version: "1.0"
+        };
+
+        // Convert to JSON, then base64 encode, then make URL-safe
+        const jsonString = JSON.stringify(data);
+        const base64 = btoa(jsonString);
+        // Make URL-safe by replacing characters
+        const urlSafe = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+        return urlSafe;
+    }
+
+    // Decode URL-safe string back to composition
+    static decodeComposition(urlSafeString) {
+        try {
+            // Reverse URL-safe encoding
+            let base64 = urlSafeString.replace(/-/g, '+').replace(/_/g, '/');
+
+            // Add padding if needed
+            while (base64.length % 4) {
+                base64 += '=';
+            }
+
+            // Decode base64 and parse JSON
+            const jsonString = atob(base64);
+            const data = JSON.parse(jsonString);
+
+            // Create new composition with decoded data
+            const composition = new TabComposition();
+            composition.title = data.title;
+            composition.tempo = data.tempo;
+            composition.timeSignature = data.timeSignature;
+            composition.measures = data.measures;
+
+            // Set cursor to end of composition
+            if (composition.measures.length > 0) {
+                composition.currentMeasure = composition.measures.length - 1;
+
+                const lastMeasure = composition.measures[composition.currentMeasure];
+                let maxTime = 0;
+
+                lastMeasure.events.forEach(event => {
+                    const endTime = event.time + event.duration;
+                    if (endTime > maxTime) {
+                        maxTime = endTime;
+                    }
+                });
+
+                composition.currentTime = maxTime;
+
+                const beatsPerMeasure = composition.getBeatsPerMeasure();
+                if (composition.currentTime >= beatsPerMeasure) {
+                    composition.currentTime = 0;
+                    composition.currentMeasure++;
+                    composition.addMeasure();
+                }
+            }
+
+            return composition;
+        } catch (error) {
+            console.error('Failed to decode composition:', error);
+            return null;
+        }
+    }
+
+    // Generate shareable URL for current composition
+    static generateShareURL(composition) {
+        const encoded = this.encodeComposition(composition);
+        const baseURL = window.location.origin + window.location.pathname;
+        return `${baseURL}?tab=${encoded}`;
+    }
+
+    // Load composition from URL parameters
+    static loadFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const tabData = urlParams.get('tab');
+
+        if (tabData) {
+            return this.decodeComposition(tabData);
+        }
+
+        return null;
+    }
+}

@@ -268,8 +268,12 @@
     "yourComposition": "Your Composition",
     "save": "Save",
     "load": "Load",
+    "share": "Share",
     "export": "Export",
-    "clearComposition": "Clear All"
+    "clearComposition": "Clear All",
+    "shareSuccess": "Link copied to clipboard!",
+    "shareError": "Failed to copy link. Please copy it manually:",
+    "loadedFromURL": "Composition loaded from shared link!"
   },
   "statistics": {
     "title": "Your Progress",
