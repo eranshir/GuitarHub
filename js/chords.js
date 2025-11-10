@@ -52,7 +52,57 @@ class ChordTheory {
                 muted: [],
                 barrePosition: {fret: 1, strings: [1, 6]}
             },
-            
+
+            // Alternate voicings for common chords
+            'C_shape2': {
+                name: 'C Major (Barre Shape)',
+                type: 'major',
+                root: 'C',
+                positions: [{string: 5, fret: 3}, {string: 4, fret: 5}, {string: 3, fret: 5}, {string: 2, fret: 5}, {string: 1, fret: 3}],
+                muted: [6],
+                barrePosition: {fret: 3, strings: [1, 5]}
+            },
+            'C_shape3': {
+                name: 'C Major (High Position)',
+                type: 'major',
+                root: 'C',
+                positions: [{string: 5, fret: 8}, {string: 4, fret: 10}, {string: 3, fret: 10}, {string: 2, fret: 9}, {string: 1, fret: 8}],
+                muted: [6],
+                barrePosition: {fret: 8, strings: [1, 5]}
+            },
+            'G_shape2': {
+                name: 'G Major (Barre Shape)',
+                type: 'major',
+                root: 'G',
+                positions: [{string: 6, fret: 3}, {string: 5, fret: 5}, {string: 4, fret: 5}, {string: 3, fret: 4}, {string: 2, fret: 3}, {string: 1, fret: 3}],
+                muted: [],
+                barrePosition: {fret: 3, strings: [1, 6]}
+            },
+            'D_shape2': {
+                name: 'D Major (Barre Shape)',
+                type: 'major',
+                root: 'D',
+                positions: [{string: 5, fret: 5}, {string: 4, fret: 7}, {string: 3, fret: 7}, {string: 2, fret: 7}, {string: 1, fret: 5}],
+                muted: [6],
+                barrePosition: {fret: 5, strings: [1, 5]}
+            },
+            'A_shape2': {
+                name: 'A Major (Barre Shape)',
+                type: 'major',
+                root: 'A',
+                positions: [{string: 6, fret: 5}, {string: 5, fret: 7}, {string: 4, fret: 7}, {string: 3, fret: 6}, {string: 2, fret: 5}, {string: 1, fret: 5}],
+                muted: [],
+                barrePosition: {fret: 5, strings: [1, 6]}
+            },
+            'E_shape2': {
+                name: 'E Major (Barre Shape)',
+                type: 'major',
+                root: 'E',
+                positions: [{string: 5, fret: 7}, {string: 4, fret: 9}, {string: 3, fret: 9}, {string: 2, fret: 9}, {string: 1, fret: 7}],
+                muted: [6],
+                barrePosition: {fret: 7, strings: [1, 5]}
+            },
+
             // Minor chords
             'Am': {
                 name: 'A Minor',
@@ -109,6 +159,32 @@ class ChordTheory {
                 positions: [{string: 6, fret: 3}, {string: 5, fret: 5}, {string: 4, fret: 5}, {string: 3, fret: 3}, {string: 2, fret: 3}, {string: 1, fret: 3}],
                 muted: [],
                 barrePosition: {fret: 3, strings: [1, 6]}
+            },
+
+            // Alternate minor voicings
+            'Am_shape2': {
+                name: 'A Minor (Barre Shape)',
+                type: 'minor',
+                root: 'A',
+                positions: [{string: 6, fret: 5}, {string: 5, fret: 7}, {string: 4, fret: 7}, {string: 3, fret: 5}, {string: 2, fret: 5}, {string: 1, fret: 5}],
+                muted: [],
+                barrePosition: {fret: 5, strings: [1, 6]}
+            },
+            'Em_shape2': {
+                name: 'E Minor (Barre Shape)',
+                type: 'minor',
+                root: 'E',
+                positions: [{string: 5, fret: 7}, {string: 4, fret: 9}, {string: 3, fret: 9}, {string: 2, fret: 8}, {string: 1, fret: 7}],
+                muted: [6],
+                barrePosition: {fret: 7, strings: [1, 5]}
+            },
+            'Dm_shape2': {
+                name: 'D Minor (Barre Shape)',
+                type: 'minor',
+                root: 'D',
+                positions: [{string: 5, fret: 5}, {string: 4, fret: 7}, {string: 3, fret: 7}, {string: 2, fret: 6}, {string: 1, fret: 5}],
+                muted: [6],
+                barrePosition: {fret: 5, strings: [1, 5]}
             },
             'F#m': {
                 name: 'F# Minor',
@@ -2110,7 +2186,7 @@ class ChordTheory {
     
     playChord(chord, guitar, audio) {
         const frequencies = [];
-        
+
         // Add open strings if not muted
         for (let string = 1; string <= 6; string++) {
             if (!chord.muted.includes(string)) {
@@ -2122,15 +2198,399 @@ class ChordTheory {
                 }
             }
         }
-        
+
         // Add fretted notes
         for (const pos of chord.positions) {
             const freq = guitar.getFrequency(pos.string, pos.fret);
             if (freq) frequencies.push(freq);
         }
-        
+
         if (frequencies.length > 0) {
             audio.playChord(frequencies, 2000);
         }
+    }
+
+    // Get all voicings/shapes for a given chord by matching root and quality
+    // HYBRID APPROACH: Use manual voicings first, augment with algorithmic generation if needed
+    getAllShapes(chordName, guitar = null) {
+        console.log('=== getAllShapes called ===');
+        console.log('Chord name:', chordName);
+        console.log('Guitar:', guitar);
+
+        const chord = this.getChord(chordName);
+        console.log('Found in library:', !!chord);
+
+        const shapes = [];
+        let root, type;
+
+        // Try to get manual voicings first
+        if (chord) {
+            root = chord.root;
+            type = chord.type;
+
+            // Find all manually defined chords with the same root and type
+            for (const [key, chordData] of Object.entries(this.chords)) {
+                if (chordData.root === root && chordData.type === type) {
+                    shapes.push({
+                        key: key,
+                        ...chordData
+                    });
+                }
+            }
+
+            console.log('Manual voicings found:', shapes.length);
+
+            // If we have MORE than 1 manual voicing, just use those
+            if (shapes.length > 1) {
+                console.log('Using manual voicings only (multiple found)');
+                // Sort by lowest fret position for consistency
+                shapes.sort((a, b) => {
+                    const minFretA = Math.min(...a.positions.map(p => p.fret));
+                    const minFretB = Math.min(...b.positions.map(p => p.fret));
+                    return minFretA - minFretB;
+                });
+                return shapes;
+            }
+        } else {
+            // Chord not in library, try to parse it
+            const parsed = this.parseChordName(chordName);
+            if (parsed) {
+                root = parsed.root;
+                type = parsed.type;
+                console.log('Parsed chord (not in library):', parsed);
+            } else {
+                console.log('Could not parse chord name');
+                return [];
+            }
+        }
+
+        // If we get here, we have 0 or 1 manual voicings - augment with algorithmic generation
+        console.log('Augmenting with algorithmic generation...');
+        if (guitar && root && type) {
+            const chordObj = {
+                name: chordName,
+                root: root,
+                type: type
+            };
+            console.log('Generating voicings for:', chordObj);
+            const generatedVoicings = this.generateChordVoicings(chordObj, guitar);
+            console.log('Generated voicings:', generatedVoicings.length);
+
+            // Combine manual (if any) with generated
+            const allShapes = [...shapes, ...generatedVoicings];
+
+            // Sort by lowest fret position
+            allShapes.sort((a, b) => {
+                const minFretA = Math.min(...a.positions.map(p => p.fret));
+                const minFretB = Math.min(...b.positions.map(p => p.fret));
+                return minFretA - minFretB;
+            });
+
+            console.log('Total shapes (manual + generated):', allShapes.length);
+            return allShapes;
+        }
+
+        // No shapes available
+        console.log('No shapes found');
+        return shapes.length > 0 ? shapes : [];
+    }
+
+    // Parse a chord name into root and type
+    parseChordName(chordName) {
+        if (!chordName) return null;
+
+        const noteNames = ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B'];
+
+        // Try to match root note (1-2 characters)
+        let root = null;
+        let remainder = '';
+
+        // Try 2-character root first (e.g., C#, Bb)
+        if (chordName.length >= 2) {
+            const twoChar = chordName.substring(0, 2);
+            if (noteNames.includes(twoChar)) {
+                root = twoChar;
+                remainder = chordName.substring(2);
+            }
+        }
+
+        // If not found, try 1-character root
+        if (!root && chordName.length >= 1) {
+            const oneChar = chordName.substring(0, 1);
+            if (noteNames.includes(oneChar)) {
+                root = oneChar;
+                remainder = chordName.substring(1);
+            }
+        }
+
+        if (!root) return null;
+
+        // Normalize flat/sharp notation
+        if (root.includes('b')) root = root.replace('b', '♭');
+        if (root === 'Db') root = 'C#';
+        if (root === 'Eb') root = 'D#';
+        if (root === 'Gb') root = 'F#';
+        if (root === 'Ab') root = 'G#';
+        if (root === 'Bb') root = 'A#';
+
+        // Parse quality from remainder
+        let type = 'major'; // default
+
+        remainder = remainder.toLowerCase().trim();
+
+        if (remainder === '' || remainder === 'maj') {
+            type = 'major';
+        } else if (remainder === 'm' || remainder === 'min' || remainder === 'minor') {
+            type = 'minor';
+        } else if (remainder === '7' || remainder === 'dom7') {
+            type = 'dominant7';
+        } else if (remainder === 'maj7' || remainder === 'major7') {
+            type = 'major7';
+        } else if (remainder === 'm7' || remainder === 'min7' || remainder === 'minor7') {
+            type = 'minor7';
+        } else if (remainder === 'sus2') {
+            type = 'sus2';
+        } else if (remainder === 'sus4') {
+            type = 'sus4';
+        } else if (remainder === '6' || remainder === '6th') {
+            type = '6th';
+        } else if (remainder === 'm6' || remainder === 'min6') {
+            type = 'm6';
+        } else if (remainder === 'add9') {
+            type = 'add9';
+        } else if (remainder === 'dim' || remainder === '°') {
+            type = 'dim';
+        } else if (remainder === 'aug' || remainder === '+') {
+            type = 'aug';
+        } else if (remainder === '5') {
+            type = 'power';
+        }
+
+        return { root, type };
+    }
+
+    // Generate chord voicings algorithmically
+    generateChordVoicings(chord, guitar, options = {}) {
+        const maxFret = options.maxFret || 12;
+        const maxSpan = options.maxSpan || 5;  // Max fret span
+        const minNotes = options.minNotes || 3; // Min notes in voicing
+        const maxVoicings = options.maxVoicings || 10;
+
+        // Get the intervals for this chord type
+        const intervals = this.getIntervalsForChordType(chord.type);
+        if (!intervals) return [];
+
+        // Get all notes in the chord
+        const chordNotes = this.getNotesFromIntervals(chord.root, intervals);
+
+        // Find all possible positions for each chord note
+        const notePositions = {};
+        for (const note of chordNotes) {
+            notePositions[note] = guitar.getAllFretsForNote(note, maxFret);
+        }
+
+        // Generate candidate voicings
+        const candidates = this.generateVoicingCandidates(notePositions, chordNotes, chord.root);
+
+        // Filter by playability
+        const playable = candidates.filter(voicing =>
+            this.isVoicingPlayable(voicing, maxSpan, minNotes)
+        );
+
+        // Score and sort voicings
+        const scored = playable.map(voicing => ({
+            voicing,
+            score: this.scoreVoicing(voicing, chord.root, chordNotes)
+        }));
+
+        scored.sort((a, b) => b.score - a.score);
+
+        // Convert to chord shape format
+        return scored.slice(0, maxVoicings).map((item, index) => ({
+            key: `${chord.root}_${chord.type}_gen${index}`,
+            name: `${chord.name} (Position ${index + 1})`,
+            type: chord.type,
+            root: chord.root,
+            positions: item.voicing.positions,
+            muted: item.voicing.muted,
+            barrePosition: null,
+            isGenerated: true
+        }));
+    }
+
+    // Get intervals for a chord type
+    getIntervalsForChordType(type) {
+        const patterns = {
+            'major': [0, 4, 7],
+            'minor': [0, 3, 7],
+            'dominant7': [0, 4, 7, 10],
+            'major7': [0, 4, 7, 11],
+            'minor7': [0, 3, 7, 10],
+            'sus2': [0, 2, 7],
+            'sus4': [0, 5, 7],
+            '6th': [0, 4, 7, 9],
+            'm6': [0, 3, 7, 9],
+            'add9': [0, 2, 4, 7],
+            'dim': [0, 3, 6],
+            'aug': [0, 4, 8],
+            'power': [0, 7]
+        };
+        return patterns[type] || null;
+    }
+
+    // Convert intervals to actual notes
+    getNotesFromIntervals(root, intervals) {
+        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        const rootIndex = noteNames.indexOf(root);
+
+        return intervals.map(interval => {
+            const noteIndex = (rootIndex + interval) % 12;
+            return noteNames[noteIndex];
+        });
+    }
+
+    // Generate voicing candidates (simplified - generates voicings with 3-4 notes)
+    generateVoicingCandidates(notePositions, chordNotes, root) {
+        const candidates = [];
+        const strings = [6, 5, 4, 3, 2, 1];
+
+        // Strategy: Generate voicings by selecting positions on different strings
+        // Focus on common shapes: bass note on string 6, 5, or 4
+        const bassStrings = [6, 5, 4];
+
+        for (const bassString of bassStrings) {
+            // Find root note positions on this bass string
+            const rootPositions = notePositions[root].filter(pos => pos.string === bassString);
+
+            for (const bassPos of rootPositions) {
+                // Build voicing around this bass position
+                const voicing = this.buildVoicingFromBass(bassPos, notePositions, chordNotes, strings);
+                if (voicing) {
+                    candidates.push(voicing);
+                }
+            }
+        }
+
+        return candidates;
+    }
+
+    // Build a voicing starting from a bass note
+    buildVoicingFromBass(bassPos, notePositions, chordNotes, strings) {
+        const positions = [bassPos];
+        const usedStrings = new Set([bassPos.string]);
+        const bassFret = bassPos.fret;
+
+        // Try to add notes on higher strings (lower numbers)
+        for (const string of strings) {
+            if (string >= bassPos.string) continue; // Skip bass and lower strings
+            if (usedStrings.has(string)) continue;
+
+            // Find the best note for this string within reasonable fret range
+            let bestPos = null;
+            let bestScore = -1;
+
+            for (const note of chordNotes) {
+                const candidatePositions = notePositions[note].filter(pos =>
+                    pos.string === string &&
+                    pos.fret >= bassFret &&
+                    pos.fret <= bassFret + 5
+                );
+
+                for (const pos of candidatePositions) {
+                    const score = this.scorePosition(pos, bassFret, positions);
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestPos = pos;
+                    }
+                }
+            }
+
+            if (bestPos) {
+                positions.push(bestPos);
+                usedStrings.add(string);
+            }
+        }
+
+        // Calculate muted strings
+        const muted = strings.filter(s => !usedStrings.has(s));
+
+        return positions.length >= 3 ? { positions, muted } : null;
+    }
+
+    // Score a position (prefer closer to bass, penalize large jumps)
+    scorePosition(pos, bassFret, existingPositions) {
+        let score = 100;
+
+        // Prefer positions close to bass
+        const distanceFromBass = Math.abs(pos.fret - bassFret);
+        score -= distanceFromBass * 5;
+
+        // Penalize large jumps from existing positions
+        for (const existing of existingPositions) {
+            const jump = Math.abs(pos.fret - existing.fret);
+            if (jump > 4) score -= jump * 10;
+        }
+
+        return score;
+    }
+
+    // Check if a voicing is physically playable
+    isVoicingPlayable(voicing, maxSpan, minNotes) {
+        if (voicing.positions.length < minNotes) return false;
+
+        const frets = voicing.positions.map(p => p.fret).filter(f => f > 0);
+        if (frets.length === 0) return false;
+
+        const minFret = Math.min(...frets);
+        const maxFret = Math.max(...frets);
+        const span = maxFret - minFret;
+
+        return span <= maxSpan;
+    }
+
+    // Score a voicing (higher is better)
+    scoreVoicing(voicing, root, chordNotes) {
+        let score = 0;
+
+        // Prefer more notes
+        score += voicing.positions.length * 20;
+
+        // Prefer root in bass
+        const bassPos = voicing.positions.reduce((lowest, pos) =>
+            pos.string > lowest.string ? pos : lowest
+        );
+        const bassNote = this.getNoteAtPosition(bassPos);
+        if (bassNote === root) score += 50;
+
+        // Prefer complete chord (all notes present)
+        const notesInVoicing = new Set(voicing.positions.map(p => this.getNoteAtPosition(p)));
+        const completeness = notesInVoicing.size / chordNotes.length;
+        score += completeness * 30;
+
+        // Prefer lower positions (easier to play)
+        const avgFret = voicing.positions.reduce((sum, p) => sum + p.fret, 0) / voicing.positions.length;
+        score -= avgFret * 2;
+
+        return score;
+    }
+
+    // Helper to get note at a fretboard position
+    getNoteAtPosition(pos) {
+        const stringNotes = ['E', 'A', 'D', 'G', 'B', 'E']; // Strings 6-1
+        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        const openNote = stringNotes[6 - pos.string];
+        const openNoteIndex = noteNames.indexOf(openNote);
+        const actualNoteIndex = (openNoteIndex + pos.fret) % 12;
+        return noteNames[actualNoteIndex];
+    }
+
+    // Get a specific shape by index for a chord
+    getShapeByIndex(chordName, index, guitar = null) {
+        const shapes = this.getAllShapes(chordName, guitar);
+        if (shapes.length === 0) return null;
+
+        // Wrap around if index is out of bounds
+        const wrappedIndex = ((index % shapes.length) + shapes.length) % shapes.length;
+        return shapes[wrappedIndex];
     }
 }

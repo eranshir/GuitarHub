@@ -24,6 +24,11 @@ class AssistantGame {
         this.currentIndex = 0;
         this.previousIndex = null;
 
+        // Chord shape navigation
+        this.currentShapeIndex = 0;
+        this.availableShapes = [];
+        this.currentChordName = null;
+
         // Composition state (Composer mode)
         this.composition = new TabComposition();
         this.tabRenderer = null;
@@ -240,6 +245,26 @@ class AssistantGame {
         if (clearChatBtn) {
             clearChatBtn.addEventListener('click', () => this.clearChat());
         }
+
+        // Arrow key navigation for chord shapes (works in both assistant and composer modes)
+        document.addEventListener('keydown', (e) => {
+            // Only handle arrow keys when in assistant module
+            const isAssistantActive = document.getElementById('assistant-module')?.classList.contains('active');
+            if (!isAssistantActive) return;
+
+            // Don't intercept if user is typing in an input field (except in composer mode with chord input)
+            if (e.target.tagName === 'TEXTAREA') return;
+            if (e.target.tagName === 'INPUT' && e.target.id !== 'chord-name-input') return;
+
+            // Handle arrow keys for shape navigation
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                // Check if we have shapes to navigate
+                if (this.currentChordName && this.availableShapes.length > 1) {
+                    e.preventDefault();
+                    this.navigateShape(e.key === 'ArrowLeft' ? -1 : 1);
+                }
+            }
+        });
     }
 
     async sendMessage() {
@@ -487,7 +512,61 @@ class AssistantGame {
         this.currentSequence = sequence;
         this.currentIndex = 0;
         this.previousIndex = null;
+
+        // Initialize chord shape navigation if sequence has a chord
+        if (sequence.length > 0 && sequence[0].chord_name) {
+            this.currentChordName = sequence[0].chord_name;
+            this.availableShapes = this.chordTheory.getAllShapes(this.currentChordName, this.guitar);
+            this.currentShapeIndex = 0;
+        } else {
+            this.currentChordName = null;
+            this.availableShapes = [];
+            this.currentShapeIndex = 0;
+        }
+
         this.updateDisplay();
+    }
+
+    navigateShape(direction) {
+        if (this.availableShapes.length <= 1) return;
+
+        // Update shape index
+        this.currentShapeIndex = (this.currentShapeIndex + direction + this.availableShapes.length) % this.availableShapes.length;
+
+        // Get the new shape
+        const newShape = this.availableShapes[this.currentShapeIndex];
+
+        if (this.mode === 'assistant') {
+            // Assistant mode: update the current sequence with the new shape
+            if (this.currentSequence.length > 0) {
+                // Replace positions in current shape
+                this.currentSequence[this.currentIndex].positions = newShape.positions;
+                this.currentSequence[this.currentIndex].muted = newShape.muted || [];
+
+                // Update display
+                this.updateDisplay();
+
+                // Provide audio/visual feedback
+                this.addSystemMessage(`Shape ${this.currentShapeIndex + 1} of ${this.availableShapes.length} for ${this.currentChordName}`);
+            }
+        } else if (this.mode === 'composer') {
+            // Composer mode: update the fretboard state with new shape
+            this.fretboardState.clear();
+
+            // Load new shape positions onto fretboard
+            newShape.positions.forEach(pos => {
+                this.fretboardState.addNote(pos.string, pos.fret);
+            });
+
+            // Display on fretboard
+            this.displayComposerFretboard();
+
+            // Update detected chord
+            this.updateDetectedChord();
+
+            // Provide visual feedback
+            this.showTransientNotification(`Shape ${this.currentShapeIndex + 1} of ${this.availableShapes.length} for ${this.currentChordName}`);
+        }
     }
 
     startPlayback() {
@@ -617,7 +696,15 @@ class AssistantGame {
 
             // Update text display
             document.getElementById('assistant-chord-name').textContent = currentShape.chord_name;
-            const posInfo = `${this.isPlaying ? 'Playing' : 'Showing'}: ${this.currentIndex + 1} of ${this.currentSequence.length}`;
+
+            // Build position info with shape navigation hint
+            let posInfo = `${this.isPlaying ? 'Playing' : 'Showing'}: ${this.currentIndex + 1} of ${this.currentSequence.length}`;
+
+            // Add shape navigation info if multiple shapes available
+            if (this.availableShapes.length > 1) {
+                posInfo += ` | Shape ${this.currentShapeIndex + 1}/${this.availableShapes.length} (← →)`;
+            }
+
             document.getElementById('assistant-position-info').textContent = posInfo;
         }
     }
@@ -1140,19 +1227,33 @@ class AssistantGame {
     loadChordShape(chordName) {
         if (!chordName) return;
 
-        // Find chord in chordTheory (case-insensitive)
-        const chord = this.chordTheory.getChord(chordName);
+        console.log('=== loadChordShape called ===');
+        console.log('Chord name:', chordName);
 
-        if (!chord) {
-            this.showTransientNotification(`Chord "${chordName}" not found. Try: C, Am, G7, etc.`);
+        // Initialize shape navigation for this chord (works even if chord not in library)
+        this.currentChordName = chordName;
+        this.availableShapes = this.chordTheory.getAllShapes(chordName, this.guitar);
+        this.currentShapeIndex = 0;
+
+        console.log('Available shapes:', this.availableShapes.length);
+        console.log('Guitar instance:', this.guitar);
+        console.log('Shapes:', this.availableShapes);
+
+        // Check if we found any shapes
+        if (this.availableShapes.length === 0) {
+            this.showTransientNotification(`Chord "${chordName}" not recognized. Try: C, Am, G7, F#m7, etc.`);
+            this.currentChordName = null;
             return;
         }
+
+        // Get first shape
+        const firstShape = this.availableShapes[0];
 
         // Clear current fretboard state
         this.fretboardState.clear();
 
         // Load chord positions onto fretboard
-        chord.positions.forEach(pos => {
+        firstShape.positions.forEach(pos => {
             this.fretboardState.addNote(pos.string, pos.fret);
         });
 
@@ -1162,7 +1263,12 @@ class AssistantGame {
         // Detect chord (should match what was typed, but allow detection to verify)
         this.updateDetectedChord();
 
-        this.showTransientNotification(`Loaded ${chord.name} onto fretboard`);
+        // Show notification with shape info
+        const shapeInfo = this.availableShapes.length > 1
+            ? ` (Shape 1/${this.availableShapes.length}, use ← → to navigate)`
+            : '';
+        const isGenerated = firstShape.isGenerated ? ' [Generated]' : '';
+        this.showTransientNotification(`Loaded ${firstShape.name}${isGenerated} onto fretboard${shapeInfo}`);
     }
 
     selectDuration(duration) {
