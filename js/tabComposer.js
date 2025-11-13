@@ -483,6 +483,60 @@ class FretboardState {
 
 // URL Encoding/Decoding Utilities for sharing compositions
 class CompositionShareUtils {
+    // Simplified LZ-string compression (basic run-length encoding)
+    static compressString(str) {
+        // Use native compression if available (not widely supported yet)
+        // Fallback to JSON minification to reduce size
+        const data = JSON.parse(str);
+
+        // Minify by removing nulls and using shorter keys
+        const minified = {
+            t: data.title,
+            p: data.tempo,
+            s: data.timeSignature,
+            m: data.measures.map(measure => ({
+                s: measure.timeSignature,
+                e: measure.events.map(event => {
+                    // Compress event data - omit null values
+                    const compressed = [event.time, event.string, event.fret, event.duration];
+                    if (event.isRest) compressed.push(1); // Flag for rest
+                    return compressed;
+                }),
+                c: measure.chords
+            })),
+            v: data.version
+        };
+
+        return JSON.stringify(minified);
+    }
+
+    static decompressString(str) {
+        const minified = JSON.parse(str);
+
+        // Expand back to full format
+        return JSON.stringify({
+            title: minified.t,
+            tempo: minified.p,
+            timeSignature: minified.s,
+            measures: minified.m.map(measure => ({
+                timeSignature: measure.s,
+                events: measure.e.map(eventData => {
+                    const [time, string, fret, duration, isRest] = eventData;
+                    return {
+                        time,
+                        string,
+                        fret,
+                        duration,
+                        leftFinger: null,
+                        ...(isRest && { isRest: true })
+                    };
+                }),
+                chords: measure.c
+            })),
+            version: minified.v
+        });
+    }
+
     // Encode composition data to a URL-safe string
     static encodeComposition(composition) {
         const data = {
@@ -493,11 +547,15 @@ class CompositionShareUtils {
             version: "1.0"
         };
 
-        // Convert to JSON, then UTF-8 encode, then base64 encode, then make URL-safe
+        // Convert to JSON and compress
         const jsonString = JSON.stringify(data);
+        const compressed = this.compressString(jsonString);
+
+        console.log('Original JSON length:', jsonString.length);
+        console.log('Compressed JSON length:', compressed.length);
 
         // Convert to UTF-8 bytes first to handle Unicode characters
-        const utf8Bytes = new TextEncoder().encode(jsonString);
+        const utf8Bytes = new TextEncoder().encode(compressed);
 
         // Convert bytes to binary string
         let binaryString = '';
@@ -510,6 +568,8 @@ class CompositionShareUtils {
 
         // Make URL-safe by replacing characters
         const urlSafe = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+        console.log('Base64 length:', urlSafe.length);
 
         return urlSafe;
     }
@@ -534,8 +594,11 @@ class CompositionShareUtils {
                 utf8Bytes[i] = binaryString.charCodeAt(i);
             }
 
-            // Decode UTF-8 bytes to string
-            const jsonString = new TextDecoder().decode(utf8Bytes);
+            // Decode UTF-8 bytes to string (compressed)
+            const compressedString = new TextDecoder().decode(utf8Bytes);
+
+            // Decompress
+            const jsonString = this.decompressString(compressedString);
             const data = JSON.parse(jsonString);
 
             // Create new composition with decoded data
