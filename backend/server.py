@@ -8,6 +8,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 import json
+import secrets
+import hashlib
+from datetime import datetime, timedelta
 from openai import OpenAI
 from dotenv import load_dotenv
 
@@ -32,6 +35,72 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 # Load enhanced system prompt from file
 with open(os.path.join(os.path.dirname(__file__), 'system_prompt.txt'), 'r') as f:
     SYSTEM_PROMPT = f.read()
+
+# Share storage configuration
+SHARES_DIR = os.path.join(os.path.dirname(__file__), 'shares')
+SHARE_TTL_DAYS = 90  # Shares expire after 90 days
+
+# Ensure shares directory exists
+os.makedirs(SHARES_DIR, exist_ok=True)
+
+
+def generate_share_id():
+    """Generate a short, URL-safe share ID."""
+    # Generate 6 random bytes, encode as base64, make URL-safe
+    random_bytes = secrets.token_bytes(6)
+    share_id = hashlib.sha256(random_bytes).hexdigest()[:8]  # Use first 8 chars
+    return share_id
+
+
+def generate_edit_token():
+    """Generate a secure edit token."""
+    return secrets.token_urlsafe(16)
+
+
+def save_share(share_id, composition, edit_token):
+    """Save a shared composition to disk."""
+    share_data = {
+        'composition': composition,
+        'edit_token_hash': hashlib.sha256(edit_token.encode()).hexdigest(),
+        'created_at': datetime.now().isoformat(),
+        'updated_at': datetime.now().isoformat(),
+        'expires_at': (datetime.now() + timedelta(days=SHARE_TTL_DAYS)).isoformat()
+    }
+
+    filepath = os.path.join(SHARES_DIR, f'{share_id}.json')
+    with open(filepath, 'w', encoding='utf-8') as f:
+        json.dump(share_data, f, ensure_ascii=False, indent=2)
+
+    return share_data
+
+
+def load_share(share_id):
+    """Load a shared composition from disk."""
+    filepath = os.path.join(SHARES_DIR, f'{share_id}.json')
+
+    if not os.path.exists(filepath):
+        return None
+
+    with open(filepath, 'r', encoding='utf-8') as f:
+        share_data = json.load(f)
+
+    # Check if expired
+    expires_at = datetime.fromisoformat(share_data['expires_at'])
+    if datetime.now() > expires_at:
+        # Delete expired share
+        os.remove(filepath)
+        return None
+
+    return share_data
+
+
+def verify_edit_token(share_data, edit_token):
+    """Verify if the provided edit token matches the stored hash."""
+    if not edit_token:
+        return False
+
+    provided_hash = hashlib.sha256(edit_token.encode()).hexdigest()
+    return provided_hash == share_data['edit_token_hash']
 
 
 @app.route('/api/assistant', methods=['POST'])
@@ -235,6 +304,116 @@ def format_composition_for_gpt(composition, selected_region=None):
         output.append("")
 
     return "\n".join(output)
+
+
+@app.route('/api/share', methods=['POST'])
+def create_or_update_share():
+    """
+    Create a new share or update existing share (if author).
+
+    Request body:
+    {
+        "composition": {...},  // Full composition data
+        "shareId": "abc123",   // Optional: if updating existing share
+        "editToken": "xyz..."  // Optional: proves you're the author
+    }
+
+    Response:
+    {
+        "shareId": "abc123",
+        "editToken": "secret...",  // Only returned on create or if you're author
+        "isAuthor": true,
+        "isNew": true,
+        "expiresAt": "2025-02-11T..."
+    }
+    """
+    try:
+        data = request.get_json()
+
+        if not data or 'composition' not in data:
+            return jsonify({'error': 'Missing composition in request'}), 400
+
+        composition = data['composition']
+        share_id = data.get('shareId')
+        edit_token = data.get('editToken')
+
+        # Check if updating existing share
+        if share_id:
+            existing = load_share(share_id)
+
+            if existing and verify_edit_token(existing, edit_token):
+                # Author updating existing share
+                existing['composition'] = composition
+                existing['updated_at'] = datetime.now().isoformat()
+
+                filepath = os.path.join(SHARES_DIR, f'{share_id}.json')
+                with open(filepath, 'w', encoding='utf-8') as f:
+                    json.dump(existing, f, ensure_ascii=False, indent=2)
+
+                return jsonify({
+                    'shareId': share_id,
+                    'editToken': edit_token,  # Return same token
+                    'isAuthor': True,
+                    'isNew': False,
+                    'expiresAt': existing['expires_at']
+                }), 200
+
+        # Create new share (or fork if no edit token)
+        new_share_id = generate_share_id()
+        new_edit_token = generate_edit_token()
+
+        share_data = save_share(new_share_id, composition, new_edit_token)
+
+        return jsonify({
+            'shareId': new_share_id,
+            'editToken': new_edit_token,
+            'isAuthor': True,
+            'isNew': True,
+            'expiresAt': share_data['expires_at']
+        }), 201
+
+    except Exception as e:
+        print(f"Error creating share: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/share/<share_id>', methods=['GET'])
+def get_share(share_id):
+    """
+    Load a shared composition.
+
+    Query params:
+    - editToken: Optional, proves you're the author
+
+    Response:
+    {
+        "composition": {...},
+        "isAuthor": true/false,
+        "createdAt": "...",
+        "expiresAt": "..."
+    }
+    """
+    try:
+        edit_token = request.args.get('editToken')
+
+        share_data = load_share(share_id)
+
+        if not share_data:
+            return jsonify({'error': 'Share not found or expired'}), 404
+
+        is_author = verify_edit_token(share_data, edit_token)
+
+        return jsonify({
+            'composition': share_data['composition'],
+            'isAuthor': is_author,
+            'createdAt': share_data['created_at'],
+            'updatedAt': share_data['updated_at'],
+            'expiresAt': share_data['expires_at']
+        }), 200
+
+    except Exception as e:
+        print(f"Error loading share: {e}")
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/health', methods=['GET'])

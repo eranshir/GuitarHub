@@ -42,3 +42,6 @@ imagine*.pdf
 *.log
 *.tmp
 checkpoint*.json
+
+# Backend shares storage
+backend/shares/

@@ -70,47 +70,23 @@ class AssistantGame {
         this.loadSettings();
 
         // Check if there's a shared composition in the URL
-        const sharedComposition = CompositionShareUtils.loadFromURL();
-        if (sharedComposition) {
-            this.composition = sharedComposition;
-            this.updateCompositionTitle();
-            this.updateTempoDisplay();
-            this.renderComposition();
+        // First try backend share (new method)
+        const urlParams = new URLSearchParams(window.location.search);
+        const shareId = urlParams.get('share');
 
-            // Switch to composer mode to show the loaded composition
-            // Don't update URL hash here - let app.js handle that from the URL
-            this.mode = 'composer';
-
-            // Update UI elements manually (without calling switchMode which updates hash)
-            document.querySelectorAll('.mode-toggle-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.getElementById('mode-composer')?.classList.add('active');
-
-            const composerControls = document.getElementById('composer-controls-compact');
-            const chordDetector = document.getElementById('composer-chord-detector');
-            const compositionTab = document.getElementById('composition-tab-container');
-            const assistantDisplay = document.getElementById('assistant-display-container');
-            const playbackControls = document.querySelector('.playback-controls');
-            const chordDisplay = document.querySelector('#assistant-module .current-chord-display');
-
-            if (composerControls) composerControls.style.display = 'flex';
-            if (chordDetector) chordDetector.style.display = 'flex';
-            if (compositionTab) compositionTab.style.display = 'block';
-            if (assistantDisplay) assistantDisplay.style.display = 'none';
-            if (playbackControls) playbackControls.style.display = 'none';
-            if (chordDisplay) chordDisplay.style.display = 'none';
-
-            // Show notification
-            const message = window.i18n?.t('composer.loadedFromURL') || 'Composition loaded from shared link!';
-            setTimeout(() => {
-                this.showTransientNotification(message);
-            }, 500);
-
-            console.log('Loaded composition from URL:', sharedComposition.title);
+        if (shareId) {
+            // Load from backend
+            this.loadSharedComposition(shareId);
         } else {
-            // Load saved composition if exists (only if no URL composition)
-            this.loadComposition();
+            // Fallback: try legacy URL encoding method
+            const sharedComposition = CompositionShareUtils.loadFromURL();
+            if (sharedComposition) {
+                this.loadCompositionFromData(sharedComposition, false);
+                console.log('Loaded composition from URL (legacy):', sharedComposition.title);
+            } else {
+                // Load saved composition if exists (only if no URL composition)
+                this.loadComposition();
+            }
         }
     }
 
@@ -1567,6 +1543,111 @@ class AssistantGame {
         }
     }
 
+    async loadSharedComposition(shareId) {
+        try {
+            // Get edit token if we have it
+            const shareInfo = localStorage.getItem(`guitarHub_share_id_${shareId}`);
+            const editToken = shareInfo ? JSON.parse(shareInfo).editToken : null;
+
+            // Call backend API
+            const endpoint = this.apiEndpoint.replace('/api/assistant', `/api/share/${shareId}`);
+            const url = editToken ? `${endpoint}?editToken=${encodeURIComponent(editToken)}` : endpoint;
+
+            const response = await fetch(url);
+
+            if (!response.ok) {
+                if (response.status === 404) {
+                    this.showTransientNotification('Share link expired or not found.');
+                } else {
+                    throw new Error(`Failed to load share: ${response.status}`);
+                }
+                return;
+            }
+
+            const result = await response.json();
+
+            // Load the composition
+            this.loadCompositionFromData(result.composition, result.isAuthor, shareId, editToken);
+
+            // Show notification
+            const authorMsg = result.isAuthor ? ' (You are the author - edits will update this share)' : ' (Read-only - Share button will create your own copy)';
+            const message = (window.i18n?.t('composer.loadedFromURL') || 'Composition loaded from shared link!') + authorMsg;
+
+            setTimeout(() => {
+                this.showTransientNotification(message);
+            }, 500);
+
+            console.log('Loaded shared composition:', shareId, 'isAuthor:', result.isAuthor);
+
+        } catch (error) {
+            console.error('Error loading shared composition:', error);
+            this.showTransientNotification('Failed to load share. Backend may be offline.');
+        }
+    }
+
+    loadCompositionFromData(compositionData, isAuthor = false, shareId = null, editToken = null) {
+        // Create composition from data
+        const composition = new TabComposition();
+        composition.title = compositionData.title;
+        composition.tempo = compositionData.tempo;
+        composition.timeSignature = compositionData.timeSignature;
+        composition.measures = compositionData.measures;
+
+        // Set cursor to end
+        if (composition.measures.length > 0) {
+            composition.currentMeasure = composition.measures.length - 1;
+            const lastMeasure = composition.measures[composition.currentMeasure];
+            let maxTime = 0;
+
+            lastMeasure.events.forEach(event => {
+                const endTime = event.time + event.duration;
+                if (endTime > maxTime) {
+                    maxTime = endTime;
+                }
+            });
+
+            composition.currentTime = maxTime;
+
+            const beatsPerMeasure = composition.getBeatsPerMeasure();
+            if (composition.currentTime >= beatsPerMeasure) {
+                composition.currentTime = 0;
+                composition.currentMeasure++;
+                composition.addMeasure();
+            }
+        }
+
+        this.composition = composition;
+
+        // Store share info if this is a backend share
+        if (shareId && isAuthor && editToken) {
+            localStorage.setItem(`guitarHub_share_id_${shareId}`, JSON.stringify({ editToken }));
+            this.saveShareInfo(shareId, editToken);
+        }
+
+        this.updateCompositionTitle();
+        this.updateTempoDisplay();
+        this.renderComposition();
+
+        // Switch to composer mode
+        this.mode = 'composer';
+        document.querySelectorAll('.mode-toggle-btn').forEach(btn => btn.classList.remove('active'));
+        document.getElementById('mode-composer')?.classList.add('active');
+
+        const composerControls = document.getElementById('composer-controls-compact');
+        const chordDetector = document.getElementById('composer-chord-detector');
+        const compositionTab = document.getElementById('composition-tab-container');
+        const assistantDisplay = document.getElementById('assistant-display-container');
+        const playbackControls = document.querySelector('.playback-controls');
+        const chordDisplay = document.querySelector('#assistant-module .current-chord-display');
+
+        if (composerControls) composerControls.style.display = 'flex';
+        if (chordDetector) chordDetector.style.display = 'flex';
+        if (compositionTab) compositionTab.style.display = 'block';
+        if (assistantDisplay) assistantDisplay.style.display = 'none';
+        if (playbackControls) playbackControls.style.display = 'none';
+        if (chordDisplay) chordDisplay.style.display = 'none';
+    }
+
     loadCompositionByName(name) {
         const storageKey = `guitarHub_composition_${name}`;
         const data = localStorage.getItem(storageKey);
@@ -1591,34 +1672,98 @@ class AssistantGame {
         }
     }
 
-    shareComposition() {
+    async shareComposition() {
         if (this.composition.measures.length === 0) {
             this.showTransientNotification('Nothing to share! Compose something first.');
             return;
         }
 
         try {
-            // Generate shareable URL
-            const shareURL = CompositionShareUtils.generateShareURL(this.composition);
+            // Show loading state
+            this.showTransientNotification('Creating share link...');
 
-            // Try to copy to clipboard
+            // Get current share info if this composition was loaded from a share
+            const currentShareInfo = this.getShareInfo();
+
+            // Call backend API to create/update share
+            const endpoint = this.apiEndpoint.replace('/api/assistant', '/api/share');
+
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    composition: {
+                        title: this.composition.title,
+                        tempo: this.composition.tempo,
+                        timeSignature: this.composition.timeSignature,
+                        measures: this.composition.measures
+                    },
+                    shareId: currentShareInfo?.shareId,
+                    editToken: currentShareInfo?.editToken
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Share API error: ${response.status}`);
+            }
+
+            const result = await response.json();
+
+            // Store edit token locally
+            this.saveShareInfo(result.shareId, result.editToken);
+
+            // Generate shareable URL
+            const shareURL = this.generateBackendShareURL(result.shareId);
+
+            // Copy to clipboard
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(shareURL).then(() => {
-                    // Get translated message
-                    const message = window.i18n?.t('composer.shareSuccess') || 'Link copied to clipboard!';
-                    this.showTransientNotification(message);
-                }).catch(err => {
-                    console.error('Failed to copy to clipboard:', err);
-                    this.showShareURLDialog(shareURL);
-                });
+                await navigator.clipboard.writeText(shareURL);
+
+                const message = result.isNew
+                    ? (window.i18n?.t('composer.shareSuccess') || 'Link copied to clipboard!')
+                    : 'Share link updated and copied!';
+
+                this.showTransientNotification(message + ` (Expires: ${new Date(result.expiresAt).toLocaleDateString()})`);
             } else {
                 // Fallback for browsers that don't support clipboard API
                 this.showShareURLDialog(shareURL);
             }
+
+            console.log('Share created/updated:', result);
+
         } catch (error) {
-            console.error('Error generating share URL:', error);
-            this.showTransientNotification('Failed to generate share link. Try again.');
+            console.error('Error sharing composition:', error);
+            this.showTransientNotification('Failed to create share link. Check if backend is running.');
         }
+    }
+
+    generateBackendShareURL(shareId) {
+        // Build clean URL with share ID
+        let pathname = window.location.pathname;
+        if (pathname.endsWith('index.html')) {
+            pathname = pathname.replace(/index\.html$/, '');
+        }
+        if (!pathname.endsWith('/')) {
+            pathname += '/';
+        }
+
+        const baseURL = window.location.origin + pathname;
+        return `${baseURL}?share=${shareId}#assistant/composer`;
+    }
+
+    getShareInfo() {
+        // Get stored share info for this composition
+        const key = `guitarHub_share_${this.composition.title}`;
+        const stored = localStorage.getItem(key);
+        return stored ? JSON.parse(stored) : null;
+    }
+
+    saveShareInfo(shareId, editToken) {
+        // Store share info for this composition
+        const key = `guitarHub_share_${this.composition.title}`;
+        localStorage.setItem(key, JSON.stringify({ shareId, editToken }));
     }
 
     showShareURLDialog(url) {
