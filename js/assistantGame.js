@@ -78,7 +78,28 @@ class AssistantGame {
             this.renderComposition();
 
             // Switch to composer mode to show the loaded composition
-            this.switchMode('composer');
+            // Don't update URL hash here - let app.js handle that from the URL
+            this.mode = 'composer';
+
+            // Update UI elements manually (without calling switchMode which updates hash)
+            document.querySelectorAll('.mode-toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('mode-composer')?.classList.add('active');
+
+            const composerControls = document.getElementById('composer-controls-compact');
+            const chordDetector = document.getElementById('composer-chord-detector');
+            const compositionTab = document.getElementById('composition-tab-container');
+            const assistantDisplay = document.getElementById('assistant-display-container');
+            const playbackControls = document.querySelector('.playback-controls');
+            const chordDisplay = document.querySelector('#assistant-module .current-chord-display');
+
+            if (composerControls) composerControls.style.display = 'flex';
+            if (chordDetector) chordDetector.style.display = 'flex';
+            if (compositionTab) compositionTab.style.display = 'block';
+            if (assistantDisplay) assistantDisplay.style.display = 'none';
+            if (playbackControls) playbackControls.style.display = 'none';
+            if (chordDisplay) chordDisplay.style.display = 'none';
 
             // Show notification
             const message = window.i18n?.t('composer.loadedFromURL') || 'Composition loaded from shared link!';
