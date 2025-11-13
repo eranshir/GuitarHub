@@ -493,9 +493,21 @@ class CompositionShareUtils {
             version: "1.0"
         };
 
-        // Convert to JSON, then base64 encode, then make URL-safe
+        // Convert to JSON, then UTF-8 encode, then base64 encode, then make URL-safe
         const jsonString = JSON.stringify(data);
-        const base64 = btoa(jsonString);
+
+        // Convert to UTF-8 bytes first to handle Unicode characters
+        const utf8Bytes = new TextEncoder().encode(jsonString);
+
+        // Convert bytes to binary string
+        let binaryString = '';
+        for (let i = 0; i < utf8Bytes.length; i++) {
+            binaryString += String.fromCharCode(utf8Bytes[i]);
+        }
+
+        // Now base64 encode
+        const base64 = btoa(binaryString);
+
         // Make URL-safe by replacing characters
         const urlSafe = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 
@@ -513,8 +525,17 @@ class CompositionShareUtils {
                 base64 += '=';
             }
 
-            // Decode base64 and parse JSON
-            const jsonString = atob(base64);
+            // Decode base64 to binary string
+            const binaryString = atob(base64);
+
+            // Convert binary string to UTF-8 bytes
+            const utf8Bytes = new Uint8Array(binaryString.length);
+            for (let i = 0; i < binaryString.length; i++) {
+                utf8Bytes[i] = binaryString.charCodeAt(i);
+            }
+
+            // Decode UTF-8 bytes to string
+            const jsonString = new TextDecoder().decode(utf8Bytes);
             const data = JSON.parse(jsonString);
 
             // Create new composition with decoded data
