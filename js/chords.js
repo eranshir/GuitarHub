@@ -2144,6 +2144,24 @@ class ChordTheory {
         return { matchedCount, totalScore };
     }
 
+    // Helper to normalize chord name case (e.g., "c#m" -> "C#m", "CM7" -> "Cmaj7")
+    normalizeChordCase(chordName) {
+        if (!chordName) return chordName;
+
+        // Capitalize first letter (root note)
+        let normalized = chordName.charAt(0).toUpperCase() + chordName.slice(1);
+
+        // Handle common case variations in chord qualities
+        // "M" followed by number should be "maj" (e.g., "CM7" -> "Cmaj7")
+        normalized = normalized.replace(/^([A-G][#♭]?)M(\d)/, '$1maj$2');
+
+        // Lowercase "m" for minor (but not "M" for major which we handle above)
+        // Only if it's after the root note and not part of "maj"
+        normalized = normalized.replace(/^([A-G][#♭]?)M([^a-z0-9]|$)/, '$1$2'); // Remove standalone M
+
+        return normalized;
+    }
+
     // Case-insensitive chord lookup with 'b' as alternative to '♭'
     getChord(chordName) {
         if (!chordName) return null;
@@ -2163,6 +2181,19 @@ class ChordTheory {
         // Try normalized exact match
         if (this.chords[normalizedName]) {
             return this.chords[normalizedName];
+        }
+
+        // Try case-insensitive match (normalize to proper case)
+        // Convert first letter to uppercase, keep # and ♭, lowercase quality indicators
+        const properCaseName = this.normalizeChordCase(chordName);
+        if (properCaseName !== chordName && this.chords[properCaseName]) {
+            return this.chords[properCaseName];
+        }
+
+        // Try normalized + proper case
+        const properNormalizedName = this.normalizeChordCase(normalizedName);
+        if (properNormalizedName !== normalizedName && this.chords[properNormalizedName]) {
+            return this.chords[properNormalizedName];
         }
 
         // Try case-insensitive match by key
