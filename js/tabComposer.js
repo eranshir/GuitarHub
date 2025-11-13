@@ -582,6 +582,9 @@ class CompositionShareUtils {
 
         // Build base URL without index.html (for cleaner, more compatible URLs)
         let pathname = window.location.pathname;
+
+        console.log('Original pathname:', pathname);
+
         if (pathname.endsWith('index.html')) {
             pathname = pathname.replace(/index\.html$/, '');
         }
@@ -591,9 +594,14 @@ class CompositionShareUtils {
             pathname += '/';
         }
 
+        console.log('Final pathname:', pathname);
+
         const baseURL = window.location.origin + pathname;
-        // Always include the assistant/composer hash so the page loads the right module
-        return `${baseURL}?tab=${encoded}#assistant/composer`;
+        const finalURL = `${baseURL}?tab=${encoded}#assistant/composer`;
+
+        console.log('Generated share URL:', finalURL);
+
+        return finalURL;
     }
 
     // Load composition from URL parameters
