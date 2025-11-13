@@ -579,7 +579,14 @@ class CompositionShareUtils {
     // Generate shareable URL for current composition
     static generateShareURL(composition) {
         const encoded = this.encodeComposition(composition);
-        const baseURL = window.location.origin + window.location.pathname;
+
+        // Build base URL without index.html (for cleaner, more compatible URLs)
+        let pathname = window.location.pathname;
+        if (pathname.endsWith('index.html')) {
+            pathname = pathname.replace(/index\.html$/, '');
+        }
+
+        const baseURL = window.location.origin + pathname;
         // Always include the assistant/composer hash so the page loads the right module
         return `${baseURL}?tab=${encoded}#assistant/composer`;
     }
