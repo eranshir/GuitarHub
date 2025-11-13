@@ -586,6 +586,11 @@ class CompositionShareUtils {
             pathname = pathname.replace(/index\.html$/, '');
         }
 
+        // Ensure pathname ends with / to avoid nginx redirect issues
+        if (!pathname.endsWith('/')) {
+            pathname += '/';
+        }
+
         const baseURL = window.location.origin + pathname;
         // Always include the assistant/composer hash so the page loads the right module
         return `${baseURL}?tab=${encoded}#assistant/composer`;
