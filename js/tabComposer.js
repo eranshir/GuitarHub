@@ -580,7 +580,8 @@ class CompositionShareUtils {
     static generateShareURL(composition) {
         const encoded = this.encodeComposition(composition);
         const baseURL = window.location.origin + window.location.pathname;
-        return `${baseURL}?tab=${encoded}`;
+        // Always include the assistant/composer hash so the page loads the right module
+        return `${baseURL}?tab=${encoded}#assistant/composer`;
     }
 
     // Load composition from URL parameters
