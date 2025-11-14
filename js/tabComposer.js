@@ -481,6 +481,189 @@ class FretboardState {
 }
 
 
+// Radial Menu for TAB Note Editing
+class RadialNoteMenu {
+    constructor(onSelect, onCancel) {
+        this.onSelect = onSelect; // Callback: (fret, duration) => void
+        this.onCancel = onCancel; // Callback: () => void
+        this.container = null;
+        this.targetElement = null;
+    }
+
+    show(x, y, targetElement, currentFret = null) {
+        this.targetElement = targetElement;
+        this.hide(); // Remove any existing menu
+
+        this.container = document.createElement('div');
+        this.container.className = 'radial-note-menu';
+        this.container.style.left = `${x}px`;
+        this.container.style.top = `${y}px`;
+
+        // Inner ring: Frets 0-12
+        const innerRing = this.createFretRing(0, 12, 60, currentFret);
+        this.container.appendChild(innerRing);
+
+        // Outer ring: Frets 13-24 (top half) + Duration controls (bottom half)
+        const outerRing = this.createOuterRing(currentFret);
+        this.container.appendChild(outerRing);
+
+        // Center indicator
+        const center = document.createElement('div');
+        center.className = 'radial-menu-center';
+        center.textContent = currentFret !== null ? currentFret : '?';
+        this.container.appendChild(center);
+
+        document.body.appendChild(this.container);
+
+        // Setup cancel handlers
+        this.setupCancelHandlers();
+
+        // Animate in
+        setTimeout(() => {
+            this.container.classList.add('show');
+        }, 10);
+    }
+
+    createFretRing(startFret, endFret, radius, currentFret) {
+        const ring = document.createElement('div');
+        ring.className = 'radial-ring inner-ring';
+
+        const fretCount = endFret - startFret + 1;
+        const angleStep = (2 * Math.PI) / fretCount;
+
+        for (let i = 0; i <= endFret - startFret; i++) {
+            const fret = startFret + i;
+            const angle = angleStep * i - Math.PI / 2; // Start at top
+
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            const button = document.createElement('button');
+            button.className = 'radial-menu-item fret-button';
+            if (fret === currentFret) {
+                button.classList.add('current');
+            }
+            button.textContent = fret;
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.onSelect(fret, null); // Select fret only
+                this.hide();
+            });
+
+            ring.appendChild(button);
+        }
+
+        return ring;
+    }
+
+    createOuterRing(currentFret) {
+        const ring = document.createElement('div');
+        ring.className = 'radial-ring outer-ring';
+        const radius = 110;
+
+        // Top half: Frets 13-24
+        const highFrets = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        const fretAngleStep = Math.PI / (highFrets.length + 1);
+
+        highFrets.forEach((fret, i) => {
+            const angle = Math.PI + fretAngleStep * (i + 1); // Bottom half of circle
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            const button = document.createElement('button');
+            button.className = 'radial-menu-item fret-button small';
+            if (fret === currentFret) {
+                button.classList.add('current');
+            }
+            button.textContent = fret;
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.onSelect(fret, null);
+                this.hide();
+            });
+
+            ring.appendChild(button);
+        });
+
+        // Top half: Duration buttons
+        const durations = [
+            { value: 0.125, label: '♪', title: 'Eighth note' },
+            { value: 0.25, label: '♩', title: 'Quarter note' },
+            { value: 0.5, label: '𝅗𝅥', title: 'Half note' },
+            { value: 1, label: '𝅝', title: 'Whole note' }
+        ];
+        const durationAngleStep = Math.PI / (durations.length + 1);
+
+        durations.forEach((dur, i) => {
+            const angle = -fretAngleStep * (i + 1); // Top half of circle
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            const button = document.createElement('button');
+            button.className = 'radial-menu-item duration-button';
+            button.textContent = dur.label;
+            button.title = dur.title;
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.onSelect(null, dur.value);
+                this.hide();
+            });
+
+            ring.appendChild(button);
+        });
+
+        return ring;
+    }
+
+    setupCancelHandlers() {
+        // Click outside to cancel
+        const clickHandler = (e) => {
+            if (!this.container?.contains(e.target)) {
+                this.hide();
+            }
+        };
+        setTimeout(() => {
+            document.addEventListener('click', clickHandler, { once: true });
+        }, 100);
+
+        // ESC key to cancel
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                this.hide();
+            }
+        };
+        document.addEventListener('keydown', escHandler, { once: true });
+
+        // Store handlers for cleanup
+        this._clickHandler = clickHandler;
+        this._escHandler = escHandler;
+    }
+
+    hide() {
+        if (this.container) {
+            this.container.classList.remove('show');
+            setTimeout(() => {
+                this.container?.remove();
+                this.container = null;
+            }, 200);
+
+            if (this.onCancel) {
+                this.onCancel();
+            }
+        }
+    }
+}
+
+
 // URL Encoding/Decoding Utilities for sharing compositions
 class CompositionShareUtils {
     // Simplified LZ-string compression (basic run-length encoding)

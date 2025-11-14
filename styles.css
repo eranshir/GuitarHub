@@ -3852,3 +3852,111 @@ body.rtl .mobile-header {
     background: #1e2d3d;
     transform: translateY(-1px);
 }
+
+/* ===== Radial Note Menu ===== */
+.radial-note-menu {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+}
+
+.radial-note-menu.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.radial-ring {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.radial-menu-item {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    background: white;
+    color: var(--text-color);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 10001;
+}
+
+.radial-menu-item:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translate(-50%, -50%) scale(1.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.radial-menu-item.current {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.3);
+}
+
+.radial-menu-item.small {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+}
+
+.radial-menu-item.duration-button {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    border-color: var(--accent-color);
+}
+
+.radial-menu-item.duration-button:hover {
+    background: var(--accent-color);
+}
+
+.radial-menu-center {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 10002;
+}
+
+/* Make TAB lines clickable in composer mode */
+.tab-line {
+    cursor: crosshair;
+    position: relative;
+}
+
+.tab-note {
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.tab-note:hover {
+    transform: scale(1.2);
+    color: var(--accent-color);
+    font-weight: 700;
+}

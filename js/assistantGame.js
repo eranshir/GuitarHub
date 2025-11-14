@@ -36,6 +36,7 @@ class AssistantGame {
         this.selectedDuration = 0.25; // Default: quarter note
         this.detectedChord = null;
         this.editContext = null; // {measureIndex, time, originalEvents} when editing
+        this.radialMenu = null; // Radial menu for direct TAB editing
 
         // Playback state for composition
         this.isPlayingComposition = false;
@@ -103,11 +104,71 @@ class AssistantGame {
 
         // Set up note click handler for editing
         this.tabRenderer.setNoteClickHandler((measureIndex, event) => {
-            this.loadNoteForEditing(measureIndex, event);
+            this.handleNoteClickForRadialEdit(measureIndex, event);
         });
+
+        // Initialize radial menu
+        this.radialMenu = new RadialNoteMenu(
+            (fret, duration) => this.handleRadialMenuSelection(fret, duration),
+            () => this.handleRadialMenuCancel()
+        );
 
         // Set up drag selection
         this.setupDragSelection();
+
+        // Set up direct TAB line editing (add notes by clicking empty space)
+        this.setupDirectTABEditing();
+    }
+
+    setupDirectTABEditing() {
+        const container = document.getElementById('composition-tab-display');
+        if (!container) return;
+
+        // Use event delegation for dynamically created TAB lines
+        container.addEventListener('click', (e) => {
+            if (this.mode !== 'composer') return;
+
+            // Check if clicking on a TAB line (not a note, not a button)
+            const tabLine = e.target.closest('.tab-line');
+            if (!tabLine || e.target.closest('.tab-note') || e.target.closest('button')) return;
+
+            // Get string number from parent
+            const stringLine = tabLine.closest('.tab-string-line');
+            if (!stringLine) return;
+
+            const stringNum = parseInt(stringLine.dataset.string);
+            const measureDiv = stringLine.closest('.tab-measure');
+            if (!measureDiv) return;
+
+            const measureIndex = parseInt(measureDiv.dataset.measureIndex);
+
+            // Calculate which time position was clicked (based on horizontal position)
+            const rect = tabLine.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const position = Math.round(clickX / 50); // 50px per note
+
+            // Calculate time based on position
+            const measure = this.composition.measures[measureIndex];
+            if (!measure) return;
+
+            // Find if there's already a note at this position on any string
+            const allTimes = this.getAllTimesInMeasure(measure);
+            const time = allTimes[position] !== undefined ? allTimes[position] : position * 0.25; // Default to quarter note spacing
+
+            // Show radial menu to add new note
+            this.showRadialMenuForNewNote(e.clientX, e.clientY, measureIndex, stringNum, time);
+        });
+    }
+
+    getAllTimesInMeasure(measure) {
+        // Get all unique time positions in this measure
+        const times = new Set();
+        measure.events.forEach(event => {
+            if (event && event.time !== null && event.time !== undefined) {
+                times.add(event.time);
+            }
+        });
+        return Array.from(times).sort((a, b) => a - b);
     }
 
     setupDragSelection() {
@@ -1439,6 +1500,135 @@ class AssistantGame {
         if (this.tabRenderer) {
             this.tabRenderer.render(this.composition);
         }
+    }
+
+    handleNoteClickForRadialEdit(measureIndex, event) {
+        // Get the note element that was clicked
+        const noteEl = document.querySelector(`.tab-note[data-measure-index="${measureIndex}"][data-time="${event.time}"][data-string="${event.string}"]`);
+
+        if (noteEl) {
+            const rect = noteEl.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            // Store editing context
+            this.radialEditContext = {
+                measureIndex,
+                event,
+                noteElement: noteEl
+            };
+
+            // Load all notes at this time onto fretboard for visual context
+            const measure = this.composition.measures[measureIndex];
+            const notesAtSameTime = measure.events.filter(e =>
+                Math.abs(e.time - event.time) < 0.001
+            );
+
+            this.fretboardState.clear();
+            notesAtSameTime.forEach(note => {
+                this.fretboardState.addNote(note.string, note.fret);
+            });
+            this.displayComposerFretboard();
+
+            // Show radial menu
+            this.radialMenu.show(x, y, noteEl, event.fret);
+        }
+    }
+
+    showRadialMenuForNewNote(x, y, measureIndex, stringNum, time) {
+        // Store context for adding new note
+        this.radialEditContext = {
+            measureIndex,
+            stringNum,
+            time,
+            isNew: true
+        };
+
+        // Show radial menu for selecting fret
+        this.radialMenu.show(x, y, null, null);
+    }
+
+    handleRadialMenuSelection(fret, duration) {
+        if (!this.radialEditContext) return;
+
+        const ctx = this.radialEditContext;
+
+        if (fret !== null) {
+            // Fret selected - add or update note
+            if (ctx.isNew) {
+                // Adding new note
+                const measure = this.composition.measures[ctx.measureIndex];
+                if (measure) {
+                    measure.events.push({
+                        time: ctx.time,
+                        string: ctx.stringNum,
+                        fret: fret,
+                        duration: this.selectedDuration,
+                        leftFinger: null
+                    });
+
+                    this.showTransientNotification(`Added note: String ${ctx.stringNum}, Fret ${fret}`);
+                }
+            } else {
+                // Editing existing note
+                const measure = this.composition.measures[ctx.measureIndex];
+                if (measure) {
+                    const noteToEdit = measure.events.find(e =>
+                        e.string === ctx.event.string &&
+                        Math.abs(e.time - ctx.event.time) < 0.001
+                    );
+
+                    if (noteToEdit) {
+                        noteToEdit.fret = fret;
+                        this.showTransientNotification(`Updated to fret ${fret}`);
+
+                        // Update fretboard display
+                        this.fretboardState.clear();
+                        const notesAtSameTime = measure.events.filter(e =>
+                            Math.abs(e.time - ctx.event.time) < 0.001
+                        );
+                        notesAtSameTime.forEach(note => {
+                            this.fretboardState.addNote(note.string, note.fret);
+                        });
+                        this.displayComposerFretboard();
+                    }
+                }
+            }
+
+            // Re-render and save
+            this.renderComposition();
+            this.autoSaveComposition();
+        }
+
+        if (duration !== null) {
+            // Duration selected - update note duration
+            if (!ctx.isNew && ctx.event) {
+                const measure = this.composition.measures[ctx.measureIndex];
+                const noteToEdit = measure.events.find(e =>
+                    e.string === ctx.event.string &&
+                    Math.abs(e.time - ctx.event.time) < 0.001
+                );
+
+                if (noteToEdit) {
+                    noteToEdit.duration = duration;
+                    this.showTransientNotification(`Duration updated`);
+                    this.renderComposition();
+                    this.autoSaveComposition();
+                }
+            }
+        }
+
+        this.radialEditContext = null;
+    }
+
+    handleRadialMenuCancel() {
+        // Clear fretboard if we were editing
+        if (this.radialEditContext && !this.radialEditContext.isNew) {
+            this.fretboardState.clear();
+            this.displayComposerFretboard();
+        }
+
+        this.radialEditContext = null;
     }
 
     loadNoteForEditing(measureIndex, event) {
