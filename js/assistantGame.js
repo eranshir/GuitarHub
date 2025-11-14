@@ -1598,6 +1598,9 @@ class AssistantGame {
             // Re-render and save
             this.renderComposition();
             this.autoSaveComposition();
+
+            // Ensure there's space for next note by adding measures if needed
+            this.ensureMeasureCapacity();
         }
 
         if (duration !== null) {
@@ -1629,6 +1632,18 @@ class AssistantGame {
         }
 
         this.radialEditContext = null;
+    }
+
+    ensureMeasureCapacity() {
+        // Make sure we always have at least one empty measure at the end
+        // This ensures users can always add more notes
+        const lastMeasure = this.composition.measures[this.composition.measures.length - 1];
+
+        if (!lastMeasure || lastMeasure.events.length > 0) {
+            // Last measure has notes, add a new empty one
+            this.composition.addMeasure();
+            this.renderComposition();
+        }
     }
 
     loadNoteForEditing(measureIndex, event) {

@@ -591,23 +591,54 @@ class RadialNoteMenu {
             ring.appendChild(button);
         });
 
-        // Top half: Duration buttons
+        // Top half: Duration buttons with SVG icons
         const durations = [
-            { value: 0.125, label: '♪', title: 'Eighth note' },
-            { value: 0.25, label: '♩', title: 'Quarter note' },
-            { value: 0.5, label: '𝅗𝅥', title: 'Half note' },
-            { value: 1, label: '𝅝', title: 'Whole note' }
+            {
+                value: 0.0625,
+                title: 'Sixteenth note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z M11.5 5 Q15 7 15 10 L11.5 9 Z"/></svg>'
+            },
+            {
+                value: 0.125,
+                title: 'Eighth note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/></svg>'
+            },
+            {
+                value: 0.375,
+                title: 'Dotted eighth note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/><circle cx="13" cy="16" r="1.2"/></svg>'
+            },
+            {
+                value: 0.25,
+                title: 'Quarter note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/></svg>'
+            },
+            {
+                value: 0.5,
+                title: 'Half note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>'
+            },
+            {
+                value: 0.75,
+                title: 'Dotted half note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="16" r="1.2"/></svg>'
+            },
+            {
+                value: 1,
+                title: 'Whole note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>'
+            }
         ];
         const durationAngleStep = Math.PI / (durations.length + 1);
 
         durations.forEach((dur, i) => {
-            const angle = -fretAngleStep * (i + 1); // Top half of circle
+            const angle = -durationAngleStep * (i + 1); // Top half of circle
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
 
             const button = document.createElement('button');
             button.className = 'radial-menu-item duration-button';
-            button.textContent = dur.label;
+            button.innerHTML = dur.svg;
             button.title = dur.title;
             button.style.left = `${x}px`;
             button.style.top = `${y}px`;
@@ -625,7 +656,7 @@ class RadialNoteMenu {
     }
 
     setupCancelHandlers() {
-        // Click outside to cancel
+        // Click outside to cancel - delay to avoid catching the click that opened the menu
         const clickHandler = (e) => {
             if (!this.container?.contains(e.target)) {
                 this.hide();
@@ -633,7 +664,7 @@ class RadialNoteMenu {
         };
         setTimeout(() => {
             document.addEventListener('click', clickHandler, { once: true });
-        }, 100);
+        }, 300); // Increased delay to prevent immediate dismissal
 
         // ESC key to cancel
         const escHandler = (e) => {

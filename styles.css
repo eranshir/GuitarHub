@@ -3479,6 +3479,10 @@ body.rtl .mobile-header {
     transform: translateY(-50%) scale(1.1);
 }
 
+.tab-note:active {
+    transform: translateY(-50%) scale(1.0);
+}
+
 .tab-note.playing {
     background: #27ae60;
     color: white;
@@ -3915,10 +3919,16 @@ body.rtl .mobile-header {
 }
 
 .radial-menu-item.duration-button {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     font-size: 18px;
     border-color: var(--accent-color);
+    padding: 4px;
+}
+
+.radial-menu-item.duration-button svg {
+    width: 100%;
+    height: 100%;
 }
 
 .radial-menu-item.duration-button:hover {
@@ -3959,4 +3969,8 @@ body.rtl .mobile-header {
     transform: scale(1.2);
     color: var(--accent-color);
     font-weight: 700;
+}
+
+.tab-note:active {
+    transform: scale(1.0);
 }
