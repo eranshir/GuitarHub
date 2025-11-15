@@ -133,16 +133,48 @@ class AssistantGame {
         container.addEventListener('click', (e) => {
             if (this.mode !== 'composer') return;
 
-            console.log('Container clicked, target:', e.target, 'classList:', e.target.classList);
-            console.log('Closest tab-note:', e.target.closest('.tab-note'));
-            console.log('Closest tab-line:', e.target.closest('.tab-line'));
+            // Check if clicking on or near a note element
+            let clickedNote = e.target.closest('.tab-note');
 
-            // Check if clicking on a TAB line (not a note, not a button)
-            const tabLine = e.target.closest('.tab-line');
-            if (!tabLine || e.target.closest('.tab-note') || e.target.closest('button')) {
-                console.log('Returning early - clicked on note/button or no tab-line');
+            // If not directly on note, check if there's a note at the click position
+            if (!clickedNote) {
+                const tabLine = e.target.closest('.tab-line');
+                if (tabLine) {
+                    // Get all notes in this line
+                    const notes = tabLine.querySelectorAll('.tab-note');
+                    const rect = tabLine.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+
+                    // Find if we clicked on a note position (within 20px)
+                    notes.forEach(note => {
+                        const noteLeft = parseFloat(note.style.left);
+                        if (Math.abs(clickX - noteLeft) < 20) {
+                            clickedNote = note;
+                        }
+                    });
+                }
+            }
+
+            // If clicked on a note, trigger note edit
+            if (clickedNote) {
+                console.log('Clicked on note element:', clickedNote);
+                e.stopPropagation();
+
+                const measureIndex = parseInt(clickedNote.closest('[data-measure-index]').dataset.measureIndex);
+                const event = {
+                    time: parseFloat(clickedNote.dataset.time),
+                    string: parseInt(clickedNote.dataset.string),
+                    fret: parseInt(clickedNote.dataset.fret),
+                    duration: parseFloat(clickedNote.dataset.duration)
+                };
+
+                this.handleNoteClickForRadialEdit(measureIndex, event, e);
                 return;
             }
+
+            // Otherwise, adding new note on empty space
+            const tabLine = e.target.closest('.tab-line');
+            if (!tabLine || e.target.closest('button')) return;
 
             // Stop propagation to prevent click-outside handler from firing
             e.stopPropagation();
