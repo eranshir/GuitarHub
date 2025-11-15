@@ -9,6 +9,9 @@ class TabComposition {
         this.measures = [];
         this.currentMeasure = 0;
         this.currentTime = 0; // Current position in beats within measure
+
+        // Start with one empty measure so users can click on TAB immediately
+        this.addMeasure();
     }
 
     addEvent(string, fret, duration, leftFinger = null, timeOverride = null) {
