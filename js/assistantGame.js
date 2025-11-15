@@ -189,7 +189,7 @@ class AssistantGame {
         container.addEventListener('mousedown', (e) => {
             // Only in composer mode and if not clicking on a note/button
             if (this.mode !== 'composer') return;
-            if (e.target.closest('.tab-note') || e.target.closest('button')) return;
+            if (e.target.closest('.tab-note') || e.target.closest('button') || e.target.closest('.duration-symbol')) return;
 
             this.isSelecting = true;
             startX = e.clientX;
@@ -1511,6 +1511,8 @@ class AssistantGame {
     }
 
     handleNoteClickForRadialEdit(measureIndex, event, clickEvent) {
+        console.log('handleNoteClickForRadialEdit called:', { measureIndex, event });
+
         // Stop propagation to prevent click-outside handler
         if (clickEvent) {
             clickEvent.stopPropagation();
