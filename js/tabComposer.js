@@ -522,7 +522,9 @@ class RadialNoteMenu {
         this.container.appendChild(outerRing);
 
         // Delete button at top (only show if editing existing note)
+        console.log('Showing radial menu, currentFret:', currentFret);
         if (currentFret !== null) {
+            console.log('Creating delete button');
             const deleteButton = this.createDeleteButton();
             this.container.appendChild(deleteButton);
         }
