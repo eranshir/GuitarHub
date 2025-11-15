@@ -3957,11 +3957,17 @@ body.rtl .mobile-header {
 /* Make TAB lines clickable in composer mode - increased hit area */
 .tab-line {
     cursor: crosshair;
-    position: relative;
-    /* Keep height at 1px for visual, but add transparent border for click area */
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    /* This creates a 17px total clickable height (8 + 1 + 8) */
+}
+
+/* Invisible click area overlay - keeps line visually thin but clickable */
+.tab-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -8px;
+    bottom: -8px;
+    /* Creates 17px clickable height while line stays 1px */
 }
 
 .tab-string-line {
