@@ -521,6 +521,12 @@ class RadialNoteMenu {
         const outerRing = this.createHighFretRing(currentFret);
         this.container.appendChild(outerRing);
 
+        // Delete button at top (only show if editing existing note)
+        if (currentFret !== null) {
+            const deleteButton = this.createDeleteButton();
+            this.container.appendChild(deleteButton);
+        }
+
         // Center indicator
         const center = document.createElement('div');
         center.className = 'radial-menu-center';
@@ -594,6 +600,29 @@ class RadialNoteMenu {
         }
 
         return ring;
+    }
+
+    createDeleteButton() {
+        const radius = 140; // Further out than outer ring
+        const angle = -Math.PI / 2; // Top position
+
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
+
+        const button = document.createElement('button');
+        button.className = 'radial-menu-item delete-button';
+        button.innerHTML = '🗑️'; // Trash icon
+        button.title = 'Delete note';
+        button.style.left = `${x}px`;
+        button.style.top = `${y}px`;
+
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.onSelect('DELETE', null); // Special value to indicate deletion
+            this.hide();
+        });
+
+        return button;
     }
 
     createHighFretRing(currentFret) {

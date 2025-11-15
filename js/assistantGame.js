@@ -1568,7 +1568,29 @@ class AssistantGame {
 
         const ctx = this.radialEditContext;
 
-        if (fret !== null) {
+        if (fret === 'DELETE') {
+            // Delete note
+            if (ctx && !ctx.isNew && ctx.event) {
+                const measure = this.composition.measures[ctx.measureIndex];
+                if (measure) {
+                    // Remove the note
+                    measure.events = measure.events.filter(e =>
+                        !(e.string === ctx.event.string && Math.abs(e.time - ctx.event.time) < 0.001)
+                    );
+
+                    // Reflow to close the gap
+                    this.reflowMeasure(ctx.measureIndex);
+
+                    this.showTransientNotification(`Note deleted`);
+                    this.renderComposition();
+                    this.autoSaveComposition();
+                }
+            }
+            this.radialEditContext = null;
+            return;
+        }
+
+        if (fret !== null && fret !== 'DELETE') {
             // Fret selected - add or update note
             if (ctx.isNew) {
                 // Adding new note

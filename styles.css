@@ -3943,6 +3943,20 @@ body.rtl .mobile-header {
     background: var(--accent-color);
 }
 
+.radial-menu-item.delete-button {
+    width: 38px;
+    height: 38px;
+    font-size: 20px;
+    border-color: #e74c3c;
+    background: #ffe6e6;
+}
+
+.radial-menu-item.delete-button:hover {
+    background: #e74c3c;
+    color: white;
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
 .radial-menu-center {
     position: absolute;
     left: 0;
