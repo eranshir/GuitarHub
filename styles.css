@@ -3954,16 +3954,18 @@ body.rtl .mobile-header {
     z-index: 10002;
 }
 
-/* Make TAB lines clickable in composer mode */
+/* Make TAB lines clickable in composer mode - increased hit area */
 .tab-line {
     cursor: crosshair;
     position: relative;
-    padding: 10px 0; /* Increase clickable area vertically */
-    margin: -10px 0; /* Compensate for padding to maintain visual spacing */
+    /* Keep height at 1px for visual, but add transparent border for click area */
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    /* This creates a 17px total clickable height (8 + 1 + 8) */
 }
 
 .tab-string-line {
-    margin: 6px 0; /* Add spacing between strings for easier clicking */
+    margin: 3px 0; /* Add spacing between strings for easier clicking */
 }
 
 .tab-note {

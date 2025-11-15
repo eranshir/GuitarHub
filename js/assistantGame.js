@@ -132,6 +132,9 @@ class AssistantGame {
             const tabLine = e.target.closest('.tab-line');
             if (!tabLine || e.target.closest('.tab-note') || e.target.closest('button')) return;
 
+            // Stop propagation to prevent click-outside handler from firing
+            e.stopPropagation();
+
             // Get string number from parent
             const stringLine = tabLine.closest('.tab-string-line');
             if (!stringLine) return;
@@ -1502,9 +1505,14 @@ class AssistantGame {
         }
     }
 
-    handleNoteClickForRadialEdit(measureIndex, event) {
+    handleNoteClickForRadialEdit(measureIndex, event, clickEvent) {
+        // Stop propagation to prevent click-outside handler
+        if (clickEvent) {
+            clickEvent.stopPropagation();
+        }
+
         // Get the note element that was clicked
-        const noteEl = document.querySelector(`.tab-note[data-measure-index="${measureIndex}"][data-time="${event.time}"][data-string="${event.string}"]`);
+        const noteEl = document.querySelector(`.tab-note[data-time="${event.time}"][data-string="${event.string}"]`);
 
         if (noteEl) {
             const rect = noteEl.getBoundingClientRect();

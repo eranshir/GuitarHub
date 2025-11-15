@@ -314,9 +314,10 @@ class TabRenderer {
                 note.style.left = `${position * 50}px`; // Uniform 50px spacing per note
                 note.textContent = event.fret;
 
-                // Click to edit
-                note.addEventListener('click', () => {
-                    this.onNoteClick && this.onNoteClick(measureIndex, event);
+                // Click to edit - pass the click event for stopPropagation
+                note.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.onNoteClick && this.onNoteClick(measureIndex, event, e);
                 });
 
                 line.appendChild(note);
