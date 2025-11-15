@@ -3958,6 +3958,12 @@ body.rtl .mobile-header {
 .tab-line {
     cursor: crosshair;
     position: relative;
+    padding: 10px 0; /* Increase clickable area vertically */
+    margin: -10px 0; /* Compensate for padding to maintain visual spacing */
+}
+
+.tab-string-line {
+    margin: 6px 0; /* Add spacing between strings for easier clicking */
 }
 
 .tab-note {
