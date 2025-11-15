@@ -1562,7 +1562,9 @@ class AssistantGame {
     }
 
     handleRadialMenuSelection(fret, duration) {
-        if (!this.radialEditContext) return;
+        console.log('handleRadialMenuSelection called:', { fret, duration });
+        console.log('radialEditContext:', this.radialEditContext);
+        console.log('durationEditContext:', this.durationEditContext);
 
         const ctx = this.radialEditContext;
 
