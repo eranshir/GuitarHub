@@ -107,6 +107,11 @@ class AssistantGame {
             this.handleNoteClickForRadialEdit(measureIndex, event);
         });
 
+        // Set up duration symbol click handler
+        this.tabRenderer.setDurationClickHandler((measureIndex, time, isRest, e) => {
+            this.handleDurationSymbolClick(measureIndex, time, isRest, e);
+        });
+
         // Initialize radial menu
         this.radialMenu = new RadialNoteMenu(
             (fret, duration) => this.handleRadialMenuSelection(fret, duration),
@@ -1612,8 +1617,22 @@ class AssistantGame {
         }
 
         if (duration !== null) {
-            // Duration selected - update note duration
-            if (!ctx.isNew && ctx.event) {
+            // Check if this is from duration symbol click (durationEditContext) or radial menu (radialEditContext)
+            const durationCtx = this.durationEditContext;
+
+            if (durationCtx) {
+                // Update all events at this time with new duration
+                durationCtx.events.forEach(event => {
+                    event.duration = duration;
+                });
+
+                // Reflow measure - recalculate all time positions after this change
+                this.reflowMeasure(durationCtx.measureIndex);
+
+                this.showTransientNotification(`Duration updated - measure reflowed`);
+                this.durationEditContext = null;
+            } else if (!ctx.isNew && ctx.event) {
+                // Legacy: duration selected from note edit radial menu
                 const measure = this.composition.measures[ctx.measureIndex];
                 const noteToEdit = measure.events.find(e =>
                     e.string === ctx.event.string &&
@@ -1622,14 +1641,65 @@ class AssistantGame {
 
                 if (noteToEdit) {
                     noteToEdit.duration = duration;
-                    this.showTransientNotification(`Duration updated`);
-                    this.renderComposition();
-                    this.autoSaveComposition();
+                    this.reflowMeasure(ctx.measureIndex);
+                    this.showTransientNotification(`Duration updated - measure reflowed`);
                 }
             }
+
+            this.renderComposition();
+            this.autoSaveComposition();
         }
 
         this.radialEditContext = null;
+    }
+
+    reflowMeasure(measureIndex) {
+        // Recalculate time positions for all events in measure and following measures
+        // This ensures notes don't overlap and measures respect time signature
+
+        const measure = this.composition.measures[measureIndex];
+        if (!measure) return;
+
+        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+
+        // Sort events by current time
+        measure.events.sort((a, b) => a.time - b.time);
+
+        // Recalculate times sequentially
+        let currentTime = 0;
+        const reflowedEvents = [];
+        const overflowEvents = [];
+
+        measure.events.forEach(event => {
+            if (currentTime + event.duration <= beatsPerMeasure) {
+                // Fits in current measure
+                event.time = currentTime;
+                currentTime += event.duration;
+                reflowedEvents.push(event);
+            } else {
+                // Overflows to next measure
+                overflowEvents.push(event);
+            }
+        });
+
+        measure.events = reflowedEvents;
+
+        // Handle overflow - move to next measure
+        if (overflowEvents.length > 0) {
+            // Ensure next measure exists
+            if (measureIndex + 1 >= this.composition.measures.length) {
+                this.composition.addMeasure();
+            }
+
+            const nextMeasure = this.composition.measures[measureIndex + 1];
+            overflowEvents.forEach(event => {
+                event.time = 0; // Reset time for next measure
+                nextMeasure.events.unshift(event); // Add to beginning of next measure
+            });
+
+            // Recursively reflow next measure
+            this.reflowMeasure(measureIndex + 1);
+        }
     }
 
     handleRadialMenuCancel() {
@@ -1652,6 +1722,43 @@ class AssistantGame {
             this.composition.addMeasure();
             this.renderComposition();
         }
+    }
+
+    handleDurationSymbolClick(measureIndex, time, isRest, clickEvent) {
+        if (clickEvent) {
+            clickEvent.stopPropagation();
+        }
+
+        // Find the events at this time position
+        const measure = this.composition.measures[measureIndex];
+        if (!measure) return;
+
+        const eventsAtTime = measure.events.filter(e =>
+            Math.abs(e.time - time) < 0.001
+        );
+
+        if (eventsAtTime.length === 0) return;
+
+        const currentDuration = eventsAtTime[0].duration;
+
+        // Get click position for menu
+        const durationSymbol = clickEvent.target.closest('.duration-symbol');
+        if (!durationSymbol) return;
+
+        const rect = durationSymbol.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+
+        // Store context for duration editing
+        this.durationEditContext = {
+            measureIndex,
+            time,
+            isRest,
+            events: eventsAtTime
+        };
+
+        // Show duration-only radial menu
+        this.radialMenu.showDurationMenu(x, y, currentDuration);
     }
 
     loadNoteForEditing(measureIndex, event) {

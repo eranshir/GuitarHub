@@ -365,6 +365,15 @@ class TabRenderer {
             durationSymbol.className = 'duration-symbol' + (isRest ? ' rest-symbol' : '');
             durationSymbol.style.left = `${position * 50}px`;
             durationSymbol.innerHTML = isRest ? this.getRestSymbolSVG(duration) : this.getDurationSymbolSVG(duration);
+            durationSymbol.dataset.time = time;
+            durationSymbol.dataset.isRest = isRest ? 'true' : 'false';
+            durationSymbol.dataset.measureIndex = measureIndex;
+
+            // Make duration symbol clickable to edit duration
+            durationSymbol.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.onDurationClick && this.onDurationClick(measureIndex, time, isRest, e);
+            });
 
             durationLine.appendChild(durationSymbol);
         });
@@ -406,6 +415,10 @@ class TabRenderer {
 
     setNoteClickHandler(handler) {
         this.onNoteClick = handler;
+    }
+
+    setDurationClickHandler(handler) {
+        this.onDurationClick = handler;
     }
 }
 
@@ -504,8 +517,8 @@ class RadialNoteMenu {
         const innerRing = this.createFretRing(0, 12, 60, currentFret);
         this.container.appendChild(innerRing);
 
-        // Outer ring: Frets 13-24 (top half) + Duration controls (bottom half)
-        const outerRing = this.createOuterRing(currentFret);
+        // Outer ring: Frets 13-24 only (no durations)
+        const outerRing = this.createHighFretRing(currentFret);
         this.container.appendChild(outerRing);
 
         // Center indicator
@@ -513,6 +526,29 @@ class RadialNoteMenu {
         center.className = 'radial-menu-center';
         center.textContent = currentFret !== null ? currentFret : '?';
         this.container.appendChild(center);
+
+        document.body.appendChild(this.container);
+
+        // Setup cancel handlers
+        this.setupCancelHandlers();
+
+        // Animate in
+        setTimeout(() => {
+            this.container.classList.add('show');
+        }, 10);
+    }
+
+    showDurationMenu(x, y, currentDuration) {
+        this.hide(); // Remove any existing menu
+
+        this.container = document.createElement('div');
+        this.container.className = 'radial-note-menu duration-only';
+        this.container.style.left = `${x}px`;
+        this.container.style.top = `${y}px`;
+
+        // Single ring with all duration options
+        const durationRing = this.createDurationRing(70, currentDuration);
+        this.container.appendChild(durationRing);
 
         document.body.appendChild(this.container);
 
@@ -560,17 +596,17 @@ class RadialNoteMenu {
         return ring;
     }
 
-    createOuterRing(currentFret) {
+    createHighFretRing(currentFret) {
         const ring = document.createElement('div');
         ring.className = 'radial-ring outer-ring';
         const radius = 110;
 
-        // Bottom half: Frets 13-24
+        // Full circle: Frets 13-24
         const highFrets = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
-        const fretAngleStep = Math.PI / (highFrets.length + 1);
+        const angleStep = (2 * Math.PI) / highFrets.length;
 
         highFrets.forEach((fret, i) => {
-            const angle = fretAngleStep * (i + 1); // Top half of circle (0 to π)
+            const angle = angleStep * i - Math.PI / 2; // Start at top
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
 
@@ -592,7 +628,14 @@ class RadialNoteMenu {
             ring.appendChild(button);
         });
 
-        // Top half: Duration buttons with SVG icons
+        return ring;
+    }
+
+    createDurationRing(radius, currentDuration) {
+        const ring = document.createElement('div');
+        ring.className = 'radial-ring duration-ring';
+
+        // All duration options with SVG icons
         const durations = [
             {
                 value: 0.0625,
@@ -630,15 +673,18 @@ class RadialNoteMenu {
                 svg: '<svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>'
             }
         ];
-        const durationAngleStep = Math.PI / (durations.length + 1);
+        const angleStep = (2 * Math.PI) / durations.length;
 
         durations.forEach((dur, i) => {
-            const angle = Math.PI + durationAngleStep * (i + 1); // Bottom half of circle (π to 2π)
+            const angle = angleStep * i - Math.PI / 2; // Start at top
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
 
             const button = document.createElement('button');
             button.className = 'radial-menu-item duration-button';
+            if (Math.abs(dur.value - currentDuration) < 0.001) {
+                button.classList.add('current');
+            }
             button.innerHTML = dur.svg;
             button.title = dur.title;
             button.style.left = `${x}px`;

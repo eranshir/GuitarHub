@@ -3518,11 +3518,19 @@ body.rtl .mobile-header {
     display: inline-block;
     width: 18px;
     height: 18px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.duration-symbol:hover {
+    transform: scale(1.3);
+    filter: brightness(1.2);
 }
 
 .duration-symbol svg {
     width: 100%;
     height: 100%;
+    pointer-events: none; /* Let clicks pass through to parent */
 }
 
 .rest-marker {
