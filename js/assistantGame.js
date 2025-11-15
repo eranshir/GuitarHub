@@ -1656,51 +1656,77 @@ class AssistantGame {
     }
 
     reflowMeasure(measureIndex) {
-        // Recalculate time positions for all events in measure and following measures
-        // This ensures notes don't overlap and measures respect time signature
+        // Comprehensive reflow: recalculates ALL events from this measure forward
+        // Handles both overflow (notes pushed forward) and pullback (notes pulled back)
 
-        const measure = this.composition.measures[measureIndex];
-        if (!measure) return;
+        if (measureIndex >= this.composition.measures.length) return;
 
         const beatsPerMeasure = this.composition.getBeatsPerMeasure();
 
-        // Sort events by current time
-        measure.events.sort((a, b) => a.time - b.time);
+        // Collect all events from this measure forward
+        const allEvents = [];
+        for (let i = measureIndex; i < this.composition.measures.length; i++) {
+            const measure = this.composition.measures[i];
+            measure.events.forEach(event => {
+                allEvents.push({ ...event, originalMeasure: i });
+            });
+        }
 
-        // Recalculate times sequentially
+        // Sort by original time position
+        allEvents.sort((a, b) => {
+            const timeA = (a.originalMeasure - measureIndex) * beatsPerMeasure + a.time;
+            const timeB = (b.originalMeasure - measureIndex) * beatsPerMeasure + b.time;
+            return timeA - timeB;
+        });
+
+        // Clear all measures from measureIndex forward
+        for (let i = measureIndex; i < this.composition.measures.length; i++) {
+            this.composition.measures[i].events = [];
+        }
+
+        // Redistribute events across measures
+        let currentMeasureIdx = measureIndex;
         let currentTime = 0;
-        const reflowedEvents = [];
-        const overflowEvents = [];
 
-        measure.events.forEach(event => {
+        allEvents.forEach(event => {
+            // Check if note would fit in current measure
             if (currentTime + event.duration <= beatsPerMeasure) {
                 // Fits in current measure
                 event.time = currentTime;
+                this.composition.measures[currentMeasureIdx].events.push(event);
                 currentTime += event.duration;
-                reflowedEvents.push(event);
+            } else if (currentTime === 0 && event.duration > beatsPerMeasure) {
+                // Special case: duration longer than measure
+                // Cap it to measure length
+                event.duration = beatsPerMeasure;
+                event.time = 0;
+                this.composition.measures[currentMeasureIdx].events.push(event);
+                currentTime = beatsPerMeasure;
             } else {
-                // Overflows to next measure
-                overflowEvents.push(event);
+                // Move to next measure
+                currentMeasureIdx++;
+                currentTime = 0;
+
+                // Ensure measure exists
+                if (currentMeasureIdx >= this.composition.measures.length) {
+                    this.composition.addMeasure();
+                }
+
+                // Add event to new measure
+                event.time = currentTime;
+                this.composition.measures[currentMeasureIdx].events.push(event);
+                currentTime += event.duration;
             }
         });
 
-        measure.events = reflowedEvents;
-
-        // Handle overflow - move to next measure
-        if (overflowEvents.length > 0) {
-            // Ensure next measure exists
-            if (measureIndex + 1 >= this.composition.measures.length) {
-                this.composition.addMeasure();
+        // Clean up any trailing empty measures (except keep one for editing)
+        while (this.composition.measures.length > currentMeasureIdx + 2) {
+            const lastMeasure = this.composition.measures[this.composition.measures.length - 1];
+            if (lastMeasure.events.length === 0) {
+                this.composition.measures.pop();
+            } else {
+                break;
             }
-
-            const nextMeasure = this.composition.measures[measureIndex + 1];
-            overflowEvents.forEach(event => {
-                event.time = 0; // Reset time for next measure
-                nextMeasure.events.unshift(event); // Add to beginning of next measure
-            });
-
-            // Recursively reflow next measure
-            this.reflowMeasure(measureIndex + 1);
         }
     }
 
