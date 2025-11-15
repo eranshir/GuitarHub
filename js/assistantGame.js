@@ -133,9 +133,16 @@ class AssistantGame {
         container.addEventListener('click', (e) => {
             if (this.mode !== 'composer') return;
 
+            console.log('Container clicked, target:', e.target, 'classList:', e.target.classList);
+            console.log('Closest tab-note:', e.target.closest('.tab-note'));
+            console.log('Closest tab-line:', e.target.closest('.tab-line'));
+
             // Check if clicking on a TAB line (not a note, not a button)
             const tabLine = e.target.closest('.tab-line');
-            if (!tabLine || e.target.closest('.tab-note') || e.target.closest('button')) return;
+            if (!tabLine || e.target.closest('.tab-note') || e.target.closest('button')) {
+                console.log('Returning early - clicked on note/button or no tab-line');
+                return;
+            }
 
             // Stop propagation to prevent click-outside handler from firing
             e.stopPropagation();
