@@ -564,12 +564,12 @@ class RadialNoteMenu {
         ring.className = 'radial-ring outer-ring';
         const radius = 110;
 
-        // Top half: Frets 13-24
+        // Bottom half: Frets 13-24
         const highFrets = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
         const fretAngleStep = Math.PI / (highFrets.length + 1);
 
         highFrets.forEach((fret, i) => {
-            const angle = Math.PI + fretAngleStep * (i + 1); // Bottom half of circle
+            const angle = fretAngleStep * (i + 1); // Top half of circle (0 to π)
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
 
@@ -632,7 +632,7 @@ class RadialNoteMenu {
         const durationAngleStep = Math.PI / (durations.length + 1);
 
         durations.forEach((dur, i) => {
-            const angle = -durationAngleStep * (i + 1); // Top half of circle
+            const angle = Math.PI + durationAngleStep * (i + 1); // Bottom half of circle (π to 2π)
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
 
