@@ -606,7 +606,7 @@ class RadialNoteMenu {
     }
 
     createDeleteButton() {
-        const radius = 140; // Further out than outer ring
+        const radius = 160; // Match spacing: inner ring at 60, outer at 110, delete at 160 (50px gaps)
         const angle = -Math.PI / 2; // Top position
 
         const x = Math.cos(angle) * radius;
