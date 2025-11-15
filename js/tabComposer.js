@@ -316,6 +316,7 @@ class TabRenderer {
 
                 // Click to edit - pass the click event for stopPropagation
                 note.addEventListener('click', (e) => {
+                    console.log('Note clicked in TabRenderer:', { measureIndex, event, hasHandler: !!this.onNoteClick });
                     e.stopPropagation();
                     this.onNoteClick && this.onNoteClick(measureIndex, event, e);
                 });
