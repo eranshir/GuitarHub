@@ -185,18 +185,22 @@ class AlphaTabAdapter {
 
         console.log(`Attaching click handlers to ${noteElements.length} notes`);
 
-        // Find note stems (vertical path elements)
+        // Find note stems (vertical path elements - including those with flags)
         const pathElements = alphaTabSvg.querySelectorAll('path');
         const stemElements = Array.from(pathElements).filter(path => {
-            // Note stems are vertical paths (x values are same, y values differ)
+            // Note stems are vertical paths that start with "M x,y L x,y2"
+            // May have additional commands for flags (eighth notes, etc.)
             const d = path.getAttribute('d');
             if (!d) return false;
 
-            // Parse path - looking for vertical lines like "M x,y L x,y2"
+            // Parse path - looking for paths that START with a vertical line
+            // Regex: M x1,y1 L x2,y2 (then possibly more commands)
             const match = d.match(/M\s*([\d.]+),([\d.]+)\s*L\s*([\d.]+),([\d.]+)/);
             if (!match) return false;
 
-            const [_, x1, y1, x2, y2] = match.map(parseFloat);
+            // Check if first segment is vertical (regardless of what comes after)
+            const x1 = parseFloat(match[1]);
+            const x2 = parseFloat(match[3]);
             return Math.abs(x1 - x2) < 1; // Vertical line (x values nearly same)
         });
 
