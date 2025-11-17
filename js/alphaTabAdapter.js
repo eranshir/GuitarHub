@@ -213,17 +213,21 @@ class AlphaTabAdapter {
                 e.stopPropagation();
                 e.preventDefault();
 
-                console.log('Stem clicked:', stem);
+                console.log('Stem clicked:', stem, 'index:', index);
 
                 // Map stem to beat - stems are in order matching beats
                 const noteData = this.mapBeatIndexToNote(index);
+                console.log('noteData:', noteData, 'onDurationClick exists:', !!this.onDurationClick);
 
                 if (noteData && this.onDurationClick) {
                     const rect = stem.getBoundingClientRect();
                     const x = rect.left + rect.width / 2;
                     const y = rect.top + rect.height / 2;
 
+                    console.log('Calling onDurationClick with:', { measureIndex: noteData.measureIndex, time: noteData.event.time, x, y });
                     this.onDurationClick(noteData.measureIndex, noteData.event.time, false, e, x, y);
+                } else {
+                    console.log('Skipping callback - noteData:', noteData, 'callback:', !!this.onDurationClick);
                 }
             });
         });
