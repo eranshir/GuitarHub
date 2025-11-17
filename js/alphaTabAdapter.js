@@ -240,6 +240,12 @@ class AlphaTabAdapter {
             line.dataset.clickHandlerAttached = 'true';
 
             line.addEventListener('click', (e) => {
+                // Check if actually clicked on the rect (not a path on top of it)
+                if (e.target !== line) {
+                    console.log('Clicked on element on top of TAB line, ignoring. Target:', e.target.tagName);
+                    return; // Let other handler process
+                }
+
                 e.stopPropagation();
                 e.preventDefault();
 
@@ -252,7 +258,7 @@ class AlphaTabAdapter {
                 const clickX = e.clientX - svgRect.left;
                 const clickY = e.clientY - svgRect.top;
 
-                console.log('TAB line clicked:', { lineX, lineY, clickX, clickY });
+                console.log('TAB line actually clicked (not blocked):', { lineX, lineY, clickX, clickY });
 
                 // Check if clicking on a note (near a note element)
                 let clickedOnNote = false;
