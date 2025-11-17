@@ -259,44 +259,43 @@ class AlphaTabAdapter {
             });
         });
 
-        // Make beat groups clickable for duration (entire note graphic area)
-        // This is more reliable than trying to identify specific stem/flag paths
+        // Make ALL child paths of beat groups clickable for duration
         noteElements.forEach(noteEl => {
             const beatGroup = noteEl.closest('g[class^="b"]');
-            if (!beatGroup || beatGroup.dataset.durationHandlerAttached) return;
+            if (!beatGroup) return;
 
-            beatGroup.dataset.durationHandlerAttached = 'true';
+            const beatClass = beatGroup.className.baseVal;
+            const beatIndex = parseInt(beatClass.replace('b', ''));
 
-            // Add pointer events to make clickable
-            beatGroup.style.pointerEvents = 'all';
+            // Find all path elements within this beat group (stems, flags, beams)
+            const paths = beatGroup.querySelectorAll('path');
 
-            // Add invisible overlay to entire beat group for easier clicking
-            beatGroup.addEventListener('click', (e) => {
-                console.log('Beat group clicked, target:', e.target, 'noteEl:', noteEl);
+            paths.forEach(path => {
+                if (path.dataset.durationHandlerAttached) return;
 
-                // If clicking directly on note number text, don't show duration menu
-                if (e.target === noteEl) {
-                    console.log('Clicked on note text, skipping');
-                    return; // Note click handler will process
-                }
+                // Make path clickable with wider invisible stroke
+                path.style.cursor = 'pointer';
+                path.style.pointerEvents = 'all';
+                path.style.strokeWidth = '8'; // Wider hit area
+                path.style.opacity = '1'; // Ensure visible
+                path.dataset.durationHandlerAttached = 'true';
 
-                e.stopPropagation();
-                e.preventDefault();
+                path.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
 
-                const beatClass = beatGroup.className.baseVal;
-                const beatIndex = parseInt(beatClass.replace('b', ''));
+                    console.log('Path in beat group clicked:', beatClass);
 
-                console.log('Beat group area clicked for duration:', beatClass);
+                    const noteData = this.mapBeatIndexToNote(beatIndex);
 
-                const noteData = this.mapBeatIndexToNote(beatIndex);
+                    if (noteData && this.onDurationClick) {
+                        const rect = path.getBoundingClientRect();
+                        const x = rect.left + rect.width / 2;
+                        const y = rect.top + rect.height / 2;
 
-                if (noteData && this.onDurationClick) {
-                    const rect = beatGroup.getBoundingClientRect();
-                    const x = rect.left + rect.width / 2;
-                    const y = rect.top + rect.height / 2;
-
-                    this.onDurationClick(noteData.measureIndex, noteData.event.time, false, e, x, y);
-                }
+                        this.onDurationClick(noteData.measureIndex, noteData.event.time, false, e, x, y);
+                    }
+                });
             });
         });
 
