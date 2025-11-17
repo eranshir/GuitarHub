@@ -257,8 +257,7 @@ class AlphaTabAdapter {
                 const estimatedBeat = Math.floor(relativeX / beatWidth);
                 const estimatedTime = estimatedBeat * 0.25; // Quarter note increments
 
-                // Determine string number from line's y position
-                const lineY = parseFloat(line.getAttribute('y'));
+                // Determine string number from line's y position (already have lineY from above)
                 const stringIndex = stringYPositions.findIndex(y => Math.abs(y - lineY) < 5);
                 const stringNum = stringIndex + 1; // stringIndex 0 = string 1
 
