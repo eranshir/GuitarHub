@@ -64,9 +64,8 @@ class AlphaTabAdapter {
         const score = this.tabCompositionToScore(composition);
         this.currentScore = score;
 
-        // Render the score
-        this.alphaTabApi.score = score;
-        this.alphaTabApi.render();
+        // Render the score using alphaTab's renderScore method
+        this.alphaTabApi.renderScore(score);
 
         console.log('Composition rendered with alphaTab');
     }
