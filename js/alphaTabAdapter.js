@@ -260,20 +260,39 @@ class AlphaTabAdapter {
 
                 console.log('TAB line actually clicked (not blocked):', { lineX, lineY, clickX, clickY });
 
-                // Check if clicking on a note (near a note element)
-                let clickedOnNote = false;
+                // Check if clicking vertically near a note (different string, same time)
+                let clickedNearNote = null;
                 noteElements.forEach(noteEl => {
                     const noteX = parseFloat(noteEl.getAttribute('x'));
                     const noteY = parseFloat(noteEl.getAttribute('y'));
 
+                    // Check if clicking ON the note number itself (exact match)
                     if (Math.abs(clickX - noteX) < 15 && Math.abs(clickY - noteY) < 15) {
-                        clickedOnNote = true;
+                        clickedNearNote = 'exact'; // Exact note click
+                    }
+                    // Check if clicking NEAR note horizontally (same column, different string)
+                    else if (Math.abs(clickX - noteX) < 40 && Math.abs(clickY - noteY) > 10) {
+                        clickedNearNote = noteEl; // Near note (for chord)
                     }
                 });
 
-                if (clickedOnNote) {
+                if (clickedNearNote === 'exact') {
                     console.log('Clicked on existing note, ignoring');
                     return; // Let note handler deal with it
+                }
+
+                // If clicking near a note (chord), get that note's time
+                let noteTimeForChord = null;
+                if (clickedNearNote) {
+                    const beatGroup = clickedNearNote.closest('g');
+                    const beatClass = beatGroup.className.baseVal;
+                    const beatIndex = parseInt(beatClass.replace('b', ''));
+                    const noteData = this.mapBeatIndexToNote(beatIndex);
+
+                    if (noteData) {
+                        noteTimeForChord = noteData.event.time;
+                        console.log('Clicking near note at time:', noteTimeForChord, 'for chord');
+                    }
                 }
 
                 // Detect which measure was clicked based on line's x position
@@ -289,6 +308,9 @@ class AlphaTabAdapter {
                 const stringIndex = tabOnlyYPositions.findIndex(y => Math.abs(y - lineY) < 5);
                 const stringNum = stringIndex + 1; // stringIndex 0 = string 1
 
+                // Use chord note's time if near existing note, otherwise use estimated time
+                const finalTime = noteTimeForChord !== null ? noteTimeForChord : estimatedTime;
+
                 console.log('Click analysis:', {
                     lineX,
                     lineWidth,
@@ -297,6 +319,8 @@ class AlphaTabAdapter {
                     beatWidth,
                     estimatedBeat,
                     estimatedTime,
+                    nearNoteTime: noteTimeForChord,
+                    finalTime: finalTime,
                     string: stringNum,
                     stringIndex,
                     lineY,
@@ -305,8 +329,8 @@ class AlphaTabAdapter {
 
                 // Call add note callback
                 if (this.onAddNote) {
-                    // Pass: measureIndex, stringNum, time, click position for radial menu
-                    this.onAddNote(measureIndex, stringNum, estimatedTime, e.clientX, e.clientY);
+                    // Pass: measureIndex, stringNum, finalTime (chord time or estimated), click position
+                    this.onAddNote(measureIndex, stringNum, finalTime, e.clientX, e.clientY);
                 } else {
                     console.log('onAddNote callback not set');
                 }
