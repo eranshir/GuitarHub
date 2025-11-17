@@ -86,12 +86,25 @@ class AlphaTabAdapter {
             const textElements = firstSvg.querySelectorAll('text');
             console.log('Text elements:', textElements.length);
 
-            if (textElements.length > 0) {
-                console.log('Sample text element:', textElements[0]);
-                console.log('Text content:', textElements[0].textContent);
+            // Find note numbers (text elements with numeric content and parent beat group)
+            const noteElements = Array.from(textElements).filter(el => {
+                const content = el.textContent.trim();
+                const hasNumber = /^\d+$/.test(content);
+                const parentGroup = el.closest('g');
+                const isBeatGroup = parentGroup?.className.baseVal.match(/^b\d+$/);
+                return hasNumber && isBeatGroup;
+            });
+
+            console.log('Note number elements:', noteElements.length);
+
+            if (noteElements.length > 0) {
+                const sample = noteElements[0];
+                console.log('Sample note element:', sample);
+                console.log('Note value:', sample.textContent);
+                console.log('Parent group class:', sample.closest('g')?.className.baseVal);
                 console.log('Position:', {
-                    x: textElements[0].getAttribute('x'),
-                    y: textElements[0].getAttribute('y')
+                    x: sample.getAttribute('x'),
+                    y: sample.getAttribute('y')
                 });
             }
 
