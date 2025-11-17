@@ -74,17 +74,13 @@ class AlphaTabAdapter {
         console.log('Container children:', container.children.length);
         console.log('Container HTML preview:', container.innerHTML.substring(0, 500));
 
-        // Find SVG elements (check entire document since alphaTab might render elsewhere)
-        const svgs = document.querySelectorAll('svg');
-        console.log('SVG elements in document:', svgs.length);
+        // Find alphaTab's specific SVG (has class at-surface-svg)
+        const alphaTabSvg = container.querySelector('.at-surface-svg');
+        console.log('alphaTab SVG:', alphaTabSvg);
 
-        // Check specifically in container
-        const containerSvgs = container.querySelectorAll('svg');
-        console.log('SVG elements in container:', containerSvgs.length);
-
-        if (svgs.length > 0) {
-            const firstSvg = svgs[0];
-            console.log('First SVG:', firstSvg);
+        if (alphaTabSvg) {
+            const firstSvg = alphaTabSvg;
+            console.log('Found alphaTab SVG, inspecting...');
 
             // alphaTab renders notes as <text> SVG elements
             const textElements = firstSvg.querySelectorAll('text');
