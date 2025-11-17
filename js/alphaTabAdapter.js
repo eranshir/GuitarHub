@@ -259,40 +259,54 @@ class AlphaTabAdapter {
             });
         });
 
-        // Simpler approach: Make beat groups clickable for duration
-        // This includes stems, flags, and all note graphics
-        const beatGroups = alphaTabSvg.querySelectorAll('g[class^="b"]');
-        console.log(`Found ${beatGroups.length} beat groups`);
+        // Make path elements (stems/flags) clickable for duration
+        stemElements.forEach((stem, index) => {
+            if (stem.dataset.clickHandlerAttached) return;
 
-        beatGroups.forEach(beatGroup => {
-            if (beatGroup.dataset.clickHandlerAttached) return;
+            stem.style.cursor = 'pointer';
+            stem.style.pointerEvents = 'all'; // Ensure SVG path is clickable
+            stem.dataset.clickHandlerAttached = 'true';
 
-            const beatClass = beatGroup.className.baseVal;
-            if (!beatClass.match(/^b\d+$/)) return; // Only beat groups like b0, b1
-
-            beatGroup.style.cursor = 'pointer';
-            beatGroup.dataset.clickHandlerAttached = 'true';
-
-            beatGroup.addEventListener('click', (e) => {
-                // Check if clicking on the text element (note number) - let note handler deal with it
-                if (e.target.tagName === 'text' && /^\d+$/.test(e.target.textContent.trim())) {
-                    return; // Note handler will process this
-                }
-
+            stem.addEventListener('click', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
 
-                const beatIndex = parseInt(beatClass.replace('b', ''));
-                console.log('Beat group clicked:', beatClass);
+                console.log('Path/stem clicked');
 
-                const noteData = this.mapBeatIndexToNote(beatIndex);
+                // Find closest note by bbox proximity
+                const stemRect = stem.getBoundingClientRect();
+                const stemCenterX = stemRect.left + stemRect.width / 2;
+                const stemCenterY = stemRect.top + stemRect.height / 2;
 
-                if (noteData && this.onDurationClick) {
-                    const rect = beatGroup.getBoundingClientRect();
-                    const x = rect.left + rect.width / 2;
-                    const y = rect.top + rect.height / 2;
+                let closestNote = null;
+                let minDistance = Infinity;
 
-                    this.onDurationClick(noteData.measureIndex, noteData.event.time, false, e, x, y);
+                noteElements.forEach(noteEl => {
+                    const noteRect = noteEl.getBoundingClientRect();
+                    const noteCenterX = noteRect.left + noteRect.width / 2;
+                    const noteCenterY = noteRect.top + noteRect.height / 2;
+
+                    const distance = Math.sqrt(
+                        Math.pow(stemCenterX - noteCenterX, 2) +
+                        Math.pow(stemCenterY - noteCenterY, 2)
+                    );
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestNote = noteEl;
+                    }
+                });
+
+                if (closestNote && minDistance < 100) {
+                    const beatGroup = closestNote.closest('g');
+                    const beatClass = beatGroup.className.baseVal;
+                    const beatIndex = parseInt(beatClass.replace('b', ''));
+
+                    const noteData = this.mapBeatIndexToNote(beatIndex);
+
+                    if (noteData && this.onDurationClick) {
+                        this.onDurationClick(noteData.measureIndex, noteData.event.time, false, e, stemCenterX, stemCenterY);
+                    }
                 }
             });
         });
