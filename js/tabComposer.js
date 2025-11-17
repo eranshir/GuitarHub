@@ -522,7 +522,7 @@ class RadialNoteMenu {
         this.container.appendChild(innerRing);
 
         // Outer ring: Frets 13-24 (top) + Durations (bottom)
-        const outerRing = this.createOuterRing(currentFret);
+        const outerRing = this.createHighFretAndDurationRing(currentFret);
         this.container.appendChild(outerRing);
 
         // Delete button at top (only show if editing existing note)
@@ -635,7 +635,7 @@ class RadialNoteMenu {
         return button;
     }
 
-    createOuterRing(currentFret) {
+    createHighFretAndDurationRing(currentFret) {
         const ring = document.createElement('div');
         ring.className = 'radial-ring outer-ring';
         const radius = 110;
@@ -732,40 +732,6 @@ class RadialNoteMenu {
         return ring;
     }
 
-    createHighFretRing(currentFret) {
-        const ring = document.createElement('div');
-        ring.className = 'radial-ring outer-ring';
-        const radius = 110;
-
-        // Full circle: Frets 13-24
-        const highFrets = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
-        const angleStep = (2 * Math.PI) / highFrets.length;
-
-        highFrets.forEach((fret, i) => {
-            const angle = angleStep * i - Math.PI / 2; // Start at top
-            const x = Math.cos(angle) * radius;
-            const y = Math.sin(angle) * radius;
-
-            const button = document.createElement('button');
-            button.className = 'radial-menu-item fret-button small';
-            if (fret === currentFret) {
-                button.classList.add('current');
-            }
-            button.textContent = fret;
-            button.style.left = `${x}px`;
-            button.style.top = `${y}px`;
-
-            button.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.onSelect(fret, null);
-                this.hide();
-            });
-
-            ring.appendChild(button);
-        });
-
-        return ring;
-    }
 
     createDurationRing(radius, currentDuration) {
         const ring = document.createElement('div');

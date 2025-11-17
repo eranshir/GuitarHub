@@ -7,7 +7,6 @@ class AlphaTabAdapter {
         this.showNotation = false; // Toggle for standard notation
         this.currentComposition = null; // Store composition for click mapping
         this.onNoteClick = null; // Callback for note clicks
-        this.onDurationClick = null; // Callback for duration/stem clicks
     }
 
     /**
@@ -154,13 +153,6 @@ class AlphaTabAdapter {
     }
 
     /**
-     * Set callback for duration clicks (stems)
-     */
-    setDurationClickHandler(callback) {
-        this.onDurationClick = callback;
-    }
-
-    /**
      * Attach click handlers to alphaTab-rendered note elements
      */
     attachClickHandlers() {
@@ -184,12 +176,6 @@ class AlphaTabAdapter {
         });
 
         console.log(`Attaching click handlers to ${noteElements.length} notes`);
-
-        // Find ALL path elements near notes (includes stems and flags)
-        const pathElements = alphaTabSvg.querySelectorAll('path');
-        const stemElements = Array.from(pathElements);
-
-        console.log(`Found ${stemElements.length} note stems`);
 
         // Find horizontal TAB lines (rect elements) for adding new notes
         const rectElements = alphaTabSvg.querySelectorAll('rect');
@@ -256,52 +242,6 @@ class AlphaTabAdapter {
                 } else {
                     console.log('onAddNote callback not set');
                 }
-            });
-        });
-
-        // Make ALL child paths of beat groups clickable for duration
-        noteElements.forEach(noteEl => {
-            const beatGroup = noteEl.closest('g[class^="b"]');
-            if (!beatGroup) return;
-
-            const beatClass = beatGroup.className.baseVal;
-            const beatIndex = parseInt(beatClass.replace('b', ''));
-
-            // Find all path elements within this beat group (stems, flags, beams)
-            const paths = beatGroup.querySelectorAll('path');
-
-            console.log(`Beat group ${beatClass} has ${paths.length} paths`);
-
-            if (paths.length === 0) {
-                console.log('No paths in beat group! Structure:', beatGroup.outerHTML.substring(0, 300));
-            }
-
-            paths.forEach(path => {
-                if (path.dataset.durationHandlerAttached) return;
-
-                // Make path clickable with wider invisible stroke
-                path.style.cursor = 'pointer';
-                path.style.pointerEvents = 'all';
-                path.style.strokeWidth = '8'; // Wider hit area
-                path.style.opacity = '1'; // Ensure visible
-                path.dataset.durationHandlerAttached = 'true';
-
-                path.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-
-                    console.log('Path in beat group clicked:', beatClass);
-
-                    const noteData = this.mapBeatIndexToNote(beatIndex);
-
-                    if (noteData && this.onDurationClick) {
-                        const rect = path.getBoundingClientRect();
-                        const x = rect.left + rect.width / 2;
-                        const y = rect.top + rect.height / 2;
-
-                        this.onDurationClick(noteData.measureIndex, noteData.event.time, false, e, x, y);
-                    }
-                });
             });
         });
 
