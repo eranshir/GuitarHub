@@ -546,7 +546,9 @@ class RadialNoteMenu {
 
         // Animate in
         setTimeout(() => {
-            this.container.classList.add('show');
+            if (this.container) {
+                this.container.classList.add('show');
+            }
         }, 10);
     }
 
@@ -569,7 +571,9 @@ class RadialNoteMenu {
 
         // Animate in
         setTimeout(() => {
-            this.container.classList.add('show');
+            if (this.container) {
+                this.container.classList.add('show');
+            }
         }, 10);
     }
 
