@@ -270,6 +270,12 @@ class AlphaTabAdapter {
             // Find all path elements within this beat group (stems, flags, beams)
             const paths = beatGroup.querySelectorAll('path');
 
+            console.log(`Beat group ${beatClass} has ${paths.length} paths`);
+
+            if (paths.length === 0) {
+                console.log('No paths in beat group! Structure:', beatGroup.outerHTML.substring(0, 300));
+            }
+
             paths.forEach(path => {
                 if (path.dataset.durationHandlerAttached) return;
 
