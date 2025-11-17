@@ -1728,6 +1728,7 @@ class AssistantGame {
             }
 
             // Re-render and save
+            console.log('Re-rendering composition after adding note');
             this.renderComposition();
             this.autoSaveComposition();
 
