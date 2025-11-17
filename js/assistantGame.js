@@ -31,7 +31,8 @@ class AssistantGame {
 
         // Composition state (Composer mode)
         this.composition = new TabComposition();
-        this.tabRenderer = null;
+        this.tabRenderer = null; // Keep for compatibility during transition
+        this.alphaTabAdapter = null; // New alphaTab renderer
         this.fretboardState = new FretboardState();
         this.selectedDuration = 0.25; // Default: quarter note
         this.detectedChord = null;
@@ -99,18 +100,24 @@ class AssistantGame {
     }
 
     initializeComposer() {
-        // Initialize TAB renderer
-        this.tabRenderer = new TabRenderer('composition-tab-display');
+        // Initialize alphaTab renderer
+        this.alphaTabAdapter = new AlphaTabAdapter('composition-tab-display');
+        this.alphaTabAdapter.initialize();
 
-        // Set up note click handler for editing
+        // Keep old TabRenderer for fallback/reference (will remove later)
+        this.tabRenderer = new TabRenderer('composition-tab-display-legacy');
+
+        // TODO: Set up note click handlers for alphaTab rendered elements
+        // For now, keep the old handlers commented out until we update for alphaTab DOM
+        /*
         this.tabRenderer.setNoteClickHandler((measureIndex, event) => {
             this.handleNoteClickForRadialEdit(measureIndex, event);
         });
 
-        // Set up duration symbol click handler
         this.tabRenderer.setDurationClickHandler((measureIndex, time, isRest, e) => {
             this.handleDurationSymbolClick(measureIndex, time, isRest, e);
         });
+        */
 
         // Initialize radial menu
         this.radialMenu = new RadialNoteMenu(
@@ -122,6 +129,7 @@ class AssistantGame {
         this.setupDragSelection();
 
         // Set up direct TAB line editing (add notes by clicking empty space)
+        // TODO: Update for alphaTab DOM structure
         this.setupDirectTABEditing();
     }
 
@@ -1544,7 +1552,13 @@ class AssistantGame {
     }
 
     renderComposition() {
-        if (this.tabRenderer) {
+        // Use alphaTab for rendering
+        if (this.alphaTabAdapter) {
+            this.alphaTabAdapter.render(this.composition);
+        }
+
+        // Fallback to old renderer if alphaTab not initialized
+        if (!this.alphaTabAdapter && this.tabRenderer) {
             this.tabRenderer.render(this.composition);
         }
     }

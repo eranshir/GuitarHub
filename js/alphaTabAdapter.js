@@ -1,7 +1,92 @@
 // AlphaTab Adapter - Bidirectional sync between TabComposition and alphaTab Score
 class AlphaTabAdapter {
-    constructor() {
+    constructor(containerId) {
+        this.containerId = containerId;
         this.alphaTabApi = null;
+        this.currentScore = null;
+        this.showNotation = false; // Toggle for standard notation
+    }
+
+    /**
+     * Initialize alphaTab API
+     */
+    initialize() {
+        const container = document.getElementById(this.containerId);
+        if (!container) {
+            console.error('alphaTab container not found:', this.containerId);
+            return;
+        }
+
+        // Clear container
+        container.innerHTML = '';
+
+        // Create alphaTab settings
+        const settings = {
+            core: {
+                engine: 'svg', // SVG for better quality and DOM access
+                logLevel: 1 // Warnings only
+            },
+            display: {
+                scale: 1.0,
+                stretchForce: 0.8,
+                layoutMode: alphaTab.LayoutMode.Horizontal
+            },
+            notation: {
+                notationMode: this.showNotation
+                    ? alphaTab.NotationMode.GuitarPro
+                    : alphaTab.NotationMode.SongBook, // SongBook = TAB only
+                rhythmMode: alphaTab.TabRhythmMode.ShowWithBars,
+                elements: {
+                    scoreTitle: false,
+                    scoreWordsAndMusic: false,
+                    effectTempo: false
+                }
+            }
+        };
+
+        // Initialize alphaTab
+        this.alphaTabApi = new alphaTab.AlphaTabApi(container, settings);
+
+        console.log('alphaTab initialized successfully');
+
+        return this.alphaTabApi;
+    }
+
+    /**
+     * Render a composition using alphaTab
+     */
+    render(composition) {
+        if (!this.alphaTabApi) {
+            this.initialize();
+        }
+
+        // Convert to alphaTab Score
+        const score = this.tabCompositionToScore(composition);
+        this.currentScore = score;
+
+        // Render the score
+        this.alphaTabApi.score = score;
+        this.alphaTabApi.render();
+
+        console.log('Composition rendered with alphaTab');
+    }
+
+    /**
+     * Toggle standard notation display
+     */
+    toggleNotation() {
+        this.showNotation = !this.showNotation;
+
+        if (this.alphaTabApi) {
+            this.alphaTabApi.settings.notation.notationMode = this.showNotation
+                ? alphaTab.NotationMode.GuitarPro
+                : alphaTab.NotationMode.SongBook;
+
+            // Re-render with new settings
+            this.alphaTabApi.render();
+        }
+
+        return this.showNotation;
     }
 
     /**
