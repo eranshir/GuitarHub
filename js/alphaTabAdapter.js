@@ -47,9 +47,50 @@ class AlphaTabAdapter {
         // Initialize alphaTab
         this.alphaTabApi = new alphaTab.AlphaTabApi(container, settings);
 
+        // Listen for render completion to inspect DOM
+        this.alphaTabApi.renderFinished.on(() => {
+            console.log('alphaTab render finished - inspecting DOM');
+            this.inspectAlphaTabDOM();
+        });
+
         console.log('alphaTab initialized successfully');
 
         return this.alphaTabApi;
+    }
+
+    /**
+     * Inspect alphaTab's rendered DOM to understand structure
+     */
+    inspectAlphaTabDOM() {
+        const container = document.getElementById(this.containerId);
+        if (!container) return;
+
+        console.log('=== alphaTab DOM Structure ===');
+        console.log('Container:', container);
+
+        // Find SVG elements
+        const svgs = container.querySelectorAll('svg');
+        console.log('SVG elements:', svgs.length);
+
+        if (svgs.length > 0) {
+            const firstSvg = svgs[0];
+            console.log('First SVG:', firstSvg);
+
+            // Look for note elements (alphaTab typically uses specific classes)
+            const noteElements = firstSvg.querySelectorAll('[data-beat-index]');
+            console.log('Elements with data-beat-index:', noteElements.length);
+
+            // Look for other data attributes
+            const allDataElements = firstSvg.querySelectorAll('[data-bar-index], [data-note-index], [data-string]');
+            console.log('Elements with data attributes:', allDataElements.length);
+
+            if (allDataElements.length > 0) {
+                console.log('Sample element:', allDataElements[0]);
+                console.log('Sample element attributes:', Array.from(allDataElements[0].attributes).map(a => a.name));
+            }
+        }
+
+        console.log('=== End DOM Inspection ===');
     }
 
     /**
