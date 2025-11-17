@@ -7,6 +7,7 @@ class AlphaTabAdapter {
         this.showNotation = false; // Toggle for standard notation
         this.currentComposition = null; // Store composition for click mapping
         this.onNoteClick = null; // Callback for note clicks
+        this.onDurationClick = null; // Callback for duration/stem clicks
     }
 
     /**
@@ -153,6 +154,13 @@ class AlphaTabAdapter {
     }
 
     /**
+     * Set callback for duration clicks (stems)
+     */
+    setDurationClickHandler(callback) {
+        this.onDurationClick = callback;
+    }
+
+    /**
      * Attach click handlers to alphaTab-rendered note elements
      */
     attachClickHandlers() {
@@ -176,6 +184,49 @@ class AlphaTabAdapter {
         });
 
         console.log(`Attaching click handlers to ${noteElements.length} notes`);
+
+        // Find note stems (vertical path elements)
+        const pathElements = alphaTabSvg.querySelectorAll('path');
+        const stemElements = Array.from(pathElements).filter(path => {
+            // Note stems are vertical paths (x values are same, y values differ)
+            const d = path.getAttribute('d');
+            if (!d) return false;
+
+            // Parse path - looking for vertical lines like "M x,y L x,y2"
+            const match = d.match(/M\s*([\d.]+),([\d.]+)\s*L\s*([\d.]+),([\d.]+)/);
+            if (!match) return false;
+
+            const [_, x1, y1, x2, y2] = match.map(parseFloat);
+            return Math.abs(x1 - x2) < 1; // Vertical line (x values nearly same)
+        });
+
+        console.log(`Found ${stemElements.length} note stems`);
+
+        // Attach duration menu to stems
+        stemElements.forEach((stem, index) => {
+            if (stem.dataset.clickHandlerAttached) return;
+
+            stem.style.cursor = 'pointer';
+            stem.dataset.clickHandlerAttached = 'true';
+
+            stem.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                console.log('Stem clicked:', stem);
+
+                // Map stem to beat - stems are in order matching beats
+                const noteData = this.mapBeatIndexToNote(index);
+
+                if (noteData && this.onDurationClick) {
+                    const rect = stem.getBoundingClientRect();
+                    const x = rect.left + rect.width / 2;
+                    const y = rect.top + rect.height / 2;
+
+                    this.onDurationClick(noteData.measureIndex, noteData.event.time, false, e, x, y);
+                }
+            });
+        });
 
         // Attach click handler to each note (only if not already attached)
         noteElements.forEach(noteEl => {

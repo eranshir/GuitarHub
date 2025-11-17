@@ -109,6 +109,11 @@ class AssistantGame {
             this.handleAlphaTabNoteClick(measureIndex, event, clickEvent, x, y);
         });
 
+        // Set up click handler for alphaTab duration stems
+        this.alphaTabAdapter.setDurationClickHandler((measureIndex, time, isRest, clickEvent, x, y) => {
+            this.handleAlphaTabDurationClick(measureIndex, time, isRest, clickEvent, x, y);
+        });
+
         // Keep old TabRenderer for fallback/reference (will remove later)
         this.tabRenderer = new TabRenderer('composition-tab-display-legacy');
 
@@ -1581,6 +1586,33 @@ class AssistantGame {
 
         // Show radial menu at the provided position
         this.radialMenu.show(x, y, null, event.fret);
+    }
+
+    handleAlphaTabDurationClick(measureIndex, time, isRest, clickEvent, x, y) {
+        console.log('alphaTab stem clicked:', { measureIndex, time, x, y });
+
+        // Find events at this time
+        const measure = this.composition.measures[measureIndex];
+        if (!measure) return;
+
+        const eventsAtTime = measure.events.filter(e =>
+            Math.abs(e.time - time) < 0.001
+        );
+
+        if (eventsAtTime.length === 0) return;
+
+        const currentDuration = eventsAtTime[0].duration;
+
+        // Store context for duration editing
+        this.durationEditContext = {
+            measureIndex,
+            time,
+            isRest,
+            events: eventsAtTime
+        };
+
+        // Show duration-only radial menu at stem position
+        this.radialMenu.showDurationMenu(x, y, currentDuration);
     }
 
     handleNoteClickForRadialEdit(measureIndex, event, clickEvent) {
