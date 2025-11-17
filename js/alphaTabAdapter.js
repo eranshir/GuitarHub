@@ -88,14 +88,8 @@ class AlphaTabAdapter {
         // Get time signature from composition
         const [num, denom] = composition.timeSignature.split('/');
 
-        // Metadata block
-        let tex = `.
-\\title "${composition.title}"
-\\tempo ${composition.tempo}
-\\ts ${num} ${denom}
-\\tuning E4 B3 G3 D3 A2 E2
-.
-`;
+        // Simplified format without metadata delimiters - just start with notes
+        let tex = '';
 
         // Convert each measure
         composition.measures.forEach((measure, idx) => {
