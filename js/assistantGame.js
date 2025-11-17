@@ -1702,6 +1702,12 @@ class AssistantGame {
                     // Sort events by time to ensure proper rendering order
                     measure.events.sort((a, b) => a.time - b.time);
 
+                    console.log('After adding and sorting, measure events:', measure.events.map(e => ({
+                        time: e.time,
+                        string: e.string,
+                        fret: e.fret
+                    })));
+
                     this.showTransientNotification(`Added note: String ${ctx.stringNum}, Fret ${fret}`);
                 }
             } else {

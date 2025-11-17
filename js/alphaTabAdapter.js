@@ -215,6 +215,22 @@ class AlphaTabAdapter {
         const tabOnlyYPositions = stringYPositions.slice(-6);
         console.log('TAB-only y-positions (last 6):', tabOnlyYPositions);
 
+        // Group TAB lines by x-position to identify measures
+        const measureXPositions = [];
+        tabLines.forEach(line => {
+            const x = parseFloat(line.getAttribute('x'));
+
+            // Check if this x-position is already tracked (within 5px)
+            const existing = measureXPositions.find(pos => Math.abs(pos - x) < 5);
+            if (!existing) {
+                measureXPositions.push(x);
+            }
+        });
+
+        // Sort x positions (left to right = measure 0, 1, 2...)
+        measureXPositions.sort((a, b) => a - b);
+        console.log('Measure x-positions:', measureXPositions);
+
         // Make TAB lines clickable for adding notes
         tabLines.forEach((line, lineIndex) => {
             if (line.dataset.clickHandlerAttached) return;
@@ -254,9 +270,8 @@ class AlphaTabAdapter {
                     return; // Let note handler deal with it
                 }
 
-                // TODO: Detect which measure was clicked
-                // For now, always add to measure 0
-                // Need to map x-position to measure boundaries
+                // Detect which measure was clicked based on line's x position
+                const measureIndex = measureXPositions.findIndex(x => Math.abs(x - lineX) < 5);
 
                 // Calculate time within measure based on x position
                 const relativeX = clickX - lineX;
@@ -279,13 +294,13 @@ class AlphaTabAdapter {
                     string: stringNum,
                     stringIndex,
                     lineY,
-                    measureIndex: 0
+                    measureIndex: measureIndex
                 });
 
                 // Call add note callback
                 if (this.onAddNote) {
                     // Pass: measureIndex, stringNum, time, click position for radial menu
-                    this.onAddNote(0, stringNum, estimatedTime, e.clientX, e.clientY);
+                    this.onAddNote(measureIndex, stringNum, estimatedTime, e.clientX, e.clientY);
                 } else {
                     console.log('onAddNote callback not set');
                 }
