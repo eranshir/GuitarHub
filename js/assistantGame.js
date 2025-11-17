@@ -1588,22 +1588,36 @@ class AssistantGame {
         this.radialMenu.show(x, y, null, event.fret);
     }
 
-    handleAlphaTabAddNote(measureIndex, stringNum, time, x, y) {
-        console.log('alphaTab add note - using composition cursor:', {
-            clickedMeasure: measureIndex,
-            clickedTime: time,
-            cursorMeasure: this.composition.currentMeasure,
-            cursorTime: this.composition.currentTime
-        });
+    handleAlphaTabAddNote(measureIndex, stringNum, clickedTime, x, y) {
+        // Check if clicking near existing note to add chord (same time)
+        const measure = this.composition.measures[measureIndex];
+        let targetTime = this.composition.currentTime;
+        let targetMeasure = this.composition.currentMeasure;
+        let isChord = false;
 
-        // Use composition cursor instead of clicked position
-        // This ensures proper measure boundaries and sequential adding
+        if (measure) {
+            // Find notes near clicked time (within 0.15 beats ~ 40px tolerance)
+            const nearbyEvents = measure.events.filter(e =>
+                Math.abs(e.time - clickedTime) < 0.15
+            );
+
+            if (nearbyEvents.length > 0) {
+                // Add as chord - use same time as nearby note
+                targetTime = nearbyEvents[0].time;
+                targetMeasure = measureIndex;
+                isChord = true;
+                console.log('Adding as CHORD to existing note at time:', targetTime);
+            } else {
+                console.log('Adding SEQUENTIALLY at cursor');
+            }
+        }
+
         this.radialEditContext = {
-            measureIndex: this.composition.currentMeasure,
+            measureIndex: targetMeasure,
             stringNum,
-            time: this.composition.currentTime,
+            time: targetTime,
             isNew: true,
-            useCursor: true // Flag to advance cursor after adding
+            useCursor: !isChord // Only advance cursor if not chord
         };
 
         // Show radial menu for selecting fret (no current fret since it's new)
