@@ -99,7 +99,7 @@ class AlphaTabAdapter {
 
         // Set score metadata
         score.title = composition.title;
-        score.tempo = composition.tempo;
+        // Tempo will be set via first master bar
 
         // Create a single track for guitar
         const track = new alphaTab.model.Track();
@@ -124,13 +124,6 @@ class AlphaTabAdapter {
             const [numerator, denominator] = (measure.timeSignature || composition.timeSignature).split('/').map(Number);
             masterBar.timeSignatureNumerator = numerator;
             masterBar.timeSignatureDenominator = denominator;
-
-            // Set tempo (only on first measure typically)
-            if (measureIndex === 0) {
-                masterBar.tempoAutomation = new alphaTab.model.Automation();
-                masterBar.tempoAutomation.value = composition.tempo;
-                masterBar.tempoAutomation.type = alphaTab.model.AutomationType.Tempo;
-            }
 
             score.addMasterBar(masterBar);
 
