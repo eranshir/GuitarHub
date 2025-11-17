@@ -1699,6 +1699,9 @@ class AssistantGame {
                         leftFinger: null
                     });
 
+                    // Sort events by time to ensure proper rendering order
+                    measure.events.sort((a, b) => a.time - b.time);
+
                     this.showTransientNotification(`Added note: String ${ctx.stringNum}, Fret ${fret}`);
                 }
             } else {
