@@ -521,8 +521,8 @@ class RadialNoteMenu {
         const innerRing = this.createFretRing(0, 12, 60, currentFret);
         this.container.appendChild(innerRing);
 
-        // Outer ring: Frets 13-24 only (no durations)
-        const outerRing = this.createHighFretRing(currentFret);
+        // Outer ring: Frets 13-24 (top) + Durations (bottom)
+        const outerRing = this.createOuterRing(currentFret);
         this.container.appendChild(outerRing);
 
         // Delete button at top (only show if editing existing note)
@@ -633,6 +633,103 @@ class RadialNoteMenu {
         });
 
         return button;
+    }
+
+    createOuterRing(currentFret) {
+        const ring = document.createElement('div');
+        ring.className = 'radial-ring outer-ring';
+        const radius = 110;
+
+        // Top half: Frets 13-24
+        const highFrets = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
+        const fretAngleStep = Math.PI / (highFrets.length + 1);
+
+        highFrets.forEach((fret, i) => {
+            const angle = fretAngleStep * (i + 1); // Top half (0 to π)
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            const button = document.createElement('button');
+            button.className = 'radial-menu-item fret-button small';
+            if (fret === currentFret) {
+                button.classList.add('current');
+            }
+            button.textContent = fret;
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.onSelect(fret, null);
+                this.hide();
+            });
+
+            ring.appendChild(button);
+        });
+
+        // Bottom half: Duration buttons
+        const durations = [
+            {
+                value: 0.0625,
+                title: 'Sixteenth note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z M11.5 5 Q15 7 15 10 L11.5 9 Z"/></svg>'
+            },
+            {
+                value: 0.125,
+                title: 'Eighth note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/></svg>'
+            },
+            {
+                value: 0.375,
+                title: 'Dotted eighth note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/><circle cx="13" cy="16" r="1.2"/></svg>'
+            },
+            {
+                value: 0.25,
+                title: 'Quarter note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/></svg>'
+            },
+            {
+                value: 0.5,
+                title: 'Half note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>'
+            },
+            {
+                value: 0.75,
+                title: 'Dotted half note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="16" r="1.2"/></svg>'
+            },
+            {
+                value: 1,
+                title: 'Whole note',
+                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>'
+            }
+        ];
+
+        const durationAngleStep = Math.PI / (durations.length + 1);
+
+        durations.forEach((dur, i) => {
+            const angle = Math.PI + durationAngleStep * (i + 1); // Bottom half (π to 2π)
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            const button = document.createElement('button');
+            button.className = 'radial-menu-item duration-button';
+            button.innerHTML = dur.svg;
+            button.title = dur.title;
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.onSelect(null, dur.value);
+                this.hide();
+            });
+
+            ring.appendChild(button);
+        });
+
+        return ring;
     }
 
     createHighFretRing(currentFret) {
