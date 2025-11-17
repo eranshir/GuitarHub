@@ -177,12 +177,17 @@ class AlphaTabAdapter {
 
         console.log(`Attaching click handlers to ${noteElements.length} notes`);
 
-        // Attach click handler to each note
+        // Attach click handler to each note (only if not already attached)
         noteElements.forEach(noteEl => {
+            // Skip if already has handler
+            if (noteEl.dataset.clickHandlerAttached) return;
+
             noteEl.style.cursor = 'pointer';
+            noteEl.dataset.clickHandlerAttached = 'true';
 
             noteEl.addEventListener('click', (e) => {
                 e.stopPropagation();
+                e.preventDefault(); // Prevent any default behavior
 
                 const fret = parseInt(noteEl.textContent);
                 const beatGroup = noteEl.closest('g');
@@ -202,7 +207,7 @@ class AlphaTabAdapter {
 
                     this.onNoteClick(noteData.measureIndex, noteData.event, e, x, y);
                 }
-            });
+            }, { once: false }); // Allow multiple clicks on same note
         });
     }
 
