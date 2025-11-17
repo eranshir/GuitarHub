@@ -209,7 +209,11 @@ class AlphaTabAdapter {
 
         // Sort y positions (top to bottom = strings 1-6)
         stringYPositions.sort((a, b) => a - b);
-        console.log('String y-positions:', stringYPositions);
+        console.log('All y-positions:', stringYPositions);
+
+        // Take only the last 6 (bottom group = TAB lines, ignore standard notation lines)
+        const tabOnlyYPositions = stringYPositions.slice(-6);
+        console.log('TAB-only y-positions (last 6):', tabOnlyYPositions);
 
         // Make TAB lines clickable for adding notes
         tabLines.forEach((line, lineIndex) => {
@@ -258,7 +262,7 @@ class AlphaTabAdapter {
                 const estimatedTime = estimatedBeat * 0.25; // Quarter note increments
 
                 // Determine string number from line's y position (already have lineY from above)
-                const stringIndex = stringYPositions.findIndex(y => Math.abs(y - lineY) < 5);
+                const stringIndex = tabOnlyYPositions.findIndex(y => Math.abs(y - lineY) < 5);
                 const stringNum = stringIndex + 1; // stringIndex 0 = string 1
 
                 console.log('Add new note:', { string: stringNum, stringIndex, lineY, time: estimatedTime, measureIndex: 0 });
