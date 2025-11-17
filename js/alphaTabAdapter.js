@@ -60,14 +60,83 @@ class AlphaTabAdapter {
             this.initialize();
         }
 
-        // Convert to alphaTab Score
-        const score = this.tabCompositionToScore(composition);
-        this.currentScore = score;
+        // Convert to AlphaTex format (simpler than building Score manually)
+        const alphaTex = this.tabCompositionToAlphaTex(composition);
+        console.log('Generated AlphaTex:', alphaTex);
 
-        // Render the score using alphaTab's renderScore method
-        this.alphaTabApi.renderScore(score);
+        // Load and render using tex method
+        this.alphaTabApi.tex(alphaTex);
 
         console.log('Composition rendered with alphaTab');
+    }
+
+    /**
+     * Convert TabComposition to AlphaTex format (text-based)
+     * This is simpler and more reliable than manually building Score objects
+     */
+    tabCompositionToAlphaTex(composition) {
+        let tex = `.
+\\title "${composition.title}"
+\\tempo ${composition.tempo}
+\\tuning E4 B3 G3 D3 A2 E2
+.\n`;
+
+        // Convert each measure
+        composition.measures.forEach((measure, idx) => {
+            // Time signature (only if changed)
+            const [num, denom] = (measure.timeSignature || composition.timeSignature).split('/');
+            if (idx === 0) {
+                tex += `\\ts ${num} ${denom}\n`;
+            }
+
+            // Group events by time
+            const eventsByTime = this.groupEventsByTime(measure.events);
+            const times = Array.from(eventsByTime.keys()).sort((a, b) => a - b);
+
+            if (times.length === 0) {
+                // Empty measure - add a rest
+                tex += `r.1 `;
+            } else {
+                times.forEach(time => {
+                    const events = eventsByTime.get(time);
+                    const duration = events[0].duration;
+
+                    if (events[0].isRest) {
+                        // Rest
+                        tex += `r.${this.durationToTexNotation(duration)} `;
+                    } else if (events.length === 1) {
+                        // Single note
+                        const e = events[0];
+                        tex += `${e.fret}.${e.string}.${this.durationToTexNotation(duration)} `;
+                    } else {
+                        // Chord (multiple notes at same time)
+                        tex += `(`;
+                        events.forEach((e, i) => {
+                            tex += `${e.fret}.${e.string}`;
+                            if (i < events.length - 1) tex += ` `;
+                        });
+                        tex += `).${this.durationToTexNotation(duration)} `;
+                    }
+                });
+            }
+
+            // Bar separator
+            tex += `| `;
+        });
+
+        return tex;
+    }
+
+    /**
+     * Convert duration to AlphaTex notation
+     */
+    durationToTexNotation(duration) {
+        if (duration >= 1) return '1'; // Whole
+        if (duration >= 0.5) return '2'; // Half
+        if (duration >= 0.25) return '4'; // Quarter
+        if (duration >= 0.125) return '8'; // Eighth
+        if (duration >= 0.0625) return '16'; // Sixteenth
+        return '4'; // Default quarter
     }
 
     /**
