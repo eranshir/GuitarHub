@@ -359,17 +359,29 @@ class AlphaTabAdapter {
                         // Rest
                         tex += `r.${this.durationToTexNotation(duration)} `;
                     } else if (events.length === 1) {
-                        // Single note
+                        // Single note - validate string number
                         const e = events[0];
-                        tex += `${e.fret}.${e.string}.${this.durationToTexNotation(duration)} `;
+                        if (e.string >= 1 && e.string <= 6 && e.fret !== null && e.fret !== undefined) {
+                            tex += `${e.fret}.${e.string}.${this.durationToTexNotation(duration)} `;
+                        } else {
+                            console.warn('Skipping invalid note:', e);
+                        }
                     } else {
-                        // Chord (multiple notes at same time)
-                        tex += `(`;
-                        events.forEach((e, i) => {
-                            tex += `${e.fret}.${e.string}`;
-                            if (i < events.length - 1) tex += ` `;
-                        });
-                        tex += `).${this.durationToTexNotation(duration)} `;
+                        // Chord (multiple notes at same time) - validate all notes
+                        const validEvents = events.filter(e =>
+                            e.string >= 1 && e.string <= 6 && e.fret !== null && e.fret !== undefined
+                        );
+
+                        if (validEvents.length > 0) {
+                            tex += `(`;
+                            validEvents.forEach((e, i) => {
+                                tex += `${e.fret}.${e.string}`;
+                                if (i < validEvents.length - 1) tex += ` `;
+                            });
+                            tex += `).${this.durationToTexNotation(duration)} `;
+                        } else {
+                            console.warn('Skipping invalid chord:', events);
+                        }
                     }
                 });
             }
