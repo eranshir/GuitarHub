@@ -5,6 +5,8 @@ class AlphaTabAdapter {
         this.alphaTabApi = null;
         this.currentScore = null;
         this.showNotation = false; // Toggle for standard notation
+        this.currentComposition = null; // Store composition for click mapping
+        this.onNoteClick = null; // Callback for note clicks
     }
 
     /**
@@ -47,13 +49,14 @@ class AlphaTabAdapter {
         // Initialize alphaTab
         this.alphaTabApi = new alphaTab.AlphaTabApi(container, settings);
 
-        // Listen for render completion to inspect DOM
+        // Listen for render completion to attach click handlers
         // Note: renderFinished fires before lazy partials are rendered
         this.alphaTabApi.renderFinished.on(() => {
             console.log('alphaTab render finished event');
             // Wait for lazy rendering to complete
             setTimeout(() => {
                 this.inspectAlphaTabDOM();
+                this.attachClickHandlers();
             }, 500); // Give time for SVG to be inserted
         });
 
@@ -131,12 +134,108 @@ class AlphaTabAdapter {
             this.initialize();
         }
 
+        // Store composition for click mapping
+        this.currentComposition = composition;
+
         // Convert to AlphaTex and render
         const alphaTex = this.tabCompositionToAlphaTex(composition);
         console.log('Generated AlphaTex:', alphaTex);
 
         this.alphaTabApi.tex(alphaTex);
         console.log('Composition rendered with alphaTab');
+    }
+
+    /**
+     * Set callback for note clicks
+     */
+    setNoteClickHandler(callback) {
+        this.onNoteClick = callback;
+    }
+
+    /**
+     * Attach click handlers to alphaTab-rendered note elements
+     */
+    attachClickHandlers() {
+        const container = document.getElementById(this.containerId);
+        if (!container) return;
+
+        const alphaTabSvg = container.querySelector('.at-surface-svg');
+        if (!alphaTabSvg) {
+            console.log('No alphaTab SVG found for click handlers');
+            return;
+        }
+
+        // Find all note text elements (numeric content in beat groups)
+        const textElements = alphaTabSvg.querySelectorAll('text');
+        const noteElements = Array.from(textElements).filter(el => {
+            const content = el.textContent.trim();
+            const hasNumber = /^\d+$/.test(content);
+            const parentGroup = el.closest('g');
+            const isBeatGroup = parentGroup?.className.baseVal.match(/^b\d+$/);
+            return hasNumber && isBeatGroup;
+        });
+
+        console.log(`Attaching click handlers to ${noteElements.length} notes`);
+
+        // Attach click handler to each note
+        noteElements.forEach(noteEl => {
+            noteEl.style.cursor = 'pointer';
+
+            noteEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+
+                const fret = parseInt(noteEl.textContent);
+                const beatGroup = noteEl.closest('g');
+                const beatClass = beatGroup.className.baseVal;
+                const beatIndex = parseInt(beatClass.replace('b', ''));
+
+                console.log('Note clicked:', { fret, beatIndex, element: noteEl });
+
+                // Map beat index to composition data
+                const noteData = this.mapBeatIndexToNote(beatIndex);
+
+                if (noteData && this.onNoteClick) {
+                    // Get position for radial menu
+                    const rect = noteEl.getBoundingClientRect();
+                    const x = rect.left + rect.width / 2;
+                    const y = rect.top + rect.height / 2;
+
+                    this.onNoteClick(noteData.measureIndex, noteData.event, e, x, y);
+                }
+            });
+        });
+    }
+
+    /**
+     * Map alphaTab beat index to our composition note data
+     */
+    mapBeatIndexToNote(beatIndex) {
+        if (!this.currentComposition) return null;
+
+        // Flatten all events from all measures with their indices
+        let currentBeatIndex = 0;
+
+        for (let measureIndex = 0; measureIndex < this.currentComposition.measures.length; measureIndex++) {
+            const measure = this.currentComposition.measures[measureIndex];
+            const eventsByTime = this.groupEventsByTime(measure.events);
+            const times = Array.from(eventsByTime.keys()).sort((a, b) => a - b);
+
+            for (let time of times) {
+                const events = eventsByTime.get(time);
+
+                if (currentBeatIndex === beatIndex) {
+                    // Found the beat - return first event (could be chord)
+                    return {
+                        measureIndex,
+                        event: events[0]
+                    };
+                }
+
+                currentBeatIndex++;
+            }
+        }
+
+        return null;
     }
 
     /**

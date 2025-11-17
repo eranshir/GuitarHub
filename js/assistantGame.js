@@ -104,20 +104,13 @@ class AssistantGame {
         this.alphaTabAdapter = new AlphaTabAdapter('composition-tab-display');
         this.alphaTabAdapter.initialize();
 
+        // Set up click handler for alphaTab-rendered notes
+        this.alphaTabAdapter.setNoteClickHandler((measureIndex, event, clickEvent, x, y) => {
+            this.handleAlphaTabNoteClick(measureIndex, event, clickEvent, x, y);
+        });
+
         // Keep old TabRenderer for fallback/reference (will remove later)
         this.tabRenderer = new TabRenderer('composition-tab-display-legacy');
-
-        // TODO: Set up note click handlers for alphaTab rendered elements
-        // For now, keep the old handlers commented out until we update for alphaTab DOM
-        /*
-        this.tabRenderer.setNoteClickHandler((measureIndex, event) => {
-            this.handleNoteClickForRadialEdit(measureIndex, event);
-        });
-
-        this.tabRenderer.setDurationClickHandler((measureIndex, time, isRest, e) => {
-            this.handleDurationSymbolClick(measureIndex, time, isRest, e);
-        });
-        */
 
         // Initialize radial menu
         this.radialMenu = new RadialNoteMenu(
@@ -1561,6 +1554,33 @@ class AssistantGame {
         if (!this.alphaTabAdapter && this.tabRenderer) {
             this.tabRenderer.render(this.composition);
         }
+    }
+
+    handleAlphaTabNoteClick(measureIndex, event, clickEvent, x, y) {
+        console.log('alphaTab note clicked:', { measureIndex, event, x, y });
+
+        // Stop propagation handled in alphaTabAdapter
+        // Store editing context
+        this.radialEditContext = {
+            measureIndex,
+            event,
+            noteElement: null // alphaTab SVG element
+        };
+
+        // Load all notes at this time onto fretboard for visual context
+        const measure = this.composition.measures[measureIndex];
+        const notesAtSameTime = measure.events.filter(e =>
+            Math.abs(e.time - event.time) < 0.001
+        );
+
+        this.fretboardState.clear();
+        notesAtSameTime.forEach(note => {
+            this.fretboardState.addNote(note.string, note.fret);
+        });
+        this.displayComposerFretboard();
+
+        // Show radial menu at the provided position
+        this.radialMenu.show(x, y, null, event.fret);
     }
 
     handleNoteClickForRadialEdit(measureIndex, event, clickEvent) {
