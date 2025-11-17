@@ -185,26 +185,79 @@ class AlphaTabAdapter {
 
         console.log(`Attaching click handlers to ${noteElements.length} notes`);
 
-        // Find note stems (vertical path elements - including those with flags)
+        // Find ALL path elements near notes (includes stems and flags)
         const pathElements = alphaTabSvg.querySelectorAll('path');
-        const stemElements = Array.from(pathElements).filter(path => {
-            // Note stems are vertical paths that start with "M x,y L x,y2"
-            // May have additional commands for flags (eighth notes, etc.)
-            const d = path.getAttribute('d');
-            if (!d) return false;
-
-            // Parse path - looking for paths that START with a vertical line
-            // Regex: M x1,y1 L x2,y2 (then possibly more commands)
-            const match = d.match(/M\s*([\d.]+),([\d.]+)\s*L\s*([\d.]+),([\d.]+)/);
-            if (!match) return false;
-
-            // Check if first segment is vertical (regardless of what comes after)
-            const x1 = parseFloat(match[1]);
-            const x2 = parseFloat(match[3]);
-            return Math.abs(x1 - x2) < 1; // Vertical line (x values nearly same)
-        });
+        const stemElements = Array.from(pathElements);
 
         console.log(`Found ${stemElements.length} note stems`);
+
+        // Find horizontal TAB lines (rect elements) for adding new notes
+        const rectElements = alphaTabSvg.querySelectorAll('rect');
+        const tabLines = Array.from(rectElements).filter(rect => {
+            const width = parseFloat(rect.getAttribute('width'));
+            const height = parseFloat(rect.getAttribute('height'));
+            // TAB lines are wide and thin
+            return width > 50 && height < 2;
+        });
+
+        console.log(`Found ${tabLines.length} TAB lines for new note clicks`);
+
+        // Make TAB lines clickable for adding notes
+        tabLines.forEach(line => {
+            if (line.dataset.clickHandlerAttached) return;
+
+            line.style.cursor = 'crosshair';
+            line.style.pointerEvents = 'all'; // Ensure clickable
+            line.dataset.clickHandlerAttached = 'true';
+
+            line.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                const lineX = parseFloat(line.getAttribute('x'));
+                const lineY = parseFloat(line.getAttribute('y'));
+                const lineWidth = parseFloat(line.getAttribute('width'));
+
+                // Calculate click position relative to line
+                const svgRect = alphaTabSvg.getBoundingClientRect();
+                const clickX = e.clientX - svgRect.left;
+                const clickY = e.clientY - svgRect.top;
+
+                console.log('TAB line clicked:', { lineX, lineY, clickX, clickY });
+
+                // Check if clicking on a note (near a note element)
+                let clickedOnNote = false;
+                noteElements.forEach(noteEl => {
+                    const noteX = parseFloat(noteEl.getAttribute('x'));
+                    const noteY = parseFloat(noteEl.getAttribute('y'));
+
+                    if (Math.abs(clickX - noteX) < 15 && Math.abs(clickY - noteY) < 15) {
+                        clickedOnNote = true;
+                    }
+                });
+
+                if (clickedOnNote) {
+                    console.log('Clicked on existing note, ignoring');
+                    return; // Let note handler deal with it
+                }
+
+                // Calculate which measure and time based on x position
+                // Estimate: x position / average beat width
+                const relativeX = clickX - lineX;
+                const beatWidth = lineWidth / 4; // Rough estimate (4 beats per measure in 4/4)
+                const estimatedBeat = Math.floor(relativeX / beatWidth);
+                const estimatedTime = estimatedBeat * 0.25; // Quarter note increments
+
+                console.log('Estimated time:', estimatedTime, 'for new note');
+
+                // For now, just log - we'll implement addNewNote callback next
+                if (this.onAddNote) {
+                    this.onAddNote(0, estimatedTime, lineY, clickX, clickY);
+                } else {
+                    console.log('onAddNote callback not set');
+                }
+            });
+        });
 
         // Attach duration menu to stems - match stems to notes by proximity
         stemElements.forEach(stem => {
