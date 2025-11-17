@@ -48,9 +48,13 @@ class AlphaTabAdapter {
         this.alphaTabApi = new alphaTab.AlphaTabApi(container, settings);
 
         // Listen for render completion to inspect DOM
+        // Note: renderFinished fires before lazy partials are rendered
         this.alphaTabApi.renderFinished.on(() => {
-            console.log('alphaTab render finished - inspecting DOM');
-            this.inspectAlphaTabDOM();
+            console.log('alphaTab render finished event');
+            // Wait for lazy rendering to complete
+            setTimeout(() => {
+                this.inspectAlphaTabDOM();
+            }, 500); // Give time for SVG to be inserted
         });
 
         console.log('alphaTab initialized successfully');
@@ -67,26 +71,43 @@ class AlphaTabAdapter {
 
         console.log('=== alphaTab DOM Structure ===');
         console.log('Container:', container);
+        console.log('Container children:', container.children.length);
+        console.log('Container HTML preview:', container.innerHTML.substring(0, 500));
 
-        // Find SVG elements
-        const svgs = container.querySelectorAll('svg');
-        console.log('SVG elements:', svgs.length);
+        // Find SVG elements (check entire document since alphaTab might render elsewhere)
+        const svgs = document.querySelectorAll('svg');
+        console.log('SVG elements in document:', svgs.length);
+
+        // Check specifically in container
+        const containerSvgs = container.querySelectorAll('svg');
+        console.log('SVG elements in container:', containerSvgs.length);
 
         if (svgs.length > 0) {
             const firstSvg = svgs[0];
             console.log('First SVG:', firstSvg);
 
-            // Look for note elements (alphaTab typically uses specific classes)
-            const noteElements = firstSvg.querySelectorAll('[data-beat-index]');
-            console.log('Elements with data-beat-index:', noteElements.length);
+            // alphaTab renders notes as <text> SVG elements
+            const textElements = firstSvg.querySelectorAll('text');
+            console.log('Text elements:', textElements.length);
 
-            // Look for other data attributes
-            const allDataElements = firstSvg.querySelectorAll('[data-bar-index], [data-note-index], [data-string]');
-            console.log('Elements with data attributes:', allDataElements.length);
+            if (textElements.length > 0) {
+                console.log('Sample text element:', textElements[0]);
+                console.log('Text content:', textElements[0].textContent);
+                console.log('Position:', {
+                    x: textElements[0].getAttribute('x'),
+                    y: textElements[0].getAttribute('y')
+                });
+            }
 
-            if (allDataElements.length > 0) {
-                console.log('Sample element:', allDataElements[0]);
-                console.log('Sample element attributes:', Array.from(allDataElements[0].attributes).map(a => a.name));
+            // Look for clickable areas or groups
+            const groups = firstSvg.querySelectorAll('g');
+            console.log('Group elements:', groups.length);
+
+            // Check for any elements with classes
+            const elementsWithClass = firstSvg.querySelectorAll('[class]');
+            console.log('Elements with classes:', elementsWithClass.length);
+            if (elementsWithClass.length > 0) {
+                console.log('Sample classes:', elementsWithClass[0].getAttribute('class'));
             }
         }
 
