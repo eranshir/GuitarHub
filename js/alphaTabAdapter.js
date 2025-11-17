@@ -202,8 +202,8 @@ class AlphaTabAdapter {
 
         console.log(`Found ${stemElements.length} note stems`);
 
-        // Attach duration menu to stems
-        stemElements.forEach((stem, index) => {
+        // Attach duration menu to stems - match stems to notes by proximity
+        stemElements.forEach(stem => {
             if (stem.dataset.clickHandlerAttached) return;
 
             stem.style.cursor = 'pointer';
@@ -213,21 +213,45 @@ class AlphaTabAdapter {
                 e.stopPropagation();
                 e.preventDefault();
 
-                console.log('Stem clicked:', stem, 'index:', index);
+                // Get stem's x position
+                const d = stem.getAttribute('d');
+                const match = d.match(/M\s*([\d.]+)/);
+                if (!match) return;
 
-                // Map stem to beat - stems are in order matching beats
-                const noteData = this.mapBeatIndexToNote(index);
-                console.log('noteData:', noteData, 'onDurationClick exists:', !!this.onDurationClick);
+                const stemX = parseFloat(match[1]);
+                console.log('Stem clicked at x:', stemX);
 
-                if (noteData && this.onDurationClick) {
-                    const rect = stem.getBoundingClientRect();
-                    const x = rect.left + rect.width / 2;
-                    const y = rect.top + rect.height / 2;
+                // Find the closest note element by x position
+                let closestNote = null;
+                let minDistance = Infinity;
 
-                    console.log('Calling onDurationClick with:', { measureIndex: noteData.measureIndex, time: noteData.event.time, x, y });
-                    this.onDurationClick(noteData.measureIndex, noteData.event.time, false, e, x, y);
-                } else {
-                    console.log('Skipping callback - noteData:', noteData, 'callback:', !!this.onDurationClick);
+                noteElements.forEach(noteEl => {
+                    const noteX = parseFloat(noteEl.getAttribute('x'));
+                    const distance = Math.abs(noteX - stemX);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestNote = noteEl;
+                    }
+                });
+
+                if (closestNote && minDistance < 50) { // Within 50px
+                    // Get beat index from closest note
+                    const beatGroup = closestNote.closest('g');
+                    const beatClass = beatGroup.className.baseVal;
+                    const beatIndex = parseInt(beatClass.replace('b', ''));
+
+                    console.log('Found closest note at beat:', beatIndex);
+
+                    const noteData = this.mapBeatIndexToNote(beatIndex);
+
+                    if (noteData && this.onDurationClick) {
+                        const rect = stem.getBoundingClientRect();
+                        const x = rect.left + rect.width / 2;
+                        const y = rect.top + rect.height / 2;
+
+                        this.onDurationClick(noteData.measureIndex, noteData.event.time, false, e, x, y);
+                    }
                 }
             });
         });
