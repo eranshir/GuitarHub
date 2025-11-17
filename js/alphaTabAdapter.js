@@ -75,19 +75,20 @@ class AlphaTabAdapter {
      * This is simpler and more reliable than manually building Score objects
      */
     tabCompositionToAlphaTex(composition) {
+        // Get time signature from composition
+        const [num, denom] = composition.timeSignature.split('/');
+
+        // Metadata block
         let tex = `.
 \\title "${composition.title}"
 \\tempo ${composition.tempo}
+\\ts ${num} ${denom}
 \\tuning E4 B3 G3 D3 A2 E2
-.\n`;
+.
+`;
 
         // Convert each measure
         composition.measures.forEach((measure, idx) => {
-            // Time signature (only if changed)
-            const [num, denom] = (measure.timeSignature || composition.timeSignature).split('/');
-            if (idx === 0) {
-                tex += `\\ts ${num} ${denom}\n`;
-            }
 
             // Group events by time
             const eventsByTime = this.groupEventsByTime(measure.events);
