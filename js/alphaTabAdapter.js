@@ -60,23 +60,11 @@ class AlphaTabAdapter {
             this.initialize();
         }
 
-        // TEST: Try minimal AlphaTex first
-        const testTex = `0.1.4`;
-        console.log('Testing minimal AlphaTex:', testTex);
+        // Convert to AlphaTex and render
+        const alphaTex = this.tabCompositionToAlphaTex(composition);
+        console.log('Generated AlphaTex:', alphaTex);
 
-        try {
-            this.alphaTabApi.tex(testTex);
-            console.log('Minimal test SUCCESS - alphaTab can parse');
-
-            // Now try our full composition
-            const alphaTex = this.tabCompositionToAlphaTex(composition);
-            console.log('Generated AlphaTex:', alphaTex);
-            this.alphaTabApi.tex(alphaTex);
-        } catch (e) {
-            console.error('Even minimal AlphaTex failed:', e);
-            console.error('alphaTab API may not support tex() in this version');
-        }
-
+        this.alphaTabApi.tex(alphaTex);
         console.log('Composition rendered with alphaTab');
     }
 
