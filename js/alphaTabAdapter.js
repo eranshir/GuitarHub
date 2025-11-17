@@ -267,10 +267,16 @@ class AlphaTabAdapter {
 
             beatGroup.dataset.durationHandlerAttached = 'true';
 
+            // Add pointer events to make clickable
+            beatGroup.style.pointerEvents = 'all';
+
             // Add invisible overlay to entire beat group for easier clicking
             beatGroup.addEventListener('click', (e) => {
+                console.log('Beat group clicked, target:', e.target, 'noteEl:', noteEl);
+
                 // If clicking directly on note number text, don't show duration menu
                 if (e.target === noteEl) {
+                    console.log('Clicked on note text, skipping');
                     return; // Note click handler will process
                 }
 
