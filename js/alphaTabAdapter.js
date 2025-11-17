@@ -195,15 +195,24 @@ class AlphaTabAdapter {
 
         console.log(`Found ${tabLines.length} TAB lines for new note clicks`);
 
-        // Sort TAB lines by y position to determine string numbers
-        const sortedTabLines = tabLines.sort((a, b) => {
-            const yA = parseFloat(a.getAttribute('y'));
-            const yB = parseFloat(b.getAttribute('y'));
-            return yA - yB;
+        // Group TAB lines by y-position (there are multiple lines per string across measures)
+        const stringYPositions = [];
+        tabLines.forEach(line => {
+            const y = parseFloat(line.getAttribute('y'));
+
+            // Check if this y-position is already tracked
+            const existing = stringYPositions.find(pos => Math.abs(pos - y) < 5);
+            if (!existing) {
+                stringYPositions.push(y);
+            }
         });
 
+        // Sort y positions (top to bottom = strings 1-6)
+        stringYPositions.sort((a, b) => a - b);
+        console.log('String y-positions:', stringYPositions);
+
         // Make TAB lines clickable for adding notes
-        sortedTabLines.forEach((line, lineIndex) => {
+        tabLines.forEach((line, lineIndex) => {
             if (line.dataset.clickHandlerAttached) return;
 
             line.style.cursor = 'crosshair';
@@ -248,10 +257,12 @@ class AlphaTabAdapter {
                 const estimatedBeat = Math.floor(relativeX / beatWidth);
                 const estimatedTime = estimatedBeat * 0.25; // Quarter note increments
 
-                // Determine string number from line index (lineIndex 0 = string 1, etc.)
-                const stringNum = lineIndex + 1;
+                // Determine string number from line's y position
+                const lineY = parseFloat(line.getAttribute('y'));
+                const stringIndex = stringYPositions.findIndex(y => Math.abs(y - lineY) < 5);
+                const stringNum = stringIndex + 1; // stringIndex 0 = string 1
 
-                console.log('Add new note:', { string: stringNum, time: estimatedTime, measureIndex: 0 });
+                console.log('Add new note:', { string: stringNum, stringIndex, lineY, time: estimatedTime, measureIndex: 0 });
 
                 // Call add note callback
                 if (this.onAddNote) {
