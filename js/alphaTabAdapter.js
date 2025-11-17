@@ -254,8 +254,11 @@ class AlphaTabAdapter {
                     return; // Let note handler deal with it
                 }
 
-                // Calculate which measure and time based on x position
-                // Estimate: x position / average beat width
+                // TODO: Detect which measure was clicked
+                // For now, always add to measure 0
+                // Need to map x-position to measure boundaries
+
+                // Calculate time within measure based on x position
                 const relativeX = clickX - lineX;
                 const beatWidth = lineWidth / 4; // Rough estimate (4 beats per measure in 4/4)
                 const estimatedBeat = Math.floor(relativeX / beatWidth);
@@ -265,7 +268,19 @@ class AlphaTabAdapter {
                 const stringIndex = tabOnlyYPositions.findIndex(y => Math.abs(y - lineY) < 5);
                 const stringNum = stringIndex + 1; // stringIndex 0 = string 1
 
-                console.log('Add new note:', { string: stringNum, stringIndex, lineY, time: estimatedTime, measureIndex: 0 });
+                console.log('Click analysis:', {
+                    lineX,
+                    lineWidth,
+                    clickX,
+                    relativeX,
+                    beatWidth,
+                    estimatedBeat,
+                    estimatedTime,
+                    string: stringNum,
+                    stringIndex,
+                    lineY,
+                    measureIndex: 0
+                });
 
                 // Call add note callback
                 if (this.onAddNote) {
