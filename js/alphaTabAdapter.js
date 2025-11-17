@@ -153,6 +153,13 @@ class AlphaTabAdapter {
     }
 
     /**
+     * Set callback for adding new notes on empty space
+     */
+    setAddNoteHandler(callback) {
+        this.onAddNote = callback;
+    }
+
+    /**
      * Attach click handlers to alphaTab-rendered note elements
      */
     attachClickHandlers() {
@@ -188,8 +195,15 @@ class AlphaTabAdapter {
 
         console.log(`Found ${tabLines.length} TAB lines for new note clicks`);
 
+        // Sort TAB lines by y position to determine string numbers
+        const sortedTabLines = tabLines.sort((a, b) => {
+            const yA = parseFloat(a.getAttribute('y'));
+            const yB = parseFloat(b.getAttribute('y'));
+            return yA - yB;
+        });
+
         // Make TAB lines clickable for adding notes
-        tabLines.forEach(line => {
+        sortedTabLines.forEach((line, lineIndex) => {
             if (line.dataset.clickHandlerAttached) return;
 
             line.style.cursor = 'crosshair';
@@ -234,11 +248,15 @@ class AlphaTabAdapter {
                 const estimatedBeat = Math.floor(relativeX / beatWidth);
                 const estimatedTime = estimatedBeat * 0.25; // Quarter note increments
 
-                console.log('Estimated time:', estimatedTime, 'for new note');
+                // Determine string number from line index (lineIndex 0 = string 1, etc.)
+                const stringNum = lineIndex + 1;
 
-                // For now, just log - we'll implement addNewNote callback next
+                console.log('Add new note:', { string: stringNum, time: estimatedTime, measureIndex: 0 });
+
+                // Call add note callback
                 if (this.onAddNote) {
-                    this.onAddNote(0, estimatedTime, lineY, clickX, clickY);
+                    // Pass: measureIndex, stringNum, time, click position for radial menu
+                    this.onAddNote(0, stringNum, estimatedTime, e.clientX, e.clientY);
                 } else {
                     console.log('onAddNote callback not set');
                 }

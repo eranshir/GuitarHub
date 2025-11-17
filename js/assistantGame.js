@@ -109,6 +109,11 @@ class AssistantGame {
             this.handleAlphaTabNoteClick(measureIndex, event, clickEvent, x, y);
         });
 
+        // Set up click handler for adding new notes on empty TAB space
+        this.alphaTabAdapter.setAddNoteHandler((measureIndex, stringNum, time, x, y) => {
+            this.handleAlphaTabAddNote(measureIndex, stringNum, time, x, y);
+        });
+
         // Keep old TabRenderer for fallback/reference (will remove later)
         this.tabRenderer = new TabRenderer('composition-tab-display-legacy');
 
@@ -1581,6 +1586,21 @@ class AssistantGame {
 
         // Show radial menu at the provided position
         this.radialMenu.show(x, y, null, event.fret);
+    }
+
+    handleAlphaTabAddNote(measureIndex, stringNum, time, x, y) {
+        console.log('alphaTab add note:', { measureIndex, stringNum, time, x, y });
+
+        // Store context for adding new note
+        this.radialEditContext = {
+            measureIndex,
+            stringNum,
+            time,
+            isNew: true
+        };
+
+        // Show radial menu for selecting fret (no current fret since it's new)
+        this.radialMenu.show(x, y, null, null);
     }
 
     handleNoteClickForRadialEdit(measureIndex, event, clickEvent) {
