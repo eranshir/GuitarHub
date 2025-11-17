@@ -1589,14 +1589,21 @@ class AssistantGame {
     }
 
     handleAlphaTabAddNote(measureIndex, stringNum, time, x, y) {
-        console.log('alphaTab add note:', { measureIndex, stringNum, time, x, y });
+        console.log('alphaTab add note - using composition cursor:', {
+            clickedMeasure: measureIndex,
+            clickedTime: time,
+            cursorMeasure: this.composition.currentMeasure,
+            cursorTime: this.composition.currentTime
+        });
 
-        // Store context for adding new note
+        // Use composition cursor instead of clicked position
+        // This ensures proper measure boundaries and sequential adding
         this.radialEditContext = {
-            measureIndex,
+            measureIndex: this.composition.currentMeasure,
             stringNum,
-            time,
-            isNew: true
+            time: this.composition.currentTime,
+            isNew: true,
+            useCursor: true // Flag to advance cursor after adding
         };
 
         // Show radial menu for selecting fret (no current fret since it's new)
@@ -1707,6 +1714,24 @@ class AssistantGame {
                         string: e.string,
                         fret: e.fret
                     })));
+
+                    // Advance cursor if this was a sequential add (not a click-to-position add)
+                    if (ctx.useCursor) {
+                        this.composition.currentTime += this.selectedDuration;
+
+                        // Check if we need a new measure
+                        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+                        if (this.composition.currentTime >= beatsPerMeasure) {
+                            this.composition.currentTime = 0;
+                            this.composition.currentMeasure++;
+                            this.composition.addMeasure();
+                        }
+
+                        console.log('Advanced cursor to:', {
+                            currentMeasure: this.composition.currentMeasure,
+                            currentTime: this.composition.currentTime
+                        });
+                    }
 
                     this.showTransientNotification(`Added note: String ${ctx.stringNum}, Fret ${fret}`);
                 }
