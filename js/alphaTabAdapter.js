@@ -321,27 +321,37 @@ class AlphaTabAdapter {
                 const estimatedBeat = Math.floor(relativeX / beatWidth);
                 const estimatedTime = estimatedBeat * 0.25; // Quarter note increments
 
-                // Determine string number from ORIGINAL line's y position (not overlay y)
-                const stringIndex = tabOnlyYPositions.findIndex(y => Math.abs(y - originalLineY) < 5);
-                const stringNum = stringIndex + 1; // stringIndex 0 = string 1
+                // Determine string number by finding CLOSEST line to click Y position
+                let closestStringIndex = 0;
+                let minDistance = Infinity;
+
+                tabOnlyYPositions.forEach((y, idx) => {
+                    const distance = Math.abs(y - clickY);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestStringIndex = idx;
+                    }
+                });
+
+                const stringNum = closestStringIndex + 1; // stringIndex 0 = string 1
+
+                console.log('String detection:', {
+                    clickY,
+                    tabOnlyYPositions,
+                    closestStringIndex,
+                    stringNum,
+                    minDistance
+                });
 
                 // Use chord note's time if near existing note, otherwise use estimated time
                 const finalTime = noteTimeForChord !== null ? noteTimeForChord : estimatedTime;
 
                 console.log('Click analysis:', {
-                    lineX,
-                    lineWidth,
-                    clickX,
-                    relativeX,
-                    beatWidth,
-                    estimatedBeat,
+                    measureIndex,
+                    stringNum,
+                    finalTime,
                     estimatedTime,
-                    nearNoteTime: noteTimeForChord,
-                    finalTime: finalTime,
-                    string: stringNum,
-                    stringIndex,
-                    originalLineY,
-                    measureIndex: measureIndex
+                    nearNoteTime: noteTimeForChord
                 });
 
                 // Call add note callback
