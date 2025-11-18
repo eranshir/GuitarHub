@@ -538,6 +538,18 @@ class AlphaTabAdapter {
         });
 
         console.log(`Finished attaching handlers to ${noteElements.length} notes`);
+
+        // Verify overlays are still in DOM
+        const overlaysInDOM = alphaTabSvg.querySelectorAll('rect[data-tab-line-overlay="true"]');
+        console.log(`Overlays in DOM after attachment: ${overlaysInDOM.length}`);
+        if (overlaysInDOM.length > 0) {
+            const sample = overlaysInDOM[0];
+            console.log('Sample overlay styles:', {
+                cursor: sample.style.cursor,
+                pointerEvents: sample.style.pointerEvents,
+                fill: sample.getAttribute('fill')
+            });
+        }
     }
 
     /**
