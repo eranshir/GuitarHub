@@ -1596,10 +1596,15 @@ class AssistantGame {
         let isChord = false;
 
         if (measure) {
+            console.log('Checking for nearby events in measure', measureIndex, 'at clicked time:', clickedTime);
+            console.log('Measure has events:', measure.events.map(e => ({ time: e.time, string: e.string, fret: e.fret })));
+
             // Find notes near clicked time (within 0.15 beats ~ 40px tolerance)
             const nearbyEvents = measure.events.filter(e =>
                 Math.abs(e.time - clickedTime) < 0.15
             );
+
+            console.log('Nearby events found:', nearbyEvents.length);
 
             if (nearbyEvents.length > 0) {
                 // Add as chord - use same time as nearby note
