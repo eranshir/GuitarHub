@@ -281,8 +281,9 @@ class AlphaTabAdapter {
                     return; // Let note handler deal with it
                 }
 
-                // If clicking near a note (chord), get that note's time
+                // If clicking near a note (chord), get that note's time AND measure
                 let noteTimeForChord = null;
+                let noteMeasureForChord = null;
                 if (clickedNearNote) {
                     const beatGroup = clickedNearNote.closest('g');
                     const beatClass = beatGroup.className.baseVal;
@@ -291,12 +292,18 @@ class AlphaTabAdapter {
 
                     if (noteData) {
                         noteTimeForChord = noteData.event.time;
-                        console.log('Clicking near note at time:', noteTimeForChord, 'for chord');
+                        noteMeasureForChord = noteData.measureIndex; // Also get measure!
+                        console.log('Clicking near note at time:', noteTimeForChord, 'in measure:', noteMeasureForChord, 'for chord');
                     }
                 }
 
                 // Detect which measure was clicked based on line's x position
-                const measureIndex = measureXPositions.findIndex(x => Math.abs(x - lineX) < 5);
+                let measureIndex = measureXPositions.findIndex(x => Math.abs(x - lineX) < 5);
+
+                // Override with chord note's measure if adding to chord
+                if (noteMeasureForChord !== null) {
+                    measureIndex = noteMeasureForChord;
+                }
 
                 // Calculate time within measure based on x position
                 const relativeX = clickX - lineX;
