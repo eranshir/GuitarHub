@@ -1886,9 +1886,19 @@ class AssistantGame {
         let currentMeasureIdx = measureIndex;
         let currentTime = 0;
 
-        eventGroups.forEach(group => {
+        console.log('Reflow starting:', { measureIndex, beatsPerMeasure, eventGroupCount: eventGroups.length });
+
+        eventGroups.forEach((group, groupIdx) => {
             // All events in a group (chord) have the same duration
             const groupDuration = group[0].duration;
+
+            console.log(`Group ${groupIdx}:`, {
+                currentMeasure: currentMeasureIdx,
+                currentTime,
+                groupDuration,
+                wouldFit: currentTime + groupDuration <= beatsPerMeasure,
+                strings: group.map(e => `string ${e.string} fret ${e.fret}`)
+            });
 
             // Check if group would fit in current measure
             if (currentTime + groupDuration <= beatsPerMeasure) {
@@ -1898,6 +1908,7 @@ class AssistantGame {
                     this.composition.measures[currentMeasureIdx].events.push(event);
                 });
                 currentTime += groupDuration;
+                console.log(`  → Added to measure ${currentMeasureIdx}, new time: ${currentTime}`);
             } else if (currentTime === 0 && groupDuration > beatsPerMeasure) {
                 // Special case: duration longer than measure
                 // Cap it to measure length
@@ -1907,6 +1918,7 @@ class AssistantGame {
                     this.composition.measures[currentMeasureIdx].events.push(event);
                 });
                 currentTime = beatsPerMeasure;
+                console.log(`  → Capped duration to ${beatsPerMeasure}, added to measure ${currentMeasureIdx}`);
             } else {
                 // Move to next measure
                 currentMeasureIdx++;
@@ -1923,6 +1935,7 @@ class AssistantGame {
                     this.composition.measures[currentMeasureIdx].events.push(event);
                 });
                 currentTime += groupDuration;
+                console.log(`  → Moved to measure ${currentMeasureIdx}, time: ${currentTime}`);
             }
         });
 
@@ -1935,6 +1948,16 @@ class AssistantGame {
                 break;
             }
         }
+
+        // Log final measure state
+        console.log('Reflow complete. Final measures:');
+        this.composition.measures.forEach((measure, idx) => {
+            const totalTime = measure.events.reduce((sum, e) => {
+                const eventEnd = e.time + e.duration;
+                return Math.max(sum, eventEnd);
+            }, 0);
+            console.log(`  Measure ${idx}: ${measure.events.length} events, totalTime: ${totalTime}/${beatsPerMeasure}`);
+        });
     }
 
     handleRadialMenuCancel() {
