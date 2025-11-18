@@ -306,9 +306,33 @@ class AlphaTabAdapter {
                     }
                 });
 
+                // If clicking exactly on a note, manually trigger the note handler
                 if (clickedExactlyOnNote) {
-                    console.log('Clicked exactly on existing note, letting note handler process it');
-                    // DON'T stopPropagation - let the event reach the note element below
+                    console.log('Clicked exactly on existing note, manually triggering note handler');
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                    // Find the closest note element
+                    let closestNote = null;
+                    let minNoteDistance = Infinity;
+
+                    noteElements.forEach(noteEl => {
+                        const noteX = parseFloat(noteEl.getAttribute('x'));
+                        const noteY = parseFloat(noteEl.getAttribute('y'));
+                        const distance = Math.sqrt(
+                            Math.pow(clickX - noteX, 2) + Math.pow(clickY - noteY, 2)
+                        );
+
+                        if (distance < minNoteDistance && distance < 20) {
+                            minNoteDistance = distance;
+                            closestNote = noteEl;
+                        }
+                    });
+
+                    // Manually trigger click on the note element
+                    if (closestNote && closestNote._clickHandler) {
+                        closestNote._clickHandler(e);
+                    }
                     return;
                 }
 
