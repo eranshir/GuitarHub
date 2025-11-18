@@ -65,12 +65,12 @@ class AlphaTabAdapter {
                     clearTimeout(renderTimer);
                 }
 
-                // Wait for 2 seconds of silence before attaching handlers
+                // Wait for 1 second of silence before attaching handlers
                 // This ensures all lazy partials are done
                 renderTimer = setTimeout(() => {
-                    console.log('2 seconds of render silence, attaching handlers now');
+                    console.log('1 second of render silence, attaching handlers now');
                     this.waitForSVGAndAttachHandlers(0);
-                }, 2000);
+                }, 1000);
             });
             this.renderFinishedBound = true;
         }
