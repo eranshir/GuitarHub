@@ -295,15 +295,13 @@ class AlphaTabAdapter {
         measureXPositions.sort((a, b) => a - b);
         console.log('Measure x-positions:', measureXPositions);
 
+        // Remove ALL old overlays first (alphaTab might replace line elements)
+        const oldOverlays = alphaTabSvg.querySelectorAll('rect[data-tab-line-overlay="true"]');
+        console.log(`Removing ${oldOverlays.length} old overlays`);
+        oldOverlays.forEach(overlay => overlay.remove());
+
         // Create invisible clickable overlays for TAB lines (broader hit area, above stems)
-        // Note: alphaTab reuses elements, so we need to remove old overlays first
         tabLines.forEach((line, lineIndex) => {
-            // Remove old overlay if it exists (stored on line element)
-            if (line._overlay) {
-                console.log('Removing old overlay for line', lineIndex);
-                line._overlay.remove();
-                line._overlay = null;
-            }
 
             const lineX = parseFloat(line.getAttribute('x'));
             const lineY = parseFloat(line.getAttribute('y'));
@@ -320,14 +318,12 @@ class AlphaTabAdapter {
             overlay.setAttribute('stroke', 'none');
             overlay.style.cursor = 'crosshair';
             overlay.style.pointerEvents = 'all';
-            overlay.dataset.clickHandlerAttached = 'true';
+            overlay.dataset.tabLineOverlay = 'true'; // Mark as overlay for removal
             overlay.dataset.originalLineY = lineY; // Store original line Y for string detection
 
             // Insert overlay after the line (so it's above stems in z-order)
             line.parentElement.appendChild(overlay);
 
-            // Store overlay reference on line element for later removal
-            line._overlay = overlay;
             console.log(`Created new overlay for line ${lineIndex}`);
 
             overlay.addEventListener('click', (e) => {
