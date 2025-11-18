@@ -7,6 +7,7 @@ class AlphaTabAdapter {
         this.showNotation = false; // Toggle for standard notation
         this.currentComposition = null; // Store composition for click mapping
         this.onNoteClick = null; // Callback for note clicks
+        this.isAttachingHandlers = false; // Flag to prevent concurrent handler attachment
     }
 
     /**
@@ -66,6 +67,12 @@ class AlphaTabAdapter {
      * Wait for SVG to be ready and attach click handlers with retry logic
      */
     waitForSVGAndAttachHandlers(attempt) {
+        // Prevent concurrent handler attachment
+        if (this.isAttachingHandlers) {
+            console.log('Already attaching handlers, skipping this call');
+            return;
+        }
+
         const maxAttempts = 20; // Try for up to 10 seconds (20 * 500ms)
         const container = document.getElementById(this.containerId);
 
@@ -79,8 +86,10 @@ class AlphaTabAdapter {
         if (alphaTabSvg) {
             // SVG is ready, attach handlers
             console.log(`SVG found on attempt ${attempt + 1}, attaching handlers`);
+            this.isAttachingHandlers = true;
             this.inspectAlphaTabDOM();
             this.attachClickHandlers();
+            this.isAttachingHandlers = false;
         } else if (attempt < maxAttempts) {
             // SVG not ready yet, try again
             console.log(`SVG not ready yet (attempt ${attempt + 1}/${maxAttempts}), retrying...`);
