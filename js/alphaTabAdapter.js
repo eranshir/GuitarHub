@@ -298,14 +298,11 @@ class AlphaTabAdapter {
         // Create invisible clickable overlays for TAB lines (broader hit area, above stems)
         // Note: alphaTab reuses elements, so we need to remove old overlays first
         tabLines.forEach((line, lineIndex) => {
-            // Remove old overlay if it exists
-            if (line.dataset.clickHandlerAttached) {
-                // Find and remove old overlay (next sibling)
-                const oldOverlay = line.nextSibling;
-                if (oldOverlay && oldOverlay.dataset && oldOverlay.dataset.clickHandlerAttached) {
-                    oldOverlay.remove();
-                }
-                line.dataset.clickHandlerAttached = null;
+            // Remove old overlay if it exists (stored on line element)
+            if (line._overlay) {
+                console.log('Removing old overlay for line', lineIndex);
+                line._overlay.remove();
+                line._overlay = null;
             }
 
             const lineX = parseFloat(line.getAttribute('x'));
@@ -329,8 +326,9 @@ class AlphaTabAdapter {
             // Insert overlay after the line (so it's above stems in z-order)
             line.parentElement.appendChild(overlay);
 
-            // Mark line as having an overlay
-            line.dataset.clickHandlerAttached = 'true';
+            // Store overlay reference on line element for later removal
+            line._overlay = overlay;
+            console.log(`Created new overlay for line ${lineIndex}`);
 
             overlay.addEventListener('click', (e) => {
                 // Get original line Y from overlay dataset
