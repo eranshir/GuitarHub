@@ -540,7 +540,10 @@ class AlphaTabAdapter {
             // Store handler reference and attach
             noteEl._clickHandler = clickHandler;
             noteEl.addEventListener('click', clickHandler);
+            console.log(`Attached handler to note ${idx}, fret ${noteEl.textContent}`);
         });
+
+        console.log(`Finished attaching handlers to ${noteElements.length} notes`);
     }
 
     /**
