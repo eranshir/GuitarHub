@@ -390,8 +390,15 @@ class AlphaTabAdapter {
                     });
 
                     // Manually trigger click on the note element
-                    if (closestNote && closestNote._clickHandler) {
-                        closestNote._clickHandler(e);
+                    if (closestNote) {
+                        console.log('Closest note found:', closestNote, 'Has handler:', !!closestNote._clickHandler);
+                        if (closestNote._clickHandler) {
+                            closestNote._clickHandler(e);
+                        } else {
+                            console.error('Closest note found but no _clickHandler! Handler was lost.');
+                        }
+                    } else {
+                        console.error('No closest note found within 30px');
                     }
                     return;
                 }
