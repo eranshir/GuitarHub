@@ -274,9 +274,6 @@ class AlphaTabAdapter {
             line.dataset.clickHandlerAttached = 'true';
 
             overlay.addEventListener('click', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-
                 // Get original line Y from overlay dataset
                 const originalLineY = parseFloat(overlay.dataset.originalLineY);
 
@@ -310,9 +307,14 @@ class AlphaTabAdapter {
                 });
 
                 if (clickedExactlyOnNote) {
-                    console.log('Clicked exactly on existing note, ignoring');
-                    return; // Let note handler deal with it
+                    console.log('Clicked exactly on existing note, letting note handler process it');
+                    // DON'T stopPropagation - let the event reach the note element below
+                    return;
                 }
+
+                // Only stop propagation if NOT clicking on a note
+                e.stopPropagation();
+                e.preventDefault();
 
                 // If clicking near a note (chord), get that note's time AND measure
                 let noteTimeForChord = null;
