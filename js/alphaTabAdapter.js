@@ -272,22 +272,28 @@ class AlphaTabAdapter {
 
                 // Check if clicking vertically near a note (different string, same time)
                 let clickedNearNote = null;
+                let clickedExactlyOnNote = false;
+
                 noteElements.forEach(noteEl => {
                     const noteX = parseFloat(noteEl.getAttribute('x'));
                     const noteY = parseFloat(noteEl.getAttribute('y'));
 
-                    // Check if clicking ON the note number itself (exact match)
-                    if (Math.abs(clickX - noteX) < 15 && Math.abs(clickY - noteY) < 15) {
-                        clickedNearNote = 'exact'; // Exact note click
+                    // Check if clicking ON the note number itself (BOTH X and Y must be very close)
+                    const xDistance = Math.abs(clickX - noteX);
+                    const yDistance = Math.abs(clickY - noteY);
+
+                    if (xDistance < 15 && yDistance < 10) {
+                        // Very close to this specific note - it's an exact click
+                        clickedExactlyOnNote = true;
                     }
                     // Check if clicking NEAR note horizontally (same column, different string)
-                    else if (Math.abs(clickX - noteX) < 40 && Math.abs(clickY - noteY) > 10) {
+                    else if (xDistance < 40 && yDistance > 10) {
                         clickedNearNote = noteEl; // Near note (for chord)
                     }
                 });
 
-                if (clickedNearNote === 'exact') {
-                    console.log('Clicked on existing note, ignoring');
+                if (clickedExactlyOnNote) {
+                    console.log('Clicked exactly on existing note, ignoring');
                     return; // Let note handler deal with it
                 }
 
