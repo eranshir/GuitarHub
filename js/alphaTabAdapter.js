@@ -72,9 +72,10 @@ class AlphaTabAdapter {
      * Wait for SVG to be ready and attach click handlers with retry logic
      */
     waitForSVGAndAttachHandlers(attempt) {
-        // Debounce: Only attach if at least 2 seconds have passed since last attachment
+        // Debounce: Only attach if at least 200ms have passed since last attachment
+        // This prevents rapid-fire attachments but allows reattachment after edits
         const now = Date.now();
-        if (now - this.lastAttachTime < 2000) {
+        if (now - this.lastAttachTime < 200) {
             console.log('Debouncing: too soon since last attachment, skipping');
             return;
         }
