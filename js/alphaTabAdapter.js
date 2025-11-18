@@ -449,11 +449,13 @@ class AlphaTabAdapter {
 
             // Remove old handler if it exists to avoid duplicates
             if (noteEl._clickHandler) {
+                console.log(`Removing old handler from note ${idx}`);
                 noteEl.removeEventListener('click', noteEl._clickHandler);
             }
 
             // Create new handler
             const clickHandler = (e) => {
+                console.log('Note click handler fired!', e);
                 e.stopPropagation();
                 e.preventDefault(); // Prevent any default behavior
 
