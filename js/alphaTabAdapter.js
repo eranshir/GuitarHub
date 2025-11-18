@@ -53,16 +53,43 @@ class AlphaTabAdapter {
         // Note: renderFinished fires before lazy partials are rendered
         this.alphaTabApi.renderFinished.on(() => {
             console.log('alphaTab render finished event');
-            // Wait for lazy rendering to complete
-            setTimeout(() => {
-                this.inspectAlphaTabDOM();
-                this.attachClickHandlers();
-            }, 500); // Give time for SVG to be inserted
+            // Wait for lazy rendering to complete and retry if SVG not ready
+            this.waitForSVGAndAttachHandlers(0);
         });
 
         console.log('alphaTab initialized successfully');
 
         return this.alphaTabApi;
+    }
+
+    /**
+     * Wait for SVG to be ready and attach click handlers with retry logic
+     */
+    waitForSVGAndAttachHandlers(attempt) {
+        const maxAttempts = 20; // Try for up to 10 seconds (20 * 500ms)
+        const container = document.getElementById(this.containerId);
+
+        if (!container) {
+            console.log('Container not found, giving up');
+            return;
+        }
+
+        const alphaTabSvg = container.querySelector('.at-surface-svg');
+
+        if (alphaTabSvg) {
+            // SVG is ready, attach handlers
+            console.log(`SVG found on attempt ${attempt + 1}, attaching handlers`);
+            this.inspectAlphaTabDOM();
+            this.attachClickHandlers();
+        } else if (attempt < maxAttempts) {
+            // SVG not ready yet, try again
+            console.log(`SVG not ready yet (attempt ${attempt + 1}/${maxAttempts}), retrying...`);
+            setTimeout(() => {
+                this.waitForSVGAndAttachHandlers(attempt + 1);
+            }, 500);
+        } else {
+            console.error('SVG never appeared after 10 seconds, giving up');
+        }
     }
 
     /**
