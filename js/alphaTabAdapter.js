@@ -10,6 +10,7 @@ class AlphaTabAdapter {
         this.isAttachingHandlers = false; // Flag to prevent concurrent handler attachment
         this.renderFinishedBound = false; // Track if renderFinished listener is registered
         this.lastAttachTime = 0; // Timestamp of last attachment to debounce
+        this.lastAlphaTex = null; // Track last rendered AlphaTex to prevent duplicate renders
     }
 
     /**
@@ -189,7 +190,15 @@ class AlphaTabAdapter {
 
         // Convert to AlphaTex and render
         const alphaTex = this.tabCompositionToAlphaTex(composition);
+
+        // Skip render if AlphaTex hasn't changed (prevents infinite render loop)
+        if (alphaTex === this.lastAlphaTex) {
+            console.log('AlphaTex unchanged, skipping render to prevent loop');
+            return;
+        }
+
         console.log('Generated AlphaTex:', alphaTex);
+        this.lastAlphaTex = alphaTex;
 
         this.alphaTabApi.tex(alphaTex);
         console.log('Composition rendered with alphaTab');
