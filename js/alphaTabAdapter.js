@@ -56,10 +56,21 @@ class AlphaTabAdapter {
         // Listen for render completion to attach click handlers (only register once!)
         // Note: renderFinished fires before lazy partials are rendered
         if (!this.renderFinishedBound) {
+            let renderTimer = null;
             this.alphaTabApi.renderFinished.on(() => {
                 console.log('alphaTab render finished event');
-                // Wait for lazy rendering to complete and retry if SVG not ready
-                this.waitForSVGAndAttachHandlers(0);
+
+                // Clear any pending attachment
+                if (renderTimer) {
+                    clearTimeout(renderTimer);
+                }
+
+                // Wait for 2 seconds of silence before attaching handlers
+                // This ensures all lazy partials are done
+                renderTimer = setTimeout(() => {
+                    console.log('2 seconds of render silence, attaching handlers now');
+                    this.waitForSVGAndAttachHandlers(0);
+                }, 2000);
             });
             this.renderFinishedBound = true;
         }
@@ -107,10 +118,12 @@ class AlphaTabAdapter {
             this.isAttachingHandlers = false;
         } else if (attempt < maxAttempts) {
             // SVG not ready yet, try again
-            console.log(`SVG not ready yet (attempt ${attempt + 1}/${maxAttempts}), retrying...`);
+            // Use longer delay on later attempts to wait for lazy partials
+            const delay = attempt < 3 ? 500 : 1000;
+            console.log(`SVG not ready yet (attempt ${attempt + 1}/${maxAttempts}), retrying in ${delay}ms...`);
             setTimeout(() => {
                 this.waitForSVGAndAttachHandlers(attempt + 1);
-            }, 500);
+            }, delay);
         } else {
             console.error('SVG never appeared after 10 seconds, giving up');
         }
