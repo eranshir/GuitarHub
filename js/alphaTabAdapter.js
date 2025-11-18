@@ -8,6 +8,8 @@ class AlphaTabAdapter {
         this.currentComposition = null; // Store composition for click mapping
         this.onNoteClick = null; // Callback for note clicks
         this.isAttachingHandlers = false; // Flag to prevent concurrent handler attachment
+        this.renderFinishedBound = false; // Track if renderFinished listener is registered
+        this.lastAttachTime = 0; // Timestamp of last attachment to debounce
     }
 
     /**
@@ -50,13 +52,16 @@ class AlphaTabAdapter {
         // Initialize alphaTab
         this.alphaTabApi = new alphaTab.AlphaTabApi(container, settings);
 
-        // Listen for render completion to attach click handlers
+        // Listen for render completion to attach click handlers (only register once!)
         // Note: renderFinished fires before lazy partials are rendered
-        this.alphaTabApi.renderFinished.on(() => {
-            console.log('alphaTab render finished event');
-            // Wait for lazy rendering to complete and retry if SVG not ready
-            this.waitForSVGAndAttachHandlers(0);
-        });
+        if (!this.renderFinishedBound) {
+            this.alphaTabApi.renderFinished.on(() => {
+                console.log('alphaTab render finished event');
+                // Wait for lazy rendering to complete and retry if SVG not ready
+                this.waitForSVGAndAttachHandlers(0);
+            });
+            this.renderFinishedBound = true;
+        }
 
         console.log('alphaTab initialized successfully');
 
@@ -67,6 +72,13 @@ class AlphaTabAdapter {
      * Wait for SVG to be ready and attach click handlers with retry logic
      */
     waitForSVGAndAttachHandlers(attempt) {
+        // Debounce: Only attach if at least 2 seconds have passed since last attachment
+        const now = Date.now();
+        if (now - this.lastAttachTime < 2000) {
+            console.log('Debouncing: too soon since last attachment, skipping');
+            return;
+        }
+
         // Prevent concurrent handler attachment
         if (this.isAttachingHandlers) {
             console.log('Already attaching handlers, skipping this call');
@@ -87,6 +99,7 @@ class AlphaTabAdapter {
             // SVG is ready, attach handlers
             console.log(`SVG found on attempt ${attempt + 1}, attaching handlers`);
             this.isAttachingHandlers = true;
+            this.lastAttachTime = now;
             this.inspectAlphaTabDOM();
             this.attachClickHandlers();
             this.isAttachingHandlers = false;
