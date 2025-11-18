@@ -387,10 +387,13 @@ class AlphaTabAdapter {
                 const beatClass = beatGroup.className.baseVal;
                 const beatIndex = parseInt(beatClass.replace('b', ''));
 
-                console.log('Note clicked:', { fret, beatIndex, element: noteEl });
+                // Get note Y position to determine which string
+                const noteY = parseFloat(noteEl.getAttribute('y'));
 
-                // Map beat index to composition data
-                const noteData = this.mapBeatIndexToNote(beatIndex);
+                console.log('Note clicked:', { fret, beatIndex, noteY, element: noteEl });
+
+                // Map beat index to composition data, using Y position to find specific note in chord
+                const noteData = this.mapBeatIndexToNote(beatIndex, noteY, tabOnlyYPositions);
 
                 if (noteData && this.onNoteClick) {
                     // Get position for radial menu
@@ -406,8 +409,11 @@ class AlphaTabAdapter {
 
     /**
      * Map alphaTab beat index to our composition note data
+     * @param {number} beatIndex - The beat index from alphaTab
+     * @param {number} noteY - Optional Y position to find specific note in chord
+     * @param {Array} tabOnlyYPositions - Optional array of TAB line Y positions
      */
-    mapBeatIndexToNote(beatIndex) {
+    mapBeatIndexToNote(beatIndex, noteY = null, tabOnlyYPositions = null) {
         if (!this.currentComposition) return null;
 
         // Flatten all events from all measures with their indices
@@ -422,7 +428,37 @@ class AlphaTabAdapter {
                 const events = eventsByTime.get(time);
 
                 if (currentBeatIndex === beatIndex) {
-                    // Found the beat - return first event (could be chord)
+                    // Found the beat
+
+                    // If noteY is provided, find the specific note in the chord by string
+                    if (noteY !== null && tabOnlyYPositions) {
+                        // Find which string this Y position corresponds to
+                        let closestStringIndex = 0;
+                        let minDistance = Infinity;
+
+                        tabOnlyYPositions.forEach((y, idx) => {
+                            const distance = Math.abs(y - noteY);
+                            if (distance < minDistance) {
+                                minDistance = distance;
+                                closestStringIndex = idx;
+                            }
+                        });
+
+                        const stringNum = closestStringIndex + 1; // stringIndex 0 = string 1
+
+                        // Find event with this string number
+                        const matchingEvent = events.find(e => e.string === stringNum);
+
+                        if (matchingEvent) {
+                            console.log('Found specific note in chord:', { stringNum, fret: matchingEvent.fret });
+                            return {
+                                measureIndex,
+                                event: matchingEvent
+                            };
+                        }
+                    }
+
+                    // Default: return first event (for single notes or fallback)
                     return {
                         measureIndex,
                         event: events[0]
