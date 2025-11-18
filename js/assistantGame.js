@@ -1829,6 +1829,7 @@ class AssistantGame {
     reflowMeasure(measureIndex) {
         // Comprehensive reflow: recalculates ALL events from this measure forward
         // Handles both overflow (notes pushed forward) and pullback (notes pulled back)
+        // PRESERVES CHORD GROUPINGS: Events at the same time stay together
 
         if (measureIndex >= this.composition.measures.length) return;
 
@@ -1850,28 +1851,61 @@ class AssistantGame {
             return timeA - timeB;
         });
 
+        // Group events by time to preserve chords
+        const eventGroups = [];
+        let currentGroup = [];
+        let lastAbsoluteTime = -1;
+
+        allEvents.forEach(event => {
+            const absoluteTime = (event.originalMeasure - measureIndex) * beatsPerMeasure + event.time;
+
+            // If this event is at the same time as previous (chord), add to current group
+            if (Math.abs(absoluteTime - lastAbsoluteTime) < 0.001) {
+                currentGroup.push(event);
+            } else {
+                // New time position - save previous group and start new one
+                if (currentGroup.length > 0) {
+                    eventGroups.push(currentGroup);
+                }
+                currentGroup = [event];
+                lastAbsoluteTime = absoluteTime;
+            }
+        });
+
+        // Don't forget the last group
+        if (currentGroup.length > 0) {
+            eventGroups.push(currentGroup);
+        }
+
         // Clear all measures from measureIndex forward
         for (let i = measureIndex; i < this.composition.measures.length; i++) {
             this.composition.measures[i].events = [];
         }
 
-        // Redistribute events across measures
+        // Redistribute event groups across measures
         let currentMeasureIdx = measureIndex;
         let currentTime = 0;
 
-        allEvents.forEach(event => {
-            // Check if note would fit in current measure
-            if (currentTime + event.duration <= beatsPerMeasure) {
+        eventGroups.forEach(group => {
+            // All events in a group (chord) have the same duration
+            const groupDuration = group[0].duration;
+
+            // Check if group would fit in current measure
+            if (currentTime + groupDuration <= beatsPerMeasure) {
                 // Fits in current measure
-                event.time = currentTime;
-                this.composition.measures[currentMeasureIdx].events.push(event);
-                currentTime += event.duration;
-            } else if (currentTime === 0 && event.duration > beatsPerMeasure) {
+                group.forEach(event => {
+                    event.time = currentTime;
+                    this.composition.measures[currentMeasureIdx].events.push(event);
+                });
+                currentTime += groupDuration;
+            } else if (currentTime === 0 && groupDuration > beatsPerMeasure) {
                 // Special case: duration longer than measure
                 // Cap it to measure length
-                event.duration = beatsPerMeasure;
-                event.time = 0;
-                this.composition.measures[currentMeasureIdx].events.push(event);
+                group.forEach(event => {
+                    event.duration = beatsPerMeasure;
+                    event.time = 0;
+                    this.composition.measures[currentMeasureIdx].events.push(event);
+                });
                 currentTime = beatsPerMeasure;
             } else {
                 // Move to next measure
@@ -1883,10 +1917,12 @@ class AssistantGame {
                     this.composition.addMeasure();
                 }
 
-                // Add event to new measure
-                event.time = currentTime;
-                this.composition.measures[currentMeasureIdx].events.push(event);
-                currentTime += event.duration;
+                // Add group to new measure
+                group.forEach(event => {
+                    event.time = currentTime;
+                    this.composition.measures[currentMeasureIdx].events.push(event);
+                });
+                currentTime += groupDuration;
             }
         });
 
