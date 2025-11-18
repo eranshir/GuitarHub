@@ -237,8 +237,17 @@ class AlphaTabAdapter {
         console.log('Measure x-positions:', measureXPositions);
 
         // Create invisible clickable overlays for TAB lines (broader hit area, above stems)
+        // Note: alphaTab reuses elements, so we need to remove old overlays first
         tabLines.forEach((line, lineIndex) => {
-            if (line.dataset.clickHandlerAttached) return;
+            // Remove old overlay if it exists
+            if (line.dataset.clickHandlerAttached) {
+                // Find and remove old overlay (next sibling)
+                const oldOverlay = line.nextSibling;
+                if (oldOverlay && oldOverlay.dataset && oldOverlay.dataset.clickHandlerAttached) {
+                    oldOverlay.remove();
+                }
+                line.dataset.clickHandlerAttached = null;
+            }
 
             const lineX = parseFloat(line.getAttribute('x'));
             const lineY = parseFloat(line.getAttribute('y'));
@@ -375,10 +384,17 @@ class AlphaTabAdapter {
             });
         });
 
-        // Attach click handler to each note (only if not already attached)
-        noteElements.forEach(noteEl => {
-            // Skip if already has handler
-            if (noteEl.dataset.clickHandlerAttached) return;
+        // Attach click handler to each note
+        // Note: alphaTab reuses SVG elements between renders
+        // We need to remove old event listeners before attaching new ones
+        noteElements.forEach((noteEl, idx) => {
+            // Clone and replace to remove all old event listeners
+            if (noteEl.dataset.clickHandlerAttached) {
+                const clone = noteEl.cloneNode(true);
+                noteEl.parentNode.replaceChild(clone, noteEl);
+                noteElements[idx] = clone; // Update array reference
+                noteEl = clone;
+            }
 
             noteEl.style.cursor = 'pointer';
             noteEl.dataset.clickHandlerAttached = 'true';
