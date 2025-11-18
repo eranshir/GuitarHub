@@ -292,16 +292,17 @@ class AlphaTabAdapter {
                     const noteX = parseFloat(noteEl.getAttribute('x'));
                     const noteY = parseFloat(noteEl.getAttribute('y'));
 
-                    // Check if clicking ON the note number itself (BOTH X and Y must be very close)
+                    // Check if clicking ON the note number itself
+                    // Use generous tolerance since overlay is capturing most clicks
                     const xDistance = Math.abs(clickX - noteX);
                     const yDistance = Math.abs(clickY - noteY);
 
-                    if (xDistance < 15 && yDistance < 10) {
-                        // Very close to this specific note - it's an exact click
+                    if (xDistance < 25 && yDistance < 15) {
+                        // Close enough to this note - treat as exact click
                         clickedExactlyOnNote = true;
                     }
-                    // Check if clicking NEAR note horizontally (same column, different string)
-                    else if (xDistance < 40 && yDistance > 10) {
+                    // Check if clicking NEAR note horizontally for chord (same column, different string)
+                    else if (xDistance < 40 && yDistance > 15) {
                         clickedNearNote = noteEl; // Near note (for chord)
                     }
                 });
@@ -323,7 +324,7 @@ class AlphaTabAdapter {
                             Math.pow(clickX - noteX, 2) + Math.pow(clickY - noteY, 2)
                         );
 
-                        if (distance < minNoteDistance && distance < 20) {
+                        if (distance < minNoteDistance && distance < 30) {
                             minNoteDistance = distance;
                             closestNote = noteEl;
                         }
@@ -417,6 +418,7 @@ class AlphaTabAdapter {
         // Note: alphaTab reuses SVG elements between renders, so we always reattach
         noteElements.forEach((noteEl, idx) => {
             noteEl.style.cursor = 'pointer';
+            noteEl.style.pointerEvents = 'all'; // Ensure clickable
 
             // Remove old handler if it exists to avoid duplicates
             if (noteEl._clickHandler) {
