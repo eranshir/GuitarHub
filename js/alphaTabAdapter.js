@@ -270,6 +270,9 @@ class AlphaTabAdapter {
             // Insert overlay after the line (so it's above stems in z-order)
             line.parentElement.appendChild(overlay);
 
+            // Mark line as having an overlay
+            line.dataset.clickHandlerAttached = 'true';
+
             overlay.addEventListener('click', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -385,21 +388,17 @@ class AlphaTabAdapter {
         });
 
         // Attach click handler to each note
-        // Note: alphaTab reuses SVG elements between renders
-        // We need to remove old event listeners before attaching new ones
+        // Note: alphaTab reuses SVG elements between renders, so we always reattach
         noteElements.forEach((noteEl, idx) => {
-            // Clone and replace to remove all old event listeners
-            if (noteEl.dataset.clickHandlerAttached) {
-                const clone = noteEl.cloneNode(true);
-                noteEl.parentNode.replaceChild(clone, noteEl);
-                noteElements[idx] = clone; // Update array reference
-                noteEl = clone;
+            noteEl.style.cursor = 'pointer';
+
+            // Remove old handler if it exists to avoid duplicates
+            if (noteEl._clickHandler) {
+                noteEl.removeEventListener('click', noteEl._clickHandler);
             }
 
-            noteEl.style.cursor = 'pointer';
-            noteEl.dataset.clickHandlerAttached = 'true';
-
-            noteEl.addEventListener('click', (e) => {
+            // Create new handler
+            const clickHandler = (e) => {
                 e.stopPropagation();
                 e.preventDefault(); // Prevent any default behavior
 
@@ -424,7 +423,11 @@ class AlphaTabAdapter {
 
                     this.onNoteClick(noteData.measureIndex, noteData.event, e, x, y);
                 }
-            }, { once: false }); // Allow multiple clicks on same note
+            };
+
+            // Store handler reference and attach
+            noteEl._clickHandler = clickHandler;
+            noteEl.addEventListener('click', clickHandler);
         });
     }
 
