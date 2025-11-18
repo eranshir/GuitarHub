@@ -343,11 +343,27 @@ class AlphaTabAdapter {
 
                 console.log('TAB line overlay clicked:', { lineX, originalLineY, clickX, clickY });
 
+                // Get fresh note elements (don't use closure - it's stale after re-render!)
+                const currentAlphaTabSvg = alphaTabSvg.parentElement ? alphaTabSvg : container.querySelector('.at-surface-svg');
+                if (!currentAlphaTabSvg) {
+                    console.error('SVG not found in overlay click handler');
+                    return;
+                }
+
+                const textElements = currentAlphaTabSvg.querySelectorAll('text');
+                const currentNoteElements = Array.from(textElements).filter(el => {
+                    const content = el.textContent.trim();
+                    const hasNumber = /^\d+$/.test(content);
+                    const parentGroup = el.closest('g');
+                    const isBeatGroup = parentGroup?.className.baseVal.match(/^b\d+$/);
+                    return hasNumber && isBeatGroup;
+                });
+
                 // Check if clicking vertically near a note (different string, same time)
                 let clickedNearNote = null;
                 let clickedExactlyOnNote = false;
 
-                noteElements.forEach(noteEl => {
+                currentNoteElements.forEach(noteEl => {
                     const noteX = parseFloat(noteEl.getAttribute('x'));
                     const noteY = parseFloat(noteEl.getAttribute('y'));
 
@@ -372,11 +388,11 @@ class AlphaTabAdapter {
                     e.stopPropagation();
                     e.preventDefault();
 
-                    // Find the closest note element
+                    // Find the closest note element (use fresh elements, not closure!)
                     let closestNote = null;
                     let minNoteDistance = Infinity;
 
-                    noteElements.forEach(noteEl => {
+                    currentNoteElements.forEach(noteEl => {
                         const noteX = parseFloat(noteEl.getAttribute('x'));
                         const noteY = parseFloat(noteEl.getAttribute('y'));
                         const distance = Math.sqrt(
