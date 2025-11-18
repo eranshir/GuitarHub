@@ -231,34 +231,44 @@ class AlphaTabAdapter {
         measureXPositions.sort((a, b) => a - b);
         console.log('Measure x-positions:', measureXPositions);
 
-        // Make TAB lines clickable for adding notes
+        // Create invisible clickable overlays for TAB lines (broader hit area, above stems)
         tabLines.forEach((line, lineIndex) => {
             if (line.dataset.clickHandlerAttached) return;
 
-            line.style.cursor = 'crosshair';
-            line.style.pointerEvents = 'all'; // Ensure clickable
-            line.dataset.clickHandlerAttached = 'true';
+            const lineX = parseFloat(line.getAttribute('x'));
+            const lineY = parseFloat(line.getAttribute('y'));
+            const lineWidth = parseFloat(line.getAttribute('width'));
+            const lineHeight = parseFloat(line.getAttribute('height'));
 
-            line.addEventListener('click', (e) => {
-                // Check if actually clicked on the rect (not a path on top of it)
-                if (e.target !== line) {
-                    console.log('Clicked on element on top of TAB line, ignoring. Target:', e.target.tagName);
-                    return; // Let other handler process
-                }
+            // Create a taller invisible rect overlay for easier clicking
+            const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            overlay.setAttribute('x', lineX);
+            overlay.setAttribute('y', lineY - 15); // Extend 15px above
+            overlay.setAttribute('width', lineWidth);
+            overlay.setAttribute('height', 30); // 30px total height (15 above + 15 below)
+            overlay.setAttribute('fill', 'transparent');
+            overlay.setAttribute('stroke', 'none');
+            overlay.style.cursor = 'crosshair';
+            overlay.style.pointerEvents = 'all';
+            overlay.dataset.clickHandlerAttached = 'true';
+            overlay.dataset.originalLineY = lineY; // Store original line Y for string detection
 
+            // Insert overlay after the line (so it's above stems in z-order)
+            line.parentElement.appendChild(overlay);
+
+            overlay.addEventListener('click', (e) => {
                 e.stopPropagation();
                 e.preventDefault();
 
-                const lineX = parseFloat(line.getAttribute('x'));
-                const lineY = parseFloat(line.getAttribute('y'));
-                const lineWidth = parseFloat(line.getAttribute('width'));
+                // Get original line Y from overlay dataset
+                const originalLineY = parseFloat(overlay.dataset.originalLineY);
 
-                // Calculate click position relative to line
+                // Calculate click position relative to SVG
                 const svgRect = alphaTabSvg.getBoundingClientRect();
                 const clickX = e.clientX - svgRect.left;
                 const clickY = e.clientY - svgRect.top;
 
-                console.log('TAB line actually clicked (not blocked):', { lineX, lineY, clickX, clickY });
+                console.log('TAB line overlay clicked:', { lineX, originalLineY, clickX, clickY });
 
                 // Check if clicking vertically near a note (different string, same time)
                 let clickedNearNote = null;
@@ -311,8 +321,8 @@ class AlphaTabAdapter {
                 const estimatedBeat = Math.floor(relativeX / beatWidth);
                 const estimatedTime = estimatedBeat * 0.25; // Quarter note increments
 
-                // Determine string number from line's y position (already have lineY from above)
-                const stringIndex = tabOnlyYPositions.findIndex(y => Math.abs(y - lineY) < 5);
+                // Determine string number from ORIGINAL line's y position (not overlay y)
+                const stringIndex = tabOnlyYPositions.findIndex(y => Math.abs(y - originalLineY) < 5);
                 const stringNum = stringIndex + 1; // stringIndex 0 = string 1
 
                 // Use chord note's time if near existing note, otherwise use estimated time
@@ -330,7 +340,7 @@ class AlphaTabAdapter {
                     finalTime: finalTime,
                     string: stringNum,
                     stringIndex,
-                    lineY,
+                    originalLineY,
                     measureIndex: measureIndex
                 });
 
