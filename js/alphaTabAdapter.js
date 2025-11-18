@@ -163,8 +163,12 @@ class AlphaTabAdapter {
      * Attach click handlers to alphaTab-rendered note elements
      */
     attachClickHandlers() {
+        console.log('attachClickHandlers() called');
         const container = document.getElementById(this.containerId);
-        if (!container) return;
+        if (!container) {
+            console.log('Container not found');
+            return;
+        }
 
         const alphaTabSvg = container.querySelector('.at-surface-svg');
         if (!alphaTabSvg) {
@@ -183,6 +187,7 @@ class AlphaTabAdapter {
         });
 
         console.log(`Attaching click handlers to ${noteElements.length} notes`);
+        console.log(`Note elements already with handlers: ${Array.from(noteElements).filter(el => el.dataset.clickHandlerAttached).length}`);
 
         // Find horizontal TAB lines (rect elements) for adding new notes
         const rectElements = alphaTabSvg.querySelectorAll('rect');
