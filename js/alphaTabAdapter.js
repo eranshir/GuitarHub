@@ -366,6 +366,30 @@ class AlphaTabAdapter {
                     return hasNumber && isBeatGroup;
                 });
 
+                // Calculate average string spacing from tabOnlyYPositions
+                // Get fresh tabOnlyYPositions from current SVG
+                const currentTabLines = Array.from(currentAlphaTabSvg.querySelectorAll('rect')).filter(rect => {
+                    const width = parseFloat(rect.getAttribute('width'));
+                    const height = parseFloat(rect.getAttribute('height'));
+                    return width > 50 && height < 2;
+                });
+
+                const currentStringYPositions = [];
+                currentTabLines.forEach(line => {
+                    const y = parseFloat(line.getAttribute('y'));
+                    const existing = currentStringYPositions.find(pos => Math.abs(pos - y) < 5);
+                    if (!existing) currentStringYPositions.push(y);
+                });
+                currentStringYPositions.sort((a, b) => a - b);
+                const currentTabOnlyYPositions = currentStringYPositions.slice(-6);
+
+                // Calculate string spacing (distance between adjacent strings)
+                const stringSpacing = currentTabOnlyYPositions.length > 1
+                    ? currentTabOnlyYPositions[1] - currentTabOnlyYPositions[0]
+                    : 11; // Default ~11px
+
+                console.log('String spacing:', stringSpacing);
+
                 // Check if clicking vertically near a note (different string, same time)
                 let clickedNearNote = null;
                 let clickedExactlyOnNote = false;
@@ -375,16 +399,16 @@ class AlphaTabAdapter {
                     const noteY = parseFloat(noteEl.getAttribute('y'));
 
                     // Check if clicking ON the note number itself
-                    // Use generous tolerance since overlay is capturing most clicks
+                    // Must be on SAME string (yDistance < half string spacing)
                     const xDistance = Math.abs(clickX - noteX);
                     const yDistance = Math.abs(clickY - noteY);
 
-                    if (xDistance < 25 && yDistance < 15) {
-                        // Close enough to this note - treat as exact click
+                    if (xDistance < 25 && yDistance < stringSpacing / 2) {
+                        // Close enough to this note AND same string - treat as exact click
                         clickedExactlyOnNote = true;
                     }
                     // Check if clicking NEAR note horizontally for chord (same column, different string)
-                    else if (xDistance < 40 && yDistance > 15) {
+                    else if (xDistance < 40 && yDistance >= stringSpacing / 2) {
                         clickedNearNote = noteEl; // Near note (for chord)
                     }
                 });
