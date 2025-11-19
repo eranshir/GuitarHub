@@ -113,6 +113,11 @@ class AssistantGame {
         this.alphaTabAdapter.setAddNoteHandler((measureIndex, stringNum, time, x, y) => {
             this.handleAlphaTabAddNote(measureIndex, stringNum, time, x, y);
         });
+        // Set up callback for when chord annotation is added
+        this.alphaTabAdapter.setChordAddedHandler(() => {
+            this.renderComposition();
+            this.autoSaveComposition();
+        });
 
         // Keep old TabRenderer for fallback/reference (will remove later)
         this.tabRenderer = new TabRenderer('composition-tab-display-legacy');

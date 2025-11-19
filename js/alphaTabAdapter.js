@@ -587,6 +587,143 @@ class AlphaTabAdapter {
                 fill: sample.getAttribute('fill')
             });
         }
+
+        // Create chord annotation area above TAB staff
+        this.createChordAnnotationArea(alphaTabSvg, tabOnlyYPositions, measureXPositions);
+    }
+
+    /**
+     * Create clickable area above TAB staff for adding chord annotations
+     */
+    createChordAnnotationArea(alphaTabSvg, tabOnlyYPositions, measureXPositions) {
+        if (tabOnlyYPositions.length === 0 || measureXPositions.length === 0) return;
+
+        // Remove old chord area overlays
+        const oldChordAreas = alphaTabSvg.querySelectorAll('rect[data-chord-area="true"]');
+        console.log(`Removing ${oldChordAreas.length} old chord areas`);
+        oldChordAreas.forEach(area => area.remove());
+
+        // The top of the TAB staff (first string)
+        const tabTopY = tabOnlyYPositions[0];
+
+        // Create clickable area for each measure, positioned above the TAB
+        measureXPositions.forEach((measureX, measureIndex) => {
+            const measureWidth = measureIndex < measureXPositions.length - 1
+                ? measureXPositions[measureIndex + 1] - measureX
+                : 200; // Default width for last measure
+
+            // Create overlay above TAB staff for chord annotations
+            const chordArea = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            chordArea.setAttribute('x', measureX);
+            chordArea.setAttribute('y', tabTopY - 40); // 40px above first string
+            chordArea.setAttribute('width', measureWidth);
+            chordArea.setAttribute('height', 35); // 35px tall clickable area
+            chordArea.setAttribute('fill', 'transparent');
+            chordArea.setAttribute('stroke', 'none');
+            chordArea.style.cursor = 'text'; // Text cursor to indicate typing
+            chordArea.style.pointerEvents = 'all';
+            chordArea.dataset.chordArea = 'true';
+            chordArea.dataset.measureIndex = measureIndex;
+
+            alphaTabSvg.appendChild(chordArea);
+
+            chordArea.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+
+                const svgRect = alphaTabSvg.getBoundingClientRect();
+                const clickX = e.clientX - svgRect.left;
+
+                // Calculate which beat (time position) was clicked
+                const relativeX = clickX - measureX;
+                const beatWidth = measureWidth / 4; // Rough estimate for 4/4
+                const estimatedBeat = Math.floor(relativeX / beatWidth);
+                const estimatedTime = estimatedBeat * 0.25;
+
+                console.log('Chord area clicked:', { measureIndex, estimatedTime, clickX: e.clientX, clickY: e.clientY });
+
+                // Show inline input for chord name
+                this.showChordNameInput(measureIndex, estimatedTime, e.clientX, e.clientY - 20);
+            });
+
+            console.log(`Created chord area for measure ${measureIndex}`);
+        });
+    }
+
+    /**
+     * Show inline input for typing chord name
+     */
+    showChordNameInput(measureIndex, time, x, y) {
+        // Remove any existing chord input
+        const existingInput = document.querySelector('.chord-name-input-overlay');
+        if (existingInput) {
+            existingInput.remove();
+        }
+
+        // Create input overlay
+        const inputContainer = document.createElement('div');
+        inputContainer.className = 'chord-name-input-overlay';
+        inputContainer.style.position = 'fixed';
+        inputContainer.style.left = `${x}px`;
+        inputContainer.style.top = `${y}px`;
+        inputContainer.style.zIndex = '10000';
+        inputContainer.style.background = 'white';
+        inputContainer.style.border = '2px solid #4CAF50';
+        inputContainer.style.borderRadius = '4px';
+        inputContainer.style.padding = '4px';
+        inputContainer.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = 'Chord name...';
+        input.style.border = 'none';
+        input.style.outline = 'none';
+        input.style.font = '14px Arial';
+        input.style.width = '100px';
+        input.style.padding = '4px';
+
+        inputContainer.appendChild(input);
+        document.body.appendChild(inputContainer);
+
+        // Focus and select
+        input.focus();
+
+        // Handle Enter key to save
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const chordName = input.value.trim();
+                if (chordName) {
+                    console.log('Adding chord:', { measureIndex, time, chordName });
+                    this.currentComposition.addChordAnnotation(measureIndex, time, chordName);
+
+                    // Re-render to show the chord
+                    if (this.onChordAdded) {
+                        this.onChordAdded();
+                    }
+                }
+                inputContainer.remove();
+            } else if (e.key === 'Escape') {
+                inputContainer.remove();
+            }
+        });
+
+        // Handle click outside to cancel
+        const handleClickOutside = (e) => {
+            if (!inputContainer.contains(e.target)) {
+                inputContainer.remove();
+                document.removeEventListener('click', handleClickOutside);
+            }
+        };
+        setTimeout(() => {
+            document.addEventListener('click', handleClickOutside);
+        }, 100);
+    }
+
+    /**
+     * Set callback for when chord is added
+     */
+    setChordAddedHandler(callback) {
+        this.onChordAdded = callback;
     }
 
     /**
