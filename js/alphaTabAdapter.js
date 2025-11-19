@@ -34,7 +34,7 @@ class AlphaTabAdapter {
             },
             display: {
                 scale: 1.0,
-                stretchForce: 0.8,
+                stretchForce: 1.0, // Increase spacing to make clicking easier (was 0.8)
                 layoutMode: alphaTab.LayoutMode.Horizontal
             },
             notation: {
