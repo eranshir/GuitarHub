@@ -634,16 +634,52 @@ class AlphaTabAdapter {
                 const svgRect = alphaTabSvg.getBoundingClientRect();
                 const clickX = e.clientX - svgRect.left;
 
-                // Calculate which beat (time position) was clicked
-                const relativeX = clickX - measureX;
-                const beatWidth = measureWidth / 4; // Rough estimate for 4/4
-                const estimatedBeat = Math.floor(relativeX / beatWidth);
-                const estimatedTime = estimatedBeat * 0.25;
+                // Find the closest beat (note) in this measure by X position
+                const currentAlphaTabSvg = alphaTabSvg.parentElement ? alphaTabSvg : document.querySelector('.at-surface-svg');
+                const textElements = currentAlphaTabSvg.querySelectorAll('text');
+                const currentNoteElements = Array.from(textElements).filter(el => {
+                    const content = el.textContent.trim();
+                    const hasNumber = /^\d+$/.test(content);
+                    const parentGroup = el.closest('g');
+                    const isBeatGroup = parentGroup?.className.baseVal.match(/^b\d+$/);
+                    return hasNumber && isBeatGroup;
+                });
 
-                console.log('Chord area clicked:', { measureIndex, estimatedTime, clickX: e.clientX, clickY: e.clientY });
+                // Find closest note by X position
+                let closestNote = null;
+                let minXDistance = Infinity;
+
+                currentNoteElements.forEach(noteEl => {
+                    const noteX = parseFloat(noteEl.getAttribute('x'));
+                    const xDistance = Math.abs(clickX - noteX);
+
+                    if (xDistance < minXDistance) {
+                        minXDistance = xDistance;
+                        closestNote = noteEl;
+                    }
+                });
+
+                // Get the beat data for the closest note
+                let beatTime = 0;
+                let beatMeasureIndex = measureIndex;
+
+                if (closestNote) {
+                    const beatGroup = closestNote.closest('g');
+                    const beatClass = beatGroup.className.baseVal;
+                    const beatIndex = parseInt(beatClass.replace('b', ''));
+                    const noteData = this.mapBeatIndexToNote(beatIndex);
+
+                    if (noteData) {
+                        beatTime = noteData.event.time;
+                        beatMeasureIndex = noteData.measureIndex;
+                        console.log('Chord will attach to beat:', { beatMeasureIndex, beatTime, minXDistance });
+                    }
+                }
+
+                console.log('Chord area clicked:', { measureIndex, beatMeasureIndex, beatTime, clickX: e.clientX, clickY: e.clientY });
 
                 // Show inline input for chord name
-                this.showChordNameInput(measureIndex, estimatedTime, e.clientX, e.clientY - 20);
+                this.showChordNameInput(beatMeasureIndex, beatTime, e.clientX, e.clientY - 20);
             });
 
             console.log(`Created chord area for measure ${measureIndex}`);
