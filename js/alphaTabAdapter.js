@@ -553,12 +553,22 @@ class AlphaTabAdapter {
                 // Get note Y position to determine which string
                 const noteY = parseFloat(noteEl.getAttribute('y'));
 
-                console.log('Note clicked:', { fret, beatIndex, noteY, element: noteEl });
+                console.log('Note clicked:', { fret, beatIndex, noteY, element: noteEl, shiftKey: e.shiftKey });
 
-                // Map beat index to composition data, using Y position to find specific note in chord
+                // Map beat index to composition data
                 const noteData = this.mapBeatIndexToNote(beatIndex, noteY, tabOnlyYPositions);
 
-                if (noteData && this.onNoteClick) {
+                if (!noteData) return;
+
+                // If Shift key is held, add chord annotation instead of editing note
+                if (e.shiftKey) {
+                    const rect = noteEl.getBoundingClientRect();
+                    this.showChordNameInput(noteData.measureIndex, noteData.event.time, rect.left, rect.top - 30);
+                    return;
+                }
+
+                // Normal click - edit note
+                if (this.onNoteClick) {
                     // Get position for radial menu
                     const rect = noteEl.getBoundingClientRect();
                     const x = rect.left + rect.width / 2;
