@@ -680,14 +680,17 @@ class AlphaTabAdapter {
                     const events = eventsByTime.get(time);
                     const duration = events[0].duration;
 
+                    // Check if there's a chord annotation at this time
+                    const chordAnnotation = measure.chords ? measure.chords.find(c => Math.abs(c.time - time) < 0.001) : null;
+
                     if (events[0].isRest) {
                         // Rest
-                        tex += `r.${this.durationToTexNotation(duration)} `;
+                        tex += `r.${this.durationToTexNotation(duration)}`;
                     } else if (events.length === 1) {
                         // Single note - validate string number
                         const e = events[0];
                         if (e.string >= 1 && e.string <= 6 && e.fret !== null && e.fret !== undefined) {
-                            tex += `${e.fret}.${e.string}.${this.durationToTexNotation(duration)} `;
+                            tex += `${e.fret}.${e.string}.${this.durationToTexNotation(duration)}`;
                         } else {
                             console.warn('Skipping invalid note:', e);
                         }
@@ -703,11 +706,18 @@ class AlphaTabAdapter {
                                 tex += `${e.fret}.${e.string}`;
                                 if (i < validEvents.length - 1) tex += ` `;
                             });
-                            tex += `).${this.durationToTexNotation(duration)} `;
+                            tex += `).${this.durationToTexNotation(duration)}`;
                         } else {
                             console.warn('Skipping invalid chord:', events);
                         }
                     }
+
+                    // Add chord annotation if exists
+                    if (chordAnnotation) {
+                        tex += `{ch "${chordAnnotation.name}"}`;
+                    }
+
+                    tex += ` `;
                 });
             }
 
