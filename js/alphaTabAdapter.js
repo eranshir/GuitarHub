@@ -706,6 +706,12 @@ class AlphaTabAdapter {
             existingInput.remove();
         }
 
+        // Check if chord already exists at this position
+        const measure = this.currentComposition.measures[measureIndex];
+        const existingChord = measure && measure.chords
+            ? measure.chords.find(c => Math.abs(c.time - time) < 0.001)
+            : null;
+
         // Create input overlay
         const inputContainer = document.createElement('div');
         inputContainer.className = 'chord-name-input-overlay';
@@ -714,7 +720,7 @@ class AlphaTabAdapter {
         inputContainer.style.top = `${y}px`;
         inputContainer.style.zIndex = '10000';
         inputContainer.style.background = 'white';
-        inputContainer.style.border = '2px solid #4CAF50';
+        inputContainer.style.border = existingChord ? '2px solid #FF9800' : '2px solid #4CAF50'; // Orange if editing
         inputContainer.style.borderRadius = '4px';
         inputContainer.style.padding = '4px';
         inputContainer.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
@@ -728,25 +734,48 @@ class AlphaTabAdapter {
         input.style.width = '100px';
         input.style.padding = '4px';
 
+        // Pre-fill with existing chord name if editing
+        if (existingChord) {
+            input.value = existingChord.name;
+            input.select(); // Select text for easy replacement
+        }
+
         inputContainer.appendChild(input);
         document.body.appendChild(inputContainer);
 
-        // Focus and select
+        // Focus
         input.focus();
 
-        // Handle Enter key to save
+        // Handle Enter key to save or delete
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 const chordName = input.value.trim();
-                if (chordName) {
-                    console.log('Adding chord:', { measureIndex, time, chordName });
-                    this.currentComposition.addChordAnnotation(measureIndex, time, chordName);
 
-                    // Re-render to show the chord
-                    if (this.onChordAdded) {
-                        this.onChordAdded();
+                if (chordName) {
+                    // Save or update chord
+                    if (existingChord) {
+                        // Update existing chord
+                        existingChord.name = chordName;
+                        console.log('Updated chord:', { measureIndex, time, chordName });
+                    } else {
+                        // Add new chord
+                        console.log('Adding chord:', { measureIndex, time, chordName });
+                        this.currentComposition.addChordAnnotation(measureIndex, time, chordName);
+                    }
+                } else if (existingChord) {
+                    // Empty input + existing chord = delete
+                    const chordIndex = measure.chords.indexOf(existingChord);
+                    if (chordIndex > -1) {
+                        measure.chords.splice(chordIndex, 1);
+                        console.log('Deleted chord at:', { measureIndex, time });
                     }
                 }
+
+                // Re-render to show changes
+                if (this.onChordAdded) {
+                    this.onChordAdded();
+                }
+
                 inputContainer.remove();
             } else if (e.key === 'Escape') {
                 inputContainer.remove();
