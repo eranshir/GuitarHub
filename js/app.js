@@ -21,7 +21,7 @@ class App {
         this.intervalGame = new IntervalGame(this.guitar, this.statistics, this.intervalTheory);
         this.chordGame = new ChordGame(this.guitar, this.statistics, this.chordTheory);
         this.chordPositionsGame = new ChordPositionsGame(this.guitar, this.audio, this.chordTheory);
-        this.assistantGame = new AssistantGame(this.guitar, this.audio, this.chordTheory);
+        this.assistantGame = new Composer(this.guitar, this.audio, this.chordTheory);
         this.spotNoteGame = new SpotNoteGame(this.guitar, this.statistics);
         this.mobileManager = new MobileManager(this);
         this.setupModuleNavigation();

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bravura Font Test</title>
+    <style>
+        @font-face {
+            font-family: 'Bravura';
+            src: url('vendor/alphatab/font/Bravura.woff2') format('woff2'),
+                 url('vendor/alphatab/font/Bravura.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+        }
+
+        .test-button {
+            font-family: 'Bravura', sans-serif;
+            font-size: 30px;
+            padding: 20px;
+            margin: 10px;
+            border: 2px solid #333;
+            background: white;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .fallback {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bravura Font Test</h1>
+
+    <h2>Notes:</h2>
+    <div class="test-button">&#xE1D9;</div> Sixteenth (E1D9)<br>
+    <div class="test-button">&#xE1D7;</div> Eighth (E1D7)<br>
+    <div class="test-button">&#xE1D5;</div> Quarter (E1D5)<br>
+    <div class="test-button">&#xE1D3;</div> Half (E1D3)<br>
+    <div class="test-button">&#xE1D2;</div> Whole (E1D2)<br>
+
+    <h2>Rests:</h2>
+    <div class="test-button">&#xE4E7;</div> Sixteenth rest (E4E7)<br>
+    <div class="test-button">&#xE4E6;</div> Eighth rest (E4E6)<br>
+    <div class="test-button">&#xE4E5;</div> Quarter rest (E4E5)<br>
+    <div class="test-button">&#xE4E3;</div> Half rest (E4E3)<br>
+    <div class="test-button">&#xE4E2;</div> Whole rest (E4E2)<br>
+
+    <h2>Dotted notes:</h2>
+    <div class="test-button">&#xE1D7;&#xE1E7;</div> Dotted eighth<br>
+    <div class="test-button">&#xE1D3;&#xE1E7;</div> Dotted half<br>
+
+    <p class="fallback">If you see musical note symbols above, the Bravura font is loading correctly!</p>
+</body>
+</html>

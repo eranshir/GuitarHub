@@ -1,5 +1,5 @@
-// Guitar Assistant - AI-powered teaching assistant with fretboard visualization
-class AssistantGame {
+// Guitar TAB Composer - AI-powered composition assistant with fretboard visualization
+class Composer {
     constructor(guitar, audio, chordTheory) {
         this.guitar = guitar;
         this.audio = audio;
@@ -12,24 +12,11 @@ class AssistantGame {
             ? 'http://localhost:5001/api/assistant'
             : 'https://livehive.events/guitar-api/api/assistant';
 
-        // Mode: 'assistant' or 'composer'
-        this.mode = 'assistant';
-
         // Chat state
         this.conversationHistory = [];
         this.isWaitingForResponse = false;
 
-        // Fretboard sequence state (Assistant mode)
-        this.currentSequence = [];
-        this.currentIndex = 0;
-        this.previousIndex = null;
-
-        // Chord shape navigation
-        this.currentShapeIndex = 0;
-        this.availableShapes = [];
-        this.currentChordName = null;
-
-        // Composition state (Composer mode)
+        // Composition state
         this.composition = new TabComposition();
         this.tabRenderer = null; // Keep for compatibility during transition
         this.alphaTabAdapter = null; // New alphaTab renderer
@@ -330,38 +317,6 @@ class AssistantGame {
 
     setupEventListeners() {
         // Mode toggle buttons
-        document.getElementById('mode-assistant')?.addEventListener('click', () => {
-            this.switchMode('assistant');
-        });
-
-        document.getElementById('mode-composer')?.addEventListener('click', () => {
-            this.switchMode('composer');
-        });
-
-        // BPM control
-        const bpmSlider = document.getElementById('assistant-bpm-slider');
-        const bpmDisplay = document.getElementById('assistant-bpm-display');
-        if (bpmSlider && bpmDisplay) {
-            bpmSlider.addEventListener('input', (e) => {
-                this.bpm = parseInt(e.target.value);
-                bpmDisplay.textContent = this.bpm;
-                this.saveSettings();
-
-                // Restart metronome if playing
-                if (this.isPlaying) {
-                    this.stopPlayback();
-                    this.startPlayback();
-                }
-            });
-        }
-
-        // Playback controls
-        document.getElementById('assistant-start')?.addEventListener('click', () => this.startPlayback());
-        document.getElementById('assistant-pause')?.addEventListener('click', () => this.pausePlayback());
-        document.getElementById('assistant-resume')?.addEventListener('click', () => this.resumePlayback());
-        document.getElementById('assistant-stop')?.addEventListener('click', () => this.stopPlayback());
-        document.getElementById('assistant-play-shape')?.addEventListener('click', () => this.playCurrentShape());
-
         // Chat controls
         const sendBtn = document.getElementById('send-message');
         const chatInput = document.getElementById('chat-input');
@@ -420,57 +375,36 @@ class AssistantGame {
         this.isWaitingForResponse = true;
 
         try {
-            let response;
+            // Composer mode - send composition context
+            const composerEndpoint = this.apiEndpoint.replace('/api/assistant', '/api/composer/suggest');
 
-            // Different endpoints for different modes
-            if (this.mode === 'composer') {
-                // Composer mode - send composition context
-                const composerEndpoint = this.apiEndpoint.replace('/api/assistant', '/api/composer/suggest');
+            // Prepare selected region if notes are selected
+            const selectedRegion = this.selectedNotes.length > 0 ? {
+                notes: this.selectedNotes,
+                count: this.selectedNotes.length
+            } : null;
 
-                // Prepare selected region if notes are selected
-                const selectedRegion = this.selectedNotes.length > 0 ? {
-                    notes: this.selectedNotes,
-                    count: this.selectedNotes.length
-                } : null;
-
-                response = await fetch(composerEndpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
+            const response = await fetch(composerEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: message,
+                    composition: {
+                        title: this.composition.title,
+                        tempo: this.composition.tempo,
+                        timeSignature: this.composition.timeSignature,
+                        measures: this.composition.measures
                     },
-                    body: JSON.stringify({
-                        message: message,
-                        composition: {
-                            title: this.composition.title,
-                            tempo: this.composition.tempo,
-                            timeSignature: this.composition.timeSignature,
-                            measures: this.composition.measures
-                        },
-                        selected_region: selectedRegion,
-                        context: {
-                            tempo: this.composition.tempo,
-                            time_signature: this.composition.timeSignature,
-                            has_selection: !!selectedRegion
-                        }
-                    })
-                });
-            } else {
-                // Assistant mode - original behavior
-                response = await fetch(this.apiEndpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        conversation_history: this.conversationHistory,
-                        context: {
-                            bpm: this.bpm,
-                            fretboard_range: [0, 15]
-                        }
-                    })
-                });
-            }
+                    selected_region: selectedRegion,
+                    context: {
+                        tempo: this.composition.tempo,
+                        time_signature: this.composition.timeSignature,
+                        has_selection: !!selectedRegion
+                    }
+                })
+            });
 
             if (!response.ok) {
                 throw new Error(`API error: ${response.status}`);
@@ -478,29 +412,13 @@ class AssistantGame {
 
             const data = await response.json();
 
-            // DEBUG: Log the full response from GPT
-            console.log('=== GPT Response ===');
-            console.log(JSON.stringify(data, null, 2));
-            console.log('==================');
+            // Handle composer suggestion
+            this.addMessageToChat(data.chat_response, 'assistant');
 
-            if (this.mode === 'composer') {
-                // Handle composer suggestion
-                this.addMessageToChat(data.chat_response, 'assistant');
-                console.log('TAB context sent to GPT:', data.tab_context_used);
-
-                // If GPT provided structured TAB additions, offer to apply them
-                if (data.tab_additions && data.tab_additions.length > 0) {
-                    console.log('GPT suggested TAB additions:', data.tab_additions);
-                    const hasSelection = this.selectedNotes.length > 0;
-                    this.showTabAdditionsPreview(data.tab_additions, hasSelection);
-                }
-            } else {
-                // Handle assistant response (fretboard sequences)
-                this.conversationHistory.push(
-                    { role: 'user', content: message },
-                    { role: 'assistant', content: data.chat_response }
-                );
-                this.handleAssistantResponse(data);
+            // If GPT provided structured TAB additions, offer to apply them
+            if (data.tab_additions && data.tab_additions.length > 0) {
+                const hasSelection = this.selectedNotes.length > 0;
+                this.showTabAdditionsPreview(data.tab_additions, hasSelection);
             }
 
         } catch (error) {
@@ -516,39 +434,6 @@ class AssistantGame {
         }
     }
 
-    handleAssistantResponse(data) {
-        // Add chat response to conversation
-        this.addMessageToChat(data.chat_response, 'assistant');
-
-        // Handle fretboard sequence if provided
-        if (data.fretboard_sequence && Array.isArray(data.fretboard_sequence) && data.fretboard_sequence.length > 0) {
-            console.log('Loading sequence:', data.fretboard_sequence);
-            this.loadSequence(data.fretboard_sequence);
-
-            // Check if any shapes have strumming patterns
-            const hasStrumming = data.fretboard_sequence.some(s => s.strumming_pattern && s.strumming_pattern.length > 0);
-            const hasFingers = data.fretboard_sequence.some(s => s.positions.some(p => p.left_finger));
-
-            console.log('Has strumming patterns:', hasStrumming);
-            console.log('Has finger numbers:', hasFingers);
-
-            this.addSystemMessage(`Loaded ${data.fretboard_sequence.length} shapes. Click "Start" to play through the sequence.`);
-        }
-
-        // Display tab if provided
-        if (data.tab_display) {
-            document.getElementById('assistant-tab-display').textContent = data.tab_display;
-        }
-
-        // Display additional notes if provided
-        if (data.additional_notes) {
-            const notesContainer = document.getElementById('assistant-additional-notes');
-            notesContainer.textContent = data.additional_notes;
-            notesContainer.style.display = 'block';
-        } else {
-            document.getElementById('assistant-additional-notes').style.display = 'none';
-        }
-    }
 
     addMessageToChat(message, sender, isError = false) {
         const chatMessages = document.getElementById('chat-messages');
@@ -611,6 +496,19 @@ class AssistantGame {
         }, 3000);
     }
 
+    formatDuration(duration) {
+        const durationNames = {
+            0.0625: 'sixteenth',
+            0.125: 'eighth',
+            0.25: 'quarter',
+            0.375: 'dotted eighth',
+            0.5: 'half',
+            0.75: 'dotted half',
+            1: 'whole'
+        };
+        return durationNames[duration] || `${duration}`;
+    }
+
     escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
@@ -645,25 +543,6 @@ class AssistantGame {
         }
     }
 
-    loadSequence(sequence) {
-        this.stopPlayback();
-        this.currentSequence = sequence;
-        this.currentIndex = 0;
-        this.previousIndex = null;
-
-        // Initialize chord shape navigation if sequence has a chord
-        if (sequence.length > 0 && sequence[0].chord_name) {
-            this.currentChordName = sequence[0].chord_name;
-            this.availableShapes = this.chordTheory.getAllShapes(this.currentChordName, this.guitar);
-            this.currentShapeIndex = 0;
-        } else {
-            this.currentChordName = null;
-            this.availableShapes = [];
-            this.currentShapeIndex = 0;
-        }
-
-        this.updateDisplay();
-    }
 
     navigateShape(direction) {
         if (this.availableShapes.length <= 1) return;
@@ -674,367 +553,24 @@ class AssistantGame {
         // Get the new shape
         const newShape = this.availableShapes[this.currentShapeIndex];
 
-        if (this.mode === 'assistant') {
-            // Assistant mode: update the current sequence with the new shape
-            if (this.currentSequence.length > 0) {
-                // Replace positions in current shape
-                this.currentSequence[this.currentIndex].positions = newShape.positions;
-                this.currentSequence[this.currentIndex].muted = newShape.muted || [];
+        // Update the fretboard state with new shape
+        this.fretboardState.clear();
 
-                // Update display
-                this.updateDisplay();
-
-                // Provide audio/visual feedback
-                this.addSystemMessage(`Shape ${this.currentShapeIndex + 1} of ${this.availableShapes.length} for ${this.currentChordName}`);
-            }
-        } else if (this.mode === 'composer') {
-            // Composer mode: update the fretboard state with new shape
-            this.fretboardState.clear();
-
-            // Load new shape positions onto fretboard
-            newShape.positions.forEach(pos => {
-                this.fretboardState.addNote(pos.string, pos.fret);
-            });
-
-            // Display on fretboard
-            this.displayComposerFretboard();
-
-            // Update detected chord
-            this.updateDetectedChord();
-
-            // Provide visual feedback
-            this.showTransientNotification(`Shape ${this.currentShapeIndex + 1} of ${this.availableShapes.length} for ${this.currentChordName}`);
-        }
-    }
-
-    startPlayback() {
-        if (this.currentSequence.length === 0) {
-            this.addSystemMessage('No sequence loaded. Ask the assistant to show you chords or progressions!');
-            return;
-        }
-
-        this.isPlaying = true;
-        this.isPaused = false;
-        this.currentIndex = 0;
-        this.previousIndex = null;
-
-        // Update UI
-        document.getElementById('assistant-start').style.display = 'none';
-        document.getElementById('assistant-pause').style.display = 'inline-block';
-        document.getElementById('assistant-stop').style.display = 'inline-block';
-
-        // Display first shape immediately
-        this.updateDisplay();
-
-        // Calculate timing
-        const beatDuration = (60 / this.bpm) * 1000; // ms per beat
-
-        // Check if current shape has strumming pattern
-        const currentShape = this.currentSequence[this.currentIndex];
-        if (currentShape.strumming_pattern && currentShape.strumming_pattern.length > 0) {
-            // Play with strumming pattern animation
-            this.playStrummingPattern(currentShape, beatDuration);
-        } else {
-            // Simple advance after duration
-            this.scheduleNextShape(beatDuration);
-        }
-    }
-
-    scheduleNextShape(beatDuration) {
-        if (!this.isPlaying || this.isPaused) return;
-
-        const currentShape = this.currentSequence[this.currentIndex];
-        const duration = currentShape.duration_beats * beatDuration;
-
-        this.metronomeInterval = setTimeout(() => {
-            if (!this.isPlaying || this.isPaused) return;
-
-            this.advanceToNextShape();
-
-            // Schedule next shape
-            if (this.isPlaying && this.currentIndex < this.currentSequence.length) {
-                const nextBeatDuration = (60 / this.bpm) * 1000;
-                this.scheduleNextShape(nextBeatDuration);
-            } else {
-                // Sequence complete
-                this.stopPlayback();
-                this.addSystemMessage('Sequence complete! Click "Start" to play again.');
-            }
-        }, duration);
-    }
-
-    advanceToNextShape() {
-        this.previousIndex = this.currentIndex;
-        this.currentIndex = (this.currentIndex + 1) % this.currentSequence.length;
-        this.updateDisplay();
-    }
-
-    pausePlayback() {
-        this.isPaused = true;
-        if (this.metronomeInterval) {
-            clearTimeout(this.metronomeInterval);
-            this.metronomeInterval = null;
-        }
-
-        document.getElementById('assistant-pause').style.display = 'none';
-        document.getElementById('assistant-resume').style.display = 'inline-block';
-    }
-
-    resumePlayback() {
-        this.isPaused = false;
-        document.getElementById('assistant-pause').style.display = 'inline-block';
-        document.getElementById('assistant-resume').style.display = 'none';
-
-        const beatDuration = (60 / this.bpm) * 1000;
-        this.scheduleNextShape(beatDuration);
-    }
-
-    stopPlayback() {
-        this.isPlaying = false;
-        this.isPaused = false;
-
-        if (this.metronomeInterval) {
-            clearTimeout(this.metronomeInterval);
-            this.metronomeInterval = null;
-        }
-
-        document.getElementById('assistant-start').style.display = 'inline-block';
-        document.getElementById('assistant-pause').style.display = 'none';
-        document.getElementById('assistant-resume').style.display = 'none';
-        document.getElementById('assistant-stop').style.display = 'none';
-
-        // Reset to first shape
-        this.currentIndex = 0;
-        this.previousIndex = null;
-        this.updateDisplay();
-    }
-
-    updateDisplay() {
-        if (!this.fretboardDisplay) return;
-
-        this.fretboardDisplay.clearHighlights();
-
-        if (this.currentSequence.length === 0) {
-            document.getElementById('assistant-chord-name').textContent = '-';
-            document.getElementById('assistant-position-info').textContent = 'Ready';
-            return;
-        }
-
-        const currentShape = this.currentSequence[this.currentIndex];
-        const previousShape = this.previousIndex !== null ? this.currentSequence[this.previousIndex] : null;
-
-        // Display previous shape in gray
-        if (previousShape && previousShape !== currentShape) {
-            this.displayShape(previousShape, true);
-        }
-
-        // Display current shape in red
-        if (currentShape) {
-            this.displayShape(currentShape, false);
-
-            // Update text display
-            document.getElementById('assistant-chord-name').textContent = currentShape.chord_name;
-
-            // Build position info with shape navigation hint
-            let posInfo = `${this.isPlaying ? 'Playing' : 'Showing'}: ${this.currentIndex + 1} of ${this.currentSequence.length}`;
-
-            // Add shape navigation info if multiple shapes available
-            if (this.availableShapes.length > 1) {
-                posInfo += ` | Shape ${this.currentShapeIndex + 1}/${this.availableShapes.length} (← →)`;
-            }
-
-            document.getElementById('assistant-position-info').textContent = posInfo;
-        }
-    }
-
-    displayShape(shape, isPrevious) {
-        if (!shape || !this.fretboardDisplay.container) return;
-
-        // Display chord positions
-        shape.positions.forEach(pos => {
-            const position = this.fretboardDisplay.container.querySelector(`#pos-${pos.string}-${pos.fret}`);
-            if (position) {
-                const marker = position.querySelector('.position-marker');
-                if (marker) {
-                    marker.classList.add('active');
-
-                    if (isPrevious) {
-                        marker.classList.add('previous-chord');
-                        marker.style.opacity = '0.5';
-                    } else {
-                        marker.classList.remove('previous-chord');
-                        marker.style.opacity = '1';
-                    }
-
-                    // Add left-hand finger number if provided (only for current shape)
-                    if (!isPrevious && pos.left_finger) {
-                        const fingerNum = document.createElement('span');
-                        fingerNum.className = 'finger-number';
-                        fingerNum.textContent = pos.left_finger;
-                        marker.appendChild(fingerNum);
-                    }
-
-                    // Prepare right-hand finger indicator (hidden until played)
-                    if (!isPrevious) {
-                        const rightFinger = document.createElement('span');
-                        rightFinger.className = 'right-finger';
-                        marker.appendChild(rightFinger);
-                    }
-                }
-            }
+        // Load new shape positions onto fretboard
+        newShape.positions.forEach(pos => {
+            this.fretboardState.addNote(pos.string, pos.fret);
         });
 
-        // Display muted strings
-        if (shape.muted && shape.muted.length > 0) {
-            shape.muted.forEach(stringNum => {
-                const openPosition = this.fretboardDisplay.container.querySelector(`#pos-${stringNum}-0`);
-                if (openPosition) {
-                    const marker = openPosition.querySelector('.position-marker');
-                    if (marker) {
-                        marker.classList.add('muted-string');
-                        marker.innerHTML = 'X';
+        // Display on fretboard
+        this.displayComposerFretboard();
 
-                        if (isPrevious) {
-                            marker.classList.add('previous-chord');
-                            marker.style.opacity = '0.5';
-                        } else {
-                            marker.classList.remove('previous-chord');
-                            marker.style.opacity = '1';
-                        }
-                    }
-                }
-            });
-        }
+        // Update detected chord
+        this.updateDetectedChord();
+
+        // Provide visual feedback
+        this.showTransientNotification(`Shape ${this.currentShapeIndex + 1} of ${this.availableShapes.length} for ${this.currentChordName}`);
     }
 
-    playStrummingPattern(shape, beatDuration) {
-        if (!shape.strumming_pattern || !this.isPlaying) return;
-
-        let cumulativeDelay = 0;
-
-        shape.strumming_pattern.forEach((strum, index) => {
-            const delay = cumulativeDelay;
-            const duration = strum.duration_beats * beatDuration;
-
-            setTimeout(() => {
-                if (!this.isPlaying || this.isPaused) return;
-
-                // Highlight the strings being played (green)
-                this.highlightPlayingStrings(strum.strings, strum.right_finger);
-
-                // Play the notes
-                this.playStrings(shape, strum.strings);
-
-                // Remove green highlight after a short time
-                setTimeout(() => {
-                    this.clearPlayingHighlights();
-                }, Math.min(duration * 0.8, 400));
-
-            }, delay);
-
-            cumulativeDelay += duration;
-        });
-
-        // After pattern completes, advance to next shape
-        setTimeout(() => {
-            if (!this.isPlaying || this.isPaused) return;
-
-            this.advanceToNextShape();
-
-            // Schedule next shape
-            if (this.isPlaying && this.currentIndex < this.currentSequence.length) {
-                const nextShape = this.currentSequence[this.currentIndex];
-                const nextBeatDuration = (60 / this.bpm) * 1000;
-
-                if (nextShape.strumming_pattern && nextShape.strumming_pattern.length > 0) {
-                    this.playStrummingPattern(nextShape, nextBeatDuration);
-                } else {
-                    this.scheduleNextShape(nextBeatDuration);
-                }
-            } else {
-                this.stopPlayback();
-                this.addSystemMessage('Sequence complete! Click "Start" to play again.');
-            }
-        }, cumulativeDelay);
-    }
-
-    highlightPlayingStrings(strings, rightFinger) {
-        if (!this.fretboardDisplay.container) return;
-
-        strings.forEach(stringNum => {
-            // Find the position for this string in current shape
-            const currentShape = this.currentSequence[this.currentIndex];
-            const pos = currentShape.positions.find(p => p.string === stringNum);
-
-            if (pos) {
-                const position = this.fretboardDisplay.container.querySelector(`#pos-${pos.string}-${pos.fret}`);
-                if (position) {
-                    const marker = position.querySelector('.position-marker');
-                    if (marker) {
-                        marker.classList.add('playing-now');
-
-                        // Show right finger if provided
-                        if (rightFinger) {
-                            const rightFingerSpan = marker.querySelector('.right-finger');
-                            if (rightFingerSpan) {
-                                rightFingerSpan.textContent = rightFinger.toUpperCase();
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
-
-    clearPlayingHighlights() {
-        if (!this.fretboardDisplay.container) return;
-
-        this.fretboardDisplay.container.querySelectorAll('.playing-now').forEach(marker => {
-            marker.classList.remove('playing-now');
-        });
-    }
-
-    playStrings(shape, strings) {
-        // Play the notes for the specified strings
-        const frequencies = [];
-
-        strings.forEach(stringNum => {
-            const pos = shape.positions.find(p => p.string === stringNum);
-            if (pos && !shape.muted.includes(stringNum)) {
-                const freq = this.guitar.getFrequency(pos.string, pos.fret);
-                if (freq) frequencies.push(freq);
-            }
-        });
-
-        if (frequencies.length > 0) {
-            if (frequencies.length === 1) {
-                this.audio.playNote(frequencies[0], 800);
-            } else {
-                this.audio.playChord(frequencies, 800);
-            }
-        }
-    }
-
-    playCurrentShape() {
-        if (this.currentSequence.length === 0) return;
-
-        const currentShape = this.currentSequence[this.currentIndex];
-        if (!currentShape) return;
-
-        // If has strumming pattern, play through it
-        if (currentShape.strumming_pattern && currentShape.strumming_pattern.length > 0) {
-            const beatDuration = (60 / this.bpm) * 1000;
-            this.playStrummingPattern(currentShape, beatDuration);
-        } else {
-            // Build chord object compatible with chordTheory.playChord
-            const chordData = {
-                positions: currentShape.positions,
-                muted: currentShape.muted || []
-            };
-
-            this.chordTheory.playChord(chordData, this.guitar, this.audio);
-        }
-    }
 
     saveSettings() {
         localStorage.setItem('assistantSettings', JSON.stringify({
@@ -1047,16 +583,8 @@ class AssistantGame {
         const saved = localStorage.getItem('assistantSettings');
         if (saved) {
             const settings = JSON.parse(saved);
-            this.bpm = settings.bpm || 80;
+            this.bpm = settings.bpm || 120;
             this.apiEndpoint = settings.apiEndpoint || this.apiEndpoint;
-
-            // Update UI
-            const bpmSlider = document.getElementById('assistant-bpm-slider');
-            const bpmDisplay = document.getElementById('assistant-bpm-display');
-            if (bpmSlider && bpmDisplay) {
-                bpmSlider.value = this.bpm;
-                bpmDisplay.textContent = this.bpm;
-            }
         }
     }
 
@@ -1211,62 +739,6 @@ class AssistantGame {
         }
     }
 
-    switchMode(mode) {
-        this.mode = mode;
-
-        // Update mode toggle buttons
-        document.querySelectorAll('.mode-toggle-btn').forEach(btn => {
-            btn.classList.remove('active');
-        });
-
-        if (mode === 'assistant') {
-            const modeBtn = document.getElementById('mode-assistant');
-            if (modeBtn) modeBtn.classList.add('active');
-
-            // Show assistant controls, hide composer controls
-            const composerControls = document.getElementById('composer-controls-compact');
-            const chordDetector = document.getElementById('composer-chord-detector');
-            const compositionTab = document.getElementById('composition-tab-container');
-            const assistantDisplay = document.getElementById('assistant-display-container');
-            const playbackControls = document.querySelector('.playback-controls');
-            const chordDisplay = document.querySelector('#assistant-module .current-chord-display');
-
-            if (composerControls) composerControls.style.display = 'none';
-            if (chordDetector) chordDetector.style.display = 'none';
-            if (compositionTab) compositionTab.style.display = 'none';
-            if (assistantDisplay) assistantDisplay.style.display = 'block';
-            if (playbackControls) playbackControls.style.display = 'block';
-            if (chordDisplay) chordDisplay.style.display = 'block';
-
-            // Update URL
-            window.location.hash = '#assistant/assistant';
-        } else {
-            const modeBtn = document.getElementById('mode-composer');
-            if (modeBtn) modeBtn.classList.add('active');
-
-            // Hide assistant controls, show composer controls
-            const composerControls = document.getElementById('composer-controls-compact');
-            const chordDetector = document.getElementById('composer-chord-detector');
-            const compositionTab = document.getElementById('composition-tab-container');
-            const assistantDisplay = document.getElementById('assistant-display-container');
-            const playbackControls = document.querySelector('.playback-controls');
-            const chordDisplay = document.querySelector('#assistant-module .current-chord-display');
-
-            if (composerControls) composerControls.style.display = 'flex';
-            if (chordDetector) chordDetector.style.display = 'flex';
-            if (compositionTab) compositionTab.style.display = 'block';
-            if (assistantDisplay) assistantDisplay.style.display = 'none';
-            if (playbackControls) playbackControls.style.display = 'none';
-            if (chordDisplay) chordDisplay.style.display = 'none';
-
-            // Update composition title and render
-            this.updateCompositionTitle();
-            this.renderComposition();
-
-            // Update URL
-            window.location.hash = '#assistant/composer';
-        }
-    }
 
     handleComposerFretboardClick(string, fret) {
         const notes = this.fretboardState.getNotes();
@@ -1495,17 +967,13 @@ class AssistantGame {
                 this.composition.addMeasure();
             }
 
-            console.log('Before adding: currentMeasure =', this.composition.currentMeasure, 'currentTime =', currentTime);
-
             // Add each note to composition at the same time
             notes.forEach(note => {
-                const event = this.composition.addEvent(note.string, note.fret, this.selectedDuration, null, currentTime);
-                console.log('Added event:', event);
+                this.composition.addEvent(note.string, note.fret, this.selectedDuration, null, currentTime);
             });
 
             // Now advance time only once (after all notes added)
             this.composition.currentTime += this.selectedDuration;
-            console.log('After advancing time: currentTime =', this.composition.currentTime);
 
             // Check if we need a new measure
             const beatsPerMeasure = this.composition.getBeatsPerMeasure();
@@ -1567,7 +1035,7 @@ class AssistantGame {
     }
 
     handleAlphaTabNoteClick(measureIndex, event, clickEvent, x, y) {
-        console.log('alphaTab note clicked:', { measureIndex, event, x, y });
+        // alphaTab note clicked: { measureIndex, event, x, y }
 
         // Stop propagation handled in alphaTabAdapter
         // Store editing context
@@ -1601,24 +1069,19 @@ class AssistantGame {
         let isChord = false;
 
         if (measure) {
-            console.log('Checking for nearby events in measure', measureIndex, 'at clicked time:', clickedTime);
-            console.log('Measure has events:', measure.events.map(e => ({ time: e.time, string: e.string, fret: e.fret })));
 
             // Find notes near clicked time (within 0.15 beats ~ 40px tolerance)
             const nearbyEvents = measure.events.filter(e =>
                 Math.abs(e.time - clickedTime) < 0.15
             );
 
-            console.log('Nearby events found:', nearbyEvents.length);
-
             if (nearbyEvents.length > 0) {
                 // Add as chord - use same time as nearby note
                 targetTime = nearbyEvents[0].time;
                 targetMeasure = measureIndex;
                 isChord = true;
-                console.log('Adding as CHORD to existing note at time:', targetTime);
             } else {
-                console.log('Adding SEQUENTIALLY at cursor');
+                // Adding sequentially at cursor
             }
         }
 
@@ -1688,9 +1151,6 @@ class AssistantGame {
     }
 
     handleRadialMenuSelection(fret, duration) {
-        console.log('handleRadialMenuSelection called:', { fret, duration });
-        console.log('radialEditContext:', this.radialEditContext);
-        console.log('durationEditContext:', this.durationEditContext);
 
         const ctx = this.radialEditContext;
 
@@ -1716,6 +1176,42 @@ class AssistantGame {
             return;
         }
 
+        if (fret === 'REST') {
+            // Replace chord/note with rest
+            if (ctx && !ctx.isNew && ctx.event && duration) {
+                const measure = this.composition.measures[ctx.measureIndex];
+                if (measure) {
+                    // Find all notes at this time position (chord)
+                    const notesAtTime = measure.events.filter(e =>
+                        Math.abs(e.time - ctx.event.time) < 0.001
+                    );
+
+                    // Remove all notes at this position
+                    measure.events = measure.events.filter(e =>
+                        Math.abs(e.time - ctx.event.time) >= 0.001
+                    );
+
+                    // Add a rest at this position
+                    measure.events.push({
+                        time: ctx.event.time,
+                        isRest: true,
+                        duration: duration,
+                        string: null, // Rests don't have a string
+                        fret: null
+                    });
+
+                    // Sort events by time
+                    measure.events.sort((a, b) => a.time - b.time);
+
+                    this.showTransientNotification(`Replaced with ${this.formatDuration(duration)} rest`);
+                    this.renderComposition();
+                    this.autoSaveComposition();
+                }
+            }
+            this.radialEditContext = null;
+            return;
+        }
+
         if (fret !== null && fret !== 'DELETE') {
             // Fret selected - add or update note
             if (ctx.isNew) {
@@ -1732,12 +1228,6 @@ class AssistantGame {
 
                     // Sort events by time to ensure proper rendering order
                     measure.events.sort((a, b) => a.time - b.time);
-
-                    console.log('After adding and sorting, measure events:', measure.events.map(e => ({
-                        time: e.time,
-                        string: e.string,
-                        fret: e.fret
-                    })));
 
                     // Advance cursor if this was a sequential add (not a click-to-position add)
                     if (ctx.useCursor) {
@@ -1891,19 +1381,9 @@ class AssistantGame {
         let currentMeasureIdx = measureIndex;
         let currentTime = 0;
 
-        console.log('Reflow starting:', { measureIndex, beatsPerMeasure, eventGroupCount: eventGroups.length });
-
         eventGroups.forEach((group, groupIdx) => {
             // All events in a group (chord) have the same duration
             const groupDuration = group[0].duration;
-
-            console.log(`Group ${groupIdx}:`, {
-                currentMeasure: currentMeasureIdx,
-                currentTime,
-                groupDuration,
-                wouldFit: currentTime + groupDuration <= beatsPerMeasure,
-                strings: group.map(e => `string ${e.string} fret ${e.fret}`)
-            });
 
             // Check if group would fit in current measure
             if (currentTime + groupDuration <= beatsPerMeasure) {
@@ -1913,7 +1393,6 @@ class AssistantGame {
                     this.composition.measures[currentMeasureIdx].events.push(event);
                 });
                 currentTime += groupDuration;
-                console.log(`  → Added to measure ${currentMeasureIdx}, new time: ${currentTime}`);
             } else if (currentTime === 0 && groupDuration > beatsPerMeasure) {
                 // Special case: duration longer than measure
                 // Cap it to measure length
@@ -1923,7 +1402,6 @@ class AssistantGame {
                     this.composition.measures[currentMeasureIdx].events.push(event);
                 });
                 currentTime = beatsPerMeasure;
-                console.log(`  → Capped duration to ${beatsPerMeasure}, added to measure ${currentMeasureIdx}`);
             } else {
                 // Move to next measure
                 currentMeasureIdx++;
@@ -1940,7 +1418,6 @@ class AssistantGame {
                     this.composition.measures[currentMeasureIdx].events.push(event);
                 });
                 currentTime += groupDuration;
-                console.log(`  → Moved to measure ${currentMeasureIdx}, time: ${currentTime}`);
             }
         });
 
@@ -1953,16 +1430,6 @@ class AssistantGame {
                 break;
             }
         }
-
-        // Log final measure state
-        console.log('Reflow complete. Final measures:');
-        this.composition.measures.forEach((measure, idx) => {
-            const totalTime = measure.events.reduce((sum, e) => {
-                const eventEnd = e.time + e.duration;
-                return Math.max(sum, eventEnd);
-            }, 0);
-            console.log(`  Measure ${idx}: ${measure.events.length} events, totalTime: ${totalTime}/${beatsPerMeasure}`);
-        });
     }
 
     handleRadialMenuCancel() {
@@ -2544,32 +2011,50 @@ class AssistantGame {
         // Sort by time to maintain sequence
         const sortedAdditions = [...tabAdditions].sort((a, b) => (a.time || 0) - (b.time || 0));
 
-        // Add each suggested note to the composition sequentially
+        // Group notes by time (to handle chords properly)
+        const notesByTime = {};
+        sortedAdditions.forEach(note => {
+            const time = note.time || 0;
+            if (!notesByTime[time]) {
+                notesByTime[time] = [];
+            }
+            notesByTime[time].push(note);
+        });
+
+        // Get sorted time positions
+        const times = Object.keys(notesByTime).map(Number).sort((a, b) => a - b);
+
+        // Add each group of notes (chords or single notes) to the composition
         let currentTime = this.composition.currentTime;
         let currentMeasure = this.composition.currentMeasure;
 
-        sortedAdditions.forEach(note => {
+        times.forEach(relativeTime => {
+            const notesAtTime = notesByTime[relativeTime];
+
             // Ensure we have a measure
             if (this.composition.measures.length === 0) {
                 this.composition.addMeasure();
             }
 
-            // Add the note at the current cursor position
-            this.composition.measures[currentMeasure].events.push({
-                time: currentTime,
-                string: note.string,
-                fret: note.fret,
-                duration: note.duration || 0.25,
-                leftFinger: null
+            // Add all notes at this time position (chord or single note)
+            notesAtTime.forEach(note => {
+                this.composition.measures[currentMeasure].events.push({
+                    time: currentTime,
+                    string: note.string,
+                    fret: note.fret,
+                    duration: note.duration || 0.25,
+                    leftFinger: null
+                });
             });
 
-            // Advance time
-            currentTime += (note.duration || 0.25);
+            // Advance time ONCE per chord (use the duration from the first note)
+            const duration = notesAtTime[0].duration || 0.25;
+            currentTime += duration;
 
             // Check if we need a new measure
             const beatsPerMeasure = this.composition.getBeatsPerMeasure();
             if (currentTime >= beatsPerMeasure) {
-                currentTime = 0;
+                currentTime -= beatsPerMeasure;
                 currentMeasure++;
                 if (currentMeasure >= this.composition.measures.length) {
                     this.composition.addMeasure();

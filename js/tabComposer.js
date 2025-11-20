@@ -525,12 +525,16 @@ class RadialNoteMenu {
         const outerRing = this.createHighFretAndDurationRing(currentFret);
         this.container.appendChild(outerRing);
 
-        // Delete button at top (only show if editing existing note)
+        // Delete button and rest buttons at top (only show if editing existing note)
         console.log('Showing radial menu, currentFret:', currentFret);
         if (currentFret !== null) {
             console.log('Creating delete button');
             const deleteButton = this.createDeleteButton();
             this.container.appendChild(deleteButton);
+
+            // Add rest buttons around delete button
+            const restButtons = this.createRestButtons();
+            restButtons.forEach(btn => this.container.appendChild(btn));
         }
 
         // Center indicator
@@ -635,6 +639,53 @@ class RadialNoteMenu {
         return button;
     }
 
+    createRestButtons() {
+        const buttons = [];
+        const radius = 160; // Same radius as delete button
+        const baseAngle = -Math.PI / 2; // Top position (where delete is)
+
+        // Rest durations with Bravura font glyphs
+        const rests = [
+            { value: 0.0625, glyph: '\uE4E7', title: 'Sixteenth rest' },
+            { value: 0.125, glyph: '\uE4E6', title: 'Eighth rest' },
+            { value: 0.25, glyph: '\uE4E5', title: 'Quarter rest' },
+            { value: 0.5, glyph: '\uE4E3', title: 'Half rest' },
+            { value: 1, glyph: '\uE4E2', title: 'Whole rest' }
+        ];
+
+        // Space rest buttons evenly around delete button (±30 degrees each side)
+        const angleSpan = Math.PI / 3; // 60 degrees total
+        const angleStep = angleSpan / (rests.length + 1);
+
+        rests.forEach((rest, i) => {
+            // Spread left and right of delete button
+            const offset = (i - Math.floor(rests.length / 2)) * angleStep;
+            const angle = baseAngle + offset;
+
+            const x = Math.cos(angle) * radius;
+            const y = Math.sin(angle) * radius;
+
+            const button = document.createElement('button');
+            button.className = 'radial-menu-item rest-button';
+            button.textContent = rest.glyph;
+            button.title = rest.title;
+            button.style.left = `${x}px`;
+            button.style.top = `${y}px`;
+            button.style.fontFamily = 'Bravura, sans-serif';
+            button.style.fontSize = '16px';
+
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.onSelect('REST', rest.value); // Special 'REST' indicator with duration
+                this.hide();
+            });
+
+            buttons.push(button);
+        });
+
+        return buttons;
+    }
+
     createHighFretAndDurationRing(currentFret) {
         const ring = document.createElement('div');
         ring.className = 'radial-ring outer-ring';
@@ -667,43 +718,15 @@ class RadialNoteMenu {
             ring.appendChild(button);
         });
 
-        // Bottom half: Duration buttons
+        // Bottom half: Duration buttons using Bravura font
         const durations = [
-            {
-                value: 0.0625,
-                title: 'Sixteenth note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z M11.5 5 Q15 7 15 10 L11.5 9 Z"/></svg>'
-            },
-            {
-                value: 0.125,
-                title: 'Eighth note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/></svg>'
-            },
-            {
-                value: 0.375,
-                title: 'Dotted eighth note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/><circle cx="13" cy="16" r="1.2"/></svg>'
-            },
-            {
-                value: 0.25,
-                title: 'Quarter note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/></svg>'
-            },
-            {
-                value: 0.5,
-                title: 'Half note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>'
-            },
-            {
-                value: 0.75,
-                title: 'Dotted half note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="16" r="1.2"/></svg>'
-            },
-            {
-                value: 1,
-                title: 'Whole note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>'
-            }
+            { value: 0.0625, title: 'Sixteenth note', glyph: '\uE1D9' },
+            { value: 0.125, title: 'Eighth note', glyph: '\uE1D7' },
+            { value: 0.375, title: 'Dotted eighth note', glyph: '\uE1D7\uE1E7' },
+            { value: 0.25, title: 'Quarter note', glyph: '\uE1D5' },
+            { value: 0.5, title: 'Half note', glyph: '\uE1D3' },
+            { value: 0.75, title: 'Dotted half note', glyph: '\uE1D3\uE1E7' },
+            { value: 1, title: 'Whole note', glyph: '\uE1D2' }
         ];
 
         const durationAngleStep = Math.PI / (durations.length + 1);
@@ -715,10 +738,12 @@ class RadialNoteMenu {
 
             const button = document.createElement('button');
             button.className = 'radial-menu-item duration-button';
-            button.innerHTML = dur.svg;
+            button.textContent = dur.glyph;
             button.title = dur.title;
             button.style.left = `${x}px`;
             button.style.top = `${y}px`;
+            button.style.fontFamily = 'Bravura, sans-serif';
+            button.style.fontSize = '16px';
 
             button.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -737,43 +762,15 @@ class RadialNoteMenu {
         const ring = document.createElement('div');
         ring.className = 'radial-ring duration-ring';
 
-        // All duration options with SVG icons
+        // All duration options with Bravura font glyphs
         const durations = [
-            {
-                value: 0.0625,
-                title: 'Sixteenth note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z M11.5 5 Q15 7 15 10 L11.5 9 Z"/></svg>'
-            },
-            {
-                value: 0.125,
-                title: 'Eighth note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/></svg>'
-            },
-            {
-                value: 0.375,
-                title: 'Dotted eighth note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/><circle cx="13" cy="16" r="1.2"/></svg>'
-            },
-            {
-                value: 0.25,
-                title: 'Quarter note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/></svg>'
-            },
-            {
-                value: 0.5,
-                title: 'Half note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>'
-            },
-            {
-                value: 0.75,
-                title: 'Dotted half note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="16" r="1.2"/></svg>'
-            },
-            {
-                value: 1,
-                title: 'Whole note',
-                svg: '<svg viewBox="0 0 24 24" fill="currentColor"><ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/></svg>'
-            }
+            { value: 0.0625, title: 'Sixteenth note', glyph: '\uE1D9' },
+            { value: 0.125, title: 'Eighth note', glyph: '\uE1D7' },
+            { value: 0.375, title: 'Dotted eighth note', glyph: '\uE1D7\uE1E7' },
+            { value: 0.25, title: 'Quarter note', glyph: '\uE1D5' },
+            { value: 0.5, title: 'Half note', glyph: '\uE1D3' },
+            { value: 0.75, title: 'Dotted half note', glyph: '\uE1D3\uE1E7' },
+            { value: 1, title: 'Whole note', glyph: '\uE1D2' }
         ];
         const angleStep = (2 * Math.PI) / durations.length;
 
@@ -787,10 +784,12 @@ class RadialNoteMenu {
             if (Math.abs(dur.value - currentDuration) < 0.001) {
                 button.classList.add('current');
             }
-            button.innerHTML = dur.svg;
+            button.textContent = dur.glyph;
             button.title = dur.title;
             button.style.left = `${x}px`;
             button.style.top = `${y}px`;
+            button.style.fontFamily = 'Bravura, sans-serif';
+            button.style.fontSize = '16px';
 
             button.addEventListener('click', (e) => {
                 e.stopPropagation();

@@ -52,8 +52,6 @@ class SongsBrowser {
             'sting_index.json'
         ];
 
-        console.log('Loading book indices...');
-
         for (const indexFile of bookFiles) {
             try {
                 const response = await fetch(`score/${indexFile}`);
@@ -78,8 +76,6 @@ class SongsBrowser {
                             pdfFile: pdfFileName
                         });
                     });
-
-                    console.log(`Loaded: ${indexFile}`);
                 } else {
                     console.warn(`Could not load ${indexFile}`);
                 }
@@ -87,8 +83,6 @@ class SongsBrowser {
                 console.error(`Error loading ${indexFile}:`, error);
             }
         }
-
-        console.log(`Loaded ${this.books.length} books with ${this.allSongs.length} total songs`);
         this.populateBookSelector();
     }
 
@@ -408,7 +402,7 @@ class SongsBrowser {
 
     async loadPDF(pdfPath, startPage, endPage) {
         try {
-            console.log(`Loading PDF: ${pdfPath}, starting at page ${startPage}`);
+            // Loading PDF: ${pdfPath}, starting at page ${startPage}
 
             const loadingTask = pdfjsLib.getDocument(pdfPath);
             this.pdfDoc = await loadingTask.promise;

@@ -11,6 +11,13 @@ class AlphaTabAdapter {
         this.renderFinishedBound = false; // Track if renderFinished listener is registered
         this.lastAttachTime = 0; // Timestamp of last attachment to debounce
         this.lastAlphaTex = null; // Track last rendered AlphaTex to prevent duplicate renders
+        this.debug = false; // Set to true to enable debug logging
+    }
+
+    log(...args) {
+        if (this.debug) {
+            console.log(...args);
+        }
     }
 
     /**
@@ -30,7 +37,7 @@ class AlphaTabAdapter {
         const settings = {
             core: {
                 engine: 'svg', // SVG for better quality and DOM access
-                logLevel: 1 // Warnings only
+                logLevel: 0 // None (0 = None, 1 = Warning, 2 = Info, 3 = Debug)
             },
             display: {
                 scale: 1.0,
@@ -58,8 +65,6 @@ class AlphaTabAdapter {
         if (!this.renderFinishedBound) {
             let renderTimer = null;
             this.alphaTabApi.renderFinished.on(() => {
-                console.log('alphaTab render finished event');
-
                 // Clear any pending attachment
                 if (renderTimer) {
                     clearTimeout(renderTimer);
@@ -68,14 +73,11 @@ class AlphaTabAdapter {
                 // Wait for 1 second of silence before attaching handlers
                 // This ensures all lazy partials are done
                 renderTimer = setTimeout(() => {
-                    console.log('1 second of render silence, attaching handlers now');
                     this.waitForSVGAndAttachHandlers(0);
                 }, 1000);
             });
             this.renderFinishedBound = true;
         }
-
-        console.log('alphaTab initialized successfully');
 
         return this.alphaTabApi;
     }
@@ -88,13 +90,11 @@ class AlphaTabAdapter {
         // This prevents rapid-fire attachments but allows reattachment after edits
         const now = Date.now();
         if (now - this.lastAttachTime < 200) {
-            console.log('Debouncing: too soon since last attachment, skipping');
             return;
         }
 
         // Prevent concurrent handler attachment
         if (this.isAttachingHandlers) {
-            console.log('Already attaching handlers, skipping this call');
             return;
         }
 
@@ -102,7 +102,7 @@ class AlphaTabAdapter {
         const container = document.getElementById(this.containerId);
 
         if (!container) {
-            console.log('Container not found, giving up');
+            this.log('Container not found, giving up');
             return;
         }
 
@@ -110,7 +110,7 @@ class AlphaTabAdapter {
 
         if (alphaTabSvg) {
             // SVG is ready, attach handlers
-            console.log(`SVG found on attempt ${attempt + 1}, attaching handlers`);
+            this.log(`SVG found on attempt ${attempt + 1}, attaching handlers`);
             this.isAttachingHandlers = true;
             this.lastAttachTime = now;
             this.inspectAlphaTabDOM();
@@ -120,7 +120,7 @@ class AlphaTabAdapter {
             // SVG not ready yet, try again
             // Use longer delay on later attempts to wait for lazy partials
             const delay = attempt < 3 ? 500 : 1000;
-            console.log(`SVG not ready yet (attempt ${attempt + 1}/${maxAttempts}), retrying in ${delay}ms...`);
+            this.log(`SVG not ready yet (attempt ${attempt + 1}/${maxAttempts}), retrying in ${delay}ms...`);
             setTimeout(() => {
                 this.waitForSVGAndAttachHandlers(attempt + 1);
             }, delay);
@@ -136,22 +136,22 @@ class AlphaTabAdapter {
         const container = document.getElementById(this.containerId);
         if (!container) return;
 
-        console.log('=== alphaTab DOM Structure ===');
-        console.log('Container:', container);
-        console.log('Container children:', container.children.length);
-        console.log('Container HTML preview:', container.innerHTML.substring(0, 500));
+        this.log('=== alphaTab DOM Structure ===');
+        this.log('Container:', container);
+        this.log('Container children:', container.children.length);
+        this.log('Container HTML preview:', container.innerHTML.substring(0, 500));
 
         // Find alphaTab's specific SVG (has class at-surface-svg)
         const alphaTabSvg = container.querySelector('.at-surface-svg');
-        console.log('alphaTab SVG:', alphaTabSvg);
+        this.log('alphaTab SVG:', alphaTabSvg);
 
         if (alphaTabSvg) {
             const firstSvg = alphaTabSvg;
-            console.log('Found alphaTab SVG, inspecting...');
+            this.log('Found alphaTab SVG, inspecting...');
 
             // alphaTab renders notes as <text> SVG elements
             const textElements = firstSvg.querySelectorAll('text');
-            console.log('Text elements:', textElements.length);
+            this.log('Text elements:', textElements.length);
 
             // Find note numbers (text elements with numeric content and parent beat group)
             const noteElements = Array.from(textElements).filter(el => {
@@ -162,14 +162,14 @@ class AlphaTabAdapter {
                 return hasNumber && isBeatGroup;
             });
 
-            console.log('Note number elements:', noteElements.length);
+            this.log('Note number elements:', noteElements.length);
 
             if (noteElements.length > 0) {
                 const sample = noteElements[0];
-                console.log('Sample note element:', sample);
-                console.log('Note value:', sample.textContent);
-                console.log('Parent group class:', sample.closest('g')?.className.baseVal);
-                console.log('Position:', {
+                this.log('Sample note element:', sample);
+                this.log('Note value:', sample.textContent);
+                this.log('Parent group class:', sample.closest('g')?.className.baseVal);
+                this.log('Position:', {
                     x: sample.getAttribute('x'),
                     y: sample.getAttribute('y')
                 });
@@ -177,17 +177,17 @@ class AlphaTabAdapter {
 
             // Look for clickable areas or groups
             const groups = firstSvg.querySelectorAll('g');
-            console.log('Group elements:', groups.length);
+            this.log('Group elements:', groups.length);
 
             // Check for any elements with classes
             const elementsWithClass = firstSvg.querySelectorAll('[class]');
-            console.log('Elements with classes:', elementsWithClass.length);
+            this.log('Elements with classes:', elementsWithClass.length);
             if (elementsWithClass.length > 0) {
-                console.log('Sample classes:', elementsWithClass[0].getAttribute('class'));
+                this.log('Sample classes:', elementsWithClass[0].getAttribute('class'));
             }
         }
 
-        console.log('=== End DOM Inspection ===');
+        this.log('=== End DOM Inspection ===');
     }
 
     /**
@@ -206,15 +206,15 @@ class AlphaTabAdapter {
 
         // Skip render if AlphaTex hasn't changed (prevents infinite render loop)
         if (alphaTex === this.lastAlphaTex) {
-            console.log('AlphaTex unchanged, skipping render to prevent loop');
+            this.log('AlphaTex unchanged, skipping render to prevent loop');
             return;
         }
 
-        console.log('Generated AlphaTex:', alphaTex);
+        this.log('Generated AlphaTex:', alphaTex);
         this.lastAlphaTex = alphaTex;
 
         this.alphaTabApi.tex(alphaTex);
-        console.log('Composition rendered with alphaTab');
+        this.log('Composition rendered with alphaTab');
     }
 
     /**
@@ -235,16 +235,16 @@ class AlphaTabAdapter {
      * Attach click handlers to alphaTab-rendered note elements
      */
     attachClickHandlers() {
-        console.log('attachClickHandlers() called');
+        this.log('attachClickHandlers() called');
         const container = document.getElementById(this.containerId);
         if (!container) {
-            console.log('Container not found');
+            this.log('Container not found');
             return;
         }
 
         const alphaTabSvg = container.querySelector('.at-surface-svg');
         if (!alphaTabSvg) {
-            console.log('No alphaTab SVG found for click handlers');
+            this.log('No alphaTab SVG found for click handlers');
             return;
         }
 
@@ -258,8 +258,8 @@ class AlphaTabAdapter {
             return hasNumber && isBeatGroup;
         });
 
-        console.log(`Attaching click handlers to ${noteElements.length} notes`);
-        console.log(`Note elements already with handlers: ${Array.from(noteElements).filter(el => el.dataset.clickHandlerAttached).length}`);
+        this.log(`Attaching click handlers to ${noteElements.length} notes`);
+        this.log(`Note elements already with handlers: ${Array.from(noteElements).filter(el => el.dataset.clickHandlerAttached).length}`);
 
         // Find horizontal TAB lines (rect elements) for adding new notes
         const rectElements = alphaTabSvg.querySelectorAll('rect');
@@ -270,7 +270,7 @@ class AlphaTabAdapter {
             return width > 50 && height < 2;
         });
 
-        console.log(`Found ${tabLines.length} TAB lines for new note clicks`);
+        this.log(`Found ${tabLines.length} TAB lines for new note clicks`);
 
         // Group TAB lines by y-position (there are multiple lines per string across measures)
         const stringYPositions = [];
@@ -286,11 +286,11 @@ class AlphaTabAdapter {
 
         // Sort y positions (top to bottom = strings 1-6)
         stringYPositions.sort((a, b) => a - b);
-        console.log('All y-positions:', stringYPositions);
+        this.log('All y-positions:', stringYPositions);
 
         // Take only the last 6 (bottom group = TAB lines, ignore standard notation lines)
         const tabOnlyYPositions = stringYPositions.slice(-6);
-        console.log('TAB-only y-positions (last 6):', tabOnlyYPositions);
+        this.log('TAB-only y-positions (last 6):', tabOnlyYPositions);
 
         // Group TAB lines by x-position to identify measures
         const measureXPositions = [];
@@ -306,11 +306,11 @@ class AlphaTabAdapter {
 
         // Sort x positions (left to right = measure 0, 1, 2...)
         measureXPositions.sort((a, b) => a - b);
-        console.log('Measure x-positions:', measureXPositions);
+        this.log('Measure x-positions:', measureXPositions);
 
         // Remove ALL old overlays first (alphaTab might replace line elements)
         const oldOverlays = alphaTabSvg.querySelectorAll('rect[data-tab-line-overlay="true"]');
-        console.log(`Removing ${oldOverlays.length} old overlays`);
+        this.log(`Removing ${oldOverlays.length} old overlays`);
         oldOverlays.forEach(overlay => overlay.remove());
 
         // Create invisible clickable overlays for TAB lines (broader hit area, above stems)
@@ -337,7 +337,7 @@ class AlphaTabAdapter {
             // Insert overlay after the line (so it's above stems in z-order)
             line.parentElement.appendChild(overlay);
 
-            console.log(`Created new overlay for line ${lineIndex}`);
+            this.log(`Created new overlay for line ${lineIndex}`);
 
             overlay.addEventListener('click', (e) => {
                 // Get original line Y from overlay dataset
@@ -348,7 +348,7 @@ class AlphaTabAdapter {
                 const clickX = e.clientX - svgRect.left;
                 const clickY = e.clientY - svgRect.top;
 
-                console.log('TAB line overlay clicked:', { lineX, originalLineY, clickX, clickY });
+                this.log('TAB line overlay clicked:', { lineX, originalLineY, clickX, clickY });
 
                 // Get fresh note elements (don't use closure - it's stale after re-render!)
                 const currentAlphaTabSvg = alphaTabSvg.parentElement ? alphaTabSvg : container.querySelector('.at-surface-svg');
@@ -388,7 +388,7 @@ class AlphaTabAdapter {
                     ? currentTabOnlyYPositions[1] - currentTabOnlyYPositions[0]
                     : 11; // Default ~11px
 
-                console.log('String spacing:', stringSpacing);
+                this.log('String spacing:', stringSpacing);
 
                 // Check if clicking vertically near a note (different string, same time)
                 let clickedNearNote = null;
@@ -415,7 +415,7 @@ class AlphaTabAdapter {
 
                 // If clicking exactly on a note, manually trigger the note handler
                 if (clickedExactlyOnNote) {
-                    console.log('Clicked exactly on existing note, manually triggering note handler');
+                    this.log('Clicked exactly on existing note, manually triggering note handler');
                     e.stopPropagation();
                     e.preventDefault();
 
@@ -438,7 +438,7 @@ class AlphaTabAdapter {
 
                     // Manually trigger click on the note element
                     if (closestNote) {
-                        console.log('Closest note found:', closestNote, 'Has handler:', !!closestNote._clickHandler);
+                        this.log('Closest note found:', closestNote, 'Has handler:', !!closestNote._clickHandler);
                         if (closestNote._clickHandler) {
                             closestNote._clickHandler(e);
                         } else {
@@ -466,7 +466,7 @@ class AlphaTabAdapter {
                     if (noteData) {
                         noteTimeForChord = noteData.event.time;
                         noteMeasureForChord = noteData.measureIndex; // Also get measure!
-                        console.log('Clicking near note at time:', noteTimeForChord, 'in measure:', noteMeasureForChord, 'for chord');
+                        this.log('Clicking near note at time:', noteTimeForChord, 'in measure:', noteMeasureForChord, 'for chord');
                     }
                 }
 
@@ -498,7 +498,7 @@ class AlphaTabAdapter {
 
                 const stringNum = closestStringIndex + 1; // stringIndex 0 = string 1
 
-                console.log('String detection:', {
+                this.log('String detection:', {
                     clickY,
                     tabOnlyYPositions,
                     closestStringIndex,
@@ -509,7 +509,7 @@ class AlphaTabAdapter {
                 // Use chord note's time if near existing note, otherwise use estimated time
                 const finalTime = noteTimeForChord !== null ? noteTimeForChord : estimatedTime;
 
-                console.log('Click analysis:', {
+                this.log('Click analysis:', {
                     measureIndex,
                     stringNum,
                     finalTime,
@@ -522,7 +522,7 @@ class AlphaTabAdapter {
                     // Pass: measureIndex, stringNum, finalTime (chord time or estimated), click position
                     this.onAddNote(measureIndex, stringNum, finalTime, e.clientX, e.clientY);
                 } else {
-                    console.log('onAddNote callback not set');
+                    this.log('onAddNote callback not set');
                 }
             });
         });
@@ -535,13 +535,13 @@ class AlphaTabAdapter {
 
             // Remove old handler if it exists to avoid duplicates
             if (noteEl._clickHandler) {
-                console.log(`Removing old handler from note ${idx}`);
+                this.log(`Removing old handler from note ${idx}`);
                 noteEl.removeEventListener('click', noteEl._clickHandler);
             }
 
             // Create new handler
             const clickHandler = (e) => {
-                console.log('Note click handler fired!', e);
+                this.log('Note click handler fired!', e);
                 e.stopPropagation();
                 e.preventDefault(); // Prevent any default behavior
 
@@ -553,7 +553,7 @@ class AlphaTabAdapter {
                 // Get note Y position to determine which string
                 const noteY = parseFloat(noteEl.getAttribute('y'));
 
-                console.log('Note clicked:', { fret, beatIndex, noteY, element: noteEl, shiftKey: e.shiftKey });
+                this.log('Note clicked:', { fret, beatIndex, noteY, element: noteEl, shiftKey: e.shiftKey });
 
                 // Map beat index to composition data
                 const noteData = this.mapBeatIndexToNote(beatIndex, noteY, tabOnlyYPositions);
@@ -581,17 +581,17 @@ class AlphaTabAdapter {
             // Store handler reference and attach
             noteEl._clickHandler = clickHandler;
             noteEl.addEventListener('click', clickHandler);
-            console.log(`Attached handler to note ${idx}, fret ${noteEl.textContent}`);
+            this.log(`Attached handler to note ${idx}, fret ${noteEl.textContent}`);
         });
 
-        console.log(`Finished attaching handlers to ${noteElements.length} notes`);
+        this.log(`Finished attaching handlers to ${noteElements.length} notes`);
 
         // Verify overlays are still in DOM
         const overlaysInDOM = alphaTabSvg.querySelectorAll('rect[data-tab-line-overlay="true"]');
-        console.log(`Overlays in DOM after attachment: ${overlaysInDOM.length}`);
+        this.log(`Overlays in DOM after attachment: ${overlaysInDOM.length}`);
         if (overlaysInDOM.length > 0) {
             const sample = overlaysInDOM[0];
-            console.log('Sample overlay styles:', {
+            this.log('Sample overlay styles:', {
                 cursor: sample.style.cursor,
                 pointerEvents: sample.style.pointerEvents,
                 fill: sample.getAttribute('fill')
@@ -610,7 +610,7 @@ class AlphaTabAdapter {
 
         // Remove old chord area overlays
         const oldChordAreas = alphaTabSvg.querySelectorAll('rect[data-chord-area="true"]');
-        console.log(`Removing ${oldChordAreas.length} old chord areas`);
+        this.log(`Removing ${oldChordAreas.length} old chord areas`);
         oldChordAreas.forEach(area => area.remove());
 
         // The top of the TAB staff (first string)
@@ -682,17 +682,17 @@ class AlphaTabAdapter {
                     if (noteData) {
                         beatTime = noteData.event.time;
                         beatMeasureIndex = noteData.measureIndex;
-                        console.log('Chord will attach to beat:', { beatMeasureIndex, beatTime, minXDistance });
+                        this.log('Chord will attach to beat:', { beatMeasureIndex, beatTime, minXDistance });
                     }
                 }
 
-                console.log('Chord area clicked:', { measureIndex, beatMeasureIndex, beatTime, clickX: e.clientX, clickY: e.clientY });
+                this.log('Chord area clicked:', { measureIndex, beatMeasureIndex, beatTime, clickX: e.clientX, clickY: e.clientY });
 
                 // Show inline input for chord name
                 this.showChordNameInput(beatMeasureIndex, beatTime, e.clientX, e.clientY - 20);
             });
 
-            console.log(`Created chord area for measure ${measureIndex}`);
+            this.log(`Created chord area for measure ${measureIndex}`);
         });
     }
 
@@ -756,10 +756,10 @@ class AlphaTabAdapter {
                     if (existingChord) {
                         // Update existing chord
                         existingChord.name = chordName;
-                        console.log('Updated chord:', { measureIndex, time, chordName });
+                        this.log('Updated chord:', { measureIndex, time, chordName });
                     } else {
                         // Add new chord
-                        console.log('Adding chord:', { measureIndex, time, chordName });
+                        this.log('Adding chord:', { measureIndex, time, chordName });
                         this.currentComposition.addChordAnnotation(measureIndex, time, chordName);
                     }
                 } else if (existingChord) {
@@ -767,7 +767,7 @@ class AlphaTabAdapter {
                     const chordIndex = measure.chords.indexOf(existingChord);
                     if (chordIndex > -1) {
                         measure.chords.splice(chordIndex, 1);
-                        console.log('Deleted chord at:', { measureIndex, time });
+                        this.log('Deleted chord at:', { measureIndex, time });
                     }
                 }
 
@@ -844,7 +844,7 @@ class AlphaTabAdapter {
                         const matchingEvent = events.find(e => e.string === stringNum);
 
                         if (matchingEvent) {
-                            console.log('Found specific note in chord:', { stringNum, fret: matchingEvent.fret });
+                            this.log('Found specific note in chord:', { stringNum, fret: matchingEvent.fret });
                             return {
                                 measureIndex,
                                 event: matchingEvent

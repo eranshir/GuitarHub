@@ -1,3 +1,13 @@
+/* Bravura Music Font (used by AlphaTab for musical symbols) */
+@font-face {
+    font-family: 'Bravura';
+    src: url('vendor/alphatab/font/Bravura.woff2') format('woff2'),
+         url('vendor/alphatab/font/Bravura.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -3692,11 +3702,13 @@ body.rtl .mobile-header {
     stroke: white;
 }
 
-.duration-btn-compact:hover {
+.duration-btn-compact:hover,
+.rest-btn-compact:hover {
     border-color: var(--primary-color);
 }
 
-.duration-btn-compact.active {
+.duration-btn-compact.active,
+.rest-btn-compact.active {
     background: var(--primary-color);
     color: white;
     border-color: var(--primary-color);
@@ -3729,6 +3741,19 @@ body.rtl .mobile-header {
     font-family: "Segoe UI Symbol", "Apple Color Emoji", "Noto Music", "Symbola", sans-serif;
     font-size: 1.1em;
     display: inline-block;
+}
+
+/* Bravura font overrides for musical notation buttons */
+.duration-btn-compact.bravura-font,
+.rest-btn-compact.bravura-font {
+    font-family: 'Bravura', sans-serif !important;
+    font-size: 16px !important;
+    line-height: 1 !important;
+    font-weight: normal !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 4px 8px !important;
 }
 
 .icon-action-btn {
@@ -3929,9 +3954,14 @@ body.rtl .mobile-header {
 .radial-menu-item.duration-button {
     width: 40px;
     height: 40px;
-    font-size: 18px;
+    font-size: 16px;
     border-color: var(--accent-color);
     padding: 4px;
+    font-family: 'Bravura', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 .radial-menu-item.duration-button svg {
@@ -3949,6 +3979,24 @@ body.rtl .mobile-header {
     font-size: 20px;
     border-color: #e74c3c;
     background: #ffe6e6;
+}
+
+.radial-menu-item.rest-button {
+    width: 38px;
+    height: 38px;
+    font-size: 16px;
+    border-color: #3498db;
+    background: #e6f2ff;
+    font-family: 'Bravura', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.radial-menu-item.rest-button:hover {
+    background: #3498db;
+    color: white;
 }
 
 .radial-menu-item.delete-button:hover {

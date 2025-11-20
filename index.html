@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GuitarHub - Master Your Fretboard</title>
+    <title>GuitarHub - TAB Composer & Fretboard Master</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -30,7 +30,7 @@
                 <button class="drawer-nav-btn" data-module="intervals" data-i18n="nav.intervals">Intervals Memory</button>
                 <button class="drawer-nav-btn" data-module="chords" data-i18n="nav.chords">Chords Memory</button>
                 <button class="drawer-nav-btn" data-module="spot-note" data-i18n="nav.spotNote">Spot a Note</button>
-                <button class="drawer-nav-btn" data-module="assistant" data-i18n="nav.assistant">Assistant</button>
+                <button class="drawer-nav-btn" data-module="assistant" data-i18n="nav.composer">Composer</button>
                 <button class="drawer-nav-btn" data-module="stats" data-i18n="nav.stats">Statistics</button>
                 <button class="drawer-nav-btn" id="mobile-songs-btn" data-i18n="nav.songs">Songs Browser</button>
             </nav>
@@ -74,7 +74,7 @@
             <button class="module-btn" data-module="intervals" data-i18n="nav.intervals">Intervals Memory</button>
             <button class="module-btn" data-module="chords" data-i18n="nav.chords">Chords Memory</button>
             <button class="module-btn" data-module="spot-note" data-i18n="nav.spotNote">Spot a Note</button>
-            <button class="module-btn" data-module="assistant" data-i18n="nav.assistant">Assistant</button>
+            <button class="module-btn" data-module="assistant" data-i18n="nav.composer">Composer</button>
             <button class="module-btn" data-module="stats" data-i18n="nav.stats">Statistics</button>
         </nav>
 
@@ -845,16 +845,11 @@
                 <div class="assistant-container">
                     <div class="assistant-main">
                         <!-- Chord Input (Composer Mode Only) - Bidirectional -->
-                        <div id="composer-chord-detector" class="composer-chord-detector" style="display: none;">
+                        <div id="composer-chord-detector" class="composer-chord-detector">
                             <span class="detected-label" data-i18n="composer.chord">Chord:</span>
                             <input type="text" id="chord-name-input" class="chord-name-input" placeholder="Type chord name..." title="Type chord name and press Enter to load shape">
                             <button id="load-chord-btn" class="chord-action-btn" title="Load chord shape (Enter)">⏎</button>
                             <button id="add-chord-btn" class="add-chord-btn-compact" data-i18n="composer.addChord" disabled>Add to TAB</button>
-                        </div>
-
-                        <div class="current-chord-display">
-                            <span class="chord-name" id="assistant-chord-name">-</span>
-                            <span class="position-info" id="assistant-position-info">Ready</span>
                         </div>
 
                         <div class="fretboard-container">
@@ -864,7 +859,7 @@
                         </div>
 
                         <!-- Compact Composer Controls (Single Row) -->
-                        <div id="composer-controls-compact" class="composer-controls-compact" style="display: none;">
+                        <div id="composer-controls-compact" class="composer-controls-compact">
                             <select id="time-signature-select" class="time-sig-compact">
                                 <option value="4/4" selected>4/4</option>
                                 <option value="3/4">3/4</option>
@@ -874,84 +869,25 @@
                                 <option value="7/8">7/8</option>
                             </select>
                             <div class="duration-buttons-compact">
-                                <button class="duration-btn-compact" data-duration="0.0625" title="Sixteenth note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z M11.5 5 Q15 7 15 10 L11.5 9 Z"/>
-                                    </svg>
-                                </button>
-                                <button class="duration-btn-compact" data-duration="0.125" title="Eighth note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/>
-                                    </svg>
-                                </button>
-                                <button class="duration-btn-compact" data-duration="0.375" title="Dotted eighth note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/><path d="M11.5 2 Q15 4 15 7 L11.5 6 Z"/><circle cx="13" cy="16" r="1.2"/>
-                                    </svg>
-                                </button>
-                                <button class="duration-btn-compact active" data-duration="0.25" title="Quarter note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)"/>
-                                    </svg>
-                                </button>
-                                <button class="duration-btn-compact" data-duration="0.5" title="Half note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/>
-                                    </svg>
-                                </button>
-                                <button class="duration-btn-compact" data-duration="0.75" title="Dotted half note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <rect x="10" y="2" width="1.5" height="14"/><ellipse cx="7" cy="16" rx="3.5" ry="2.8" transform="rotate(-20 7 16)" fill="white" stroke="currentColor" stroke-width="1.5"/><circle cx="13" cy="16" r="1.2"/>
-                                    </svg>
-                                </button>
-                                <button class="duration-btn-compact" data-duration="1" title="Whole note">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <ellipse cx="12" cy="14" rx="5" ry="3.5" fill="white" stroke="currentColor" stroke-width="1.5"/>
-                                    </svg>
-                                </button>
+                                <button class="duration-btn-compact bravura-font" data-duration="0.0625" title="Sixteenth note">&#xE1D9;</button>
+                                <button class="duration-btn-compact bravura-font" data-duration="0.125" title="Eighth note">&#xE1D7;</button>
+                                <button class="duration-btn-compact bravura-font" data-duration="0.375" title="Dotted eighth note">&#xE1D7;&#xE1E7;</button>
+                                <button class="duration-btn-compact bravura-font active" data-duration="0.25" title="Quarter note">&#xE1D5;</button>
+                                <button class="duration-btn-compact bravura-font" data-duration="0.5" title="Half note">&#xE1D3;</button>
+                                <button class="duration-btn-compact bravura-font" data-duration="0.75" title="Dotted half note">&#xE1D3;&#xE1E7;</button>
+                                <button class="duration-btn-compact bravura-font" data-duration="1" title="Whole note">&#xE1D2;</button>
                                 <span class="duration-separator">|</span>
-                                <button class="rest-btn-compact" data-rest="0.125" title="Eighth rest">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M12 3 L8 9 L12 9 L8 15 L12 15 L8 21"/>
-                                    </svg>
-                                </button>
-                                <button class="rest-btn-compact" data-rest="0.25" title="Quarter rest">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <path d="M10 3 Q12 5 10 7 Q8 9 10 11 L12 15 Q10 17 12 19 L10 21"/>
-                                    </svg>
-                                </button>
-                                <button class="rest-btn-compact" data-rest="0.5" title="Half rest">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <rect x="6" y="10" width="12" height="3"/>
-                                    </svg>
-                                </button>
-                                <button class="rest-btn-compact" data-rest="1" title="Whole rest">
-                                    <svg class="note-icon" viewBox="0 0 24 24" fill="currentColor">
-                                        <rect x="6" y="11" width="12" height="3"/>
-                                    </svg>
-                                </button>
+                                <button class="rest-btn-compact bravura-font" data-rest="0.125" title="Eighth rest">&#xE4E6;</button>
+                                <button class="rest-btn-compact bravura-font" data-rest="0.25" title="Quarter rest">&#xE4E5;</button>
+                                <button class="rest-btn-compact bravura-font" data-rest="0.5" title="Half rest">&#xE4E3;</button>
+                                <button class="rest-btn-compact bravura-font" data-rest="1" title="Whole rest">&#xE4E2;</button>
                             </div>
                             <button id="clear-fretboard-btn" class="icon-action-btn" title="Clear (Backspace)">🗑️</button>
                             <button id="add-note-btn" class="icon-action-btn primary" title="Add Note (Enter)">⏎</button>
                         </div>
 
-                        <div class="playback-controls">
-                            <div class="bpm-control">
-                                <label>BPM: <span id="assistant-bpm-display">80</span></label>
-                                <input type="range" id="assistant-bpm-slider" min="40" max="200" value="80" step="5">
-                            </div>
-                            <div class="control-buttons">
-                                <button id="assistant-start" class="control-btn start-btn" data-i18n="assistant.controls.start">▶ Start</button>
-                                <button id="assistant-pause" class="control-btn pause-btn" style="display: none;" data-i18n="common.pause">⏸ Pause</button>
-                                <button id="assistant-resume" class="control-btn resume-btn" style="display: none;" data-i18n="common.resume">▶ Resume</button>
-                                <button id="assistant-stop" class="control-btn stop-btn" style="display: none;" data-i18n="assistant.controls.stop">⏹ Stop</button>
-                                <button id="assistant-play-shape" class="control-btn play-btn" data-i18n="assistant.controls.playShape">🔊 Play Current Shape</button>
-                            </div>
-                        </div>
-
-
                         <!-- TAB Display for Composition -->
-                        <div id="composition-tab-container" class="composition-tab-container" style="display: none;">
+                        <div id="composition-tab-container" class="composition-tab-container">
                             <div class="tab-header">
                                 <h4 id="composition-title">Untitled</h4>
                                 <div class="tab-actions">
@@ -982,26 +918,11 @@
                                 <!-- TAB will be rendered here -->
                             </div>
                         </div>
-
-                        <!-- Assistant Mode Display -->
-                        <div id="assistant-display-container" class="assistant-display-container">
-                            <div class="tab-display-container">
-                                <h4 data-i18n="assistant.tabDisplay">Tablature:</h4>
-                                <pre id="assistant-tab-display" class="tab-display">Ready for instructions...</pre>
-                            </div>
-
-                            <div class="additional-notes-container">
-                                <div id="assistant-additional-notes" class="additional-notes"></div>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="chat-interface">
                         <div class="chat-header">
-                            <div class="mode-toggle-group">
-                                <button id="mode-assistant" class="mode-toggle-btn active" data-i18n="composer.modeAssistant">Assistant</button>
-                                <button id="mode-composer" class="mode-toggle-btn" data-i18n="composer.modeComposer">Compose</button>
-                            </div>
+                            <h3>Composer</h3>
                         </div>
                         <div id="chat-messages" class="chat-messages">
                             <div class="chat-message assistant-message">
@@ -1151,7 +1072,7 @@
     <script src="js/spotNoteGame.js"></script>
     <script src="js/tabComposer.js"></script>
     <script src="js/alphaTabAdapter.js"></script>
-    <script src="js/assistantGame.js"></script>
+    <script src="js/composer.js"></script>
     <script src="js/statistics.js"></script>
     <script src="js/songsBrowser.js"></script>
     <script src="js/mobileManager.js"></script>
