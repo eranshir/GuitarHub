@@ -720,13 +720,14 @@ class RadialNoteMenu {
 
         // Bottom half: Duration buttons using Bravura font
         const durations = [
-            { value: 0.0625, title: 'Sixteenth note', glyph: '\uE1D9' },
-            { value: 0.125, title: 'Eighth note', glyph: '\uE1D7' },
-            { value: 0.375, title: 'Dotted eighth note', glyph: '\uE1D7\uE1E7' },
-            { value: 0.25, title: 'Quarter note', glyph: '\uE1D5' },
-            { value: 0.5, title: 'Half note', glyph: '\uE1D3' },
-            { value: 0.75, title: 'Dotted half note', glyph: '\uE1D3\uE1E7' },
-            { value: 1, title: 'Whole note', glyph: '\uE1D2' }
+            { value: 0.0625, title: 'Sixteenth (1/16)', glyph: '\uE1D9' },
+            { value: 0.125, title: 'Eighth (1/8)', glyph: '\uE1D7' },
+            { value: 0.1875, title: 'Dotted eighth (3/16)', glyph: '\uE1D7\uE1E7' },
+            { value: 0.25, title: 'Quarter (1/4)', glyph: '\uE1D5' },
+            { value: 0.375, title: 'Dotted quarter (3/8)', glyph: '\uE1D5\uE1E7' },
+            { value: 0.5, title: 'Half (1/2)', glyph: '\uE1D3' },
+            { value: 0.75, title: 'Dotted half (3/4)', glyph: '\uE1D3\uE1E7' },
+            { value: 1, title: 'Whole', glyph: '\uE1D2' }
         ];
 
         const durationAngleStep = Math.PI / (durations.length + 1);
@@ -764,13 +765,14 @@ class RadialNoteMenu {
 
         // All duration options with Bravura font glyphs
         const durations = [
-            { value: 0.0625, title: 'Sixteenth note', glyph: '\uE1D9' },
-            { value: 0.125, title: 'Eighth note', glyph: '\uE1D7' },
-            { value: 0.375, title: 'Dotted eighth note', glyph: '\uE1D7\uE1E7' },
-            { value: 0.25, title: 'Quarter note', glyph: '\uE1D5' },
-            { value: 0.5, title: 'Half note', glyph: '\uE1D3' },
-            { value: 0.75, title: 'Dotted half note', glyph: '\uE1D3\uE1E7' },
-            { value: 1, title: 'Whole note', glyph: '\uE1D2' }
+            { value: 0.0625, title: 'Sixteenth (1/16)', glyph: '\uE1D9' },
+            { value: 0.125, title: 'Eighth (1/8)', glyph: '\uE1D7' },
+            { value: 0.1875, title: 'Dotted eighth (3/16)', glyph: '\uE1D7\uE1E7' },
+            { value: 0.25, title: 'Quarter (1/4)', glyph: '\uE1D5' },
+            { value: 0.375, title: 'Dotted quarter (3/8)', glyph: '\uE1D5\uE1E7' },
+            { value: 0.5, title: 'Half (1/2)', glyph: '\uE1D3' },
+            { value: 0.75, title: 'Dotted half (3/4)', glyph: '\uE1D3\uE1E7' },
+            { value: 1, title: 'Whole', glyph: '\uE1D2' }
         ];
         const angleStep = (2 * Math.PI) / durations.length;
 

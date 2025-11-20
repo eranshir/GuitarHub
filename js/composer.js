@@ -497,8 +497,9 @@ class Composer {
         const durationNames = {
             0.0625: 'sixteenth',
             0.125: 'eighth',
+            0.1875: 'dotted eighth',
             0.25: 'quarter',
-            0.375: 'dotted eighth',
+            0.375: 'dotted quarter',
             0.5: 'half',
             0.75: 'dotted half',
             1: 'whole'
