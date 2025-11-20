@@ -950,26 +950,26 @@ class AlphaTabAdapter {
     /**
      * Convert duration to AlphaTex notation
      * AlphaTex uses: 1 (whole), 2 (half), 4 (quarter), 8 (eighth), 16 (sixteenth)
-     * Dotted notes: add .d suffix (e.g., 4.d for dotted quarter)
+     * Dotted notes: add {d} beat effect (e.g., fret.string.4{d} for dotted quarter)
      */
     durationToTexNotation(duration) {
         // Exact match for standard durations
         if (duration === 1) return '1';           // Whole
-        if (duration === 0.75) return '2.d';      // Dotted half (3/4)
+        if (duration === 0.75) return '2{d}';     // Dotted half (3/4)
         if (duration === 0.5) return '2';         // Half
-        if (duration === 0.375) return '4.d';     // Dotted quarter (3/8)
+        if (duration === 0.375) return '4{d}';    // Dotted quarter (3/8)
         if (duration === 0.25) return '4';        // Quarter
-        if (duration === 0.1875) return '8.d';    // Dotted eighth (3/16)
+        if (duration === 0.1875) return '8{d}';   // Dotted eighth (3/16)
         if (duration === 0.125) return '8';       // Eighth
         if (duration === 0.0625) return '16';     // Sixteenth
 
         // Fallback with threshold checks for floating point tolerance
         if (duration >= 0.99) return '1';
-        if (Math.abs(duration - 0.75) < 0.01) return '2.d';
+        if (Math.abs(duration - 0.75) < 0.01) return '2{d}';
         if (duration >= 0.49) return '2';
-        if (Math.abs(duration - 0.375) < 0.01) return '4.d';
+        if (Math.abs(duration - 0.375) < 0.01) return '4{d}';
         if (duration >= 0.24) return '4';
-        if (Math.abs(duration - 0.1875) < 0.01) return '8.d';
+        if (Math.abs(duration - 0.1875) < 0.01) return '8{d}';
         if (duration >= 0.12) return '8';
         if (duration >= 0.06) return '16';
 
