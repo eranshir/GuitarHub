@@ -875,6 +875,11 @@ class CompositionShareUtils {
     static decompressString(str) {
         const minified = JSON.parse(str);
 
+        // Validate minified data structure
+        if (!minified || !minified.m || !Array.isArray(minified.m)) {
+            throw new Error('Invalid composition data structure');
+        }
+
         // Expand back to full format
         return JSON.stringify({
             title: minified.t,

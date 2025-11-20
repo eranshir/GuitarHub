@@ -1276,7 +1276,6 @@ class Composer {
             }
 
             // Re-render and save
-            console.log('Re-rendering composition after adding note');
             this.renderComposition();
             this.autoSaveComposition();
 
@@ -1299,18 +1298,21 @@ class Composer {
 
                 this.showTransientNotification(`Duration updated - measure reflowed`);
                 this.durationEditContext = null;
-            } else if (!ctx.isNew && ctx.event) {
-                // Legacy: duration selected from note edit radial menu
+            } else if (ctx && ctx.event) {
+                // Duration selected from note edit radial menu
+                // Update ALL notes at this time position (entire chord)
                 const measure = this.composition.measures[ctx.measureIndex];
-                const noteToEdit = measure.events.find(e =>
-                    e.string === ctx.event.string &&
-                    Math.abs(e.time - ctx.event.time) < 0.001
-                );
+                if (measure) {
+                    const notesAtTime = measure.events.filter(e =>
+                        Math.abs(e.time - ctx.event.time) < 0.001
+                    );
 
-                if (noteToEdit) {
-                    noteToEdit.duration = duration;
+                    notesAtTime.forEach(note => {
+                        note.duration = duration;
+                    });
+
                     this.reflowMeasure(ctx.measureIndex);
-                    this.showTransientNotification(`Duration updated - measure reflowed`);
+                    this.showTransientNotification(`Duration updated to ${this.formatDuration(duration)}`);
                 }
             }
 

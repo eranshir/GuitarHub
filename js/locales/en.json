@@ -8,7 +8,8 @@
     "intervals": "Intervals Memory",
     "chords": "Chords Memory",
     "spotNote": "Spot a Note",
-    "assistant": "Assistant",
+    "assistant": "Composer",
+    "composer": "Composer",
     "stats": "Statistics",
     "songs": "Songs Browser"
   },

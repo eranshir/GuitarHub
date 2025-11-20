@@ -232,6 +232,13 @@ class AlphaTabAdapter {
     }
 
     /**
+     * Set callback for duration symbol clicks
+     */
+    setDurationClickHandler(callback) {
+        this.onDurationClick = callback;
+    }
+
+    /**
      * Attach click handlers to alphaTab-rendered note elements
      */
     attachClickHandlers() {
