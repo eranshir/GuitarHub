@@ -129,8 +129,6 @@ class Composer {
 
         // Use event delegation for dynamically created TAB lines
         container.addEventListener('click', (e) => {
-            if (this.mode !== 'composer') return;
-
             // Check if clicking on or near a note element
             let clickedNote = e.target.closest('.tab-note');
 
@@ -224,8 +222,7 @@ class Composer {
         let startX = 0, startY = 0;
 
         container.addEventListener('mousedown', (e) => {
-            // Only in composer mode and if not clicking on a note/button
-            if (this.mode !== 'composer') return;
+            // Only if not clicking on a note/button
             if (e.target.closest('.tab-note') || e.target.closest('button') || e.target.closest('.duration-symbol')) return;
 
             this.isSelecting = true;
@@ -700,8 +697,6 @@ class Composer {
 
         // Keyboard shortcuts for Composer mode
         document.addEventListener('keydown', (e) => {
-            if (this.mode !== 'composer') return;
-
             // Don't intercept if typing in chord input field
             if (e.target.id === 'chord-name-input') return;
 
@@ -727,8 +722,6 @@ class Composer {
         // Make fretboard interactive in composer mode
         if (this.fretboardDisplay && this.fretboardDisplay.container) {
             this.fretboardDisplay.container.addEventListener('click', (e) => {
-                if (this.mode !== 'composer') return;
-
                 const pos = e.target.closest('.fret-position');
                 if (pos) {
                     const string = parseInt(pos.dataset.string);
@@ -1679,25 +1672,6 @@ class Composer {
         this.updateCompositionTitle();
         this.updateTempoDisplay();
         this.renderComposition();
-
-        // Switch to composer mode
-        this.mode = 'composer';
-        document.querySelectorAll('.mode-toggle-btn').forEach(btn => btn.classList.remove('active'));
-        document.getElementById('mode-composer')?.classList.add('active');
-
-        const composerControls = document.getElementById('composer-controls-compact');
-        const chordDetector = document.getElementById('composer-chord-detector');
-        const compositionTab = document.getElementById('composition-tab-container');
-        const assistantDisplay = document.getElementById('assistant-display-container');
-        const playbackControls = document.querySelector('.playback-controls');
-        const chordDisplay = document.querySelector('#assistant-module .current-chord-display');
-
-        if (composerControls) composerControls.style.display = 'flex';
-        if (chordDetector) chordDetector.style.display = 'flex';
-        if (compositionTab) compositionTab.style.display = 'block';
-        if (assistantDisplay) assistantDisplay.style.display = 'none';
-        if (playbackControls) playbackControls.style.display = 'none';
-        if (chordDisplay) chordDisplay.style.display = 'none';
     }
 
     loadCompositionByName(name) {
