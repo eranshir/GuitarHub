@@ -526,9 +526,8 @@ class RadialNoteMenu {
         this.container.appendChild(outerRing);
 
         // Delete button and rest buttons at top (only show if editing existing note)
-        console.log('Showing radial menu, currentFret:', currentFret);
-        if (currentFret !== null) {
-            console.log('Creating delete button');
+        // Use !== null && !== undefined to handle fret 0 (open string)
+        if (currentFret !== null && currentFret !== undefined) {
             const deleteButton = this.createDeleteButton();
             this.container.appendChild(deleteButton);
 
