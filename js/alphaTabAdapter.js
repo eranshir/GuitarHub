@@ -595,6 +595,8 @@ class AlphaTabAdapter {
                     hoveredNote.classList.add('hover-edit-target');
                 } else {
                     // Hovering over empty space - show where note will be added
+                    // Use SAME logic as click handler to determine position
+
                     // Snap to closest string (Y axis)
                     const closestStringIndex = currentTabOnlyYPositions.reduce((closest, y, idx) => {
                         const distance = Math.abs(hoverY - y);
@@ -603,28 +605,31 @@ class AlphaTabAdapter {
 
                     const targetStringY = currentTabOnlyYPositions[closestStringIndex];
 
-                    // Snap to nearest note position horizontally (X axis)
-                    // Find all X positions where notes exist
-                    const noteXPositions = [];
+                    // Check if hovering near an existing note (within 40px horizontally)
+                    let nearbyNoteX = null;
                     currentNoteElements.forEach(noteEl => {
                         const noteX = parseFloat(noteEl.getAttribute('x'));
-                        if (!noteXPositions.some(x => Math.abs(x - noteX) < 5)) {
-                            noteXPositions.push(noteX);
+                        const noteY = parseFloat(noteEl.getAttribute('y'));
+                        const xDistance = Math.abs(hoverX - noteX);
+                        const yDistance = Math.abs(hoverY - noteY);
+
+                        // Within chord range (same column, different string)
+                        if (xDistance < 40 && yDistance >= stringSpacing / 2) {
+                            nearbyNoteX = noteX;
                         }
                     });
-                    noteXPositions.sort((a, b) => a - b);
 
-                    // Find closest note X position
-                    let targetX = hoverX;
-                    if (noteXPositions.length > 0) {
-                        const closestX = noteXPositions.reduce((closest, x) => {
-                            return Math.abs(x - hoverX) < Math.abs(closest - hoverX) ? x : closest;
-                        }, noteXPositions[0]);
-
-                        // Only snap if within reasonable distance (60px)
-                        if (Math.abs(closestX - hoverX) < 60) {
-                            targetX = closestX;
-                        }
+                    let targetX;
+                    if (nearbyNoteX !== null) {
+                        // Snap to nearby note's X position (adding to chord)
+                        targetX = nearbyNoteX;
+                    } else {
+                        // No nearby note - snap to beat grid based on measure position
+                        // This matches the click handler's estimatedTime calculation
+                        const relativeX = hoverX - lineX;
+                        const beatWidth = lineWidth / 4; // 4 beats per measure in 4/4
+                        const estimatedBeat = Math.max(0, Math.floor(relativeX / beatWidth));
+                        targetX = lineX + (estimatedBeat * beatWidth) + (beatWidth / 2); // Center of beat
                     }
 
                     // Create circle indicator showing where note will appear (snapped to grid)
