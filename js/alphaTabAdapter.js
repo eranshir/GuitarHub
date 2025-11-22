@@ -663,8 +663,10 @@ class AlphaTabAdapter {
                     }
 
                     // Create circle indicator showing where note will appear (snapped to grid)
+                    // Add small offset to align with note center (text x is at left edge of glyph)
+                    const centerOffset = 5; // Adjust to center the circle on the note
                     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    circle.setAttribute('cx', targetX);
+                    circle.setAttribute('cx', targetX + centerOffset);
                     circle.setAttribute('cy', targetStringY);
                     circle.setAttribute('r', '8');
                     circle.setAttribute('fill', 'none');
@@ -678,7 +680,7 @@ class AlphaTabAdapter {
 
                     // Add a small plus sign in the center
                     const plus = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                    plus.setAttribute('x', targetX);
+                    plus.setAttribute('x', targetX + centerOffset);
                     plus.setAttribute('y', targetStringY + 4);
                     plus.setAttribute('text-anchor', 'middle');
                     plus.setAttribute('fill', '#667eea');
