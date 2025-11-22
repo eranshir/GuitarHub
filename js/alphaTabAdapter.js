@@ -532,6 +532,101 @@ class AlphaTabAdapter {
                     this.log('onAddNote callback not set');
                 }
             });
+
+            // Add hover feedback to show what will happen on click
+            overlay.addEventListener('mousemove', (e) => {
+                const originalLineY = parseFloat(overlay.dataset.originalLineY);
+                const svgRect = alphaTabSvg.getBoundingClientRect();
+                const hoverX = e.clientX - svgRect.left;
+                const hoverY = e.clientY - svgRect.top;
+
+                // Get fresh note elements
+                const currentAlphaTabSvg = alphaTabSvg.parentElement ? alphaTabSvg : container.querySelector('.at-surface-svg');
+                if (!currentAlphaTabSvg) return;
+
+                const textElements = currentAlphaTabSvg.querySelectorAll('text');
+                const currentNoteElements = Array.from(textElements).filter(el => {
+                    const content = el.textContent.trim();
+                    const hasNumber = /^\d+$/.test(content);
+                    const parentGroup = el.closest('g');
+                    const isBeatGroup = parentGroup?.className.baseVal.match(/^b\d+$/);
+                    return hasNumber && isBeatGroup;
+                });
+
+                // Calculate string positions
+                const currentTabLines = Array.from(currentAlphaTabSvg.querySelectorAll('rect')).filter(rect => {
+                    const width = parseFloat(rect.getAttribute('width'));
+                    const height = parseFloat(rect.getAttribute('height'));
+                    return width > 50 && height < 2;
+                });
+
+                const currentStringYPositions = [];
+                currentTabLines.forEach(line => {
+                    const y = parseFloat(line.getAttribute('y'));
+                    const existing = currentStringYPositions.find(pos => Math.abs(pos - y) < 5);
+                    if (!existing) currentStringYPositions.push(y);
+                });
+                currentStringYPositions.sort((a, b) => a - b);
+                const currentTabOnlyYPositions = currentStringYPositions.slice(-6);
+
+                const stringSpacing = currentTabOnlyYPositions.length > 1
+                    ? currentTabOnlyYPositions[1] - currentTabOnlyYPositions[0]
+                    : 11;
+
+                // Clear previous hover highlights
+                currentNoteElements.forEach(el => el.classList.remove('hover-edit-target'));
+                currentAlphaTabSvg.querySelectorAll('.hover-add-indicator').forEach(el => el.remove());
+
+                // Check if hovering near a note
+                let hoveredNote = null;
+                currentNoteElements.forEach(noteEl => {
+                    const noteX = parseFloat(noteEl.getAttribute('x'));
+                    const noteY = parseFloat(noteEl.getAttribute('y'));
+                    const xDistance = Math.abs(hoverX - noteX);
+                    const yDistance = Math.abs(hoverY - noteY);
+
+                    if (xDistance < 25 && yDistance < stringSpacing / 2) {
+                        hoveredNote = noteEl;
+                    }
+                });
+
+                if (hoveredNote) {
+                    // Hovering over existing note - highlight it
+                    hoveredNote.classList.add('hover-edit-target');
+                } else {
+                    // Hovering over empty space - show vertical position indicator
+                    const closestStringIndex = currentTabOnlyYPositions.reduce((closest, y, idx) => {
+                        const distance = Math.abs(hoverY - y);
+                        return distance < Math.abs(hoverY - currentTabOnlyYPositions[closest]) ? idx : closest;
+                    }, 0);
+
+                    const targetStringY = currentTabOnlyYPositions[closestStringIndex];
+
+                    // Create subtle vertical line indicator
+                    const indicator = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    indicator.setAttribute('x1', hoverX);
+                    indicator.setAttribute('y1', targetStringY - 8);
+                    indicator.setAttribute('x2', hoverX);
+                    indicator.setAttribute('y2', targetStringY + 8);
+                    indicator.setAttribute('stroke', '#667eea');
+                    indicator.setAttribute('stroke-width', '2');
+                    indicator.setAttribute('opacity', '0.5');
+                    indicator.classList.add('hover-add-indicator');
+                    indicator.style.pointerEvents = 'none';
+
+                    currentAlphaTabSvg.appendChild(indicator);
+                }
+            });
+
+            // Clear hover highlights when mouse leaves
+            overlay.addEventListener('mouseleave', () => {
+                const currentAlphaTabSvg = alphaTabSvg.parentElement ? alphaTabSvg : container.querySelector('.at-surface-svg');
+                if (currentAlphaTabSvg) {
+                    const textElements = currentAlphaTabSvg.querySelectorAll('text');
+                    textElements.forEach(el => el.classList.remove('hover-edit-target'));
+                    currentAlphaTabSvg.querySelectorAll('.hover-add-indicator').forEach(el => el.remove());
+                }
+            });
         });
 
         // Attach click handler to each note

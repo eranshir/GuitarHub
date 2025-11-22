@@ -4024,6 +4024,23 @@ body.rtl .mobile-header {
     z-index: 10002;
 }
 
+/* Hover feedback for AlphaTab note editing */
+.hover-edit-target {
+    fill: #667eea !important;
+    opacity: 0.8 !important;
+    filter: drop-shadow(0 0 4px rgba(102, 126, 234, 0.8));
+}
+
+.hover-add-indicator {
+    pointer-events: none;
+    animation: pulse-line 1s ease-in-out infinite;
+}
+
+@keyframes pulse-line {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+}
+
 /* Make TAB lines clickable in composer mode - increased hit area */
 .tab-line {
     cursor: crosshair;
