@@ -25,6 +25,7 @@ class Composer {
         this.detectedChord = null;
         this.editContext = null; // {measureIndex, time, originalEvents} when editing
         this.radialMenu = null; // Radial menu for direct TAB editing
+        this.fretboardEditContext = null; // Track when editing a chord from TAB on fretboard
 
         // Playback state for composition
         this.isPlayingComposition = false;
@@ -735,6 +736,11 @@ class Composer {
 
 
     handleComposerFretboardClick(string, fret) {
+        // Close radial menu if open (user is now editing on fretboard)
+        if (this.radialMenu) {
+            this.radialMenu.hide();
+        }
+
         const notes = this.fretboardState.getNotes();
         const existingNote = notes.find(n => n.string === string && n.fret === fret);
         const isMuted = this.fretboardState.isStringMuted(string);
@@ -926,8 +932,37 @@ class Composer {
 
         const notes = this.fretboardState.getNotes();
 
-        // Check if we're editing existing notes
-        if (this.editContext) {
+        // Check if we're editing a chord from TAB
+        if (this.fretboardEditContext) {
+            // Remove old events at this time
+            const measure = this.composition.measures[this.fretboardEditContext.measureIndex];
+            if (measure) {
+                // Get the duration from the original notes
+                const originalDuration = this.fretboardEditContext.originalNotes[0]?.duration || this.selectedDuration;
+
+                measure.events = measure.events.filter(e =>
+                    Math.abs(e.time - this.fretboardEditContext.time) >= 0.001
+                );
+
+                // Add updated notes at the same time position with original duration
+                notes.forEach(note => {
+                    measure.events.push({
+                        time: this.fretboardEditContext.time,
+                        string: note.string,
+                        fret: note.fret,
+                        duration: originalDuration,
+                        leftFinger: null
+                    });
+                });
+
+                this.showTransientNotification('Chord updated in TAB!');
+            }
+
+            // Clear edit context
+            this.fretboardEditContext = null;
+
+        } else if (this.editContext) {
+            // Legacy edit context
             // Remove old events at this time
             const measure = this.composition.measures[this.editContext.measureIndex];
             if (measure) {
@@ -993,6 +1028,9 @@ class Composer {
         this.fretboardState.clear();
         this.displayComposerFretboard();
         this.updateDetectedChord();
+        // Clear edit context when manually clearing fretboard
+        this.fretboardEditContext = null;
+        this.editContext = null;
     }
 
     addChordToComposition() {
@@ -1032,14 +1070,7 @@ class Composer {
         // alphaTab note clicked: { measureIndex, event, x, y }
 
         // Stop propagation handled in alphaTabAdapter
-        // Store editing context
-        this.radialEditContext = {
-            measureIndex,
-            event,
-            noteElement: null // alphaTab SVG element
-        };
-
-        // Load all notes at this time onto fretboard for visual context
+        // Load all notes at this time onto fretboard for editing
         const measure = this.composition.measures[measureIndex];
         const notesAtSameTime = measure.events.filter(e =>
             Math.abs(e.time - event.time) < 0.001
@@ -1050,6 +1081,22 @@ class Composer {
             this.fretboardState.addNote(note.string, note.fret);
         });
         this.displayComposerFretboard();
+
+        // Set fretboard edit context so Enter key knows to update this chord
+        this.fretboardEditContext = {
+            measureIndex,
+            time: event.time,
+            originalNotes: notesAtSameTime.map(n => ({...n})) // Store copy of original
+        };
+
+        this.showTransientNotification('Edit chord on fretboard, then press Enter to update');
+
+        // Store radial edit context for radial menu
+        this.radialEditContext = {
+            measureIndex,
+            event,
+            noteElement: null // alphaTab SVG element
+        };
 
         // Show radial menu at the provided position
         this.radialMenu.show(x, y, null, event.fret);
