@@ -742,39 +742,45 @@ class Composer {
         }
 
         const notes = this.fretboardState.getNotes();
-        const existingNote = notes.find(n => n.string === string && n.fret === fret);
+        const existingNoteAtThisFret = notes.find(n => n.string === string && n.fret === fret);
+        const existingNoteOnString = notes.find(n => n.string === string);
         const isMuted = this.fretboardState.isStringMuted(string);
 
-        if (fret === 0) {
-            // Clicking nut (fret 0)
-            if (existingNote || isMuted) {
-                // If string has a note at fret 0 or is muted, cycle: open → muted → clear
-                if (existingNote && !isMuted) {
-                    // Currently open (fret 0) → mute it
-                    this.fretboardState.addNote(string, -1);
-                } else {
-                    // Currently muted → clear
-                    this.fretboardState.removeNote(string);
-                }
-            } else {
-                // Add open string (fret 0)
+        // In edit mode: always set the note to the clicked fret (move, don't toggle)
+        if (this.fretboardEditContext) {
+            if (fret === 0) {
+                // Clicking nut - set to open string
                 this.fretboardState.addNote(string, 0);
+            } else {
+                // Clicking regular fret - move note to this fret
+                this.fretboardState.addNote(string, fret);
             }
         } else {
-            // Clicking regular fret
-            if (existingNote) {
-                // If in edit mode, move the note to new fret on same string
-                // Otherwise toggle (remove) the note
-                if (this.fretboardEditContext) {
-                    // Move note to different fret on same string
-                    this.fretboardState.addNote(string, fret);
+            // Normal mode (not editing from TAB): use toggle behavior
+            if (fret === 0) {
+                // Clicking nut (fret 0)
+                if (existingNoteAtThisFret || isMuted) {
+                    // If string has a note at fret 0 or is muted, cycle: open → muted → clear
+                    if (existingNoteAtThisFret && !isMuted) {
+                        // Currently open (fret 0) → mute it
+                        this.fretboardState.addNote(string, -1);
+                    } else {
+                        // Currently muted → clear
+                        this.fretboardState.removeNote(string);
+                    }
                 } else {
-                    // Toggle: remove note if clicking same position
-                    this.fretboardState.removeNote(string);
+                    // Add open string (fret 0)
+                    this.fretboardState.addNote(string, 0);
                 }
             } else {
-                // Add or update note in fretboard state
-                this.fretboardState.addNote(string, fret);
+                // Clicking regular fret
+                if (existingNoteAtThisFret) {
+                    // Toggle: remove note if clicking same position
+                    this.fretboardState.removeNote(string);
+                } else {
+                    // Add or update note in fretboard state
+                    this.fretboardState.addNote(string, fret);
+                }
             }
         }
 
