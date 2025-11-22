@@ -595,6 +595,7 @@ class AlphaTabAdapter {
                     hoveredNote.classList.add('hover-edit-target');
                 } else {
                     // Hovering over empty space - show where note will be added
+                    // Snap to closest string (Y axis)
                     const closestStringIndex = currentTabOnlyYPositions.reduce((closest, y, idx) => {
                         const distance = Math.abs(hoverY - y);
                         return distance < Math.abs(hoverY - currentTabOnlyYPositions[closest]) ? idx : closest;
@@ -602,9 +603,33 @@ class AlphaTabAdapter {
 
                     const targetStringY = currentTabOnlyYPositions[closestStringIndex];
 
-                    // Create circle indicator showing where note will appear
+                    // Snap to nearest note position horizontally (X axis)
+                    // Find all X positions where notes exist
+                    const noteXPositions = [];
+                    currentNoteElements.forEach(noteEl => {
+                        const noteX = parseFloat(noteEl.getAttribute('x'));
+                        if (!noteXPositions.some(x => Math.abs(x - noteX) < 5)) {
+                            noteXPositions.push(noteX);
+                        }
+                    });
+                    noteXPositions.sort((a, b) => a - b);
+
+                    // Find closest note X position
+                    let targetX = hoverX;
+                    if (noteXPositions.length > 0) {
+                        const closestX = noteXPositions.reduce((closest, x) => {
+                            return Math.abs(x - hoverX) < Math.abs(closest - hoverX) ? x : closest;
+                        }, noteXPositions[0]);
+
+                        // Only snap if within reasonable distance (60px)
+                        if (Math.abs(closestX - hoverX) < 60) {
+                            targetX = closestX;
+                        }
+                    }
+
+                    // Create circle indicator showing where note will appear (snapped to grid)
                     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    circle.setAttribute('cx', hoverX);
+                    circle.setAttribute('cx', targetX);
                     circle.setAttribute('cy', targetStringY);
                     circle.setAttribute('r', '8');
                     circle.setAttribute('fill', 'none');
@@ -618,7 +643,7 @@ class AlphaTabAdapter {
 
                     // Add a small plus sign in the center
                     const plus = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                    plus.setAttribute('x', hoverX);
+                    plus.setAttribute('x', targetX);
                     plus.setAttribute('y', targetStringY + 4);
                     plus.setAttribute('text-anchor', 'middle');
                     plus.setAttribute('fill', '#667eea');
