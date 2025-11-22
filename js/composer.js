@@ -763,8 +763,15 @@ class Composer {
         } else {
             // Clicking regular fret
             if (existingNote) {
-                // Remove note if clicking same position
-                this.fretboardState.removeNote(string);
+                // If in edit mode, move the note to new fret on same string
+                // Otherwise toggle (remove) the note
+                if (this.fretboardEditContext) {
+                    // Move note to different fret on same string
+                    this.fretboardState.addNote(string, fret);
+                } else {
+                    // Toggle: remove note if clicking same position
+                    this.fretboardState.removeNote(string);
+                }
             } else {
                 // Add or update note in fretboard state
                 this.fretboardState.addNote(string, fret);
