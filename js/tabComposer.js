@@ -526,8 +526,8 @@ class RadialNoteMenu {
         this.container.appendChild(outerRing);
 
         // Delete button and rest buttons at top (only show if editing existing note)
-        // Use !== null && !== undefined to handle fret 0 (open string)
-        if (currentFret !== null && currentFret !== undefined) {
+        // Check for number (including 0) or explicitly check null/undefined
+        if (typeof currentFret === 'number') {
             const deleteButton = this.createDeleteButton();
             this.container.appendChild(deleteButton);
 
@@ -641,7 +641,7 @@ class RadialNoteMenu {
     createRestButtons() {
         const buttons = [];
         const radius = 160; // Same radius as delete button
-        const baseAngle = -Math.PI / 2; // Top position (where delete is)
+        const deleteAngle = -Math.PI / 2; // Top position (where delete is)
 
         // Rest durations with Bravura font glyphs
         const rests = [
@@ -652,14 +652,19 @@ class RadialNoteMenu {
             { value: 1, glyph: '\uE4E2', title: 'Whole rest' }
         ];
 
-        // Position rest buttons in an arc to the left and right of delete button
-        // Spread over 90 degrees total (±45 degrees from top)
-        const angleSpan = Math.PI / 2; // 90 degrees total
-        const startAngle = baseAngle - angleSpan / 2; // Start 45 degrees left of top
+        // Split rest buttons: half on left side, half on right side of delete
+        const halfCount = Math.ceil(rests.length / 2);
+        const angleOffset = Math.PI / 12; // ~15 degrees spacing between buttons
 
         rests.forEach((rest, i) => {
-            // Evenly space across the arc (skip the center where delete button is)
-            const angle = startAngle + (angleSpan * (i + 0.5) / rests.length);
+            let angle;
+            if (i < halfCount) {
+                // Left side: position to the left of delete button
+                angle = deleteAngle - angleOffset * (halfCount - i);
+            } else {
+                // Right side: position to the right of delete button
+                angle = deleteAngle + angleOffset * (i - halfCount + 1);
+            }
 
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;
