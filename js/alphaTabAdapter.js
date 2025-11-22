@@ -594,7 +594,7 @@ class AlphaTabAdapter {
                     // Hovering over existing note - highlight it
                     hoveredNote.classList.add('hover-edit-target');
                 } else {
-                    // Hovering over empty space - show vertical position indicator
+                    // Hovering over empty space - show where note will be added
                     const closestStringIndex = currentTabOnlyYPositions.reduce((closest, y, idx) => {
                         const distance = Math.abs(hoverY - y);
                         return distance < Math.abs(hoverY - currentTabOnlyYPositions[closest]) ? idx : closest;
@@ -602,19 +602,33 @@ class AlphaTabAdapter {
 
                     const targetStringY = currentTabOnlyYPositions[closestStringIndex];
 
-                    // Create subtle vertical line indicator
-                    const indicator = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                    indicator.setAttribute('x1', hoverX);
-                    indicator.setAttribute('y1', targetStringY - 8);
-                    indicator.setAttribute('x2', hoverX);
-                    indicator.setAttribute('y2', targetStringY + 8);
-                    indicator.setAttribute('stroke', '#667eea');
-                    indicator.setAttribute('stroke-width', '2');
-                    indicator.setAttribute('opacity', '0.5');
-                    indicator.classList.add('hover-add-indicator');
-                    indicator.style.pointerEvents = 'none';
+                    // Create circle indicator showing where note will appear
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', hoverX);
+                    circle.setAttribute('cy', targetStringY);
+                    circle.setAttribute('r', '8');
+                    circle.setAttribute('fill', 'none');
+                    circle.setAttribute('stroke', '#667eea');
+                    circle.setAttribute('stroke-width', '2');
+                    circle.setAttribute('opacity', '0.6');
+                    circle.classList.add('hover-add-indicator');
+                    circle.style.pointerEvents = 'none';
 
-                    currentAlphaTabSvg.appendChild(indicator);
+                    currentAlphaTabSvg.appendChild(circle);
+
+                    // Add a small plus sign in the center
+                    const plus = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                    plus.setAttribute('x', hoverX);
+                    plus.setAttribute('y', targetStringY + 4);
+                    plus.setAttribute('text-anchor', 'middle');
+                    plus.setAttribute('fill', '#667eea');
+                    plus.setAttribute('font-size', '12');
+                    plus.setAttribute('font-weight', 'bold');
+                    plus.textContent = '+';
+                    plus.classList.add('hover-add-indicator');
+                    plus.style.pointerEvents = 'none';
+
+                    currentAlphaTabSvg.appendChild(plus);
                 }
             });
 

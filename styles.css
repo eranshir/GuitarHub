@@ -4034,12 +4034,12 @@ body.rtl .mobile-header {
 
 .hover-add-indicator {
     pointer-events: none;
-    animation: pulse-line 1s ease-in-out infinite;
+    animation: pulse-indicator 1s ease-in-out infinite;
 }
 
-@keyframes pulse-line {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.7; }
+@keyframes pulse-indicator {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
 }
 
 /* Make TAB lines clickable in composer mode - increased hit area */
