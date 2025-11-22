@@ -86,7 +86,65 @@ class SongsBrowser {
         this.populateBookSelector();
     }
 
+    setupTitleTapGesture() {
+        // Track taps on both mobile and desktop titles
+        let tapCount = 0;
+        let tapTimer = null;
+        const tapWindow = 2000; // 2 seconds to complete 5 taps
+
+        const handleTitleTap = () => {
+            tapCount++;
+
+            // Clear existing timer
+            if (tapTimer) {
+                clearTimeout(tapTimer);
+            }
+
+            // Show visual feedback (optional)
+            if (tapCount >= 3) {
+                // Give user a hint they're on the right track
+                const title = document.querySelector('.header-title h1') || document.querySelector('.mobile-title h1');
+                if (title) {
+                    title.style.opacity = '0.5';
+                    setTimeout(() => {
+                        if (title) title.style.opacity = '1';
+                    }, 100);
+                }
+            }
+
+            // Check if reached 5 taps
+            if (tapCount >= 5) {
+                tapCount = 0;
+                if (tapTimer) clearTimeout(tapTimer);
+                this.toggleBrowser();
+                return;
+            }
+
+            // Reset counter after 2 seconds of no taps
+            tapTimer = setTimeout(() => {
+                tapCount = 0;
+            }, tapWindow);
+        };
+
+        // Attach to both mobile and desktop titles
+        const mobileTitleH1 = document.querySelector('.mobile-title h1');
+        const desktopTitleH1 = document.querySelector('.header-title h1');
+
+        if (mobileTitleH1) {
+            mobileTitleH1.style.cursor = 'pointer';
+            mobileTitleH1.addEventListener('click', handleTitleTap);
+        }
+
+        if (desktopTitleH1) {
+            desktopTitleH1.style.cursor = 'pointer';
+            desktopTitleH1.addEventListener('click', handleTitleTap);
+        }
+    }
+
     setupEventListeners() {
+        // Multi-tap on title to open (for iPad/mobile)
+        this.setupTitleTapGesture();
+
         // Keyboard shortcut: Shift+S
         document.addEventListener('keydown', (e) => {
             if (e.shiftKey && e.key === 'S') {
