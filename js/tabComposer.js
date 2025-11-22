@@ -653,14 +653,14 @@ class RadialNoteMenu {
             { value: 1, glyph: '\uE4E2', title: 'Whole rest' }
         ];
 
-        // Space rest buttons evenly around delete button (±30 degrees each side)
-        const angleSpan = Math.PI / 3; // 60 degrees total
-        const angleStep = angleSpan / (rests.length + 1);
+        // Position rest buttons in an arc to the left and right of delete button
+        // Spread over 90 degrees total (±45 degrees from top)
+        const angleSpan = Math.PI / 2; // 90 degrees total
+        const startAngle = baseAngle - angleSpan / 2; // Start 45 degrees left of top
 
         rests.forEach((rest, i) => {
-            // Spread left and right of delete button
-            const offset = (i - Math.floor(rests.length / 2)) * angleStep;
-            const angle = baseAngle + offset;
+            // Evenly space across the arc (skip the center where delete button is)
+            const angle = startAngle + (angleSpan * (i + 0.5) / rests.length);
 
             const x = Math.cos(angle) * radius;
             const y = Math.sin(angle) * radius;

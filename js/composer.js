@@ -1074,6 +1074,23 @@ class Composer {
                 targetTime = nearbyEvents[0].time;
                 targetMeasure = measureIndex;
                 isChord = true;
+
+                // Check if there's already a note on THIS string at this time
+                const existingOnThisString = nearbyEvents.find(e => e.string === stringNum);
+
+                if (existingOnThisString) {
+                    // Editing existing note on this string (show current fret in radial menu)
+                    this.radialEditContext = {
+                        measureIndex: targetMeasure,
+                        stringNum,
+                        time: targetTime,
+                        isNew: false,
+                        event: existingOnThisString,
+                        useCursor: false
+                    };
+                    this.radialMenu.show(x, y, null, existingOnThisString.fret);
+                    return;
+                }
             } else {
                 // Adding sequentially at cursor
             }
@@ -1212,36 +1229,44 @@ class Composer {
                 // Adding new note
                 const measure = this.composition.measures[ctx.measureIndex];
                 if (measure) {
-                    measure.events.push({
-                        time: ctx.time,
-                        string: ctx.stringNum,
-                        fret: fret,
-                        duration: this.selectedDuration,
-                        leftFinger: null
-                    });
+                    // Check if there's already a note on this string at this time
+                    const existingNoteOnString = measure.events.find(e =>
+                        e.string === ctx.stringNum &&
+                        Math.abs(e.time - ctx.time) < 0.001
+                    );
 
-                    // Sort events by time to ensure proper rendering order
-                    measure.events.sort((a, b) => a.time - b.time);
+                    if (existingNoteOnString) {
+                        // Replace the existing note on this string (update fret)
+                        existingNoteOnString.fret = fret;
+                        this.showTransientNotification(`Updated string ${ctx.stringNum} to fret ${fret}`);
+                    } else {
+                        // Add new note to the chord
+                        measure.events.push({
+                            time: ctx.time,
+                            string: ctx.stringNum,
+                            fret: fret,
+                            duration: this.selectedDuration,
+                            leftFinger: null
+                        });
 
-                    // Advance cursor if this was a sequential add (not a click-to-position add)
-                    if (ctx.useCursor) {
-                        this.composition.currentTime += this.selectedDuration;
+                        // Sort events by time to ensure proper rendering order
+                        measure.events.sort((a, b) => a.time - b.time);
 
-                        // Check if we need a new measure
-                        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
-                        if (this.composition.currentTime >= beatsPerMeasure) {
-                            this.composition.currentTime = 0;
-                            this.composition.currentMeasure++;
-                            this.composition.addMeasure();
+                        // Advance cursor if this was a sequential add (not a click-to-position add)
+                        if (ctx.useCursor) {
+                            this.composition.currentTime += this.selectedDuration;
+
+                            // Check if we need a new measure
+                            const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+                            if (this.composition.currentTime >= beatsPerMeasure) {
+                                this.composition.currentTime = 0;
+                                this.composition.currentMeasure++;
+                                this.composition.addMeasure();
+                            }
                         }
 
-                        console.log('Advanced cursor to:', {
-                            currentMeasure: this.composition.currentMeasure,
-                            currentTime: this.composition.currentTime
-                        });
+                        this.showTransientNotification(`Added note: String ${ctx.stringNum}, Fret ${fret}`);
                     }
-
-                    this.showTransientNotification(`Added note: String ${ctx.stringNum}, Fret ${fret}`);
                 }
             } else {
                 // Editing existing note
