@@ -4026,9 +4026,10 @@ body.rtl .mobile-header {
 
 /* Hover feedback for AlphaTab note editing */
 .hover-edit-target {
-    fill: #667eea !important;
-    opacity: 0.8 !important;
-    filter: drop-shadow(0 0 4px rgba(102, 126, 234, 0.8));
+    fill: #4c63d2 !important;
+    opacity: 1 !important;
+    font-weight: bold !important;
+    filter: drop-shadow(0 0 6px rgba(76, 99, 210, 1));
 }
 
 .hover-add-indicator {
