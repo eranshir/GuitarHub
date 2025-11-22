@@ -624,12 +624,42 @@ class AlphaTabAdapter {
                         // Snap to nearby note's X position (adding to chord)
                         targetX = nearbyNoteX;
                     } else {
-                        // No nearby note - snap to beat grid based on measure position
-                        // This matches the click handler's estimatedTime calculation
-                        const relativeX = hoverX - lineX;
-                        const beatWidth = lineWidth / 4; // 4 beats per measure in 4/4
-                        const estimatedBeat = Math.max(0, Math.floor(relativeX / beatWidth));
-                        targetX = lineX + (estimatedBeat * beatWidth) + (beatWidth / 2); // Center of beat
+                        // No nearby note - find where notes are actually positioned in this measure
+                        // Group all note X positions by measure
+                        const notesInMeasure = [];
+                        currentNoteElements.forEach(noteEl => {
+                            const noteX = parseFloat(noteEl.getAttribute('x'));
+                            // Check if this note is in the current measure (same line)
+                            if (noteX >= lineX && noteX <= lineX + lineWidth) {
+                                if (!notesInMeasure.some(x => Math.abs(x - noteX) < 5)) {
+                                    notesInMeasure.push(noteX);
+                                }
+                            }
+                        });
+                        notesInMeasure.sort((a, b) => a - b);
+
+                        if (notesInMeasure.length > 0) {
+                            // Find closest existing note column in this measure
+                            const closestNoteX = notesInMeasure.reduce((closest, x) => {
+                                return Math.abs(x - hoverX) < Math.abs(closest - hoverX) ? x : closest;
+                            }, notesInMeasure[0]);
+
+                            // If close enough, snap to it; otherwise calculate next position
+                            if (Math.abs(closestNoteX - hoverX) < 50) {
+                                targetX = closestNoteX;
+                            } else if (hoverX > notesInMeasure[notesInMeasure.length - 1]) {
+                                // Hovering after last note - estimate next beat position
+                                const avgSpacing = notesInMeasure.length > 1
+                                    ? (notesInMeasure[notesInMeasure.length - 1] - notesInMeasure[0]) / (notesInMeasure.length - 1)
+                                    : lineWidth / 4;
+                                targetX = notesInMeasure[notesInMeasure.length - 1] + avgSpacing;
+                            } else {
+                                targetX = closestNoteX;
+                            }
+                        } else {
+                            // Empty measure - use measure start + small offset
+                            targetX = lineX + 20;
+                        }
                     }
 
                     // Create circle indicator showing where note will appear (snapped to grid)
