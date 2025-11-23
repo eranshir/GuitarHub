@@ -767,9 +767,9 @@ class Composer {
                 e.preventDefault();
             }
 
-            // Delete key to delete selected notes (takes priority)
-            if (e.key === 'Delete' && this.selectedNotes.length > 0) {
-                console.log('Delete key pressed with selected notes:', this.selectedNotes.length);
+            // Backspace/Delete to delete selected notes (takes priority)
+            if ((e.key === 'Backspace' || e.key === 'Delete') && this.selectedNotes.length > 0) {
+                console.log('Delete/Backspace key pressed with selected notes:', this.selectedNotes.length);
                 this.deleteSelectedNotes();
                 e.preventDefault();
             }
