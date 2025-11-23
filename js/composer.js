@@ -716,6 +716,10 @@ class Composer {
             this.exportComposition();
         });
 
+        document.getElementById('fullscreen-tab-btn')?.addEventListener('click', () => {
+            this.toggleTabFullscreen();
+        });
+
         document.getElementById('clear-composition-btn')?.addEventListener('click', () => {
             if (confirm('Start a new composition? Current work will be saved.')) {
                 this.clearComposition();
@@ -2376,6 +2380,37 @@ class Composer {
         const modal = document.getElementById('help-modal');
         if (modal) {
             modal.style.display = 'none';
+        }
+    }
+
+    toggleTabFullscreen() {
+        const tabContainer = document.getElementById('composition-tab-container');
+        if (!tabContainer) return;
+
+        if (!document.fullscreenElement) {
+            // Enter fullscreen
+            tabContainer.requestFullscreen().then(() => {
+                tabContainer.classList.add('fullscreen-tab');
+                // Re-render to adjust to new dimensions
+                setTimeout(() => {
+                    if (this.alphaTabAdapter) {
+                        this.alphaTabAdapter.render(this.composition);
+                    }
+                }, 100);
+            }).catch(err => {
+                console.error('Error entering fullscreen:', err);
+                this.showTransientNotification('Fullscreen not available');
+            });
+        } else {
+            // Exit fullscreen
+            document.exitFullscreen();
+            tabContainer.classList.remove('fullscreen-tab');
+            // Re-render to adjust back to normal dimensions
+            setTimeout(() => {
+                if (this.alphaTabAdapter) {
+                    this.alphaTabAdapter.render(this.composition);
+                }
+            }, 100);
         }
     }
 

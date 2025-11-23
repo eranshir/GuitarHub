@@ -4049,6 +4049,21 @@ text.selected {
     50% { opacity: 0.8; }
 }
 
+/* Fullscreen TAB */
+.composition-tab-container.fullscreen-tab {
+    background: white;
+    padding: 20px;
+}
+
+.composition-tab-container.fullscreen-tab .tab-header {
+    margin-bottom: 20px;
+}
+
+.composition-tab-container.fullscreen-tab .composition-tab-display {
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+}
+
 /* Help Modal */
 .help-modal {
     position: fixed;
