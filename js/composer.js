@@ -280,6 +280,8 @@ class Composer {
     }
 
     selectNotesInRegion(selectionRect) {
+        console.log('selectNotesInRegion called', selectionRect);
+
         // Clear previous selection
         document.querySelectorAll('.tab-note.selected').forEach(note => {
             note.classList.remove('selected');
@@ -287,8 +289,27 @@ class Composer {
 
         this.selectedNotes = [];
 
-        // Find all notes that overlap with selection rectangle
-        document.querySelectorAll('.tab-note').forEach(noteEl => {
+        // For AlphaTab: find text elements (note numbers) in the SVG
+        const alphaTabSvg = document.querySelector('.at-surface-svg');
+        if (!alphaTabSvg) {
+            console.warn('No AlphaTab SVG found for selection');
+            return;
+        }
+
+        // Find all note text elements (numeric content in beat groups)
+        const textElements = alphaTabSvg.querySelectorAll('text');
+        const noteElements = Array.from(textElements).filter(el => {
+            const content = el.textContent.trim();
+            const hasNumber = /^\d+$/.test(content);
+            const parentGroup = el.closest('g');
+            const isBeatGroup = parentGroup?.className.baseVal.match(/^b\d+$/);
+            return hasNumber && isBeatGroup;
+        });
+
+        console.log('Found note elements:', noteElements.length);
+
+        // Check each note element against selection rectangle
+        noteElements.forEach(noteEl => {
             const noteRect = noteEl.getBoundingClientRect();
 
             // Check if rectangles overlap
@@ -297,22 +318,52 @@ class Composer {
                   noteRect.bottom < selectionRect.top ||
                   noteRect.top > selectionRect.bottom)) {
 
+                console.log('Note overlaps selection:', noteEl.textContent);
+
+                // Highlight the note
                 noteEl.classList.add('selected');
 
-                // Store note data
-                this.selectedNotes.push({
-                    measureIndex: parseInt(noteEl.closest('[data-measure-index]')?.dataset.measureIndex),
-                    time: parseFloat(noteEl.dataset.time),
-                    string: parseInt(noteEl.dataset.string),
-                    fret: parseInt(noteEl.dataset.fret),
-                    duration: parseFloat(noteEl.dataset.duration)
+                // Map beat index to composition data
+                const beatGroup = noteEl.closest('g');
+                const beatClass = beatGroup?.className.baseVal;
+                const beatIndex = parseInt(beatClass.replace('b', ''));
+                const noteY = parseFloat(noteEl.getAttribute('y'));
+
+                // Get tab line Y positions to determine string
+                const tabLines = Array.from(alphaTabSvg.querySelectorAll('rect')).filter(rect => {
+                    const width = parseFloat(rect.getAttribute('width'));
+                    const height = parseFloat(rect.getAttribute('height'));
+                    return width > 50 && height < 2;
                 });
+
+                const stringYPositions = [];
+                tabLines.forEach(line => {
+                    const y = parseFloat(line.getAttribute('y'));
+                    const existing = stringYPositions.find(pos => Math.abs(pos - y) < 5);
+                    if (!existing) stringYPositions.push(y);
+                });
+                stringYPositions.sort((a, b) => a - b);
+                const tabOnlyYPositions = stringYPositions.slice(-6);
+
+                // Use the alphaTabAdapter's mapping method
+                const noteData = this.alphaTabAdapter?.mapBeatIndexToNote(beatIndex, noteY, tabOnlyYPositions);
+
+                if (noteData) {
+                    this.selectedNotes.push({
+                        measureIndex: noteData.measureIndex,
+                        time: noteData.event.time,
+                        string: noteData.event.string,
+                        fret: noteData.event.fret,
+                        duration: noteData.event.duration
+                    });
+                }
             }
         });
 
+        console.log('Selected notes:', this.selectedNotes);
+
         if (this.selectedNotes.length > 0) {
             this.showTransientNotification(`Selected ${this.selectedNotes.length} notes`);
-            console.log('Selected notes:', this.selectedNotes);
         }
     }
 

@@ -3508,6 +3508,13 @@ body.rtl .mobile-header {
     box-shadow: 0 0 8px rgba(243, 156, 18, 0.6);
 }
 
+/* Selected notes in AlphaTab SVG */
+text.selected {
+    fill: #f39c12 !important;
+    font-weight: bold !important;
+    filter: drop-shadow(0 0 4px rgba(243, 156, 18, 0.8));
+}
+
 .selection-box {
     position: fixed;
     border: 2px dashed var(--primary-color);
