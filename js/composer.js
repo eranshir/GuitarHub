@@ -1219,6 +1219,8 @@ class Composer {
     }
 
     handleAlphaTabAddNote(measureIndex, stringNum, clickedTime, x, y) {
+        console.log('handleAlphaTabAddNote called:', { measureIndex, stringNum, clickedTime, x, y });
+
         // Check if clicking near existing note to add chord (same time)
         const measure = this.composition.measures[measureIndex];
         let targetTime = this.composition.currentTime;
