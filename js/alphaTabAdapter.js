@@ -42,7 +42,8 @@ class AlphaTabAdapter {
             display: {
                 scale: 1.0,
                 stretchForce: 1.5, // Increase spacing significantly for easier clicking (was 0.8)
-                layoutMode: alphaTab.LayoutMode.Horizontal
+                layoutMode: alphaTab.LayoutMode.Page, // Multi-line layout
+                barsPerRow: 4 // Number of measures per line (will fit to width)
             },
             notation: {
                 notationMode: this.showNotation
@@ -249,14 +250,22 @@ class AlphaTabAdapter {
             return;
         }
 
-        const alphaTabSvg = container.querySelector('.at-surface-svg');
-        if (!alphaTabSvg) {
+        // In Page mode, there are multiple SVGs (one per line)
+        // Get all SVG elements and process each one
+        const alphaTabSvgs = container.querySelectorAll('.at-surface-svg');
+        if (alphaTabSvgs.length === 0) {
             this.log('No alphaTab SVG found for click handlers');
             return;
         }
 
-        // Find all note text elements (numeric content in beat groups)
-        const textElements = alphaTabSvg.querySelectorAll('text');
+        this.log(`Found ${alphaTabSvgs.length} SVG elements (Page mode: multiple lines)`);
+
+        // Process each SVG (each line/system in Page mode)
+        alphaTabSvgs.forEach((alphaTabSvg, svgIndex) => {
+            this.log(`Processing SVG ${svgIndex + 1} of ${alphaTabSvgs.length}`);
+
+            // Find all note text elements (numeric content in beat groups)
+            const textElements = alphaTabSvg.querySelectorAll('text');
         const noteElements = Array.from(textElements).filter(el => {
             const content = el.textContent.trim();
             const hasNumber = /^\d+$/.test(content);
@@ -917,8 +926,9 @@ class AlphaTabAdapter {
             });
         }
 
-        // Create chord annotation area above TAB staff
-        this.createChordAnnotationArea(alphaTabSvg, tabOnlyYPositions, measureXPositions);
+            // Create chord annotation area above TAB staff
+            this.createChordAnnotationArea(alphaTabSvg, tabOnlyYPositions, measureXPositions);
+        }); // End forEach over all SVGs
     }
 
     /**
