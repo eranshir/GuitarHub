@@ -269,8 +269,11 @@ class Composer {
                 // Get selection bounds
                 const rect = selectionBox.getBoundingClientRect();
 
-                // Find all notes within selection
-                this.selectNotesInRegion(rect);
+                // Only select if user dragged at least 10px (not a click)
+                if (rect.width > 10 || rect.height > 10) {
+                    // Find all notes within selection
+                    this.selectNotesInRegion(rect);
+                }
 
                 // Remove selection box
                 selectionBox.remove();
