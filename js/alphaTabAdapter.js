@@ -11,7 +11,7 @@ class AlphaTabAdapter {
         this.renderFinishedBound = false; // Track if renderFinished listener is registered
         this.lastAttachTime = 0; // Timestamp of last attachment to debounce
         this.lastAlphaTex = null; // Track last rendered AlphaTex to prevent duplicate renders
-        this.debug = false; // Set to true to enable debug logging
+        this.debug = true; // Set to true to enable debug logging
     }
 
     log(...args) {
