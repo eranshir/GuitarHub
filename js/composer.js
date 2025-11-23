@@ -754,8 +754,30 @@ class Composer {
             this.composition.timeSignature = e.target.value;
         });
 
+        // Help modal
+        document.getElementById('close-help-modal')?.addEventListener('click', () => {
+            this.closeHelpModal();
+        });
+
         // Keyboard shortcuts for Composer mode
         document.addEventListener('keydown', (e) => {
+            // ESC to close help modal
+            if (e.key === 'Escape') {
+                const helpModal = document.getElementById('help-modal');
+                if (helpModal && helpModal.style.display !== 'none') {
+                    this.closeHelpModal();
+                    e.preventDefault();
+                    return;
+                }
+            }
+
+            // ? to open help modal
+            if (e.key === '?' && !e.target.matches('input, textarea')) {
+                this.openHelpModal();
+                e.preventDefault();
+                return;
+            }
+
             // Don't intercept if typing in chord input field or chat
             if (e.target.id === 'chord-name-input' || e.target.id === 'chat-input') return;
 
@@ -2341,6 +2363,20 @@ class Composer {
     getAbsoluteTime(measureIndex, time) {
         const beatsPerMeasure = this.composition.getBeatsPerMeasure();
         return measureIndex * beatsPerMeasure + time;
+    }
+
+    openHelpModal() {
+        const modal = document.getElementById('help-modal');
+        if (modal) {
+            modal.style.display = 'flex';
+        }
+    }
+
+    closeHelpModal() {
+        const modal = document.getElementById('help-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
     }
 
     toggleCompositionPlayback() {

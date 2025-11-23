@@ -1058,6 +1058,96 @@
         </div>
     </div>
 
+    <!-- Help Modal -->
+    <div id="help-modal" class="help-modal" style="display: none;">
+        <div class="help-modal-backdrop"></div>
+        <div class="help-modal-content">
+            <div class="help-modal-header">
+                <h2>Composer Help & Keyboard Shortcuts</h2>
+                <button id="close-help-modal" class="close-help-btn">✕</button>
+            </div>
+            <div class="help-modal-body">
+                <section class="help-section">
+                    <h3>Creating Music</h3>
+                    <ul>
+                        <li><strong>Click fretboard</strong> - Add notes to build chords</li>
+                        <li><strong>Enter</strong> or <strong>⏎ button</strong> - Add chord/notes to TAB</li>
+                        <li><strong>Backspace</strong> - Clear fretboard</li>
+                        <li><strong>Type chord name</strong> - Load chord shape (e.g., "Cmaj7", "Am", "G7")</li>
+                        <li><strong>Duration buttons</strong> - Select note duration (1/16 to whole note)</li>
+                        <li><strong>Rest buttons</strong> - Add rests to composition</li>
+                    </ul>
+                </section>
+
+                <section class="help-section">
+                    <h3>Editing TAB Notes</h3>
+                    <ul>
+                        <li><strong>Click note in TAB</strong> - Opens radial menu to edit/delete</li>
+                        <li><strong>Radial menu inner ring</strong> - Change fret (0-12)</li>
+                        <li><strong>Radial menu outer ring (top)</strong> - High frets (13-24)</li>
+                        <li><strong>Radial menu outer ring (bottom)</strong> - Change duration</li>
+                        <li><strong>Delete button (top)</strong> - Remove note</li>
+                        <li><strong>Rest buttons (around delete)</strong> - Replace with rest</li>
+                        <li><strong>Click note → edit on fretboard → Enter</strong> - Edit chord shape</li>
+                    </ul>
+                </section>
+
+                <section class="help-section">
+                    <h3>Copy & Paste</h3>
+                    <ul>
+                        <li><strong>Drag across notes</strong> - Select multiple notes (highlights orange)</li>
+                        <li><strong>Cmd+C / Ctrl+C</strong> - Copy selected notes</li>
+                        <li><strong>Cmd+V / Ctrl+V</strong> - Paste at cursor position</li>
+                        <li><strong>Backspace / Delete</strong> - Delete selected notes</li>
+                    </ul>
+                </section>
+
+                <section class="help-section">
+                    <h3>Composition Management</h3>
+                    <ul>
+                        <li><strong>Cmd+S / Ctrl+S</strong> - Save composition</li>
+                        <li><strong>Save button</strong> - Save with custom name</li>
+                        <li><strong>Load button</strong> - Load saved compositions</li>
+                        <li><strong>Share button</strong> - Generate shareable link</li>
+                        <li><strong>Export button</strong> - Download as file</li>
+                        <li><strong>▶ Play button</strong> - Play composition with audio</li>
+                    </ul>
+                </section>
+
+                <section class="help-section">
+                    <h3>Chord Annotations</h3>
+                    <ul>
+                        <li><strong>Shift+Click note</strong> - Add/edit chord name above TAB</li>
+                        <li><strong>Click above TAB staff</strong> - Add chord annotation</li>
+                        <li><strong>Type chord name + Enter</strong> - Save annotation</li>
+                        <li><strong>Empty name + Enter</strong> - Delete annotation</li>
+                    </ul>
+                </section>
+
+                <section class="help-section">
+                    <h3>Navigation</h3>
+                    <ul>
+                        <li><strong>Shift+S</strong> - Open Songs Browser</li>
+                        <li><strong>5 taps on "GuitarHub"</strong> - Open Songs Browser (iPad/mobile)</li>
+                        <li><strong>? key</strong> - Open this help modal</li>
+                        <li><strong>ESC</strong> - Close modals</li>
+                    </ul>
+                </section>
+
+                <section class="help-section">
+                    <h3>Tips</h3>
+                    <ul>
+                        <li>Hover over TAB to see where notes will be added (blue circle with +)</li>
+                        <li>Hover over existing notes to see edit preview (bold blue highlight)</li>
+                        <li>Notes on same string at same time auto-replace (no duplicates)</li>
+                        <li>Dotted notes: 3/16, 3/8, 3/4 for swing and jazz rhythms</li>
+                        <li>Chat with AI for composition suggestions and music theory help</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
     <script src="vendor/alphatab/alphaTab.js"></script>
