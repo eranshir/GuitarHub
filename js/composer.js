@@ -767,6 +767,7 @@ class Composer {
 
             // Delete key to delete selected notes (takes priority)
             if (e.key === 'Delete' && this.selectedNotes.length > 0) {
+                console.log('Delete key pressed with selected notes:', this.selectedNotes.length);
                 this.deleteSelectedNotes();
                 e.preventDefault();
             }
@@ -2292,7 +2293,11 @@ class Composer {
     }
 
     deleteSelectedNotes() {
-        if (this.selectedNotes.length === 0) return;
+        console.log('deleteSelectedNotes called, selectedNotes:', this.selectedNotes);
+        if (this.selectedNotes.length === 0) {
+            console.log('No selected notes, exiting');
+            return;
+        }
 
         // Group selected notes by measure
         const byMeasure = {};
