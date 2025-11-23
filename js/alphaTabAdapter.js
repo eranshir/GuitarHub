@@ -397,31 +397,37 @@ class AlphaTabAdapter {
 
                 this.log('String spacing:', stringSpacing);
 
+                // Check if we're in insert mode (from hover state)
+                const isInsertMode = overlay.dataset.isInsertMode === 'true';
+
                 // Check if clicking vertically near a note (different string, same time)
                 let clickedNearNote = null;
                 let clickedExactlyOnNote = false;
 
-                currentNoteElements.forEach(noteEl => {
-                    const noteX = parseFloat(noteEl.getAttribute('x'));
-                    const noteY = parseFloat(noteEl.getAttribute('y'));
+                // Only check for note clicks if NOT in insert mode
+                if (!isInsertMode) {
+                    currentNoteElements.forEach(noteEl => {
+                        const noteX = parseFloat(noteEl.getAttribute('x'));
+                        const noteY = parseFloat(noteEl.getAttribute('y'));
 
-                    // Check if clicking ON the note number itself
-                    // Must be on SAME string (yDistance < half string spacing)
-                    const xDistance = Math.abs(clickX - noteX);
-                    const yDistance = Math.abs(clickY - noteY);
+                        // Check if clicking ON the note number itself
+                        // Must be on SAME string (yDistance < half string spacing)
+                        const xDistance = Math.abs(clickX - noteX);
+                        const yDistance = Math.abs(clickY - noteY);
 
-                    if (xDistance < 25 && yDistance < stringSpacing / 2) {
-                        // Close enough to this note AND same string - treat as exact click
-                        clickedExactlyOnNote = true;
-                    }
-                    // Check if clicking NEAR note horizontally for chord (same column, different string)
-                    else if (xDistance < 40 && yDistance >= stringSpacing / 2) {
-                        clickedNearNote = noteEl; // Near note (for chord)
-                    }
-                });
+                        if (xDistance < 25 && yDistance < stringSpacing / 2) {
+                            // Close enough to this note AND same string - treat as exact click
+                            clickedExactlyOnNote = true;
+                        }
+                        // Check if clicking NEAR note horizontally for chord (same column, different string)
+                        else if (xDistance < 40 && yDistance >= stringSpacing / 2) {
+                            clickedNearNote = noteEl; // Near note (for chord)
+                        }
+                    });
+                }
 
-                // If clicking exactly on a note, manually trigger the note handler
-                if (clickedExactlyOnNote) {
+                // If clicking exactly on a note (and NOT inserting), manually trigger the note handler
+                if (clickedExactlyOnNote && !isInsertMode) {
                     this.log('Clicked exactly on existing note, manually triggering note handler');
                     e.stopPropagation();
                     e.preventDefault();
@@ -514,20 +520,119 @@ class AlphaTabAdapter {
                 });
 
                 // Use chord note's time if near existing note, otherwise use estimated time
-                const finalTime = noteTimeForChord !== null ? noteTimeForChord : estimatedTime;
+                let finalTime = noteTimeForChord !== null ? noteTimeForChord : estimatedTime;
+                let isInsertBetween = false;
+                let insertAfterTime = null;
+
+                // Check if we're in insert mode (from hover state)
+                console.log('Checking insert mode:', overlay.dataset.isInsertMode, 'insertLeftX:', overlay.dataset.insertLeftX);
+                if (overlay.dataset.isInsertMode === 'true') {
+                    const insertLeftX = parseFloat(overlay.dataset.insertLeftX);
+                    const insertRightX = parseFloat(overlay.dataset.insertRightX);
+                    console.log('INSERT MODE ACTIVE - leftX:', insertLeftX, 'rightX:', insertRightX);
+
+                    // Find the notes at these X positions to get their time values AND measures
+                    let leftNote = null;
+                    let leftNoteMeasure = null;
+                    let rightNote = null;
+                    let rightNoteMeasure = null;
+
+                    currentNoteElements.forEach(noteEl => {
+                        const noteX = parseFloat(noteEl.getAttribute('x'));
+                        if (Math.abs(noteX - insertLeftX) < 5) {
+                            // This is the left note
+                            const beatGroup = noteEl.closest('g');
+                            const beatClass = beatGroup.className.baseVal;
+                            const beatIndex = parseInt(beatClass.replace('b', ''));
+                            const noteData = this.mapBeatIndexToNote(beatIndex);
+                            if (noteData) {
+                                leftNote = noteData.event;
+                                leftNoteMeasure = noteData.measureIndex;
+                            }
+                        } else if (Math.abs(noteX - insertRightX) < 5) {
+                            // This is the right note
+                            const beatGroup = noteEl.closest('g');
+                            const beatClass = beatGroup.className.baseVal;
+                            const beatIndex = parseInt(beatClass.replace('b', ''));
+                            const noteData = this.mapBeatIndexToNote(beatIndex);
+                            if (noteData) {
+                                rightNote = noteData.event;
+                                rightNoteMeasure = noteData.measureIndex;
+                            }
+                        }
+                    });
+
+                    if (leftNote && rightNote && leftNoteMeasure !== null && rightNoteMeasure !== null) {
+                        // Calculate insertion time: truly between left note's end and right note's start
+                        const leftEndTime = leftNote.time + leftNote.duration;
+                        const rightStartTime = rightNote.time;
+                        const isCrossMeasure = leftNoteMeasure !== rightNoteMeasure;
+
+                        console.log('=== INSERTION DEBUG ===');
+                        console.log('Left note: measure', leftNoteMeasure, 'time:', leftNote.time, 'duration:', leftNote.duration, 'ends at:', leftEndTime);
+                        console.log('Right note: measure', rightNoteMeasure, 'starts at:', rightStartTime);
+                        console.log('Cross-measure insertion:', isCrossMeasure);
+
+                        if (isCrossMeasure) {
+                            console.log('CROSS-MEASURE: Left in measure', leftNoteMeasure, 'Right in measure', rightNoteMeasure);
+                        }
+
+                        // Check if there's a musical gap or if notes are consecutive
+                        // For cross-measure, need to account for different time bases
+                        let gap;
+                        if (isCrossMeasure) {
+                            // For cross-measure: left ends at end of measure, right starts at 0 of next measure
+                            // They're consecutive if left ends at measure boundary (time 1.0 in 4/4)
+                            // For simplicity, always treat cross-measure as consecutive (gap = 0)
+                            gap = 0;
+                            console.log('Cross-measure: treating as consecutive (gap = 0)');
+                        } else {
+                            gap = rightStartTime - leftEndTime;
+                            console.log('Same measure gap:', gap);
+                        }
+
+                        if (gap <= 0.01) {
+                            // Notes are consecutive (no gap)
+                            if (isCrossMeasure) {
+                                // Cross-measure: insert slightly before the boundary to avoid collision
+                                // This ensures the inserted note is distinct from the next measure's first note
+                                insertAfterTime = leftEndTime - 0.01;
+                                console.log('Cross-measure consecutive - inserting slightly before boundary:', insertAfterTime);
+                            } else {
+                                // Same measure: insert at left note's end
+                                insertAfterTime = leftEndTime;
+                                console.log('Same-measure consecutive - inserting at left end time:', insertAfterTime);
+                            }
+                        } else {
+                            // There's a gap - place insertion at the midpoint
+                            insertAfterTime = (leftEndTime + rightStartTime) / 2;
+                            console.log('Gap exists - calculated midpoint insertion time:', insertAfterTime);
+                        }
+
+                        finalTime = insertAfterTime;
+                        isInsertBetween = true;
+
+                        // IMPORTANT: Use the left note's measure for insertion
+                        measureIndex = leftNoteMeasure;
+
+                        console.log('Final insertion time:', finalTime, 'in measure:', measureIndex);
+                        console.log('======================');
+                    }
+                }
 
                 this.log('Click analysis:', {
                     measureIndex,
                     stringNum,
                     finalTime,
                     estimatedTime,
-                    nearNoteTime: noteTimeForChord
+                    nearNoteTime: noteTimeForChord,
+                    isInsertBetween
                 });
 
                 // Call add note callback
                 if (this.onAddNote) {
-                    // Pass: measureIndex, stringNum, finalTime (chord time or estimated), click position
-                    this.onAddNote(measureIndex, stringNum, finalTime, e.clientX, e.clientY);
+                    // Pass: measureIndex, stringNum, finalTime (chord time or estimated), click position, isInsertBetween
+                    this.onAddNote(measureIndex, stringNum, finalTime, e.clientX, e.clientY, isInsertBetween);
                 } else {
                     this.log('onAddNote callback not set');
                 }
@@ -577,7 +682,7 @@ class AlphaTabAdapter {
                 currentNoteElements.forEach(el => el.classList.remove('hover-edit-target'));
                 currentAlphaTabSvg.querySelectorAll('.hover-add-indicator').forEach(el => el.remove());
 
-                // Check if hovering near a note
+                // Check if hovering directly on a note (reduced range for tighter detection)
                 let hoveredNote = null;
                 currentNoteElements.forEach(noteEl => {
                     const noteX = parseFloat(noteEl.getAttribute('x'));
@@ -585,18 +690,19 @@ class AlphaTabAdapter {
                     const xDistance = Math.abs(hoverX - noteX);
                     const yDistance = Math.abs(hoverY - noteY);
 
-                    if (xDistance < 25 && yDistance < stringSpacing / 2) {
+                    // Only highlight if hovering very close to the note number itself
+                    if (xDistance < 12 && yDistance < stringSpacing / 2) {
                         hoveredNote = noteEl;
                     }
                 });
 
                 if (hoveredNote) {
-                    // Hovering over existing note - highlight it
+                    // Hovering directly over existing note - highlight it AND show circle
                     hoveredNote.classList.add('hover-edit-target');
-                } else {
-                    // Hovering over empty space - show where note will be added
-                    // Use SAME logic as click handler to determine position
+                }
 
+                // Always show cursor circle - snap to nearest valid position
+                {
                     // Snap to closest string (Y axis)
                     const closestStringIndex = currentTabOnlyYPositions.reduce((closest, y, idx) => {
                         const distance = Math.abs(hoverY - y);
@@ -605,72 +711,107 @@ class AlphaTabAdapter {
 
                     const targetStringY = currentTabOnlyYPositions[closestStringIndex];
 
-                    // Check if hovering near an existing note (within 40px horizontally)
-                    let nearbyNoteX = null;
+                    // Collect all note X positions in this measure AND nearby measures
+                    // Include notes slightly beyond line boundary to enable cross-measure snapping
+                    const notesInMeasure = [];
+                    const extendedRightBound = lineX + lineWidth + 200; // Extend to capture next measure's notes
+
                     currentNoteElements.forEach(noteEl => {
                         const noteX = parseFloat(noteEl.getAttribute('x'));
-                        const noteY = parseFloat(noteEl.getAttribute('y'));
-                        const xDistance = Math.abs(hoverX - noteX);
-                        const yDistance = Math.abs(hoverY - noteY);
-
-                        // Within chord range (same column, different string)
-                        if (xDistance < 40 && yDistance >= stringSpacing / 2) {
-                            nearbyNoteX = noteX;
+                        // Include notes in current measure and some notes from next measure
+                        if (noteX >= lineX && noteX <= extendedRightBound) {
+                            if (!notesInMeasure.some(x => Math.abs(x - noteX) < 5)) {
+                                notesInMeasure.push(noteX);
+                            }
                         }
                     });
+                    notesInMeasure.sort((a, b) => a - b);
 
                     let targetX;
-                    if (nearbyNoteX !== null) {
-                        // Snap to nearby note's X position (adding to chord)
-                        targetX = nearbyNoteX;
-                    } else {
-                        // No nearby note - find where notes are actually positioned in this measure
-                        // Group all note X positions by measure
-                        const notesInMeasure = [];
-                        currentNoteElements.forEach(noteEl => {
-                            const noteX = parseFloat(noteEl.getAttribute('x'));
-                            // Check if this note is in the current measure (same line)
-                            if (noteX >= lineX && noteX <= lineX + lineWidth) {
-                                if (!notesInMeasure.some(x => Math.abs(x - noteX) < 5)) {
-                                    notesInMeasure.push(noteX);
+                    let isInsertMode = false;
+                    let insertLeftX = null;
+                    let insertRightX = null;
+
+                    if (notesInMeasure.length > 0) {
+                        // Simple snapping: divide distance between notes into thirds
+                        // First third: snap to left note
+                        // Middle third: snap to midpoint (insert mode)
+                        // Last third: snap to right note
+
+                        let snapped = false;
+
+                        // Check each consecutive pair of notes
+                        for (let i = 0; i < notesInMeasure.length - 1; i++) {
+                            const leftX = notesInMeasure[i];
+                            const rightX = notesInMeasure[i + 1];
+                            const distance = rightX - leftX;
+                            const thirdDist = distance / 3;
+
+                            // Check if hover is in this gap
+                            if (hoverX >= leftX && hoverX <= rightX) {
+                                const relativePos = hoverX - leftX;
+
+                                if (relativePos < thirdDist) {
+                                    // First third - snap to left note
+                                    targetX = leftX;
+                                    isInsertMode = false;
+                                } else if (relativePos < 2 * thirdDist) {
+                                    // Middle third - snap to midpoint (INSERT MODE)
+                                    targetX = (leftX + rightX) / 2;
+                                    isInsertMode = true;
+                                    insertLeftX = leftX;
+                                    insertRightX = rightX;
+                                } else {
+                                    // Last third - snap to right note
+                                    targetX = rightX;
+                                    isInsertMode = false;
                                 }
+                                snapped = true;
+                                break;
                             }
-                        });
-                        notesInMeasure.sort((a, b) => a - b);
-
-                        if (notesInMeasure.length > 0) {
-                            // Find closest existing note column in this measure
-                            const closestNoteX = notesInMeasure.reduce((closest, x) => {
-                                return Math.abs(x - hoverX) < Math.abs(closest - hoverX) ? x : closest;
-                            }, notesInMeasure[0]);
-
-                            // If close enough, snap to it; otherwise calculate next position
-                            if (Math.abs(closestNoteX - hoverX) < 50) {
-                                targetX = closestNoteX;
-                            } else if (hoverX > notesInMeasure[notesInMeasure.length - 1]) {
-                                // Hovering after last note - estimate next beat position
-                                const avgSpacing = notesInMeasure.length > 1
-                                    ? (notesInMeasure[notesInMeasure.length - 1] - notesInMeasure[0]) / (notesInMeasure.length - 1)
-                                    : lineWidth / 4;
-                                targetX = notesInMeasure[notesInMeasure.length - 1] + avgSpacing;
-                            } else {
-                                targetX = closestNoteX;
-                            }
-                        } else {
-                            // Empty measure - use measure start + small offset
-                            targetX = lineX + 20;
                         }
+
+                        // If not in any gap, check if before first or after last note
+                        if (!snapped) {
+                            const firstX = notesInMeasure[0];
+                            const lastX = notesInMeasure[notesInMeasure.length - 1];
+
+                            if (hoverX < firstX) {
+                                // Before first note - snap to first note
+                                targetX = firstX;
+                                isInsertMode = false;
+                            } else {
+                                // After last note - estimate next position
+                                const avgSpacing = notesInMeasure.length > 1
+                                    ? (lastX - firstX) / (notesInMeasure.length - 1)
+                                    : lineWidth / 4;
+                                targetX = lastX + avgSpacing;
+                                isInsertMode = false;
+                            }
+                        }
+                    } else {
+                        // Empty measure - use measure start + small offset
+                        targetX = lineX + 20;
+                        isInsertMode = false;
+                    }
+
+                    // Store insertion metadata on overlay for click handler
+                    overlay.dataset.isInsertMode = isInsertMode;
+                    if (isInsertMode) {
+                        overlay.dataset.insertLeftX = insertLeftX;
+                        overlay.dataset.insertRightX = insertRightX;
                     }
 
                     // Create circle indicator showing where note will appear (snapped to grid)
-                    // Add small offset to align with note center (text x is at left edge of glyph)
+                    // Use different color for insert mode (orange) vs append mode (blue)
+                    const indicatorColor = isInsertMode ? '#ff6b35' : '#667eea';
                     const centerOffset = 5; // Adjust to center the circle on the note
                     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
                     circle.setAttribute('cx', targetX + centerOffset);
                     circle.setAttribute('cy', targetStringY);
                     circle.setAttribute('r', '8');
                     circle.setAttribute('fill', 'none');
-                    circle.setAttribute('stroke', '#667eea');
+                    circle.setAttribute('stroke', indicatorColor);
                     circle.setAttribute('stroke-width', '2');
                     circle.setAttribute('opacity', '0.6');
                     circle.classList.add('hover-add-indicator');
@@ -683,7 +824,7 @@ class AlphaTabAdapter {
                     plus.setAttribute('x', targetX + centerOffset);
                     plus.setAttribute('y', targetStringY + 4);
                     plus.setAttribute('text-anchor', 'middle');
-                    plus.setAttribute('fill', '#667eea');
+                    plus.setAttribute('fill', indicatorColor);
                     plus.setAttribute('font-size', '12');
                     plus.setAttribute('font-weight', 'bold');
                     plus.textContent = '+';

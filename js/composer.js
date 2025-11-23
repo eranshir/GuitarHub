@@ -101,8 +101,8 @@ class Composer {
         });
 
         // Set up click handler for adding new notes on empty TAB space
-        this.alphaTabAdapter.setAddNoteHandler((measureIndex, stringNum, time, x, y) => {
-            this.handleAlphaTabAddNote(measureIndex, stringNum, time, x, y);
+        this.alphaTabAdapter.setAddNoteHandler((measureIndex, stringNum, time, x, y, isInsertBetween) => {
+            this.handleAlphaTabAddNote(measureIndex, stringNum, time, x, y, isInsertBetween);
         });
         // Set up callback for when chord annotation is added
         this.alphaTabAdapter.setChordAddedHandler(() => {
@@ -1218,7 +1218,7 @@ class Composer {
         this.radialMenu.show(x, y, null, event.fret);
     }
 
-    handleAlphaTabAddNote(measureIndex, stringNum, clickedTime, x, y) {
+    handleAlphaTabAddNote(measureIndex, stringNum, clickedTime, x, y, isInsertBetween = false) {
         // Check if clicking near existing note to add chord (same time)
         const measure = this.composition.measures[measureIndex];
         let targetTime = this.composition.currentTime;
@@ -1232,8 +1232,8 @@ class Composer {
                 Math.abs(e.time - clickedTime) < 0.15
             );
 
-            if (nearbyEvents.length > 0) {
-                // Add as chord - use same time as nearby note
+            if (nearbyEvents.length > 0 && !isInsertBetween) {
+                // Add as chord - use same time as nearby note (unless explicitly inserting)
                 targetTime = nearbyEvents[0].time;
                 targetMeasure = measureIndex;
                 isChord = true;
@@ -1254,6 +1254,11 @@ class Composer {
                     this.radialMenu.show(x, y, null, existingOnThisString.fret);
                     return;
                 }
+            } else if (isInsertBetween) {
+                // Insertion mode - use clicked time and measure
+                targetTime = clickedTime;
+                targetMeasure = measureIndex;
+                isChord = false;
             } else {
                 // Adding sequentially at cursor
             }
@@ -1264,7 +1269,8 @@ class Composer {
             stringNum,
             time: targetTime,
             isNew: true,
-            useCursor: !isChord // Only advance cursor if not chord
+            useCursor: !isChord && !isInsertBetween, // Don't advance cursor if chord or insertion
+            isInsertBetween: isInsertBetween // Store insertion flag for later
         };
 
         // Show radial menu for selecting fret (no current fret since it's new)
@@ -1393,17 +1399,34 @@ class Composer {
                 const measure = this.composition.measures[ctx.measureIndex];
                 if (measure) {
                     // Check if there's already a note on this string at this time
-                    const existingNoteOnString = measure.events.find(e =>
+                    // BUT skip this check if we're explicitly inserting (not editing)
+                    const existingNoteOnString = !ctx.isInsertBetween ? measure.events.find(e =>
                         e.string === ctx.stringNum &&
                         Math.abs(e.time - ctx.time) < 0.001
-                    );
+                    ) : null;
 
                     if (existingNoteOnString) {
                         // Replace the existing note on this string (update fret)
                         existingNoteOnString.fret = fret;
                         this.showTransientNotification(`Updated string ${ctx.stringNum} to fret ${fret}`);
                     } else {
-                        // Add new note to the chord
+                        // If inserting between notes, manually shift any events at/after insertion point
+                        if (ctx.isInsertBetween) {
+                            // Find all events at or after the insertion time (within small tolerance)
+                            const eventsToShift = measure.events.filter(e =>
+                                e.time >= ctx.time - 0.002
+                            );
+
+                            console.log(`Inserting at time ${ctx.time}, found ${eventsToShift.length} events to shift`);
+
+                            // Shift them forward by the new note's duration
+                            eventsToShift.forEach(e => {
+                                console.log(`  Shifting event at ${e.time} to ${e.time + this.selectedDuration}`);
+                                e.time += this.selectedDuration;
+                            });
+                        }
+
+                        // Add new note at the insertion point
                         measure.events.push({
                             time: ctx.time,
                             string: ctx.stringNum,
@@ -1415,20 +1438,26 @@ class Composer {
                         // Sort events by time to ensure proper rendering order
                         measure.events.sort((a, b) => a.time - b.time);
 
-                        // Advance cursor if this was a sequential add (not a click-to-position add)
-                        if (ctx.useCursor) {
-                            this.composition.currentTime += this.selectedDuration;
+                        // If inserting between notes, reflow to handle measure overflow
+                        if (ctx.isInsertBetween) {
+                            this.reflowMeasure(ctx.measureIndex);
+                            this.showTransientNotification(`Inserted note: String ${ctx.stringNum}, Fret ${fret} - reflowed`);
+                        } else {
+                            // Advance cursor if this was a sequential add (not a click-to-position add)
+                            if (ctx.useCursor) {
+                                this.composition.currentTime += this.selectedDuration;
 
-                            // Check if we need a new measure
-                            const beatsPerMeasure = this.composition.getBeatsPerMeasure();
-                            if (this.composition.currentTime >= beatsPerMeasure) {
-                                this.composition.currentTime = 0;
-                                this.composition.currentMeasure++;
-                                this.composition.addMeasure();
+                                // Check if we need a new measure
+                                const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+                                if (this.composition.currentTime >= beatsPerMeasure) {
+                                    this.composition.currentTime = 0;
+                                    this.composition.currentMeasure++;
+                                    this.composition.addMeasure();
+                                }
                             }
-                        }
 
-                        this.showTransientNotification(`Added note: String ${ctx.stringNum}, Fret ${fret}`);
+                            this.showTransientNotification(`Added note: String ${ctx.stringNum}, Fret ${fret}`);
+                        }
                     }
                 }
             } else {
