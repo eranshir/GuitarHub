@@ -762,8 +762,13 @@ class Composer {
                 e.preventDefault();
             }
 
-            // Backspace/Delete to clear fretboard (only if not in input field)
-            if ((e.key === 'Backspace' || e.key === 'Delete') && !this.fretboardState.isEmpty()) {
+            // Delete key to delete selected notes (takes priority)
+            if (e.key === 'Delete' && this.selectedNotes.length > 0) {
+                this.deleteSelectedNotes();
+                e.preventDefault();
+            }
+            // Backspace/Delete to clear fretboard (only if no selection)
+            else if ((e.key === 'Backspace' || e.key === 'Delete') && !this.fretboardState.isEmpty()) {
                 this.clearComposerFretboard();
                 e.preventDefault();
             }
@@ -783,12 +788,6 @@ class Composer {
             // Ctrl+V to paste
             if (e.key === 'v' && (e.ctrlKey || e.metaKey) && this.clipboard) {
                 this.pasteNotes();
-                e.preventDefault();
-            }
-
-            // Delete key to delete selected notes
-            if (e.key === 'Delete' && this.selectedNotes.length > 0) {
-                this.deleteSelectedNotes();
                 e.preventDefault();
             }
         });
@@ -2313,8 +2312,8 @@ class Composer {
             }
         });
 
-        // Clear selection visually
-        document.querySelectorAll('.tab-note.selected').forEach(note => {
+        // Clear selection visually (both old tab-note and AlphaTab SVG text elements)
+        document.querySelectorAll('.tab-note.selected, text.selected').forEach(note => {
             note.classList.remove('selected');
         });
         this.selectedNotes = [];
