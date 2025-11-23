@@ -2336,6 +2336,10 @@ class Composer {
             byMeasure[note.measureIndex].push(note);
         });
 
+        // Find the earliest affected measure for reflowing
+        const affectedMeasures = Object.keys(byMeasure).map(Number).sort((a, b) => a - b);
+        const firstAffectedMeasure = affectedMeasures[0];
+
         // Remove selected notes from their measures
         Object.entries(byMeasure).forEach(([measureIdx, notes]) => {
             const measure = this.composition.measures[measureIdx];
@@ -2347,6 +2351,11 @@ class Composer {
                 });
             }
         });
+
+        // Reflow from the first affected measure to close gaps
+        if (firstAffectedMeasure !== undefined) {
+            this.reflowMeasure(firstAffectedMeasure);
+        }
 
         // Clear selection array (so render doesn't re-select)
         this.selectedNotes = [];
