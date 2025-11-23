@@ -42,8 +42,7 @@ class AlphaTabAdapter {
             display: {
                 scale: 1.0,
                 stretchForce: 1.5, // Increase spacing significantly for easier clicking (was 0.8)
-                layoutMode: alphaTab.LayoutMode.Page, // Page mode for multi-line layout
-                barsPerRow: 4 // 4 measures per line (configurable)
+                layoutMode: alphaTab.LayoutMode.Horizontal
             },
             notation: {
                 notationMode: this.showNotation
