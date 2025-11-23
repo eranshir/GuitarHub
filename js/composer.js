@@ -285,8 +285,8 @@ class Composer {
     selectNotesInRegion(selectionRect) {
         console.log('selectNotesInRegion called', selectionRect);
 
-        // Clear previous selection
-        document.querySelectorAll('.tab-note.selected').forEach(note => {
+        // Clear previous selection (both old tab-note and AlphaTab SVG text elements)
+        document.querySelectorAll('.tab-note.selected, text.selected').forEach(note => {
             note.classList.remove('selected');
         });
 
@@ -756,8 +756,10 @@ class Composer {
 
         // Keyboard shortcuts for Composer mode
         document.addEventListener('keydown', (e) => {
-            // Don't intercept if typing in chord input field
-            if (e.target.id === 'chord-name-input') return;
+            // Don't intercept if typing in chord input field or chat
+            if (e.target.id === 'chord-name-input' || e.target.id === 'chat-input') return;
+
+            console.log('Key pressed:', e.key, 'selectedNotes:', this.selectedNotes.length);
 
             // Enter key to add note (only if not in input field and fretboard has notes)
             if (e.key === 'Enter' && !this.fretboardState.isEmpty()) {
