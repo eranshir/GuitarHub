@@ -736,11 +736,6 @@ class Composer {
 
 
     handleComposerFretboardClick(string, fret) {
-        console.log('=== handleComposerFretboardClick ===');
-        console.log('Clicked:', { string, fret });
-        console.log('fretboardEditContext:', this.fretboardEditContext);
-        console.log('Current fretboard notes:', this.fretboardState.getNotes());
-
         // Close radial menu if open (user is now editing on fretboard)
         if (this.radialMenu) {
             this.radialMenu.hide();
@@ -751,12 +746,8 @@ class Composer {
         const existingNoteOnString = notes.find(n => n.string === string);
         const isMuted = this.fretboardState.isStringMuted(string);
 
-        console.log('existingNoteAtThisFret:', existingNoteAtThisFret);
-        console.log('existingNoteOnString:', existingNoteOnString);
-
         // In edit mode: always set the note to the clicked fret (move, don't toggle)
         if (this.fretboardEditContext) {
-            console.log('IN EDIT MODE - setting note');
             if (fret === 0) {
                 // Clicking nut - set to open string
                 this.fretboardState.addNote(string, 0);
@@ -795,8 +786,6 @@ class Composer {
 
         // Update visual display
         this.displayComposerFretboard();
-
-        console.log('After update, fretboard notes:', this.fretboardState.getNotes());
 
         // Detect chord (always update after any fretboard change)
         this.updateDetectedChord();
@@ -1525,8 +1514,8 @@ class Composer {
     }
 
     handleRadialMenuCancel() {
-        // Clear fretboard if we were editing
-        if (this.radialEditContext && !this.radialEditContext.isNew) {
+        // Clear fretboard if we were editing (but NOT if we're in fretboard edit mode)
+        if (this.radialEditContext && !this.radialEditContext.isNew && !this.fretboardEditContext) {
             this.fretboardState.clear();
             this.displayComposerFretboard();
         }
