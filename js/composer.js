@@ -1403,7 +1403,7 @@ class Composer {
                         existingNoteOnString.fret = fret;
                         this.showTransientNotification(`Updated string ${ctx.stringNum} to fret ${fret}`);
                     } else {
-                        // Add new note to the chord
+                        // Add new note at the specified time
                         measure.events.push({
                             time: ctx.time,
                             string: ctx.stringNum,
@@ -1414,6 +1414,10 @@ class Composer {
 
                         // Sort events by time to ensure proper rendering order
                         measure.events.sort((a, b) => a.time - b.time);
+
+                        // Reflow measure to push subsequent notes forward if needed
+                        // This handles inserting notes between existing notes
+                        this.reflowMeasure(ctx.measureIndex);
 
                         // Advance cursor if this was a sequential add (not a click-to-position add)
                         if (ctx.useCursor) {

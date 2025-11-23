@@ -645,17 +645,34 @@ class AlphaTabAdapter {
                                 return Math.abs(x - hoverX) < Math.abs(closest - hoverX) ? x : closest;
                             }, notesInMeasure[0]);
 
-                            // If close enough, snap to it; otherwise calculate next position
-                            if (Math.abs(closestNoteX - hoverX) < 50) {
-                                targetX = closestNoteX;
-                            } else if (hoverX > notesInMeasure[notesInMeasure.length - 1]) {
-                                // Hovering after last note - estimate next beat position
-                                const avgSpacing = notesInMeasure.length > 1
-                                    ? (notesInMeasure[notesInMeasure.length - 1] - notesInMeasure[0]) / (notesInMeasure.length - 1)
-                                    : lineWidth / 4;
-                                targetX = notesInMeasure[notesInMeasure.length - 1] + avgSpacing;
-                            } else {
-                                targetX = closestNoteX;
+                            // Check if hovering BETWEEN two notes (insert position)
+                            let betweenNotes = false;
+                            for (let i = 0; i < notesInMeasure.length - 1; i++) {
+                                const leftNote = notesInMeasure[i];
+                                const rightNote = notesInMeasure[i + 1];
+                                const midPoint = (leftNote + rightNote) / 2;
+
+                                // If hovering near the midpoint between two notes
+                                if (Math.abs(hoverX - midPoint) < 30 && hoverX > leftNote + 20 && hoverX < rightNote - 20) {
+                                    targetX = midPoint;
+                                    betweenNotes = true;
+                                    break;
+                                }
+                            }
+
+                            if (!betweenNotes) {
+                                // Not between notes - snap to closest note or next position
+                                if (Math.abs(closestNoteX - hoverX) < 40) {
+                                    targetX = closestNoteX;
+                                } else if (hoverX > notesInMeasure[notesInMeasure.length - 1]) {
+                                    // Hovering after last note - estimate next beat position
+                                    const avgSpacing = notesInMeasure.length > 1
+                                        ? (notesInMeasure[notesInMeasure.length - 1] - notesInMeasure[0]) / (notesInMeasure.length - 1)
+                                        : lineWidth / 4;
+                                    targetX = notesInMeasure[notesInMeasure.length - 1] + avgSpacing;
+                                } else {
+                                    targetX = closestNoteX;
+                                }
                             }
                         } else {
                             // Empty measure - use measure start + small offset
