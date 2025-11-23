@@ -2320,15 +2320,20 @@ class Composer {
             }
         });
 
-        // Clear selection visually (both old tab-note and AlphaTab SVG text elements)
-        document.querySelectorAll('.tab-note.selected, text.selected').forEach(note => {
-            note.classList.remove('selected');
-        });
+        // Clear selection array (so render doesn't re-select)
         this.selectedNotes = [];
 
         this.showTransientNotification('Deleted selected notes');
+
+        // Render composition (this is async for AlphaTab)
         this.renderComposition();
         this.autoSaveComposition();
+
+        // Clear visual selection immediately (don't wait for render)
+        // This gives instant feedback even though AlphaTab render is async
+        document.querySelectorAll('.tab-note.selected, text.selected').forEach(note => {
+            note.classList.remove('selected');
+        });
     }
 
     getAbsoluteTime(measureIndex, time) {
