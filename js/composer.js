@@ -39,6 +39,9 @@ class Composer {
         this.selectedNotes = [];
         this.isSelecting = false;
 
+        // Clipboard for copy/paste
+        this.clipboard = null; // {notes: [], relativePositions: []};
+
         // Metronome state
         this.bpm = 120;
         this.metronomeInterval = null;
@@ -717,6 +720,24 @@ class Composer {
             // Ctrl+S to save
             if (e.key === 's' && (e.ctrlKey || e.metaKey)) {
                 this.saveComposition();
+                e.preventDefault();
+            }
+
+            // Ctrl+C to copy selected notes
+            if (e.key === 'c' && (e.ctrlKey || e.metaKey) && this.selectedNotes.length > 0) {
+                this.copySelectedNotes();
+                e.preventDefault();
+            }
+
+            // Ctrl+V to paste
+            if (e.key === 'v' && (e.ctrlKey || e.metaKey) && this.clipboard) {
+                this.pasteNotes();
+                e.preventDefault();
+            }
+
+            // Delete key to delete selected notes
+            if (e.key === 'Delete' && this.selectedNotes.length > 0) {
+                this.deleteSelectedNotes();
                 e.preventDefault();
             }
         });
@@ -2131,6 +2152,130 @@ class Composer {
         // Re-render and save
         this.renderComposition();
         this.autoSaveComposition();
+    }
+
+    copySelectedNotes() {
+        if (this.selectedNotes.length === 0) return;
+
+        // Find the earliest note to use as reference point
+        const sortedNotes = [...this.selectedNotes].sort((a, b) => {
+            const aAbs = this.getAbsoluteTime(a.measureIndex, a.time);
+            const bAbs = this.getAbsoluteTime(b.measureIndex, b.time);
+            return aAbs - bAbs;
+        });
+
+        const firstNote = sortedNotes[0];
+        const referenceTime = this.getAbsoluteTime(firstNote.measureIndex, firstNote.time);
+
+        // Store notes with relative positions from the first note
+        this.clipboard = {
+            notes: this.selectedNotes.map(note => ({
+                string: note.string,
+                fret: note.fret,
+                duration: note.duration,
+                relativeTime: this.getAbsoluteTime(note.measureIndex, note.time) - referenceTime
+            }))
+        };
+
+        this.showTransientNotification(`Copied ${this.selectedNotes.length} notes`);
+    }
+
+    pasteNotes() {
+        if (!this.clipboard || this.clipboard.notes.length === 0) return;
+
+        // Paste at current cursor position
+        let currentTime = this.composition.currentTime;
+        let currentMeasure = this.composition.currentMeasure;
+
+        // Ensure we have a measure
+        if (currentMeasure >= this.composition.measures.length) {
+            this.composition.addMeasure();
+        }
+
+        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+
+        // Add each note from clipboard
+        this.clipboard.notes.forEach(clipNote => {
+            const noteTime = currentTime + clipNote.relativeTime;
+            let targetMeasure = currentMeasure;
+            let targetTime = noteTime;
+
+            // Handle measure overflow
+            while (targetTime >= beatsPerMeasure) {
+                targetTime -= beatsPerMeasure;
+                targetMeasure++;
+                if (targetMeasure >= this.composition.measures.length) {
+                    this.composition.addMeasure();
+                }
+            }
+
+            // Add the note
+            this.composition.measures[targetMeasure].events.push({
+                time: targetTime,
+                string: clipNote.string,
+                fret: clipNote.fret,
+                duration: clipNote.duration,
+                leftFinger: null
+            });
+        });
+
+        // Advance cursor to end of pasted section
+        const lastNote = this.clipboard.notes[this.clipboard.notes.length - 1];
+        const totalDuration = lastNote.relativeTime + lastNote.duration;
+        this.composition.currentTime = currentTime + totalDuration;
+
+        // Handle measure overflow for cursor
+        while (this.composition.currentTime >= beatsPerMeasure) {
+            this.composition.currentTime -= beatsPerMeasure;
+            this.composition.currentMeasure++;
+            if (this.composition.currentMeasure >= this.composition.measures.length) {
+                this.composition.addMeasure();
+            }
+        }
+
+        this.showTransientNotification(`Pasted ${this.clipboard.notes.length} notes`);
+        this.renderComposition();
+        this.autoSaveComposition();
+    }
+
+    deleteSelectedNotes() {
+        if (this.selectedNotes.length === 0) return;
+
+        // Group selected notes by measure
+        const byMeasure = {};
+        this.selectedNotes.forEach(note => {
+            if (!byMeasure[note.measureIndex]) {
+                byMeasure[note.measureIndex] = [];
+            }
+            byMeasure[note.measureIndex].push(note);
+        });
+
+        // Remove selected notes from their measures
+        Object.entries(byMeasure).forEach(([measureIdx, notes]) => {
+            const measure = this.composition.measures[measureIdx];
+            if (measure) {
+                notes.forEach(note => {
+                    measure.events = measure.events.filter(e =>
+                        !(Math.abs(e.time - note.time) < 0.001 && e.string === note.string)
+                    );
+                });
+            }
+        });
+
+        // Clear selection visually
+        document.querySelectorAll('.tab-note.selected').forEach(note => {
+            note.classList.remove('selected');
+        });
+        this.selectedNotes = [];
+
+        this.showTransientNotification('Deleted selected notes');
+        this.renderComposition();
+        this.autoSaveComposition();
+    }
+
+    getAbsoluteTime(measureIndex, time) {
+        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+        return measureIndex * beatsPerMeasure + time;
     }
 
     toggleCompositionPlayback() {
