@@ -55,6 +55,12 @@ class AlphaTabAdapter {
                     scoreWordsAndMusic: false,
                     effectTempo: false
                 }
+            },
+            player: {
+                enablePlayer: true,
+                enableCursor: true,
+                enableUserInteraction: true,
+                soundFont: 'vendor/alphatab/soundfont/sonivox.sf2' // Local soundfont (1.3MB)
             }
         };
 
@@ -78,6 +84,18 @@ class AlphaTabAdapter {
                 }, 1000);
             });
             this.renderFinishedBound = true;
+
+            // Listen for player state changes
+            this.alphaTabApi.playerFinished.on(() => {
+                console.log('Playback finished');
+                if (this.onPlayerFinished) {
+                    this.onPlayerFinished();
+                }
+            });
+
+            this.alphaTabApi.playerStateChanged.on((e) => {
+                console.log('Player state changed:', e.state, e);
+            });
         }
 
         return this.alphaTabApi;
@@ -202,20 +220,21 @@ class AlphaTabAdapter {
         // Store composition for click mapping
         this.currentComposition = composition;
 
-        // Convert to AlphaTex and render
+        // Convert to AlphaTex (now with tempo and instrument directives)
         const alphaTex = this.tabCompositionToAlphaTex(composition);
 
-        // Skip render if AlphaTex hasn't changed (prevents infinite render loop)
+        // Skip render if unchanged
         if (alphaTex === this.lastAlphaTex) {
-            this.log('AlphaTex unchanged, skipping render to prevent loop');
+            this.log('AlphaTex unchanged, skipping render');
             return;
         }
 
         this.log('Generated AlphaTex:', alphaTex);
         this.lastAlphaTex = alphaTex;
 
+        // Render using AlphaTex (simpler and more reliable than Score API)
         this.alphaTabApi.tex(alphaTex);
-        this.log('Composition rendered with alphaTab');
+        this.log('Composition rendered with AlphaTex');
     }
 
     /**
@@ -1203,8 +1222,11 @@ class AlphaTabAdapter {
         // Get time signature from composition
         const [num, denom] = composition.timeSignature.split('/');
 
-        // Simplified format without metadata delimiters - just start with notes
-        let tex = '';
+        // Add metadata directives at the start (must end with period)
+        let tex = `\\tempo ${composition.tempo || 120} \\instrument 24 . `;
+
+        console.log('AlphaTex metadata - Tempo:', composition.tempo || 120, 'Instrument: 24 (guitar)');
+        console.log('AlphaTex header:', tex.substring(0, 100));
 
         // Convert each measure
         composition.measures.forEach((measure, idx) => {
@@ -1326,7 +1348,8 @@ class AlphaTabAdapter {
 
         // Set score metadata
         score.title = composition.title;
-        // Tempo will be set via first master bar
+        score.tempo = composition.tempo || 120;
+        console.log('Score tempo set to:', score.tempo);
 
         // Create a single track for guitar
         const track = new alphaTab.model.Track();
@@ -1335,6 +1358,24 @@ class AlphaTabAdapter {
 
         // Standard guitar tuning (E A D G B E, from low to high)
         track.tuning = [64, 59, 55, 50, 45, 40]; // MIDI note numbers
+
+        // Initialize playback info if not already set
+        if (!track.playbackInfo) {
+            track.playbackInfo = new alphaTab.model.PlaybackInformation();
+        }
+
+        // Set playback to use acoustic guitar (nylon) sound
+        track.playbackInfo.program = 24; // MIDI program 24 = Acoustic Guitar (nylon)
+        track.playbackInfo.primaryChannel = 0;
+        track.playbackInfo.secondaryChannel = 1;
+        track.playbackInfo.volume = 15; // Max volume
+        track.playbackInfo.balance = 8; // Center
+
+        console.log('Track playback info set:', {
+            program: track.playbackInfo.program,
+            channel: track.playbackInfo.primaryChannel,
+            volume: track.playbackInfo.volume
+        });
 
         // Create staff for the track
         const staff = new alphaTab.model.Staff();
@@ -1400,6 +1441,14 @@ class AlphaTabAdapter {
                 });
             });
         });
+
+        // Finalize the score to set up all internal relationships
+        try {
+            score.finish();
+            console.log('Score finalized successfully');
+        } catch (error) {
+            console.error('Error finalizing score:', error);
+        }
 
         return score;
     }
@@ -1590,5 +1639,127 @@ class AlphaTabAdapter {
         }
 
         return false;
+    }
+
+    /**
+     * Set callback for when playback finishes
+     */
+    setPlayerFinishedHandler(callback) {
+        this.onPlayerFinished = callback;
+    }
+
+    /**
+     * Play Controls - Use AlphaTab's built-in player
+     */
+    play() {
+        console.log('AlphaTab play() called');
+        if (this.alphaTabApi) {
+            console.log('Calling alphaTabApi.play()');
+            try {
+                this.alphaTabApi.play();
+                console.log('Play command sent successfully');
+            } catch (error) {
+                console.error('Error calling play():', error);
+            }
+        } else {
+            console.error('alphaTabApi not initialized');
+        }
+    }
+
+    pause() {
+        console.log('AlphaTab pause() called');
+        if (this.alphaTabApi) {
+            this.alphaTabApi.pause();
+        }
+    }
+
+    stop() {
+        console.log('AlphaTab stop() called');
+        if (this.alphaTabApi) {
+            this.alphaTabApi.stop();
+        }
+    }
+
+    playPause() {
+        console.log('AlphaTab playPause() called');
+        if (this.alphaTabApi) {
+            this.alphaTabApi.playPause();
+        }
+    }
+
+    /**
+     * Play a single chord from fretboard state using Web Audio
+     * @param {Array} notes - Array of {string, fret} objects
+     */
+    playChord(notes) {
+        if (!notes || notes.length === 0) {
+            console.log('No notes to play');
+            return;
+        }
+
+        console.log('Playing chord with Web Audio:', notes);
+
+        // Initialize AudioContext if needed
+        if (!this.audioContext) {
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        const ctx = this.audioContext;
+        const now = ctx.currentTime;
+
+        // Guitar string frequencies (standard tuning, open strings)
+        const openStringFrequencies = [
+            329.63, // E4 (high E, string 1)
+            246.94, // B3 (string 2)
+            196.00, // G3 (string 3)
+            146.83, // D3 (string 4)
+            110.00, // A2 (string 5)
+            82.41   // E2 (low E, string 6)
+        ];
+
+        // Calculate frequency for each fret (12-TET: freq * 2^(frets/12))
+        const getNoteFrequency = (stringNum, fret) => {
+            const openFreq = openStringFrequencies[stringNum - 1];
+            return openFreq * Math.pow(2, fret / 12);
+        };
+
+        // Play each note in the chord with improved guitar-like sound
+        notes.forEach((note, index) => {
+            const freq = getNoteFrequency(note.string, note.fret);
+            const startTime = now + (index * 0.015); // Slight strum delay (15ms)
+
+            // Use multiple oscillators for richer guitar-like tone
+            const fundamentalGain = ctx.createGain();
+            fundamentalGain.gain.setValueAtTime(0.4, startTime);
+            fundamentalGain.gain.exponentialRampToValueAtTime(0.001, startTime + 3.0);
+
+            // Fundamental frequency
+            const osc1 = ctx.createOscillator();
+            osc1.frequency.value = freq;
+            osc1.type = 'triangle';
+
+            // Add slight detuning for richness
+            const osc2 = ctx.createOscillator();
+            osc2.frequency.value = freq * 1.002; // Slight detune
+            osc2.type = 'triangle';
+
+            // Add low-pass filter for warmer guitar tone
+            const filter = ctx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.value = 2000 + freq; // Filter frequency based on note
+            filter.Q.value = 1;
+
+            // Connect the audio graph
+            osc1.connect(fundamentalGain);
+            osc2.connect(fundamentalGain);
+            fundamentalGain.connect(filter);
+            filter.connect(ctx.destination);
+
+            // Play
+            osc1.start(startTime);
+            osc2.start(startTime);
+            osc1.stop(startTime + 3.0);
+            osc2.stop(startTime + 3.0);
+        });
     }
 }

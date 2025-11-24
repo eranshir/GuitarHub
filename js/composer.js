@@ -95,6 +95,12 @@ class Composer {
         this.alphaTabAdapter = new AlphaTabAdapter('composition-tab-display');
         this.alphaTabAdapter.initialize();
 
+        // Set up player finished handler to reset button
+        this.alphaTabAdapter.setPlayerFinishedHandler(() => {
+            this.isPlayingComposition = false;
+            this.updatePlayButton(false);
+        });
+
         // Set up click handler for alphaTab-rendered notes
         this.alphaTabAdapter.setNoteClickHandler((measureIndex, event, clickEvent, x, y) => {
             this.handleAlphaTabNoteClick(measureIndex, event, clickEvent, x, y);
@@ -694,6 +700,11 @@ class Composer {
             }
         });
 
+        // Play Fretboard Chord button
+        document.getElementById('play-fretboard-btn')?.addEventListener('click', () => {
+            this.playFretboardChord();
+        });
+
         // Add Chord button
         document.getElementById('add-chord-btn')?.addEventListener('click', () => {
             this.addChordToComposition();
@@ -748,6 +759,9 @@ class Composer {
                 const tempo = parseInt(e.target.value);
                 if (tempo >= 40 && tempo <= 240) {
                     this.composition.tempo = tempo;
+                    // Clear AlphaTex cache to force re-render with new tempo
+                    this.alphaTabAdapter.lastAlphaTex = null;
+                    this.renderComposition(); // Re-render to apply tempo
                     this.autoSaveComposition();
                 }
             });
@@ -2453,35 +2467,63 @@ class Composer {
     }
 
     toggleCompositionPlayback() {
-        if (this.isPlayingComposition) {
-            this.stopCompositionPlayback();
-        } else {
-            this.startCompositionPlayback();
-        }
-    }
-
-    startCompositionPlayback() {
         if (!this.composition || this.composition.measures.length === 0) {
             this.showTransientNotification('No composition to play!');
             return;
         }
 
-        this.isPlayingComposition = true;
-        this.currentPlaybackMeasure = 0;
-        this.currentPlaybackTime = 0;
+        // Use AlphaTab's built-in player
+        if (this.isPlayingComposition) {
+            this.alphaTabAdapter.pause();
+            this.isPlayingComposition = false;
+            this.updatePlayButton(false);
+        } else {
+            this.alphaTabAdapter.play();
+            this.isPlayingComposition = true;
+            this.updatePlayButton(true);
+        }
+    }
 
-        // Update button to show pause icon
+    updatePlayButton(isPlaying) {
         const playBtn = document.getElementById('play-composition-btn');
         if (playBtn) {
-            playBtn.innerHTML = `
-                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                    <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-                </svg>
-            `;
-            playBtn.title = 'Pause';
+            if (isPlaying) {
+                playBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                    </svg>
+                `;
+                playBtn.title = 'Pause';
+            } else {
+                playBtn.innerHTML = `
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                `;
+                playBtn.title = 'Play Composition';
+            }
+        }
+    }
+
+    startCompositionPlayback() {
+        // Now handled by toggleCompositionPlayback using AlphaTab
+        this.toggleCompositionPlayback();
+    }
+
+    /**
+     * Play the current fretboard chord shape
+     */
+    playFretboardChord() {
+        const notes = this.fretboardState.getNotes();
+
+        if (notes.length === 0) {
+            this.showTransientNotification('No notes on fretboard to play');
+            return;
         }
 
-        this.scheduleNextNote();
+        console.log('Playing fretboard notes:', notes);
+        this.alphaTabAdapter.playChord(notes);
+        this.showTransientNotification(`Playing ${notes.length} note${notes.length > 1 ? 's' : ''}`);
     }
 
     scheduleNextNote() {
