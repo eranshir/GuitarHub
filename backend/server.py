@@ -6,13 +6,18 @@ Provides secure proxy to OpenAI API for the Guitar Assistant feature.
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from werkzeug.utils import secure_filename
 import os
 import json
 import secrets
 import hashlib
+import uuid
 from datetime import datetime, timedelta
 from openai import OpenAI
 from dotenv import load_dotenv
+
+# Import OMR pipeline
+from omr_pipeline import start_omr_job, get_job, process_omr_sync
 
 # Load environment variables
 load_dotenv()
@@ -40,8 +45,16 @@ with open(os.path.join(os.path.dirname(__file__), 'system_prompt.txt'), 'r') as 
 SHARES_DIR = os.path.join(os.path.dirname(__file__), 'shares')
 SHARE_TTL_DAYS = 90  # Shares expire after 90 days
 
-# Ensure shares directory exists
+# OMR configuration
+UPLOADS_DIR = os.path.join(os.path.dirname(__file__), 'uploads')
+OMR_OUTPUT_DIR = os.path.join(os.path.dirname(__file__), 'omr_jobs')
+ALLOWED_OMR_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'tiff', 'tif'}
+MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB max upload
+
+# Ensure directories exist
 os.makedirs(SHARES_DIR, exist_ok=True)
+os.makedirs(UPLOADS_DIR, exist_ok=True)
+os.makedirs(OMR_OUTPUT_DIR, exist_ok=True)
 
 
 def generate_share_id():
@@ -413,6 +426,148 @@ def get_share(share_id):
 
     except Exception as e:
         print(f"Error loading share: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+# ============================================================
+# OMR (Optical Music Recognition) Endpoints
+# ============================================================
+
+def allowed_omr_file(filename):
+    """Check if file extension is allowed for OMR."""
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_OMR_EXTENSIONS
+
+
+@app.route('/api/omr/upload', methods=['POST'])
+def omr_upload():
+    """
+    Upload a PDF or image file for OMR processing.
+
+    Expects multipart/form-data with 'file' field.
+
+    Response:
+    {
+        "job_id": "abc123def456",
+        "status": "pending",
+        "message": "File uploaded, processing started"
+    }
+    """
+    try:
+        # Check if file is present
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file provided'}), 400
+
+        file = request.files['file']
+
+        if file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+
+        if not allowed_omr_file(file.filename):
+            return jsonify({
+                'error': f'Invalid file type. Allowed: {", ".join(ALLOWED_OMR_EXTENSIONS)}'
+            }), 400
+
+        # Generate job ID and create directories
+        job_id = uuid.uuid4().hex[:12]
+        job_upload_dir = os.path.join(UPLOADS_DIR, job_id)
+        job_output_dir = os.path.join(OMR_OUTPUT_DIR, job_id)
+        os.makedirs(job_upload_dir, exist_ok=True)
+        os.makedirs(job_output_dir, exist_ok=True)
+
+        # Save uploaded file
+        filename = secure_filename(file.filename)
+        input_path = os.path.join(job_upload_dir, filename)
+        file.save(input_path)
+
+        # Start OMR processing in background
+        job = start_omr_job(input_path, job_output_dir)
+
+        return jsonify({
+            'job_id': job.job_id,
+            'status': job.status,
+            'message': 'File uploaded, processing started'
+        }), 202
+
+    except Exception as e:
+        print(f"Error in OMR upload: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/omr/status/<job_id>', methods=['GET'])
+def omr_status(job_id):
+    """
+    Get the status of an OMR processing job.
+
+    Response:
+    {
+        "job_id": "abc123def456",
+        "status": "processing",
+        "progress": "Processing page 2 of 4",
+        "pages_total": 4,
+        "pages_completed": 1
+    }
+    """
+    try:
+        job = get_job(job_id)
+
+        if not job:
+            return jsonify({'error': 'Job not found'}), 404
+
+        return jsonify(job.to_dict()), 200
+
+    except Exception as e:
+        print(f"Error getting OMR status: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/omr/result/<job_id>', methods=['GET'])
+def omr_result(job_id):
+    """
+    Get the result of a completed OMR job.
+
+    Response (on success):
+    {
+        "job_id": "abc123def456",
+        "status": "completed",
+        "composition": {
+            "title": "Song Name",
+            "tempo": 120,
+            "timeSignature": "4/4",
+            "measures": [...]
+        }
+    }
+    """
+    try:
+        job = get_job(job_id)
+
+        if not job:
+            return jsonify({'error': 'Job not found'}), 404
+
+        if job.status == "pending" or job.status == "processing":
+            return jsonify({
+                'job_id': job_id,
+                'status': job.status,
+                'progress': job.progress,
+                'error': 'Job not yet completed'
+            }), 202
+
+        if job.status == "failed":
+            return jsonify({
+                'job_id': job_id,
+                'status': 'failed',
+                'error': job.error
+            }), 400
+
+        # Job completed successfully
+        return jsonify({
+            'job_id': job_id,
+            'status': 'completed',
+            'composition': job.result
+        }), 200
+
+    except Exception as e:
+        print(f"Error getting OMR result: {e}")
         return jsonify({'error': str(e)}), 500
 
 

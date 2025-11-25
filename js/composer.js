@@ -727,6 +727,30 @@ class Composer {
             this.exportComposition();
         });
 
+        // OMR Import button - triggers file input
+        document.getElementById('import-sheet-btn')?.addEventListener('click', () => {
+            document.getElementById('omr-file-input')?.click();
+        });
+
+        // OMR File input change handler
+        document.getElementById('omr-file-input')?.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                this.importSheetMusic(file);
+            }
+            // Reset input so same file can be selected again
+            e.target.value = '';
+        });
+
+        // OMR Modal close/retry buttons
+        document.getElementById('close-omr-modal')?.addEventListener('click', () => {
+            this.closeOmrModal();
+        });
+        document.getElementById('omr-retry-btn')?.addEventListener('click', () => {
+            this.closeOmrModal();
+            document.getElementById('omr-file-input')?.click();
+        });
+
         document.getElementById('fullscreen-tab-btn')?.addEventListener('click', () => {
             this.toggleTabFullscreen();
         });
@@ -2637,5 +2661,174 @@ class Composer {
     cleanup() {
         this.stopPlayback();
         this.stopCompositionPlayback();
+    }
+
+    // ============================================================
+    // OMR (Optical Music Recognition) Import Methods
+    // ============================================================
+
+    async importSheetMusic(file) {
+        // Show modal with progress
+        this.showOmrModal();
+        this.updateOmrStatus('Uploading file...', '');
+
+        try {
+            // Upload file
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const uploadResponse = await fetch(this.apiEndpoint.replace('/api/assistant', '/api/omr/upload'), {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!uploadResponse.ok) {
+                const error = await uploadResponse.json();
+                throw new Error(error.error || 'Upload failed');
+            }
+
+            const uploadResult = await uploadResponse.json();
+            const jobId = uploadResult.job_id;
+
+            this.updateOmrStatus('Processing sheet music...', 'This may take a minute');
+
+            // Poll for status
+            const result = await this.pollOmrStatus(jobId);
+
+            if (result.status === 'completed' && result.composition) {
+                // Load the composition
+                this.loadCompositionFromOmrResult(result.composition);
+
+                // Build success message with processing stats
+                let successMsg = `Imported "${result.composition.title}" with ${result.composition.measures?.length || 0} measures`;
+                const processing = result.composition._processing;
+                if (processing && processing.pages_total > 1) {
+                    if (processing.failed_pages && processing.failed_pages.length > 0) {
+                        successMsg += ` (${processing.pages_processed} of ${processing.pages_total} pages - page ${processing.failed_pages.join(', ')} could not be read)`;
+                    } else {
+                        successMsg += ` (${processing.pages_total} pages)`;
+                    }
+                }
+                this.showOmrSuccess(successMsg);
+
+                // Auto-close modal after 2 seconds
+                setTimeout(() => this.closeOmrModal(), 2000);
+            } else {
+                throw new Error(result.error || 'Processing failed');
+            }
+
+        } catch (error) {
+            console.error('OMR import error:', error);
+            this.showOmrError(error.message || 'Failed to import sheet music');
+        }
+    }
+
+    async pollOmrStatus(jobId, maxAttempts = 180) {
+        // Poll every 2 seconds for up to 6 minutes
+        for (let attempt = 0; attempt < maxAttempts; attempt++) {
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            try {
+                const response = await fetch(this.apiEndpoint.replace('/api/assistant', `/api/omr/status/${jobId}`));
+                const status = await response.json();
+
+                // Update progress display
+                this.updateOmrStatus(
+                    status.progress || 'Processing...',
+                    status.pages_completed && status.pages_total
+                        ? `Page ${status.pages_completed} of ${status.pages_total}`
+                        : ''
+                );
+
+                if (status.status === 'completed') {
+                    // Fetch the result
+                    const resultResponse = await fetch(this.apiEndpoint.replace('/api/assistant', `/api/omr/result/${jobId}`));
+                    return await resultResponse.json();
+                }
+
+                if (status.status === 'failed') {
+                    throw new Error(status.error || 'Processing failed');
+                }
+
+            } catch (error) {
+                console.error('Status poll error:', error);
+                // Continue polling unless it's a definitive failure
+                if (error.message && !error.message.includes('fetch')) {
+                    throw error;
+                }
+            }
+        }
+
+        throw new Error('Processing timed out. Please try a smaller file.');
+    }
+
+    loadCompositionFromOmrResult(compositionData) {
+        // Use same approach as loadCompositionFromData for consistency
+        const composition = new TabComposition();
+        composition.title = compositionData.title || 'Imported Sheet';
+        composition.tempo = compositionData.tempo || 120;
+        composition.timeSignature = compositionData.timeSignature || '4/4';
+        composition.measures = compositionData.measures || [];
+
+        // Ensure at least one measure
+        if (composition.measures.length === 0) {
+            composition.addMeasure();
+        }
+
+        // Set cursor to beginning (measure 0, time 0)
+        composition.currentMeasure = 0;
+        composition.currentTime = 0;
+
+        this.composition = composition;
+
+        // Update UI (same as loadCompositionFromData)
+        this.updateCompositionTitle();
+        this.updateTempoDisplay();
+        this.renderComposition();
+        this.autoSaveComposition();
+
+        // Add chat message
+        this.addSystemMessage(`Imported "${composition.title}" - ${composition.measures.length} measures, ${this.countNotes(composition)} notes`);
+    }
+
+    countNotes(composition) {
+        return composition.measures.reduce((sum, m) => sum + (m.events?.length || 0), 0);
+    }
+
+    showOmrModal() {
+        const modal = document.getElementById('omr-modal');
+        if (modal) {
+            modal.style.display = 'flex';
+            document.getElementById('omr-progress-container').style.display = 'block';
+            document.getElementById('omr-error-container').style.display = 'none';
+            document.getElementById('omr-success-container').style.display = 'none';
+            document.getElementById('close-omr-modal').style.display = 'none';
+        }
+    }
+
+    closeOmrModal() {
+        const modal = document.getElementById('omr-modal');
+        if (modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    updateOmrStatus(status, progress) {
+        document.getElementById('omr-status-text').textContent = status;
+        document.getElementById('omr-progress-text').textContent = progress;
+    }
+
+    showOmrError(message) {
+        document.getElementById('omr-progress-container').style.display = 'none';
+        document.getElementById('omr-error-container').style.display = 'block';
+        document.getElementById('omr-error-text').textContent = message;
+        document.getElementById('close-omr-modal').style.display = 'block';
+    }
+
+    showOmrSuccess(message) {
+        document.getElementById('omr-progress-container').style.display = 'none';
+        document.getElementById('omr-success-container').style.display = 'block';
+        document.getElementById('omr-success-text').textContent = message;
+        document.getElementById('close-omr-modal').style.display = 'block';
     }
 }

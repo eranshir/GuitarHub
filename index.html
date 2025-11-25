@@ -915,6 +915,8 @@
                                     <button id="save-composition-btn" class="secondary-btn" data-i18n="composer.save">Save</button>
                                     <button id="share-composition-btn" class="secondary-btn" data-i18n="composer.share">Share</button>
                                     <button id="export-tab-btn" class="secondary-btn" data-i18n="composer.export">Export</button>
+                                    <button id="import-sheet-btn" class="secondary-btn" title="Import from sheet music (PDF/Image)">📄 Import</button>
+                                    <input type="file" id="omr-file-input" accept=".pdf,.png,.jpg,.jpeg,.gif,.bmp,.tiff,.tif" style="display: none;">
                                     <button id="fullscreen-tab-btn" class="secondary-btn" title="Fullscreen TAB">⛶</button>
                                 </div>
                             </div>
@@ -1144,6 +1146,33 @@
                         <li>Chat with AI for composition suggestions and music theory help</li>
                     </ul>
                 </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- OMR Progress Modal -->
+    <div id="omr-modal" class="help-modal" style="display: none;">
+        <div class="help-modal-backdrop"></div>
+        <div class="help-modal-content" style="max-width: 400px;">
+            <div class="help-modal-header">
+                <h2>Importing Sheet Music</h2>
+                <button id="close-omr-modal" class="close-help-btn" style="display: none;">✕</button>
+            </div>
+            <div class="help-modal-body" style="text-align: center; padding: 2rem;">
+                <div id="omr-progress-container">
+                    <div class="loading-spinner" style="margin: 0 auto 1rem;"></div>
+                    <p id="omr-status-text">Uploading file...</p>
+                    <p id="omr-progress-text" style="color: #888; font-size: 0.9rem;"></p>
+                </div>
+                <div id="omr-error-container" style="display: none;">
+                    <p style="color: #e74c3c; font-size: 1.1rem;">⚠️</p>
+                    <p id="omr-error-text" style="color: #e74c3c;"></p>
+                    <button id="omr-retry-btn" class="secondary-btn" style="margin-top: 1rem;">Try Again</button>
+                </div>
+                <div id="omr-success-container" style="display: none;">
+                    <p style="color: #27ae60; font-size: 2rem;">✓</p>
+                    <p id="omr-success-text" style="color: #27ae60;">Sheet music imported successfully!</p>
+                </div>
             </div>
         </div>
     </div>
