@@ -30,7 +30,15 @@ from musicxml_to_tab import convert_musicxml_to_tab, merge_compositions, extract
 
 # Constants
 MAX_PIXELS = 20_000_000  # Audiveris limit
-AUDIVERIS_PATH = "/Applications/Audiveris.app/Contents/MacOS/Audiveris"
+
+# Platform-specific Audiveris path
+import platform
+if platform.system() == "Linux":
+    AUDIVERIS_PATH = "/opt/audiveris/bin/Audiveris"
+elif platform.system() == "Darwin":  # macOS
+    AUDIVERIS_PATH = "/Applications/Audiveris.app/Contents/MacOS/Audiveris"
+else:
+    AUDIVERIS_PATH = "audiveris"  # Assume it's in PATH
 SUPPORTED_IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.tif'}
 SUPPORTED_EXTENSIONS = SUPPORTED_IMAGE_EXTENSIONS | {'.pdf'}
 
