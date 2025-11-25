@@ -67,21 +67,27 @@ echo ""
 echo "[5/6] Installing Audiveris..."
 
 AUDIVERIS_VERSION="5.8.1"
-AUDIVERIS_DEB="Audiveris_${AUDIVERIS_VERSION}-1_amd64.deb"
+
+# Detect Ubuntu version for correct package
+. /etc/os-release
+if [[ "$VERSION_ID" == "24.04" ]]; then
+    AUDIVERIS_DEB="Audiveris-${AUDIVERIS_VERSION}-ubuntu24.04-x86_64.deb"
+else
+    # Default to Ubuntu 22.04 package (works on most Debian-based systems)
+    AUDIVERIS_DEB="Audiveris-${AUDIVERIS_VERSION}-ubuntu22.04-x86_64.deb"
+fi
 AUDIVERIS_URL="https://github.com/Audiveris/audiveris/releases/download/${AUDIVERIS_VERSION}/${AUDIVERIS_DEB}"
 
 # Check if Audiveris is already installed
 if command -v audiveris &> /dev/null; then
     echo "Audiveris is already installed"
 else
-    echo "Downloading Audiveris ${AUDIVERIS_VERSION}..."
+    echo "Downloading Audiveris ${AUDIVERIS_VERSION} (${AUDIVERIS_DEB})..."
     cd /tmp
-    wget -q "${AUDIVERIS_URL}" -O "${AUDIVERIS_DEB}" || {
-        echo "Failed to download Audiveris. Trying alternative method..."
-        # Try without specific architecture
-        AUDIVERIS_DEB="Audiveris-${AUDIVERIS_VERSION}-linux-x64.deb"
-        AUDIVERIS_URL="https://github.com/Audiveris/audiveris/releases/download/${AUDIVERIS_VERSION}/${AUDIVERIS_DEB}"
-        wget -q "${AUDIVERIS_URL}" -O "${AUDIVERIS_DEB}"
+    wget -q --show-progress "${AUDIVERIS_URL}" -O "${AUDIVERIS_DEB}" || {
+        echo "Failed to download Audiveris from ${AUDIVERIS_URL}"
+        echo "Please download manually from: https://github.com/Audiveris/audiveris/releases"
+        exit 1
     }
 
     echo "Installing Audiveris..."
