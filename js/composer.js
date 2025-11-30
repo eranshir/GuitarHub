@@ -1759,6 +1759,39 @@ class Composer {
         return { valid: true, fixed: 0, issues: [] };
     }
 
+    /**
+     * Debug helper: log the contents of all measures
+     */
+    debugMeasureContents() {
+        if (!this.composition || !this.composition.measures) {
+            console.log('No composition to debug');
+            return;
+        }
+
+        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+        console.log(`=== Measure Debug (${this.composition.timeSignature}, ${beatsPerMeasure} beats/measure) ===`);
+
+        this.composition.measures.forEach((measure, idx) => {
+            if (!measure.events || measure.events.length === 0) {
+                console.log(`  Measure ${idx + 1}: empty`);
+                return;
+            }
+
+            let maxEndTime = 0;
+            const eventSummary = measure.events.map(e => {
+                const endTime = e.time + (e.duration || 0);
+                if (endTime > maxEndTime) maxEndTime = endTime;
+                return `t=${e.time.toFixed(2)} d=${(e.duration || 0).toFixed(2)} s${e.string}f${e.fret}`;
+            });
+
+            const status = maxEndTime > beatsPerMeasure ? '⚠️ OVERFLOW' :
+                          maxEndTime < beatsPerMeasure * 0.9 ? '(sparse)' : '✓';
+            console.log(`  Measure ${idx + 1}: ${measure.events.length} events, ends at ${maxEndTime.toFixed(2)} ${status}`);
+            console.log(`    Events: ${eventSummary.join(' | ')}`);
+        });
+        console.log('=== End Measure Debug ===');
+    }
+
     handleRadialMenuCancel() {
         // Clear fretboard if we were editing (but NOT if we're in fretboard edit mode)
         if (this.radialEditContext && !this.radialEditContext.isNew && !this.fretboardEditContext) {
@@ -2030,6 +2063,18 @@ class Composer {
         if (data) {
             try {
                 this.composition = TabComposition.deserialize(data);
+
+                // Validate and fix any measure beat count issues
+                console.log('Running measure validation...');
+                this.debugMeasureContents(); // Log measure details for debugging
+                const validation = this.validateAndFixMeasures();
+                console.log('Validation result:', validation);
+                if (!validation.valid) {
+                    console.log(`Fixed ${validation.fixed} measure issues on load:`, validation.issues);
+                    this.showTransientNotification(`Fixed ${validation.fixed} measure issue(s)`);
+                    this.debugMeasureContents(); // Log again after fix
+                }
+
                 this.updateCompositionTitle();
                 this.updateTempoDisplay();
                 this.renderComposition();
