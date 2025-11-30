@@ -58,7 +58,7 @@ class AlphaTabAdapter {
             player: {
                 enablePlayer: true,
                 enableCursor: true,
-                enableUserInteraction: true,
+                enableUserInteraction: false, // FIXED: Disable alphaTab's default interaction to prevent measure selection interfering with custom click handlers
                 soundFont: 'vendor/alphatab/soundfont/sonivox.sf2' // Local soundfont (1.3MB)
             }
         };
@@ -512,6 +512,21 @@ class AlphaTabAdapter {
 
                 // Detect which measure was clicked based on line's x position
                 let measureIndex = measureXPositions.findIndex(x => Math.abs(x - lineX) < 5);
+
+                // If findIndex returns -1 (not found), find the closest measure instead
+                if (measureIndex === -1) {
+                    let minDistance = Infinity;
+                    let closestIdx = 0;
+                    measureXPositions.forEach((x, idx) => {
+                        const distance = Math.abs(x - lineX);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            closestIdx = idx;
+                        }
+                    });
+                    measureIndex = closestIdx;
+                    this.log('Measure not found exactly, using closest:', measureIndex, 'distance:', minDistance);
+                }
 
                 // Override with chord note's measure if adding to chord
                 if (noteMeasureForChord !== null) {

@@ -808,7 +808,7 @@ class Composer {
 
         // Keyboard shortcuts for Composer mode
         document.addEventListener('keydown', (e) => {
-            // ESC to close help modal
+            // ESC to close help modal (works globally)
             if (e.key === 'Escape') {
                 const helpModal = document.getElementById('help-modal');
                 if (helpModal && helpModal.style.display !== 'none') {
@@ -818,12 +818,16 @@ class Composer {
                 }
             }
 
-            // ? to open help modal
+            // ? to open help modal (works globally)
             if (e.key === '?' && !e.target.matches('input, textarea')) {
                 this.openHelpModal();
                 e.preventDefault();
                 return;
             }
+
+            // Only handle composer shortcuts when in assistant module
+            const isAssistantActive = document.getElementById('assistant-module')?.classList.contains('active');
+            if (!isAssistantActive) return;
 
             // Don't intercept if typing in chord input field or chat
             if (e.target.id === 'chord-name-input' || e.target.id === 'chat-input') return;
@@ -1262,6 +1266,12 @@ class Composer {
     }
 
     handleAlphaTabAddNote(measureIndex, stringNum, clickedTime, x, y, isInsertBetween = false) {
+        // Validate measureIndex - if invalid or out of bounds, use the last measure
+        if (measureIndex < 0 || measureIndex >= this.composition.measures.length) {
+            console.warn('Invalid measureIndex:', measureIndex, 'using last measure instead');
+            measureIndex = this.composition.measures.length - 1;
+        }
+
         // Check if clicking near existing note to add chord (same time)
         const measure = this.composition.measures[measureIndex];
         let targetTime = this.composition.currentTime;
@@ -1303,7 +1313,10 @@ class Composer {
                 targetMeasure = measureIndex;
                 isChord = false;
             } else {
-                // Adding sequentially at cursor
+                // Adding to empty space in measure - use clicked position
+                targetTime = clickedTime;
+                targetMeasure = measureIndex;
+                isChord = false;
             }
         }
 
@@ -1818,6 +1831,9 @@ class Composer {
             savedList.push(compositionName);
             localStorage.setItem('guitarHub_compositions_list', JSON.stringify(savedList));
         }
+
+        // Store this as the last active composition so we can restore it on reload
+        localStorage.setItem('guitarHub_last_active_composition', compositionName);
     }
 
     getSavedCompositionsList() {
@@ -1840,12 +1856,19 @@ class Composer {
     }
 
     loadComposition() {
-        // Try to load the most recently saved composition
-        const savedList = this.getSavedCompositionsList();
-        if (savedList.length > 0) {
-            // Load the last saved composition
-            const lastComposition = savedList[savedList.length - 1];
-            this.loadCompositionByName(lastComposition);
+        // Try to load the most recently active composition
+        const lastActive = localStorage.getItem('guitarHub_last_active_composition');
+
+        if (lastActive) {
+            // Load the last active composition
+            this.loadCompositionByName(lastActive);
+        } else {
+            // Fallback: load the last composition in the list (legacy behavior)
+            const savedList = this.getSavedCompositionsList();
+            if (savedList.length > 0) {
+                const lastComposition = savedList[savedList.length - 1];
+                this.loadCompositionByName(lastComposition);
+            }
         }
     }
 
@@ -1945,6 +1968,10 @@ class Composer {
                 this.updateCompositionTitle();
                 this.updateTempoDisplay();
                 this.renderComposition();
+
+                // Update last active composition so this one loads on next reload
+                localStorage.setItem('guitarHub_last_active_composition', name);
+
                 console.log('Composition loaded:', name);
             } catch (e) {
                 console.error('Error loading composition:', e);

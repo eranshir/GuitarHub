@@ -220,6 +220,66 @@ def extract_time_signature(measure: ET.Element, default: str = "4/4") -> str:
     return default
 
 
+def parse_time_signature(time_sig: str) -> tuple[int, int]:
+    """
+    Parse time signature string into (beats, beat_type).
+
+    Args:
+        time_sig: Time signature string like "4/4" or "3/4"
+
+    Returns:
+        Tuple of (beats, beat_type), e.g., (4, 4) for "4/4"
+    """
+    parts = time_sig.split('/')
+    if len(parts) == 2:
+        try:
+            return (int(parts[0]), int(parts[1]))
+        except ValueError:
+            pass
+    return (4, 4)  # Default to 4/4
+
+
+def calculate_measure_duration(time_sig: str) -> float:
+    """
+    Calculate expected measure duration in whole notes.
+
+    Args:
+        time_sig: Time signature string like "4/4" or "3/4"
+
+    Returns:
+        Duration in whole notes (e.g., 1.0 for 4/4, 0.75 for 3/4)
+    """
+    beats, beat_type = parse_time_signature(time_sig)
+    # beats = number of beats per measure
+    # beat_type = note value that gets one beat (4 = quarter note, 8 = eighth note)
+    # Duration in whole notes = beats / beat_type
+    # For 4/4: 4 / 4 = 1.0 (4 quarter notes = 1 whole note)
+    # For 3/4: 3 / 4 = 0.75 (3 quarter notes = 0.75 whole notes)
+    # For 6/8: 6 / 8 = 0.75 (6 eighth notes = 0.75 whole notes)
+    return beats / beat_type
+
+
+def get_measure_event_extent(measure: Dict) -> float:
+    """
+    Calculate the maximum time position covered by events in a measure.
+
+    Args:
+        measure: Measure dictionary with 'events' list
+
+    Returns:
+        Maximum time + duration from all events in whole notes
+    """
+    if not measure.get('events'):
+        return 0.0
+
+    max_extent = 0.0
+    for event in measure['events']:
+        event_end = event['time'] + event['duration']
+        max_extent = max(max_extent, event_end)
+
+    return max_extent
+
+
 def convert_musicxml_to_tab(xml_path: str) -> Dict:
     """
     Convert a MusicXML file to TabComposition JSON format.
@@ -431,6 +491,36 @@ def convert_musicxml_to_tab(xml_path: str) -> Dict:
         # Sort events by time
         measure["events"].sort(key=lambda e: (e["time"], e["string"]))
 
+        # Validate measure duration matches time signature
+        expected_duration = calculate_measure_duration(time_sig)
+        actual_extent = get_measure_event_extent(measure)
+
+        # Check if measure has incorrect beat count
+        # Allow small tolerance for floating point errors (0.01 whole notes = 1/100 of a measure)
+        tolerance = 0.01
+        if actual_extent > 0 and abs(actual_extent - expected_duration) > tolerance:
+            # Calculate beats (for logging)
+            beats_expected, beat_type = parse_time_signature(time_sig)
+            beats_actual = actual_extent * beat_type / 4.0
+
+            # Add warning metadata to measure
+            if "_warnings" not in measure:
+                measure["_warnings"] = []
+
+            measure["_warnings"].append({
+                "type": "incorrect_beat_count",
+                "message": f"Measure has {beats_actual:.2f} beats but time signature expects {beats_expected}",
+                "expected_duration": expected_duration,
+                "actual_duration": actual_extent,
+                "time_signature": time_sig
+            })
+
+            # Log warning for debugging
+            import sys
+            measure_num = len(composition["measures"]) + 1
+            print(f"Warning: Measure {measure_num} has {beats_actual:.2f} beats but time signature {time_sig} expects {beats_expected}",
+                  file=sys.stderr)
+
         composition["measures"].append(measure)
 
     # Ensure at least one measure
@@ -440,6 +530,23 @@ def convert_musicxml_to_tab(xml_path: str) -> Dict:
             "events": [],
             "chords": []
         })
+
+    # Add validation summary to composition metadata
+    validation_issues = []
+    for i, measure in enumerate(composition["measures"]):
+        if "_warnings" in measure:
+            for warning in measure["_warnings"]:
+                validation_issues.append({
+                    "measure_number": i + 1,
+                    **warning
+                })
+
+    if validation_issues:
+        composition["_validation"] = {
+            "has_issues": True,
+            "issue_count": len(validation_issues),
+            "issues": validation_issues
+        }
 
     return composition
 
