@@ -766,6 +766,11 @@ class Composer {
             this.toggleCompositionPlayback();
         });
 
+        // Notation toggle button
+        document.getElementById('notation-toggle-btn')?.addEventListener('click', () => {
+            this.toggleNotationMode();
+        });
+
         // Composition tempo control
         const tempoInput = document.getElementById('composition-tempo');
         if (tempoInput) {
@@ -2526,6 +2531,42 @@ class Composer {
                 `;
                 playBtn.title = 'Play Composition';
             }
+        }
+    }
+
+    /**
+     * Toggle notation display mode
+     * Cycles through: TAB only -> TAB + Standard -> Standard only -> TAB only
+     */
+    toggleNotationMode() {
+        if (!this.alphaTabAdapter) return;
+
+        const newMode = this.alphaTabAdapter.toggleNotation();
+        this.updateNotationToggleButton(newMode);
+
+        // Show a brief notification
+        const modeNames = {
+            'tab-only': 'TAB Only',
+            'tab-and-standard': 'TAB + Standard Notation',
+            'standard-only': 'Standard Notation Only'
+        };
+        this.showTransientNotification(`Notation: ${modeNames[newMode]}`);
+    }
+
+    /**
+     * Update the notation toggle button text based on current mode
+     */
+    updateNotationToggleButton(mode) {
+        const btn = document.getElementById('notation-toggle-btn');
+        const textSpan = btn?.querySelector('.notation-mode-text');
+
+        if (textSpan) {
+            const modeTexts = {
+                'tab-only': 'TAB Only',
+                'tab-and-standard': 'TAB + Standard',
+                'standard-only': 'Standard Only'
+            };
+            textSpan.textContent = modeTexts[mode] || 'TAB Only';
         }
     }
 

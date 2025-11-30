@@ -17,7 +17,7 @@ from openai import OpenAI
 from dotenv import load_dotenv
 
 # Import OMR pipeline
-from omr_pipeline import start_omr_job, get_job, process_omr_sync
+from omr_pipeline import start_omr_job, get_job, process_omr_sync, cleanup_old_jobs, cleanup_temp_output_dirs
 
 # Load environment variables
 load_dotenv()
@@ -571,6 +571,79 @@ def omr_result(job_id):
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/api/omr/cleanup', methods=['POST'])
+def omr_cleanup():
+    """
+    Clean up old OMR jobs and temporary files.
+
+    Query parameters:
+    - dry_run: bool (default: false) - if true, only report what would be deleted
+    - retention_days: int (default: 7) - number of days to retain jobs
+
+    Response:
+    {
+        "job_cleanup": {
+            "memory_jobs_removed": int,
+            "output_dirs_removed": list[str],
+            "upload_dirs_removed": list[str],
+            "space_freed_mb": float
+        },
+        "temp_cleanup": {
+            "dirs_cleaned": list[dict],
+            "files_removed": int,
+            "space_freed_mb": float
+        },
+        "total_space_freed_mb": float,
+        "errors": list[str]
+    }
+    """
+    try:
+        # Get query parameters
+        dry_run = request.args.get('dry_run', 'false').lower() == 'true'
+        retention_days = int(request.args.get('retention_days', '7'))
+
+        # Clean up job directories
+        job_stats = cleanup_old_jobs(
+            base_output_dir=OMR_OUTPUT_DIR,
+            base_upload_dir=UPLOADS_DIR,
+            retention_days=retention_days,
+            dry_run=dry_run
+        )
+
+        # Clean up temporary output directories
+        backend_dir = os.path.dirname(__file__)
+        temp_stats = cleanup_temp_output_dirs(
+            base_dir=backend_dir,
+            retention_days=retention_days,
+            dry_run=dry_run
+        )
+
+        # Combine results
+        all_errors = job_stats.get("errors", []) + temp_stats.get("errors", [])
+        total_space = job_stats.get("space_freed_mb", 0) + temp_stats.get("space_freed_mb", 0)
+
+        return jsonify({
+            "job_cleanup": {
+                "memory_jobs_removed": job_stats.get("memory_jobs_removed", 0),
+                "output_dirs_removed": job_stats.get("output_dirs_removed", []),
+                "upload_dirs_removed": job_stats.get("upload_dirs_removed", []),
+                "space_freed_mb": job_stats.get("space_freed_mb", 0)
+            },
+            "temp_cleanup": {
+                "dirs_cleaned": temp_stats.get("dirs_cleaned", []),
+                "files_removed": temp_stats.get("files_removed", 0),
+                "space_freed_mb": temp_stats.get("space_freed_mb", 0)
+            },
+            "total_space_freed_mb": round(total_space, 2),
+            "errors": all_errors,
+            "dry_run": dry_run
+        }), 200
+
+    except Exception as e:
+        print(f"Error in OMR cleanup: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/health', methods=['GET'])
 def health():
     """Health check endpoint."""
@@ -594,6 +667,46 @@ if __name__ == '__main__':
     print(f"OpenAI API: {'✓ Configured' if OPENAI_API_KEY else '✗ Missing'}")
     print(f"Allowed Origins: {ALLOWED_ORIGINS}")
     print("=" * 60)
+    print()
+
+    # Run cleanup on startup
+    print("Running OMR job cleanup on startup...")
+    try:
+        backend_dir = os.path.dirname(__file__)
+        job_stats = cleanup_old_jobs(
+            base_output_dir=OMR_OUTPUT_DIR,
+            base_upload_dir=UPLOADS_DIR,
+            retention_days=7,
+            dry_run=False
+        )
+        temp_stats = cleanup_temp_output_dirs(
+            base_dir=backend_dir,
+            retention_days=7,
+            dry_run=False
+        )
+
+        total_space = job_stats.get("space_freed_mb", 0) + temp_stats.get("space_freed_mb", 0)
+        total_jobs = job_stats.get("memory_jobs_removed", 0)
+        total_dirs = len(job_stats.get("output_dirs_removed", [])) + len(job_stats.get("upload_dirs_removed", []))
+        total_files = temp_stats.get("files_removed", 0)
+
+        if total_jobs > 0 or total_dirs > 0 or total_files > 0:
+            print(f"  Removed {total_jobs} job(s) from memory")
+            print(f"  Cleaned {total_dirs} job directory(ies)")
+            print(f"  Removed {total_files} temporary file(s)")
+            print(f"  Freed {total_space:.2f} MB")
+        else:
+            print("  No old jobs to clean up")
+
+        errors = job_stats.get("errors", []) + temp_stats.get("errors", [])
+        if errors:
+            print(f"  Cleanup errors: {len(errors)}")
+            for error in errors[:5]:  # Show first 5 errors
+                print(f"    - {error}")
+
+    except Exception as e:
+        print(f"  Cleanup error: {e}")
+
     print()
 
     app.run(host=HOST, port=PORT, debug=DEBUG)

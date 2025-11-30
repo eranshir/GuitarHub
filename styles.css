@@ -3313,6 +3313,55 @@ body.rtl .mobile-header {
     font-weight: 600;
 }
 
+/* Notation Toggle */
+.notation-toggle-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
+}
+
+.notation-toggle-label {
+    font-weight: 600;
+    color: #666;
+    font-size: 0.9em;
+    white-space: nowrap;
+}
+
+.notation-toggle-btn {
+    padding: 8px 16px;
+    background: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.notation-toggle-btn:hover {
+    background: rgba(52, 152, 219, 0.1);
+    transform: translateY(-1px);
+}
+
+.notation-toggle-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.notation-mode-text {
+    display: inline-block;
+}
+
+/* Hide TAB staff when in standard-notation-only mode */
+.composition-tab-display.standard-notation-only .at-surface-svg g[class*="tab"] {
+    display: none;
+}
+
 .play-btn-icon {
     width: 40px;
     height: 40px;

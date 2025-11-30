@@ -19,6 +19,7 @@ import subprocess
 import tempfile
 import time
 import uuid
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 from threading import Thread
@@ -30,6 +31,7 @@ from musicxml_to_tab import convert_musicxml_to_tab, merge_compositions, extract
 
 # Constants
 MAX_PIXELS = 20_000_000  # Audiveris limit
+JOB_RETENTION_DAYS = 7  # Keep jobs for 7 days
 
 # Platform-specific Audiveris path
 import platform
@@ -84,6 +86,195 @@ def create_job(input_path: str, output_dir: str) -> OMRJob:
     job = OMRJob(job_id, input_path, output_dir)
     _jobs[job_id] = job
     return job
+
+
+def cleanup_old_jobs(base_output_dir: str, base_upload_dir: Optional[str] = None,
+                     retention_days: int = JOB_RETENTION_DAYS, dry_run: bool = False) -> Dict:
+    """
+    Clean up old OMR jobs from memory and filesystem.
+
+    Args:
+        base_output_dir: Base directory containing job output folders (e.g., 'omr_jobs')
+        base_upload_dir: Optional base directory containing uploaded files (e.g., 'uploads')
+        retention_days: Number of days to retain jobs (default: 7)
+        dry_run: If True, only report what would be deleted without actually deleting
+
+    Returns:
+        Dictionary with cleanup statistics:
+        {
+            "memory_jobs_removed": int,
+            "output_dirs_removed": list[str],
+            "upload_dirs_removed": list[str],
+            "space_freed_mb": float,
+            "errors": list[str]
+        }
+    """
+    cutoff_time = time.time() - (retention_days * 24 * 60 * 60)
+    stats = {
+        "memory_jobs_removed": 0,
+        "output_dirs_removed": [],
+        "upload_dirs_removed": [],
+        "space_freed_mb": 0.0,
+        "errors": []
+    }
+
+    # Clean up in-memory jobs
+    jobs_to_remove = []
+    for job_id, job in _jobs.items():
+        if job.created_at < cutoff_time:
+            jobs_to_remove.append(job_id)
+
+    if not dry_run:
+        for job_id in jobs_to_remove:
+            del _jobs[job_id]
+
+    stats["memory_jobs_removed"] = len(jobs_to_remove)
+
+    # Clean up filesystem - output directories
+    if os.path.exists(base_output_dir):
+        try:
+            for job_dir_name in os.listdir(base_output_dir):
+                job_dir_path = os.path.join(base_output_dir, job_dir_name)
+
+                if not os.path.isdir(job_dir_path):
+                    continue
+
+                # Check directory creation time
+                dir_mtime = os.path.getmtime(job_dir_path)
+
+                if dir_mtime < cutoff_time:
+                    # Calculate space before deletion
+                    try:
+                        total_size = sum(
+                            os.path.getsize(os.path.join(dirpath, filename))
+                            for dirpath, _, filenames in os.walk(job_dir_path)
+                            for filename in filenames
+                        )
+                        stats["space_freed_mb"] += total_size / (1024 * 1024)
+                    except Exception as e:
+                        stats["errors"].append(f"Error calculating size for {job_dir_name}: {e}")
+
+                    # Remove directory
+                    if not dry_run:
+                        try:
+                            shutil.rmtree(job_dir_path)
+                            stats["output_dirs_removed"].append(job_dir_name)
+                        except Exception as e:
+                            stats["errors"].append(f"Error removing {job_dir_path}: {e}")
+                    else:
+                        stats["output_dirs_removed"].append(job_dir_name)
+
+        except Exception as e:
+            stats["errors"].append(f"Error processing output directory {base_output_dir}: {e}")
+
+    # Clean up filesystem - upload directories (if provided)
+    if base_upload_dir and os.path.exists(base_upload_dir):
+        try:
+            for job_dir_name in os.listdir(base_upload_dir):
+                job_dir_path = os.path.join(base_upload_dir, job_dir_name)
+
+                if not os.path.isdir(job_dir_path):
+                    continue
+
+                # Check directory creation time
+                dir_mtime = os.path.getmtime(job_dir_path)
+
+                if dir_mtime < cutoff_time:
+                    # Calculate space before deletion
+                    try:
+                        total_size = sum(
+                            os.path.getsize(os.path.join(dirpath, filename))
+                            for dirpath, _, filenames in os.walk(job_dir_path)
+                            for filename in filenames
+                        )
+                        stats["space_freed_mb"] += total_size / (1024 * 1024)
+                    except Exception as e:
+                        stats["errors"].append(f"Error calculating size for {job_dir_name}: {e}")
+
+                    # Remove directory
+                    if not dry_run:
+                        try:
+                            shutil.rmtree(job_dir_path)
+                            stats["upload_dirs_removed"].append(job_dir_name)
+                        except Exception as e:
+                            stats["errors"].append(f"Error removing {job_dir_path}: {e}")
+                    else:
+                        stats["upload_dirs_removed"].append(job_dir_name)
+
+        except Exception as e:
+            stats["errors"].append(f"Error processing upload directory {base_upload_dir}: {e}")
+
+    return stats
+
+
+def cleanup_temp_output_dirs(base_dir: str, patterns: Optional[List[str]] = None,
+                             retention_days: int = JOB_RETENTION_DAYS, dry_run: bool = False) -> Dict:
+    """
+    Clean up temporary output directories (e.g., omr_output_*, omr_pipeline_test).
+
+    Args:
+        base_dir: Base directory to search for temp directories
+        patterns: List of glob patterns to match (default: ['omr_output_*', 'omr_pipeline_*'])
+        retention_days: Number of days to retain files
+        dry_run: If True, only report what would be deleted
+
+    Returns:
+        Dictionary with cleanup statistics
+    """
+    import glob
+
+    if patterns is None:
+        patterns = ['omr_output_*', 'omr_pipeline_*']
+
+    cutoff_time = time.time() - (retention_days * 24 * 60 * 60)
+    stats = {
+        "dirs_cleaned": [],
+        "files_removed": 0,
+        "space_freed_mb": 0.0,
+        "errors": []
+    }
+
+    for pattern in patterns:
+        full_pattern = os.path.join(base_dir, pattern)
+
+        for dir_path in glob.glob(full_pattern):
+            if not os.path.isdir(dir_path):
+                continue
+
+            dir_name = os.path.basename(dir_path)
+            files_removed = 0
+
+            try:
+                for root, dirs, files in os.walk(dir_path):
+                    for filename in files:
+                        file_path = os.path.join(root, filename)
+
+                        try:
+                            file_mtime = os.path.getmtime(file_path)
+
+                            if file_mtime < cutoff_time:
+                                file_size = os.path.getsize(file_path)
+                                stats["space_freed_mb"] += file_size / (1024 * 1024)
+
+                                if not dry_run:
+                                    os.remove(file_path)
+
+                                files_removed += 1
+
+                        except Exception as e:
+                            stats["errors"].append(f"Error processing {file_path}: {e}")
+
+                if files_removed > 0:
+                    stats["dirs_cleaned"].append({
+                        "dir": dir_name,
+                        "files_removed": files_removed
+                    })
+                    stats["files_removed"] += files_removed
+
+            except Exception as e:
+                stats["errors"].append(f"Error processing directory {dir_path}: {e}")
+
+    return stats
 
 
 def validate_file(file_path: str) -> Tuple[bool, str]:

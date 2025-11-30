@@ -4,7 +4,8 @@ class AlphaTabAdapter {
         this.containerId = containerId;
         this.alphaTabApi = null;
         this.currentScore = null;
-        this.showNotation = false; // Toggle for standard notation
+        // Notation mode: 'tab-only', 'tab-and-standard', 'standard-only'
+        this.notationMode = 'tab-only';
         this.currentComposition = null; // Store composition for click mapping
         this.onNoteClick = null; // Callback for note clicks
         this.isAttachingHandlers = false; // Flag to prevent concurrent handler attachment
@@ -46,9 +47,7 @@ class AlphaTabAdapter {
                 barsPerRow: 4 // Number of measures per line (will fit to width)
             },
             notation: {
-                notationMode: this.showNotation
-                    ? alphaTab.NotationMode.GuitarPro
-                    : alphaTab.NotationMode.SongBook, // SongBook = TAB only
+                notationMode: this.getAlphaTabNotationMode(),
                 rhythmMode: alphaTab.TabRhythmMode.ShowWithBars,
                 elements: {
                     scoreTitle: false,
@@ -1321,21 +1320,89 @@ class AlphaTabAdapter {
     }
 
     /**
-     * Toggle standard notation display
+     * Get AlphaTab notation mode enum based on current mode string
+     */
+    getAlphaTabNotationMode() {
+        switch (this.notationMode) {
+            case 'tab-only':
+                return alphaTab.NotationMode.SongBook; // TAB only
+            case 'tab-and-standard':
+                return alphaTab.NotationMode.GuitarPro; // TAB + Standard notation
+            case 'standard-only':
+                return alphaTab.NotationMode.GuitarPro; // Standard notation only (we'll hide TAB via CSS)
+            default:
+                return alphaTab.NotationMode.SongBook;
+        }
+    }
+
+    /**
+     * Cycle through notation display modes
+     * Returns the new mode name for UI updates
      */
     toggleNotation() {
-        this.showNotation = !this.showNotation;
+        // Cycle through: tab-only -> tab-and-standard -> standard-only -> tab-only
+        switch (this.notationMode) {
+            case 'tab-only':
+                this.notationMode = 'tab-and-standard';
+                break;
+            case 'tab-and-standard':
+                this.notationMode = 'standard-only';
+                break;
+            case 'standard-only':
+                this.notationMode = 'tab-only';
+                break;
+            default:
+                this.notationMode = 'tab-only';
+        }
 
         if (this.alphaTabApi) {
-            this.alphaTabApi.settings.notation.notationMode = this.showNotation
-                ? alphaTab.NotationMode.GuitarPro
-                : alphaTab.NotationMode.SongBook;
+            this.alphaTabApi.settings.notation.notationMode = this.getAlphaTabNotationMode();
 
             // Re-render with new settings
             this.alphaTabApi.render();
+
+            // Apply CSS class to container for standard-only mode
+            const container = document.getElementById(this.containerId);
+            if (container) {
+                if (this.notationMode === 'standard-only') {
+                    container.classList.add('standard-notation-only');
+                } else {
+                    container.classList.remove('standard-notation-only');
+                }
+            }
         }
 
-        return this.showNotation;
+        return this.notationMode;
+    }
+
+    /**
+     * Get current notation mode
+     */
+    getNotationMode() {
+        return this.notationMode;
+    }
+
+    /**
+     * Set notation mode explicitly
+     */
+    setNotationMode(mode) {
+        if (['tab-only', 'tab-and-standard', 'standard-only'].includes(mode)) {
+            this.notationMode = mode;
+            if (this.alphaTabApi) {
+                this.alphaTabApi.settings.notation.notationMode = this.getAlphaTabNotationMode();
+                this.alphaTabApi.render();
+
+                const container = document.getElementById(this.containerId);
+                if (container) {
+                    if (this.notationMode === 'standard-only') {
+                        container.classList.add('standard-notation-only');
+                    } else {
+                        container.classList.remove('standard-notation-only');
+                    }
+                }
+            }
+        }
+        return this.notationMode;
     }
 
     /**
