@@ -1734,19 +1734,37 @@ class Composer {
                 needsReflow = true;
             }
 
-            // Also check for events with invalid time positions (negative or NaN)
+            // Check for events with invalid data
+            const eventsToRemove = [];
             measure.events.forEach((event, eventIdx) => {
+                // Check for null/undefined string or fret (invalid notes)
+                if ((event.string === null || event.string === undefined ||
+                    event.fret === null || event.fret === undefined) && !event.isRest) {
+                    issues.push(`Measure ${idx + 1}, event ${eventIdx}: null string/fret - removing`);
+                    eventsToRemove.push(eventIdx);
+                    return; // Skip further checks for this event
+                }
+                // Check for invalid time positions (negative or NaN)
                 if (event.time < 0 || isNaN(event.time)) {
                     issues.push(`Measure ${idx + 1}, event ${eventIdx}: invalid time ${event.time}`);
                     event.time = 0; // Fix inline
                     needsReflow = true;
                 }
+                // Check for invalid durations
                 if (event.duration <= 0 || isNaN(event.duration)) {
                     issues.push(`Measure ${idx + 1}, event ${eventIdx}: invalid duration ${event.duration}`);
                     event.duration = 0.25; // Default to quarter note
                     needsReflow = true;
                 }
             });
+
+            // Remove invalid events (in reverse order to preserve indices)
+            if (eventsToRemove.length > 0) {
+                eventsToRemove.sort((a, b) => b - a).forEach(eventIdx => {
+                    measure.events.splice(eventIdx, 1);
+                });
+                needsReflow = true;
+            }
         });
 
         // If any issues found, reflow from the beginning to fix
