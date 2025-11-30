@@ -1730,7 +1730,18 @@ class Composer {
 
             // Check if events exceed measure capacity (with small tolerance for floating point)
             if (maxEndTime > beatsPerMeasure + 0.001) {
-                issues.push(`Measure ${idx + 1}: events extend to ${maxEndTime.toFixed(2)} beats (max: ${beatsPerMeasure})`);
+                issues.push(`Measure ${idx + 1}: overflow - events extend to ${maxEndTime.toFixed(2)} beats (max: ${beatsPerMeasure})`);
+                needsReflow = true;
+            }
+
+            // Check if measure is sparse (doesn't fill the beat capacity) and has subsequent measures
+            // This indicates notes should be pulled back from later measures
+            const isLastMeasure = idx === this.composition.measures.length - 1;
+            const hasSubsequentContent = !isLastMeasure &&
+                this.composition.measures.slice(idx + 1).some(m => m.events && m.events.length > 0);
+
+            if (maxEndTime < beatsPerMeasure - 0.001 && hasSubsequentContent) {
+                issues.push(`Measure ${idx + 1}: sparse - ends at ${maxEndTime.toFixed(2)} beats, pulling notes from next measures`);
                 needsReflow = true;
             }
 
