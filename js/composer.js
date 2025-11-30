@@ -1701,6 +1701,64 @@ class Composer {
         }
     }
 
+    /**
+     * Validate all measures conform to the time signature and fix any issues.
+     * Checks that no measure has events extending beyond its beat capacity.
+     * @returns {Object} { valid: boolean, fixed: number, issues: string[] }
+     */
+    validateAndFixMeasures() {
+        if (!this.composition || !this.composition.measures) {
+            return { valid: true, fixed: 0, issues: [] };
+        }
+
+        const beatsPerMeasure = this.composition.getBeatsPerMeasure();
+        const issues = [];
+        let needsReflow = false;
+
+        // Check each measure for violations
+        this.composition.measures.forEach((measure, idx) => {
+            if (!measure.events || measure.events.length === 0) return;
+
+            // Find the maximum end time of any event in this measure
+            let maxEndTime = 0;
+            measure.events.forEach(event => {
+                const endTime = event.time + (event.duration || 0);
+                if (endTime > maxEndTime) {
+                    maxEndTime = endTime;
+                }
+            });
+
+            // Check if events exceed measure capacity (with small tolerance for floating point)
+            if (maxEndTime > beatsPerMeasure + 0.001) {
+                issues.push(`Measure ${idx + 1}: events extend to ${maxEndTime.toFixed(2)} beats (max: ${beatsPerMeasure})`);
+                needsReflow = true;
+            }
+
+            // Also check for events with invalid time positions (negative or NaN)
+            measure.events.forEach((event, eventIdx) => {
+                if (event.time < 0 || isNaN(event.time)) {
+                    issues.push(`Measure ${idx + 1}, event ${eventIdx}: invalid time ${event.time}`);
+                    event.time = 0; // Fix inline
+                    needsReflow = true;
+                }
+                if (event.duration <= 0 || isNaN(event.duration)) {
+                    issues.push(`Measure ${idx + 1}, event ${eventIdx}: invalid duration ${event.duration}`);
+                    event.duration = 0.25; // Default to quarter note
+                    needsReflow = true;
+                }
+            });
+        });
+
+        // If any issues found, reflow from the beginning to fix
+        if (needsReflow) {
+            console.log('Measure validation issues found, reflowing:', issues);
+            this.reflowMeasure(0);
+            return { valid: false, fixed: issues.length, issues };
+        }
+
+        return { valid: true, fixed: 0, issues: [] };
+    }
+
     handleRadialMenuCancel() {
         // Clear fretboard if we were editing (but NOT if we're in fretboard edit mode)
         if (this.radialEditContext && !this.radialEditContext.isNew && !this.fretboardEditContext) {
@@ -1946,6 +2004,13 @@ class Composer {
         }
 
         this.composition = composition;
+
+        // Validate and fix any measure beat count issues
+        const validation = this.validateAndFixMeasures();
+        if (!validation.valid) {
+            console.log(`Fixed ${validation.fixed} measure issues on load`);
+            this.showTransientNotification(`Fixed ${validation.fixed} measure issue(s)`);
+        }
 
         // Store share info if this is a backend share
         if (shareId && isAuthor && editToken) {
@@ -2858,14 +2923,24 @@ class Composer {
 
         this.composition = composition;
 
+        // Validate and fix any measure beat count issues (especially important for OMR imports)
+        const validation = this.validateAndFixMeasures();
+        if (!validation.valid) {
+            console.log(`Fixed ${validation.fixed} measure issues from OMR import:`, validation.issues);
+        }
+
         // Update UI (same as loadCompositionFromData)
         this.updateCompositionTitle();
         this.updateTempoDisplay();
         this.renderComposition();
         this.autoSaveComposition();
 
-        // Add chat message
-        this.addSystemMessage(`Imported "${composition.title}" - ${composition.measures.length} measures, ${this.countNotes(composition)} notes`);
+        // Add chat message with validation info
+        let message = `Imported "${composition.title}" - ${composition.measures.length} measures, ${this.countNotes(composition)} notes`;
+        if (!validation.valid) {
+            message += ` (fixed ${validation.fixed} measure issue(s))`;
+        }
+        this.addSystemMessage(message);
     }
 
     countNotes(composition) {
