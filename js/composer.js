@@ -1704,6 +1704,7 @@ class Composer {
     /**
      * Validate all measures conform to the time signature and fix any issues.
      * Checks that no measure has events extending beyond its beat capacity.
+     * Loops until all issues are fixed.
      * @returns {Object} { valid: boolean, fixed: number, issues: string[] }
      */
     validateAndFixMeasures() {
@@ -1711,6 +1712,47 @@ class Composer {
             return { valid: true, fixed: 0, issues: [] };
         }
 
+        const allIssues = [];
+        let totalFixed = 0;
+        let iterationCount = 0;
+        const maxIterations = 10; // Safety limit to prevent infinite loops
+
+        // Loop until no more issues or max iterations reached
+        while (iterationCount < maxIterations) {
+            iterationCount++;
+            const { issues, needsReflow } = this._validateMeasuresOnce();
+
+            if (issues.length > 0) {
+                allIssues.push(...issues);
+                totalFixed += issues.length;
+                console.log(`Validation iteration ${iterationCount}: found ${issues.length} issues`, issues);
+            }
+
+            if (!needsReflow) {
+                break; // No more issues found
+            }
+
+            // Reflow and check again
+            this.reflowMeasure(0);
+        }
+
+        if (iterationCount >= maxIterations) {
+            console.warn('Validation reached max iterations, some issues may remain');
+        }
+
+        return {
+            valid: totalFixed === 0,
+            fixed: totalFixed,
+            issues: allIssues,
+            iterations: iterationCount
+        };
+    }
+
+    /**
+     * Helper: Run one pass of measure validation
+     * @returns {Object} { issues: string[], needsReflow: boolean }
+     */
+    _validateMeasuresOnce() {
         const beatsPerMeasure = this.composition.getBeatsPerMeasure();
         const issues = [];
         let needsReflow = false;
@@ -1749,9 +1791,14 @@ class Composer {
             const eventsToRemove = [];
             measure.events.forEach((event, eventIdx) => {
                 // Check for null/undefined string or fret (invalid notes)
-                if ((event.string === null || event.string === undefined ||
-                    event.fret === null || event.fret === undefined) && !event.isRest) {
-                    issues.push(`Measure ${idx + 1}, event ${eventIdx}: null string/fret - removing`);
+                // Also check for string "null" which can happen from JSON parsing
+                const stringInvalid = event.string === null || event.string === undefined ||
+                                     event.string === 'null' || (typeof event.string === 'number' && isNaN(event.string));
+                const fretInvalid = event.fret === null || event.fret === undefined ||
+                                   event.fret === 'null' || (typeof event.fret === 'number' && isNaN(event.fret));
+
+                if ((stringInvalid || fretInvalid) && !event.isRest) {
+                    issues.push(`Measure ${idx + 1}, event ${eventIdx}: invalid string(${event.string})/fret(${event.fret}) - removing`);
                     eventsToRemove.push(eventIdx);
                     return; // Skip further checks for this event
                 }
@@ -1778,14 +1825,7 @@ class Composer {
             }
         });
 
-        // If any issues found, reflow from the beginning to fix
-        if (needsReflow) {
-            console.log('Measure validation issues found, reflowing:', issues);
-            this.reflowMeasure(0);
-            return { valid: false, fixed: issues.length, issues };
-        }
-
-        return { valid: true, fixed: 0, issues: [] };
+        return { issues, needsReflow };
     }
 
     /**
