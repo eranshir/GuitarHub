@@ -1180,8 +1180,14 @@ class Composer {
         // Clear fretboard state
         this.clearComposerFretboard();
 
+        // Validate and fix measures (handles sparse measures, overflow, etc.)
+        this.validateAndFixMeasures();
+
         // Re-render composition
         this.renderComposition();
+
+        // Ensure there's always space to add more notes
+        this.ensureMeasureCapacity();
 
         // Auto-save
         this.autoSaveComposition();
@@ -1563,6 +1569,9 @@ class Composer {
                 // Reflow measure - recalculate all time positions after this change
                 this.reflowMeasure(durationCtx.measureIndex);
 
+                // Validate all measures after reflow
+                this.validateAndFixMeasures();
+
                 this.showTransientNotification(`Duration updated - measure reflowed`);
                 this.durationEditContext = null;
             } else if (ctx && ctx.event) {
@@ -1579,11 +1588,16 @@ class Composer {
                     });
 
                     this.reflowMeasure(ctx.measureIndex);
+
+                    // Validate all measures after reflow
+                    this.validateAndFixMeasures();
+
                     this.showTransientNotification(`Duration updated to ${this.formatDuration(duration)}`);
                 }
             }
 
             this.renderComposition();
+            this.ensureMeasureCapacity();
             this.autoSaveComposition();
         }
 
