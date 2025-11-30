@@ -2185,6 +2185,7 @@ class Composer {
         this.updateCompositionTitle();
         this.updateTempoDisplay();
         this.renderComposition();
+        this.ensureMeasureCapacity(); // Ensure there's space to add new notes
     }
 
     loadCompositionByName(name) {
@@ -2230,6 +2231,7 @@ class Composer {
                 this.updateCompositionTitle();
                 this.updateTempoDisplay();
                 this.renderComposition();
+                this.ensureMeasureCapacity(); // Ensure there's space to add new notes
 
                 // Update last active composition so this one loads on next reload
                 localStorage.setItem('guitarHub_last_active_composition', name);
