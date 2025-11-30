@@ -2375,6 +2375,9 @@ class Composer {
 
         const beatsPerMeasure = this.composition.getBeatsPerMeasure();
 
+        // Track which measures are modified
+        const modifiedMeasures = new Set();
+
         // Add each note from clipboard
         this.clipboard.notes.forEach(clipNote => {
             const noteTime = currentTime + clipNote.relativeTime;
@@ -2398,6 +2401,12 @@ class Composer {
                 duration: clipNote.duration,
                 leftFinger: null
             });
+            modifiedMeasures.add(targetMeasure);
+        });
+
+        // Sort events by time in all modified measures to ensure correct edit targeting
+        modifiedMeasures.forEach(measureIdx => {
+            this.composition.measures[measureIdx].events.sort((a, b) => a.time - b.time);
         });
 
         // Advance cursor to end of pasted section
