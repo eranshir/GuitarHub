@@ -1600,10 +1600,26 @@ class Composer {
         const beatsPerMeasure = this.composition.getBeatsPerMeasure();
 
         // Collect all events from this measure forward
+        // Filter out any events with null/invalid string or fret values
         const allEvents = [];
         for (let i = measureIndex; i < this.composition.measures.length; i++) {
             const measure = this.composition.measures[i];
             measure.events.forEach(event => {
+                // Skip events with invalid string or fret values
+                const stringVal = event.string;
+                const fretVal = event.fret;
+                const stringInvalid = stringVal === null || stringVal === undefined ||
+                                     stringVal === 'null' || stringVal === '' ||
+                                     String(stringVal) === 'null';
+                const fretInvalid = fretVal === null || fretVal === undefined ||
+                                   fretVal === 'null' || fretVal === '' ||
+                                   String(fretVal) === 'null';
+
+                if (stringInvalid || fretInvalid) {
+                    console.log(`  [Reflow] Skipping invalid event: string=${stringVal}, fret=${fretVal}`);
+                    return; // Skip this event
+                }
+
                 allEvents.push({ ...event, originalMeasure: i });
             });
         }
@@ -1790,15 +1806,37 @@ class Composer {
             // Check for events with invalid data
             const eventsToRemove = [];
             measure.events.forEach((event, eventIdx) => {
-                // Check for null/undefined string or fret (invalid notes)
-                // Also check for string "null" which can happen from JSON parsing
-                const stringInvalid = event.string === null || event.string === undefined ||
-                                     event.string === 'null' || (typeof event.string === 'number' && isNaN(event.string));
-                const fretInvalid = event.fret === null || event.fret === undefined ||
-                                   event.fret === 'null' || (typeof event.fret === 'number' && isNaN(event.fret));
+                // Comprehensive null/undefined check for string and fret
+                // Check multiple ways a value can be "null-ish":
+                // 1. Primitive null
+                // 2. undefined
+                // 3. String "null" (from JSON or string coercion)
+                // 4. NaN (for numbers)
+                // 5. Empty string
+                const stringVal = event.string;
+                const fretVal = event.fret;
 
-                if ((stringInvalid || fretInvalid) && !event.isRest) {
-                    issues.push(`Measure ${idx + 1}, event ${eventIdx}: invalid string(${event.string})/fret(${event.fret}) - removing`);
+                const stringInvalid = stringVal === null ||
+                                     stringVal === undefined ||
+                                     stringVal === 'null' ||
+                                     stringVal === '' ||
+                                     (typeof stringVal === 'number' && isNaN(stringVal)) ||
+                                     (typeof stringVal === 'string' && stringVal.toLowerCase() === 'null') ||
+                                     String(stringVal) === 'null';
+
+                const fretInvalid = fretVal === null ||
+                                   fretVal === undefined ||
+                                   fretVal === 'null' ||
+                                   fretVal === '' ||
+                                   (typeof fretVal === 'number' && isNaN(fretVal)) ||
+                                   (typeof fretVal === 'string' && fretVal.toLowerCase() === 'null') ||
+                                   String(fretVal) === 'null';
+
+                // Remove ANY event with invalid string/fret, even if marked as rest
+                // A proper rest should not have null values for string/fret
+                if (stringInvalid || fretInvalid) {
+                    console.log(`  [Validation] Removing invalid event: string=${stringVal} (type=${typeof stringVal}), fret=${fretVal} (type=${typeof fretVal}), isRest=${event.isRest}`);
+                    issues.push(`Measure ${idx + 1}, event ${eventIdx}: invalid string(${stringVal})/fret(${fretVal}) - removing`);
                     eventsToRemove.push(eventIdx);
                     return; // Skip further checks for this event
                 }
@@ -1850,7 +1888,8 @@ class Composer {
             const eventSummary = measure.events.map(e => {
                 const endTime = e.time + (e.duration || 0);
                 if (endTime > maxEndTime) maxEndTime = endTime;
-                return `t=${e.time.toFixed(2)} d=${(e.duration || 0).toFixed(2)} s${e.string}f${e.fret}`;
+                const restFlag = e.isRest ? ' REST' : '';
+                return `t=${e.time.toFixed(2)} d=${(e.duration || 0).toFixed(2)} s${e.string}f${e.fret}${restFlag}`;
             });
 
             const status = maxEndTime > beatsPerMeasure ? '⚠️ OVERFLOW' :
@@ -2080,7 +2119,30 @@ class Composer {
         composition.title = compositionData.title;
         composition.tempo = compositionData.tempo;
         composition.timeSignature = compositionData.timeSignature;
-        composition.measures = compositionData.measures;
+
+        // Sanitize measures: filter out any events with null/invalid string or fret
+        const sanitizeMeasures = (measures) => {
+            return measures.map(measure => {
+                if (!measure.events) return measure;
+                const filteredEvents = measure.events.filter(event => {
+                    const stringVal = event.string;
+                    const fretVal = event.fret;
+                    const stringInvalid = stringVal === null || stringVal === undefined ||
+                                         stringVal === 'null' || stringVal === '' ||
+                                         String(stringVal) === 'null';
+                    const fretInvalid = fretVal === null || fretVal === undefined ||
+                                       fretVal === 'null' || fretVal === '' ||
+                                       String(fretVal) === 'null';
+                    if (stringInvalid || fretInvalid) {
+                        console.log(`  [Sanitize] Removing invalid event: string=${stringVal}, fret=${fretVal}`);
+                        return false;
+                    }
+                    return true;
+                });
+                return { ...measure, events: filteredEvents };
+            });
+        };
+        composition.measures = sanitizeMeasures(compositionData.measures);
 
         // Set cursor to end
         if (composition.measures.length > 0) {
@@ -2132,6 +2194,27 @@ class Composer {
         if (data) {
             try {
                 this.composition = TabComposition.deserialize(data);
+
+                // Sanitize measures: filter out any events with null/invalid string or fret
+                this.composition.measures = this.composition.measures.map(measure => {
+                    if (!measure.events) return measure;
+                    const filteredEvents = measure.events.filter(event => {
+                        const stringVal = event.string;
+                        const fretVal = event.fret;
+                        const stringInvalid = stringVal === null || stringVal === undefined ||
+                                             stringVal === 'null' || stringVal === '' ||
+                                             String(stringVal) === 'null';
+                        const fretInvalid = fretVal === null || fretVal === undefined ||
+                                           fretVal === 'null' || fretVal === '' ||
+                                           String(fretVal) === 'null';
+                        if (stringInvalid || fretInvalid) {
+                            console.log(`  [Sanitize] Removing invalid event: string=${stringVal}, fret=${fretVal}`);
+                            return false;
+                        }
+                        return true;
+                    });
+                    return { ...measure, events: filteredEvents };
+                });
 
                 // Validate and fix any measure beat count issues
                 console.log('Running measure validation...');
